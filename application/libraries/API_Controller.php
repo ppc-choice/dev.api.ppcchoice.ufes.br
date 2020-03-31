@@ -600,7 +600,7 @@ class API_Controller extends CI_Controller
                     }
 
                     if(!$single){
-                        $return[$prop] = $this->doctrine_to_array($val, $single);
+                        $return[$prop] = $this->doctrine_to_array($val, $single, $dateFormat);
                     } else {
                         if(!is_array($val) && !is_object($val)){
                             $return[$prop] = $val;
@@ -612,7 +612,7 @@ class API_Controller extends CI_Controller
         } else if(is_array($data)){
             if(count($data)){
                 foreach($data as $idx => $val){
-                    $data[$idx] = $this->doctrine_to_array($val, $single);
+                    $data[$idx] = $this->doctrine_to_array($val, $single, $dateFormat);
                 }
             }
         }
