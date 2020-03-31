@@ -1,0 +1,33 @@
+Entities\Correspondencia:
+  type: entity
+  table: correspondencia
+  uniqueConstraints:
+    corresp_index:
+      columns:
+        - cod_comp_curric
+        - cod_comp_curric_corresp
+  fields:
+    codCompCurric:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_comp_curric
+    codCompCurricCorresp:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_comp_curric_corresp
+    percentual:
+      type: float
+      nullable: false
+  manyToOne:
+    componenteCurricular:
+      targetEntity: ComponenteCurricular
+      joinColumns:
+        cod_comp_curric:
+          referencedColumnName: cod_comp_curric
+    componenteCurricularCorresp:
+      targetEntity: ComponenteCurricular
+      joinColumns:
+        cod_comp_curric_corresp:
+          referencedColumnName: cod_comp_curric

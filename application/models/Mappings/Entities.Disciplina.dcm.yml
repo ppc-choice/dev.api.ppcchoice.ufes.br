@@ -1,0 +1,33 @@
+Entities\Disciplina:
+  type: entity
+  table: disciplina
+  uniqueConstraints:
+    num_cod_disc_index:
+      columns:
+        - cod_depto
+        - num_disciplina
+  fields:
+    numDisciplina:
+      type: integer
+      id: true
+      nullable: false
+      column: num_disciplina
+    ch:
+      type: integer
+      nullable: false
+    nome:
+      type: string
+      length: 255
+      nullable: false
+    codDepto:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_depto
+  manyToOne:
+    departamento:
+      targetEntity: Departamento
+      joinColumns:
+        cod_depto:
+          referencedColumnName: cod_depto
+      

@@ -1,0 +1,30 @@
+Entities\Dependencia:
+  type: entity
+  table: dependencia
+  uniqueConstraints:
+    dependencia_index:
+      columns:
+        - cod_comp_curric
+        - cod_pre_requisito
+  fields:
+    codCompCurric:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_comp_curric
+    codPreRequisito:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_pre_requisito
+  manyToOne:
+    componenteCurricular:
+      targetEntity: ComponenteCurricular
+      joinColumns:
+        cod_comp_curric:
+          referencedColumnName: cod_comp_curric
+    preRequisito:
+      targetEntity: ComponenteCurricular
+      joinColumns:
+        cod_pre_requisito:
+          referencedColumnName: cod_comp_curric

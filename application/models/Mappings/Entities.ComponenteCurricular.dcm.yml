@@ -1,0 +1,41 @@
+Entities\ComponenteCurricular:
+  type: entity
+  table: componente_curricular
+  uniqueConstraints:
+    cod_comp_curric_index:
+      columns:
+        - cod_comp_curric
+  fields:
+    codCompCurric:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_comp_curric
+    periodo:
+      type: integer
+      nullable: false
+    credito:
+      type: integer
+      nullable: false
+    tipo:
+      type: string
+      length: 255
+      nullable: false
+    codDepto:
+      type: integer
+      nullable: false
+      column: cod_depto
+  manyToOne:
+    disciplina:
+      targetEntity: Disciplina
+      joinColumns:
+        cod_depto:
+          referencedColumnName: cod_depto
+        num_disciplina:
+          referencedColumnName: num_disciplina
+    ppc:
+      targetEntity: ProjetoPedagogicoCurso
+      joinColumns:
+        cod_ppc:
+          referencedColumnName: cod_ppc
+        

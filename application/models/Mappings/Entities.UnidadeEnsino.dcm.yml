@@ -1,0 +1,27 @@
+Entities\UnidadeEnsino:
+  type: entity
+  table: unidade_ensino
+  uniqueConstraints:
+    cod_un_ensino_index:
+      columns:
+        - cod_un_ensino
+  fields:
+    codUnEnsino:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_un_ensino
+    nome:
+      type: string
+      length: 255
+      nullable: false
+    cnpj:
+      type: string
+      length: 20
+      nullable: false
+  manyToOne:
+    ies:
+      targetEntity: InstituicaoEnsinoSuperior
+      joinColumns:
+        cod_ies:
+          referencedColumnName: cod_ies

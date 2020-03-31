@@ -1,0 +1,27 @@
+Entities\Curso:
+  type: entity
+  table: curso
+  uniqueConstraints:
+    cod_curso_index:
+      columns:
+        - cod_curso
+  fields:
+    codCurso:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_curso
+    nome:
+      type: string
+      length: 255
+      nullable: false
+    anoCriacao:
+      type: integer
+      nullable: false
+      column: ano_criacao
+  manyToOne:
+    unidadeEnsino:
+      targetEntity: UnidadeEnsino
+      joinColumns:
+        cod_un_ensino:
+          referencedColumnName: cod_un_ensino

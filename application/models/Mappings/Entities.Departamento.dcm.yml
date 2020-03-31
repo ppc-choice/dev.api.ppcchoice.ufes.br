@@ -1,0 +1,27 @@
+Entities\Departamento:
+  type: entity
+  table: departamento
+  uniqueConstraints:
+    cod_depto_index:
+      columns:
+        - cod_depto
+  fields:
+    codDepto:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_depto
+    nome:
+      type: string
+      length: 255
+      nullable: false
+    abreviatura:
+      type: string
+      length: 15
+      nullable: false
+  manyToOne:
+    unidadeEnsino:
+      targetEntity: UnidadeEnsino
+      joinColumns:
+        cod_un_ensino:
+          referencedColumnName: cod_un_ensino

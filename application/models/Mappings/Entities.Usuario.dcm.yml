@@ -1,0 +1,39 @@
+Entities\Usuario:
+  type: entity
+  table: usuario
+  uniqueConstraints:
+    email_index:
+      columns:
+        - email
+  fields:
+    codUsuario:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+      column: cod_usuario
+    senha:
+      type: string
+      length: 255
+      nullable: false
+    nome:
+      type: string
+      length: 255
+      nullable: false
+    dtUltimoAcesso:
+      type: datetime
+      nullable: false
+      column: dt_ultimo_acesso
+    email:
+      type: string
+      length: 255
+      nullable: false
+    papel:
+      type: string
+      length: 255
+      nullable: false
+    conjuntoSelecao:
+      type: string
+      length: 500
+      nullable: true
+      column: conjunto_selecao
