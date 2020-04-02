@@ -29,3 +29,6 @@ application/logs/*
 *.env.development
 *.env.testing
 *.env.production
+
+#api doc
+doc/*
