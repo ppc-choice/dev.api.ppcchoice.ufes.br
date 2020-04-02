@@ -52,3 +52,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+//Componente Curricular : Hadamo
+$route['componentes-curriculares'] = 'ComponenteCurricularCtl/getAll';
+$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/get/$1';
+
+//Correspondencia : Hadamo
+$route['correspondencias'] = 'CorrespondenciaCtl/getAll';
+$route['correspondencias/(:num)'] = 'CorrespondenciaCtl/get/$1';
+
+//Transicao : Hadamo
+$route['transicoes'] = 'TransicaoCtl/getAll';
+$route['transicoes/(:num)'] = 'TransicaoCtl/get/$1';
