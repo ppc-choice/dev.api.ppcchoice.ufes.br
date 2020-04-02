@@ -52,3 +52,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['ues/get/(:num)'] = 'UnidadeEnsinoCtl/listUes/$1';
+$route['disciplina/get/(:num)'] = 'DisciplinaCtl/listDisciplina/$1';
