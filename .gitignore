@@ -32,3 +32,4 @@ application/logs/*
 
 #api doc
 doc/*
+*apidoc.json

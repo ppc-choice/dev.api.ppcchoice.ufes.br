@@ -48,7 +48,7 @@ class TransicaoCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => true,
-                    'result' =>  $this->doctrine_to_array($transicao)
+                    'result' =>  $transicao
                 ),
                 200
             );
