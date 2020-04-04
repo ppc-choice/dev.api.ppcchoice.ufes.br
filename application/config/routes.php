@@ -55,7 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 //Componente Curricular : Hadamo
 $route['componentes-curriculares'] = 'ComponenteCurricularCtl/getAll';
-$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/get/$1';
+$route['componentes-curriculares/codCc/(:num)'] = 'ComponenteCurricularCtl/getByCodCc/$1';
+$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/getByPpc/$1';
 
 //Correspondencia : Hadamo
 $route['correspondencias'] = 'CorrespondenciaCtl/getAll';
