@@ -54,13 +54,13 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 //Instituicao de Ensino Superior - Wellerson
-$route['instituicao-ensino-superior/(:num)']['get'] = 'InstituicaoEnsinoSuperiorCtl/getById/$1';
-$route['instituicao-ensino-superior']['get'] = 'InstituicaoEnsinoSuperiorCtl/getAll';
+$route['instituicoes-ensino-superior/(:num)']['get'] = 'InstituicaoEnsinoSuperiorCtl/getById/$1';
+$route['instituicoes-ensino-superior']['get'] = 'InstituicaoEnsinoSuperiorCtl/getAll';
 
 //Departamento - Wellerson
-$route['departamento/(:num)']['get'] = 'DepartamentoCtl/getById/$1';
-$route['departamento']['get'] = 'DepartamentoCtl/getAll';
+$route['departamentos/(:num)']['get'] = 'DepartamentoCtl/getById/$1';
+$route['departamentos']['get'] = 'DepartamentoCtl/getAll';
 
 //Curso - Wellerson
-$route['curso/(:num)']['get'] = 'CursoCtl/getById/$1';
-$route['curso']['get'] = 'CursoCtl/getAll';
+$route['cursos/(:num)']['get'] = 'CursoCtl/getById/$1';
+$route['cursos']['get'] = 'CursoCtl/getAll';
