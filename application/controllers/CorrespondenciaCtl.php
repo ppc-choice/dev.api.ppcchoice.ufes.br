@@ -17,26 +17,14 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiSuccess {Number} codCompCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
      */
-    public function getAllByPpc($codPpcAtual,$codPpcAlvo)
+    public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
-
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('cor.codCompCurric,cor.codCompCurricCorresp,cor.percentual')
-                ->from('Entities\Correspondencia','cor')
-                ->innerJoin('cor.componenteCurricular','cc1')
-                ->innerJoin('cc1.ppc','ppcAtual')
-                ->innerJoin('cor.componenteCurricularCorresp','cc2')
-                ->innerJoin('cc2.ppc','ppcAlvo')
-                ->where('ppcAtual.codPpc = ?1 AND ppcAlvo.codPpc = ?2')
-                ->setParameters(array(1 => $codPpcAtual, 2 => $codPpcAlvo))
-                ->getQuery();
-                
-        $correspondencia = $qb->getResult();    
-     
+   
+        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findAllByCodPpc($codPpcAtual,$codPpcAlvo);
         
         if(!empty($correspondencia))
         {
@@ -71,27 +59,15 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiSuccess {String} codDiscCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
      */
-    public function getAll()
+    public function findAll()
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('CONCAT( dep1.abreviatura,disc1.numDisciplina) as codDisc, disc1.nome as NomeDisc, cc1.codCompCurric as codCompCurric',
-                'CONCAT( dep2.abreviatura,disc2.numDisciplina) as codDiscCorresp, disc2.nome as NomeDiscCorresp, cc2.codCompCurric as codCompCorresp',
-                ' cor.percentual ')
-                ->from('Entities\Correspondencia','cor')
-                ->innerJoin('cor.componenteCurricular','cc1')
-                ->innerJoin('cc1.disciplina','disc1')
-                ->innerJoin('disc1.departamento','dep1')
-                ->innerJoin('cor.componenteCurricularCorresp','cc2')
-                ->innerJoin('cc2.disciplina','disc2')
-                ->innerJoin('disc2.departamento','dep2')
-                ->getQuery();
                 
-        $correspondencia = $qb->getResult();    
+        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findAll();
      
         
         if(!empty($correspondencia))
@@ -129,30 +105,17 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiSuccess {String} codDiscCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
      */
-    public function getByCompCurric($codCompCurric)
+    public function findByCodCompCurric($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('CONCAT( dep1.abreviatura,disc1.numDisciplina) as codDisc, disc1.nome as NomeDisc, cc1.codCompCurric as codCompCurric',
-                'CONCAT( dep2.abreviatura,disc2.numDisciplina) as codDiscCorresp, disc2.nome as NomeDiscCorresp, cc2.codCompCurric as codCompCorresp',
-                ' cor.percentual ')
-                ->from('Entities\Correspondencia','cor')
-                ->innerJoin('cor.componenteCurricular','cc1')
-                ->innerJoin('cc1.disciplina','disc1')
-                ->innerJoin('disc1.departamento','dep1')
-                ->innerJoin('cor.componenteCurricularCorresp','cc2')
-                ->innerJoin('cc2.disciplina','disc2')
-                ->innerJoin('disc2.departamento','dep2')
-                ->where('cc1.codCompCurric = :codCC OR cc2.codCompCurric = :codCC')
-                ->setParameter('codCC',$codCompCurric)
-                ->getQuery();
-                
-        $correspondencia = $qb->getResult();    
-     
+              
+        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric);
+
+
         if(!empty($correspondencia))
         {
             $this->api_return(
