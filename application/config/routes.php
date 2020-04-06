@@ -52,3 +52,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+//Instituicao de Ensino Superior - Wellerson
+$route['instituicao-ensino-superior/(:num)']['get'] = 'InstituicaoEnsinoSuperiorCtl/getById/$1';
+$route['instituicao-ensino-superior']['get'] = 'InstituicaoEnsinoSuperiorCtl/getAll';
+
+//Departamento - Wellerson
+$route['departamento/(:num)']['get'] = 'DepartamentoCtl/getById/$1';
+$route['departamento']['get'] = 'DepartamentoCtl/getAll';
+
+//Curso - Wellerson
+$route['curso/(:num)']['get'] = 'CursoCtl/getById/$1';
+$route['curso']['get'] = 'CursoCtl/getAll';
