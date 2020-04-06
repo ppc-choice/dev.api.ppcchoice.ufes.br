@@ -29,7 +29,6 @@ class UnidadeEnsinoCtl extends API_Controller
             ->select('u.codUnEnsino', 'i.codIes', 'u.nome', 'u.cnpj')
             ->from('Entities\UnidadeEnsino', 'u')
             ->innerJoin('u.ies', 'i')
-            ->where('u.codUnEnsino > 2')
             ->getQuery();
 
         $r = $qb->getResult();
