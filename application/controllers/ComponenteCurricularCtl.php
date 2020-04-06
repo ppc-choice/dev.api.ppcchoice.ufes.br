@@ -20,25 +20,14 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiSuccess {String} codDisc Código da disciplina.
      * @apiSuccess {Number} codPpc Código do projeto pedagógico de curso no qual o componente pertence.
      */
-    public function getAll()
+    public function findAll()
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
-
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.codDepto',
-                        'CONCAT(dep.abreviatura,  disc.numDisciplina) as codDisc',
-                        'p.codPpc')
-                ->from('Entities\ComponenteCurricular','c')
-                ->innerJoin('c.disciplina','disc')
-                ->innerJoin('disc.departamento','dep')
-                ->innerJoin('c.ppc','p')
-                ->getQuery();
-                
-        $compCurric = $qb->getResult();    
     
+        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findAll();
         
         if(!empty($compCurric))
         {
@@ -71,25 +60,15 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiSuccess {Number} ch Carga horária da disciplina da componente curricular.
      * @apiSuccess {Number} periodo Período da componente curricular.
      */
-	public function getByPpc($codPpc)
+	public function findByCodPpc($codPpc)
 	{
         
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('c.codCompCurric, disc.nome, disc.ch, c.tipo, c.periodo ')
-                ->from('Entities\ComponenteCurricular','c')
-                ->innerJoin('c.disciplina','disc')
-                ->innerJoin('disc.departamento','dep')
-                ->innerJoin('c.ppc','p')
-                ->where('p.codPpc = :codPpc')
-                ->setParameter('codPpc', $codPpc)
-                ->orderBy('c.periodo,c.codCompCurric','ASC')
-                ->getQuery();
                 
-        $compCurric = $qb->getResult();    
+        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findByCodPpc($codPpc);   
         
         if(!empty($compCurric))
         {
@@ -126,28 +105,16 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiSuccess {String} codDisc Código da disciplina.
      * @apiSuccess {Number} codPpc Código do projeto pedagógico de curso o qual a componente pertence.
      */
-	public function getByCompCurric($codCompCurric)
+	public function findByCodCompCurric($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-                ->select('disc.nome, c.codCompCurric,disc.ch, c.periodo, c.credito, c.codDepto',
-                        'CONCAT(dep.abreviatura,  disc.numDisciplina) as codDisc',
-                        'p.codPpc')
-                ->from('Entities\ComponenteCurricular','c')
-                ->innerJoin('c.disciplina','disc')
-                ->innerJoin('disc.departamento','dep')
-                ->innerJoin('c.ppc','p')
-                ->where('c.codCompCurric = :codCC')
-                ->setParameter('codCC',$codCompCurric)
-                ->getQuery();
                 
-        $compCurric = $qb->getResult();    
-     
-        
+        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findByCodCompCurric($codCompCurric);  
+                
         if(!empty($compCurric))
         {
             $this->api_return(
