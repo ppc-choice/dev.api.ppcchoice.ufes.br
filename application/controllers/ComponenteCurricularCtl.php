@@ -71,7 +71,7 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiSuccess {Number} ch Carga horária da disciplina da componente curricular.
      * @apiSuccess {Number} periodo Período da componente curricular.
      */
-	public function getByPpc($codPpc)
+	public function getByPPC($codPpc)
 	{
         
         header("Access-Control-Allow-Origin: *");
@@ -84,7 +84,8 @@ class ComponenteCurricularCtl extends API_Controller {
                 ->innerJoin('c.disciplina','disc')
                 ->innerJoin('disc.departamento','dep')
                 ->innerJoin('c.ppc','p')
-                ->where('p.codPpc =' . $codPpc)
+                ->where('p.codPpc = :codPpc')
+                ->setParameter('codPpc', $codPpc)
                 ->orderBy('c.periodo,c.codCompCurric','ASC')
                 ->getQuery();
                 
@@ -125,7 +126,7 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiSuccess {String} codDisc Código da disciplina.
      * @apiSuccess {Number} codPpc Código do projeto pedagógico de curso no qual a componente pertence.
      */
-	public function getByCodCc($codCompCurric)
+	public function getByCC($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
@@ -140,7 +141,8 @@ class ComponenteCurricularCtl extends API_Controller {
                 ->innerJoin('c.disciplina','disc')
                 ->innerJoin('disc.departamento','dep')
                 ->innerJoin('c.ppc','p')
-                ->where('c.codCompCurric =' . $codCompCurric)
+                ->where('c.codCompCurric = :codCC')
+                ->setParameter('codCC',$codCompCurric)
                 ->getQuery();
                 
         $compcurric = $qb->getResult();    

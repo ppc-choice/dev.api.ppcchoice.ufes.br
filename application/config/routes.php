@@ -55,13 +55,15 @@ $route['translate_uri_dashes'] = FALSE;
 
 //Componente Curricular : Hadamo
 $route['componentes-curriculares'] = 'ComponenteCurricularCtl/getAll';
-$route['componentes-curriculares/codCc/(:num)'] = 'ComponenteCurricularCtl/getByCodCc/$1';
-$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/getByPpc/$1';
+$route['componentes-curriculares/codCc/(:num)'] = 'ComponenteCurricularCtl/getByCC/$1';
+$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/getByPPC/$1';
 
 //Correspondencia : Hadamo
 $route['correspondencias'] = 'CorrespondenciaCtl/getAll';
-$route['correspondencias/(:num)'] = 'CorrespondenciaCtl/get/$1';
+$route['correspondencias/(:num)/(:num)'] = 'CorrespondenciaCtl/getAllByPPC/$1/$2';
+$route['correspondencias/(:num)'] = 'CorrespondenciaCtl/getByCC/$1';
 
 //Transicao : Hadamo
 $route['transicoes'] = 'TransicaoCtl/getAll';
-$route['transicoes/(:num)'] = 'TransicaoCtl/get/$1';
+$route['transicoes/(:num)'] = 'TransicaoCtl/getByUE/$1';
+$route['transicoes/codPpc/(:num)'] = 'TransicaoCtl/getByPPC/$1';
