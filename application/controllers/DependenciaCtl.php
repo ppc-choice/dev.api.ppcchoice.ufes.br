@@ -16,8 +16,13 @@
  * @apiSuccessExample {JSON} Success-Response:
  * HHTP/1.1 200 OK
  * {
+ *     nome": "Ciência da Computação",
+ *     "codCompCurric": 6,
+ *     "nome": "Cálculo II",
+ *     "codPreRequisito": 1
+ *     "nome": "Cálculo II",
  * }
- */
+*/
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
@@ -116,4 +121,46 @@ class DependenciaCtl extends API_Controller
             404);
         }
     }  
-}
+
+
+    public function getByIdPpc($codPpc)
+    {
+        
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiConfig(array(
+           
+            'methods' => array('GET'), 
+
+        ));
+        
+        $qb = $this->entity_manager->createQueryBuilder()
+        ->select('d.codCompCurric, d.codPreRequisito')
+        ->from('Entities\Dependencia', 'd')
+        ->innerJoin('d.componenteCurricular', 'cc')
+        ->where('cc.ppc = ?1')
+        ->setParameter(1,$codPpc)
+        ->getQuery();
+        
+        $result = $qb->getResult();
+        
+        if(!empty($result)){
+            
+            $this->api_return(
+                array(
+                    'status' => true,
+                    "result" => $result,
+                ),
+            200); 
+
+        }else{
+            
+            $this->api_return(
+                array(
+                    'status' => false,
+                    "result" => 'Depêndencia não encontrada!',
+                ),
+            404);
+        }
+    } 
+} 
