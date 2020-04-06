@@ -53,5 +53,9 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['ues/get/(:num)'] = 'UnidadeEnsinoCtl/listUes/$1';
-$route['disciplina/get/(:num)'] = 'DisciplinaCtl/listDisciplina/$1';
+# Rota para Disciplinas
+$route['disciplina/(:num)'] = 'DisciplinaCtl/getById/$1';
+
+# Rota para Unidades de Ensino
+$route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/getAll';
+$route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoCtl/getById/$1';

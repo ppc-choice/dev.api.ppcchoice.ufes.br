@@ -4,36 +4,92 @@ require_once APPPATH . 'libraries/API_Controller.php';
 
 class UnidadeEnsinoCtl extends API_Controller
 {
-    public function __construct() {
-        parent::__construct();
-    }
-
-    public function listUes($codUnEnsino)
+    /**
+     * @api {get} unidades-ensino/ Listar todas as Unidades de Ensino
+     * @apiName getAll
+     * @apiGroup UnidadeEnsino
+     *
+     *
+     * @apiSuccess {String} nome Nome da Unidade de Ensino.
+     * @apiSuccess {Number} codUnEnsino Código da Unidade de Ensino.
+     * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
+     * @apiSuccess {Number} codIes Código da Instutuição de Ensino Superior que a Unidade de Ensino pertence.
+     */
+    public function getAll()
     {
-        $ues = $this->entity_manager->//find('Entities\UnidadeEnsino', $codUnEnsino);
-            createQueryBuilder()
-            ->select('u.nome', 'u.cnpj')
-            ->from('Entities\UnidadeEnsino', 'u')
-            ->where('u.codUnEnsino = ' . $codUnEnsino)
-            ->getQuery()->getResult();
-        
-        //find('Entities\UnidadeEnsino', $codUnEnsino);
-
-        /*
-                'SELECT u.nome, u.cnpj
-                FROM Entities\UnidadeEnsino u
-                WHERE u.codUnEnsino = ' . $codUnEnsino
-            )
-            ->getResult();
-        */
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('GET'),
         ));
 
-        $this->api_return(array(
-            'status' => true,
-            'result' => $this->doctrine_to_array($ues),
-        ), 200);
+
+        $qb = $this->entity_manager->
+            createQueryBuilder()
+            ->select('u.codUnEnsino', 'i.codIes', 'u.nome', 'u.cnpj')
+            ->from('Entities\UnidadeEnsino', 'u')
+            ->innerJoin('u.ies', 'i')
+            ->where('u.codUnEnsino > 2')
+            ->getQuery();
+
+        $r = $qb->getResult();
+        $result = $this->doctrine_to_array($r);
+
+        if ( !is_null($result) ){
+            $this->api_return(array(
+                'status' => true,
+                'result' => $result,
+            ), 200);
+        } else {
+            $this->api_return(array(
+                'status' => false,
+                'result' => 'Não Encontrado',
+            ), 200);
+        }
+    }
+
+    /**
+     * @api {get} unidades-ensino/:codUnidadeEnsino Obter Unidade de Ensino pelo códigoda dela
+     * @apiName getById
+     * @apiGroup UnidadeEnsino
+     *
+     * @apiParam {Number} codUnidadeEnsino Codigo unico de uma Unidade de Ensino.
+     *
+     * @apiSuccess {String} nome Nome da Unidade de Ensino.
+     * @apiSuccess {Number} codUnEnsino Código da Unidade de Ensino.
+     * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
+     * @apiSuccess {Number} codIes Código da Instutuição de Ensino Superior que a Unidade de Ensino pertence.
+     */
+    public function getById($codUnidadeEnsino)
+    {
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiconfig(array(
+            'methods' => array('GET'),
+        ));
+
+
+        $qb = $this->entity_manager->
+            createQueryBuilder()
+            ->select('i.codIes, u.nome, u.cnpj')
+            ->from('Entities\UnidadeEnsino', 'u')
+            ->innerJoin('u.ies', 'i')
+            ->where('u.codUnEnsino = ' . $codUnidadeEnsino)
+            ->getQuery();
+
+        $r = $qb->getResult();
+        $result = $this->doctrine_to_array($r);
+
+        if ( !is_null($result) ){
+            $this->api_return(array(
+                'status' => true,
+                'result' => $result,
+            ), 200);
+        } else {
+            $this->api_return(array(
+                'status' => false,
+                'result' => 'Não Encontrado',
+            ), 200);
+        }
     }
 }

@@ -8,11 +8,12 @@ class DisciplinaCtl extends API_Controller
         parent::__construct();
     }
 
-    public function listDisciplina($numDisciplina)
+    public function getById($numDisciplina)
     {
         $disciplina = $this->entity_manager->createQueryBuilder()
-            ->select('d.nome, d.ch, d.codDepto')
+            ->select('d.nome, d.ch, d.codDepto, dep.nome')
             ->from('Entities\Disciplina', 'd')
+            ->innerJoin('d.departamento', 'dep')
             ->where('d.numDisciplina = ' . $numDisciplina)
             ->getQuery()->getResult();
 
