@@ -8,15 +8,18 @@
  * @apiGroup Dependencia
  *
  * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
+ * @apiSuccess {String} Curso Nome do curso que a componente curricular pertence.
  * @apiSuccess {String} Nome Nome da uma componente curricular.
- * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
+ * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
  * @apiSuccess {String} Nome Nome do pré-requisito da componente curricular.
+ * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
  * @apiExample {curl} Exemplo:
  *      curl -i http://dev.api.ppcchoice.ufes.br/dependencias/6/1
  * @apiSuccessExample {JSON} Success-Response:
  * HHTP/1.1 200 OK
+ * 
  * {
- *     nome": "Ciência da Computação",
+ *     "nome": "Ciência da Computação",
  *     "codCompCurric": 6,
  *     "nome": "Cálculo II",
  *     "codPreRequisito": 1
@@ -44,14 +47,14 @@ class DependenciaCtl extends API_Controller
         ));
         
         $qb = $this->entity_manager->createQueryBuilder()
-        ->select('cs.nome, disc.nome, d.codCompCurric, d.codPreRequisito')
+        ->select('curso.nome as Curso, d.codCompCurric , disc.nome as nomeCompCurric, d.codPreRequisito, dp.nome as nomePreRequisito')
         ->from('Entities\Dependencia', 'd')
-        ->innerjoin('d.componenteCurricular', 'cc')
-        ->innerjoin('cc.ppc', 'ppc')
-        ->innerjoin('ppc.curso', 'cs')
-        ->leftJoin('cc.disciplina', 'disc')
-        ->leftJoin('d.preRequisito', 'pr')
+        ->innerJoin('d.componenteCurricular', 'cc')
+        ->innerJoin('cc.disciplina', 'disc')
+        ->innerJoin('d.preRequisito', 'pr')
         ->innerJoin('pr.disciplina', 'dp ') 
+        ->innerJoin('cc.ppc', 'ppc')
+        ->innerJoin('ppc.curso', 'curso') 
         ->getQuery();
         
         $result = $qb->getResult();
@@ -71,7 +74,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => false,
-                    "result" => 'Depêndencia não encontrada!',
+                    "message" => 'Depêndencia não encontrada!',
                 ),
             404);
         }
@@ -90,12 +93,14 @@ class DependenciaCtl extends API_Controller
         ));
         
         $qb = $this->entity_manager->createQueryBuilder()
-        ->select('d.codCompCurric, disc.nome, d.codPreRequisito')
+        ->select('curso.nome as Curso, d.codCompCurric , disc.nome AS nomeCompCurric    , d.codPreRequisito, dp.nome as nomePreReq')
         ->from('Entities\Dependencia', 'd')
         ->innerJoin('d.componenteCurricular', 'cc')
         ->innerJoin('cc.disciplina', 'disc')
         ->innerJoin('d.preRequisito', 'pr')
         ->innerJoin('pr.disciplina', 'dp ') 
+        ->innerJoin('cc.ppc', 'ppc')
+        ->innerJoin('ppc.curso', 'curso')
         ->where('d.codCompCurric = ?1 AND d.codPreRequisito = ?2')
         ->setParameters(array(1 => $codCompCurric , 2 =>$codPreRequisito))
         ->getQuery();
@@ -107,7 +112,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $result,
+                    "result" => $result[0],
                 ),
             200); 
 
@@ -116,7 +121,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => false,
-                    "result" => 'Depêndencia não encontrada!',
+                    "message" => 'Dependencia não encontrada!',
                 ),
             404);
         }
@@ -149,7 +154,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $result,
+                    "result" => $result[0],
                 ),
             200); 
 
@@ -158,7 +163,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => false,
-                    "result" => 'Depêndencia não encontrada!',
+                    "message" => 'Depêndencia não encontrada!',
                 ),
             404);
         }

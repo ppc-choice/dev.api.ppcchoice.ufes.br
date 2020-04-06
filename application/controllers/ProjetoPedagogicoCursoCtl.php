@@ -4,7 +4,7 @@
 /**
  * @api {get} projetos-pedagogicos-cursos/:codPpc Solicitar Projeto Pedagógico de Curso.
  * @apiName getById
- * @apiGroup ProjetoPedagogicoCurso
+ * @apiGroup Projeto Pedagógico Curso
  *
  * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
  *
@@ -87,17 +87,30 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
 
         ));
        
-        $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findBy(array());
-        $result = $this->doctrine_to_array($ppc);
+        $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findAll();
+        $result = $this->doctrine_to_array($ppc, TRUE);
 
-        $this->api_return(
-            array(
-                'status' => true,
-                "result" => $result,
-            ),
-        200);
-        
+        if(!empty($result)){
+            
+            $this->api_return(
+                array(
+                    'status' => true,
+                    "result" => $result,
+                ),
+            200); 
+
+        }else{
+            
+            $this->api_return(
+                array(
+                    'status' => false,
+                    "message" => 'Projeto Pedagógico de Curso não encontrado!',
+                ),
+            404);
+        }
     }
+        
+
     public function getById($codPpc)
     {
         
@@ -110,14 +123,26 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
         ));
         
         $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso', $codPpc);
-        $result = $this->doctrine_to_array($ppc);
+        $result = $this->doctrine_to_array($ppc, TRUE);
 
-        $this->api_return(
-            array(
-                'status' => true,
-                "result" => $result,
-            ),
-        200);
+        if(!empty($result)){
+            
+            $this->api_return(
+                array(
+                    'status' => true,
+                    "result" => $result,
+                ),
+            200); 
+
+        }else{
+            
+            $this->api_return(
+                array(
+                    'status' => false,
+                    "message" => 'Projeto Pedagógico de Curso não encontrado!',
+                ),
+            404);
+        }
     }
 
     
