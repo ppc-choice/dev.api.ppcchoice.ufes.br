@@ -8,7 +8,7 @@ class TransicaoCtl extends API_Controller {
     /**
      * @api {get} transicoes/:codPpcAtual Requisitar os cursos atuais da unidade de ensino especificada para os quais há transição.
      * @apiName getByUe
-     * @apiGroup Transicao
+     * @apiGroup Transição
      *
      * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
      *
@@ -38,7 +38,7 @@ class TransicaoCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Transicao não encontrada!'
+                    'message' =>  'Transição não encontrada!'
                 ),
                 404
             );
@@ -56,7 +56,7 @@ class TransicaoCtl extends API_Controller {
     /**
      * @api {get} transicoes/ Listar todos os componentes curriculares
      * @apiName getAll
-     * @apiGroup Transicao
+     * @apiGroup Transição
      *
      *
      * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
@@ -104,7 +104,7 @@ class TransicaoCtl extends API_Controller {
     /**
      * @api {get} transicoes/:codPpcAtual Requisitar uma transição de ppcs pelo código do ppc atual.
      * @apiName getByPpc
-     * @apiGroup Transicao
+     * @apiGroup Transição
      *
      * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
      *

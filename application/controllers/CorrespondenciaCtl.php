@@ -8,7 +8,7 @@ class CorrespondenciaCtl extends API_Controller {
     /**
      * @api {get} correspondencias/:codPpcAtual/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
      * @apiName getAllByPPC
-     * @apiGroup Correspondencia
+     * @apiGroup Correspondência
      *
      * @apiParam {Number} codPpcAtual Código unico do PPC atual .
      * @apiParam {Number} codPpcAlvo Código unico do PPC alvo.
@@ -43,7 +43,7 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondencia não encontrada!'
+                    'message' =>  'Correspondencias não encontradas para os PPC atual e PPC alvo informados '
                 ),404
             );
             
@@ -60,7 +60,7 @@ class CorrespondenciaCtl extends API_Controller {
     /**
      * @api {get} correspondencias/ Listar todas as correspondências de componentes curriculares.
      * @apiName getAll
-     * @apiGroup Correspondencia
+     * @apiGroup Correspondência
      *
      *
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
@@ -99,7 +99,7 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondencia não encontrada!'
+                    'message' =>  'Correspondência não encontrada!'
                 ),404
             );
             
@@ -117,7 +117,7 @@ class CorrespondenciaCtl extends API_Controller {
     /**
      * @api {get} correspondencias/:codCompCurric Requisitar a correspondência de uma componente curricular
      * @apiName get
-     * @apiGroup Correspondencia
+     * @apiGroup Correspondência
      *
      * @apiParam {Number} codCompCurric Codigo unico de componente curricular.
      *
@@ -159,7 +159,7 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondencia não encontrada!'
+                    'message' =>  'Correspondência não encontrada para esta componente!'
                 ),404
             );
             
