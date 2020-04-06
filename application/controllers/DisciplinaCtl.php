@@ -10,29 +10,32 @@ class DisciplinaCtl extends API_Controller
 
     public function getById($numDisciplina)
     {
-        $disciplina = $this->entity_manager->createQueryBuilder()
-            ->select('d.nome, d.ch, d.codDepto, dep.nome')
-            ->from('Entities\Disciplina', 'd')
-            ->innerJoin('d.departamento', 'dep')
-            ->where('d.numDisciplina = ' . $numDisciplina)
-            ->getQuery()->getResult();
-
-        /*
-           createQuery(
-                'SELECT d.nome, d.ch, d.codDepto
-                FROM Entities\Disciplina d
-                WHERE d.numDisciplina = ' . $numDisciplina
-            )
-            ->getResult();
-        */
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('GET'),
         ));
 
-        $this->api_return(array(
-            'status' => true,
-            'result' => $this->doctrine_to_array($disciplina),
-        ), 200);
+        $qb = $this->entity_manager->createQueryBuilder()
+            ->select('d.nome, d.ch, d.codDepto, dep.nome')
+            ->from('Entities\Disciplina', 'd')
+            ->innerJoin('d.departamento', 'dep')
+            ->where('d.numDisciplina = ' . $numDisciplina)
+            ->getQuery();
+
+        $r = $qb->getResult();
+        $result = $this->doctrine_to_array($r);
+
+        if ( !is_null($result) ){
+            $this->api_return(array(
+                'status' => true,
+                'result' => $result,
+            ), 200);
+        } else {
+            $this->api_return(array(
+                'status' => false,
+                'message' => 'Não Encontrado',
+            ), 200);
+        }
     }
 }

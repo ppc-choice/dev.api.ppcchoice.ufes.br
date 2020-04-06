@@ -7,7 +7,7 @@ class UnidadeEnsinoCtl extends API_Controller
     /**
      * @api {get} unidades-ensino/ Listar todas as Unidades de Ensino
      * @apiName getAll
-     * @apiGroup UnidadeEnsino
+     * @apiGroup Unidades de Ensino
      *
      *
      * @apiSuccess {String} nome Nome da Unidade de Ensino.
@@ -42,7 +42,7 @@ class UnidadeEnsinoCtl extends API_Controller
         } else {
             $this->api_return(array(
                 'status' => false,
-                'result' => 'Não Encontrado',
+                'message' => 'Não Encontrado',
             ), 200);
         }
     }
@@ -50,7 +50,7 @@ class UnidadeEnsinoCtl extends API_Controller
     /**
      * @api {get} unidades-ensino/:codUnidadeEnsino Obter Unidade de Ensino pelo códigoda dela
      * @apiName getById
-     * @apiGroup UnidadeEnsino
+     * @apiGroup Unidades de Ensino
      *
      * @apiParam {Number} codUnidadeEnsino Codigo unico de uma Unidade de Ensino.
      *
@@ -87,7 +87,7 @@ class UnidadeEnsinoCtl extends API_Controller
         } else {
             $this->api_return(array(
                 'status' => false,
-                'result' => 'Não Encontrado',
+                'message' => 'Não Encontrado',
             ), 200);
         }
     }
