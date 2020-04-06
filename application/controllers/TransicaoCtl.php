@@ -6,17 +6,17 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class TransicaoCtl extends API_Controller {
 
     /**
-     * @api {get} transicoes/:codPpcAtual Requisitar os cursos atuais da unidade de ensino especificada para os quais há transição.
+     * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Requisitar os cursos atuais da unidade de ensino especificada para os quais há transição.
      * @apiName getByUe
      * @apiGroup Transição
      *
-     * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
+     * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
      *
      * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
      * @apiSuccess {Number} codPpc Código do ppc atual da transição.
      */
 
-    public function getByUE($codUE)
+    public function getByUnidadeEnsino($codUnidadeEnsino)
 	{
         $this->_apiConfig(array(
             'methods' => array('GET'), 
@@ -29,26 +29,26 @@ class TransicaoCtl extends API_Controller {
             ->innerJoin('p.curso','c')
             ->innerJoin('c.unidadeEnsino','ues1')
             ->where('ues1.codUnEnsino = :codUe'  )
-            ->setParameter('codUe',$codUE )
+            ->setParameter('codUe',$codUnidadeEnsino )
             ->getQuery();
         
         $transicao = $qb->getResult();
 
-        if(empty($transicao)){
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  'Transição não encontrada!'
-                ),
-                404
-            );
-        }else{
+        if(!empty($transicao)){
             $this->api_return(
                 array(
                     'status' => true,
                     'result' =>  $transicao
                 ),
                 200
+            );
+        }else{
+            $this->api_return(
+                array(
+                    'status' => false,
+                    'message' =>  'Transição não encontrada!'
+                ),
+                404
             );
         }
     }
@@ -82,27 +82,27 @@ class TransicaoCtl extends API_Controller {
 
         $transicao = $qb->getResult();
 
-        if(empty($transicao)){
+        if(!empty($transicao)){
             $this->api_return(
                 array(
-                    'status' => false,
-                    'message' =>  'Nenhuma transição encontrada!'
+                    'status' => true,
+                    'result' =>  $this->$transicao
                 ),
                 200
             );
         }else{
             $this->api_return(
                 array(
-                    'status' => true,
-                    'result' =>  $this->doctrine_to_array($transicao)
+                    'status' => false,
+                    'message' =>  'Nenhuma transição encontrada!'
                 ),
-                200
+                404
             );
         }
     }
 
     /**
-     * @api {get} transicoes/:codPpcAtual Requisitar uma transição de ppcs pelo código do ppc atual.
+     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/transicoes/ Requisitar uma transição de ppcs pelo código do ppc atual.
      * @apiName getByPpc
      * @apiGroup Transição
      *
@@ -113,7 +113,7 @@ class TransicaoCtl extends API_Controller {
      * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
      * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
      */
-    public function getByPPC($codPpcAtual)
+    public function getByPpc($codPpcAtual)
 	{
         $this->_apiConfig(array(
             'methods' => array('GET'), 
@@ -127,26 +127,27 @@ class TransicaoCtl extends API_Controller {
             ->innerJoin('t.ppc_alvo','pAlvo')
             ->innerJoin('pAtual.curso','cAtual')
             ->innerJoin('pAlvo.curso','cAlvo')
-            ->where('t.codPpcAtual = ' . $codPpcAtual)
+            ->where('t.codPpcAtual = :codPpcAtual')
+            ->setParameter('codPpcAtual',$codPpcAtual )
             ->getQuery();
         
         $transicao = $qb->getResult();
 
-        if(empty($transicao)){
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  'Transicao não encontrada!'
-                ),
-                404
-            );
-        }else{
+        if(!empty($transicao)){
             $this->api_return(
                 array(
                     'status' => true,
                     'result' =>  $transicao
                 ),
                 200
+            );
+        }else{
+            $this->api_return(
+                array(
+                    'status' => false,
+                    'message' =>  'Transicao não encontrada!'
+                ),
+                404
             );
         }
     }

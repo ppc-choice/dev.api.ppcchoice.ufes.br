@@ -6,7 +6,7 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class CorrespondenciaCtl extends API_Controller {
 
     /**
-     * @api {get} correspondencias/:codPpcAtual/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
+     * @api {get} projetos-pedagogicos-curso/correspondencias/:codPpcAtual/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
      * @apiName getAllByPPC
      * @apiGroup Correspondência
      *
@@ -17,7 +17,7 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiSuccess {Number} codCompCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
      */
-    public function getAllByPPC($codPpcAtual,$codPpcAlvo)
+    public function getAllByPpc($codPpcAtual,$codPpcAlvo)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
@@ -38,21 +38,21 @@ class CorrespondenciaCtl extends API_Controller {
         $correspondencia = $qb->getResult();    
      
         
-        if(empty($correspondencia))
+        if(!empty($correspondencia))
         {
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  'Correspondencias não encontradas para os PPC atual e PPC alvo informados '
-                ),404
-            );
-            
-        }else{
             $this->api_return(
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
                 ),200
+            );
+            
+        }else{
+            $this->api_return(
+                array(
+                    'status' => false,
+                    'message' =>  'Correspondencias não encontradas para os PPC atual e PPC alvo informados '
+                ),404
             );
         }
     }
@@ -94,32 +94,32 @@ class CorrespondenciaCtl extends API_Controller {
         $correspondencia = $qb->getResult();    
      
         
-        if(empty($correspondencia))
+        if(!empty($correspondencia))
         {
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  'Correspondência não encontrada!'
-                ),404
-            );
-            
-        }else{
             $this->api_return(
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
                 ),200
             );
+            
+        }else{
+            $this->api_return(
+                array(
+                    'status' => false,
+                    'message' =>  'Correspondência não encontrada!'
+                ),404
+            );
         }
     }
 
 
     /**
-     * @api {get} correspondencias/:codCompCurric Requisitar a correspondência de uma componente curricular
+     * @api {get} componentes-curriculares/:codCompCurric/correspondencias Requisitar a correspondência de uma componente curricular
      * @apiName get
      * @apiGroup Correspondência
      *
-     * @apiParam {Number} codCompCurric Codigo unico de componente curricular.
+     * @apiParam {Number} codCompCurric Código unico de componente curricular.
      *
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
@@ -129,7 +129,7 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiSuccess {String} codDiscCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
      */
-    public function getByCC($codCompCurric)
+    public function getByCompCurric($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
@@ -153,22 +153,21 @@ class CorrespondenciaCtl extends API_Controller {
                 
         $correspondencia = $qb->getResult();    
      
-        
-        if(empty($correspondencia))
+        if(!empty($correspondencia))
         {
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  'Correspondência não encontrada para esta componente!'
-                ),404
-            );
-            
-        }else{
             $this->api_return(
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
                 ),200
+            );
+            
+        }else{
+            $this->api_return(
+                array(
+                    'status' => false,
+                    'message' =>  'Correspondência não encontrada para esta componente!'
+                ),404
             );
         }
     }
