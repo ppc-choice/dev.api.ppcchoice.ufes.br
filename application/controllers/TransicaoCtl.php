@@ -16,23 +16,14 @@ class TransicaoCtl extends API_Controller {
      * @apiSuccess {Number} codPpc Código do ppc atual da transição.
      */
 
-    public function getByUnidadeEnsino($codUnidadeEnsino)
+    public function findByCodUnidadeEnsino($codUnidadeEnsino)
 	{
         $this->_apiConfig(array(
             'methods' => array('GET'), 
         ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-        ->select('CONCAT(c.nome, p.anoAprovacao) as nomeCurso, p.codPpc')
-            ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','p')
-            ->innerJoin('p.curso','c')
-            ->innerJoin('c.unidadeEnsino','ues1')
-            ->where('ues1.codUnEnsino = :codUe'  )
-            ->setParameter('codUe',$codUnidadeEnsino )
-            ->getQuery();
-        
-        $transicao = $qb->getResult();
+        $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
+
 
         if(!empty($transicao)){
             $this->api_return(
@@ -64,29 +55,19 @@ class TransicaoCtl extends API_Controller {
      * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
      * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
      */
-    public function getAll()
+    public function findAll()
 	{
         $this->_apiConfig(array(
             'methods' => array('GET'), 
         ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-            ->select('CONCAT(cAtual.nome, pAtual.anoAprovacao) as ppcAtual, t.codPpcAtual,
-                    CONCAT(cAlvo.nome, pAlvo.anoAprovacao) as ppcAlvo, t.codPpcAlvo')
-            ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','pAtual')
-            ->innerJoin('t.ppc_alvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
-            ->getQuery();
-
-        $transicao = $qb->getResult();
+        $transicao = $this->entity_manager->getRepository('Entities\Transicao')->findAll();
 
         if(!empty($transicao)){
             $this->api_return(
                 array(
                     'status' => true,
-                    'result' =>  $this->$transicao
+                    'result' =>  $this->doctrine_to_array($transicao)
                 ),
                 200
             );
@@ -113,25 +94,14 @@ class TransicaoCtl extends API_Controller {
      * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
      * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
      */
-    public function getByPpc($codPpcAtual)
+    public function findByCodPpc($codPpcAtual)
 	{
         $this->_apiConfig(array(
             'methods' => array('GET'), 
         ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-        ->select('CONCAT(cAtual.nome, pAtual.anoAprovacao) as ppcAtual, t.codPpcAtual,
-                    CONCAT(cAlvo.nome, pAlvo.anoAprovacao) as ppcAlvo, t.codPpcAlvo')
-            ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','pAtual')
-            ->innerJoin('t.ppc_alvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
-            ->where('t.codPpcAtual = :codPpcAtual')
-            ->setParameter('codPpcAtual',$codPpcAtual )
-            ->getQuery();
-        
-        $transicao = $qb->getResult();
+        $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
+
 
         if(!empty($transicao)){
             $this->api_return(
