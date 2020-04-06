@@ -60,7 +60,7 @@ $route['projetos-pedagogicos-curso/(:num)/componentes-curriculares'] = 'Componen
 
 //Correspondencia : Hadamo
 $route['correspondencias'] = 'CorrespondenciaCtl/getAll';
-$route['projetos-pedagogicos-curso/correspondencias/(:num)/(:num)'] = 'CorrespondenciaCtl/getAllByPpc/$1/$2';
+$route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)'] = 'CorrespondenciaCtl/getAllByPpc/$1/$2';
 $route['componentes-curriculares/(:num)/correspondencias'] = 'CorrespondenciaCtl/getByCompCurric/$1';
 
 //Transicao : Hadamo

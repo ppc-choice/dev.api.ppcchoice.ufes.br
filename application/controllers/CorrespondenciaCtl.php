@@ -6,7 +6,7 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class CorrespondenciaCtl extends API_Controller {
 
     /**
-     * @api {get} projetos-pedagogicos-curso/correspondencias/:codPpcAtual/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
+     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
      * @apiName getAllByPPC
      * @apiGroup Correspondência
      *
