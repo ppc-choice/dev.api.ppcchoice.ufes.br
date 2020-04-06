@@ -25,6 +25,14 @@ Entities\ComponenteCurricular:
       type: integer
       nullable: false
       column: cod_depto
+    numDisciplina:
+      type: integer
+      nullable: false
+      column: num_disciplina
+    codPpc: 
+      type: integer
+      nullable: false
+      column: cod_ppc
   manyToOne:
     disciplina:
       targetEntity: Disciplina
