@@ -52,3 +52,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+//Projeto Pedagógico de Curso
+
+$route['projetos-pedagogicos-cursos/(:num)'] = 'ProjetoPedagogicoCursoCtl/getById/$1/';
+$route['projetos-pedagogicos-cursos'] = 'ProjetoPedagogicoCursoCtl/getAll/';
+
+//Depêndencia
+
+$route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/getById/$1/$2/';
+$route['dependencias'] = 'DependenciaCtl/getAll/';
+$route['dependencias/(:num)'] = 'DependenciaCtl/getByIdPpc/$1';
