@@ -18,7 +18,7 @@ class InstituicaoEnsinoSuperiorCtl extends API_Controller
 			)
 		);
 		
-        $ies = $this->entity_manager->getRepository('Entities\InstituicaoEnsinoSuperior')->findBy(array());
+        $ies = $this->entity_manager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll(array());
         
         $result = $this->doctrine_to_array($ies,TRUE);
 

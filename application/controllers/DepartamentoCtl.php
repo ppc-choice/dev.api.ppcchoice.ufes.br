@@ -14,10 +14,10 @@ class DepartamentoCtl extends API_Controller {
 			)
 		);
 		
-		$dep = $this->entity_manager->find('Entities\Departamento',$codDepto);
+		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
 		
-		if ( !is_null($dep) ) {
-			$result = $this->doctrine_to_array($dep,TRUE);	
+		if ( !is_null($depto) ) {
+			$result = $this->doctrine_to_array($depto,TRUE);	
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
@@ -40,9 +40,9 @@ class DepartamentoCtl extends API_Controller {
 			)
 		);
 		
-        $depart = $this->entity_manager->getRepository('Entities\Departamento')->findBy(array());
+        $depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll(array());
         
-        $result = $this->doctrine_to_array($depart,TRUE);
+        $result = $this->doctrine_to_array($depto,TRUE);
 
 		$this->api_return(array(
 			'status' => TRUE,

@@ -15,9 +15,10 @@ class CursoCtl extends API_Controller {
 		);
 		
 		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
-		
+        $result = $this->doctrine_to_array($curso,TRUE);	
+        
 		if ( !is_null($curso) ) {
-			$result = $this->doctrine_to_array($curso,TRUE);	
+			
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
@@ -40,18 +41,17 @@ class CursoCtl extends API_Controller {
 			)
 		);
 		
-         /*$qb = $this->entity_manager->createQueryBuilder()
-             ->select('curso.codCurso, curso.nome, curso.anoCriacao, unidadeEnsino.nome')
+         $qb = $this->entity_manager->createQueryBuilder()
+             ->select('curso.codCurso, curso.nome as nomeCurso, curso.anoCriacao, uniEnsino.nome as nomeUnidadeEnsino')
              ->from('Entities\Curso','curso')
-             ->leftJoin('curso.unidadeEnsino', 'unidadeEnsino')
+             ->leftJoin('curso.unidadeEnsino', 'uniEnsino')
              ->getQuery();
         
         $r = $qb->getResult();
-        $result = $r;*/
+        $result = $r;
 
-        $curso = $this->entity_manager->getRepository('Entities\Curso')->findBy(array());
-
-        $result = $this->doctrine_to_array($curso,TRUE);
+        //$curso = $this->entity_manager->getRepository('Entities\Curso')->findAll(array());
+        //$result = $this->doctrine_to_array($curso,TRUE);
 
 		$this->api_return(array(
 			'status' => TRUE,
