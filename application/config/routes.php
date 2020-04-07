@@ -62,4 +62,4 @@ $route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoCtl/getAll/';
 
 $route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/getById/$1/$2/';
 $route['dependencias'] = 'DependenciaCtl/getAll/';
-$route['projetos-pedagogicos-curso/(:num)/dependencia'] = 'DependenciaCtl/getByIdPpc/$1/';
+$route['projetos-pedagogicos-curso/(:num)/dependencias'] = 'DependenciaCtl/getByIdPpc/$1/';
