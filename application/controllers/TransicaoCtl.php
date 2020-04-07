@@ -62,12 +62,12 @@ class TransicaoCtl extends API_Controller {
         ));
 
         $transicao = $this->entity_manager->getRepository('Entities\Transicao')->findAll();
-
+        $retorno = $this->doctrine_to_array($transicao);
         if(!empty($transicao)){
             $this->api_return(
                 array(
                     'status' => true,
-                    'result' =>  $this->doctrine_to_array($transicao)
+                    'result' =>  $retorno
                 ),
                 200
             );
