@@ -19,6 +19,10 @@ Entities\Curso:
       type: integer
       nullable: false
       column: ano_criacao
+    codUnEnsino:
+      type: integer
+      nullable: false
+      column: cod_un_ensino
   manyToOne:
     unidadeEnsino:
       targetEntity: UnidadeEnsino

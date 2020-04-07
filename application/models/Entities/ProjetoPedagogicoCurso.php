@@ -80,6 +80,11 @@ class ProjetoPedagogicoCurso
     private $situacao;
 
     /**
+     * @var integer
+     */
+    private $codCurso;
+
+    /**
      * @var \Entities\Curso
      */
     private $curso;
@@ -405,6 +410,29 @@ class ProjetoPedagogicoCurso
     public function getSituacao()
     {
         return $this->situacao;
+    }
+
+    /**
+     * Set codCurso
+     *
+     * @param integer $codCurso
+     * @return ProjetoPedagogicoCurso
+     */
+    public function setCodCurso($codCurso)
+    {
+        $this->codCurso = $codCurso;
+    
+        return $this;
+    }
+
+    /**
+     * Get codCurso
+     *
+     * @return integer 
+     */
+    public function getCodCurso()
+    {
+        return $this->codCurso;
     }
 
     /**
