@@ -105,6 +105,30 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getCodDepto();
     }
 
+    public function setNumDisciplina($numDisciplina)
+    {
+        $this->__load();
+        return parent::setNumDisciplina($numDisciplina);
+    }
+
+    public function getNumDisciplina()
+    {
+        $this->__load();
+        return parent::getNumDisciplina();
+    }
+
+    public function setCodPpc($codPpc)
+    {
+        $this->__load();
+        return parent::setCodPpc($codPpc);
+    }
+
+    public function getCodPpc()
+    {
+        $this->__load();
+        return parent::getCodPpc();
+    }
+
     public function setDisciplina(\Entities\Disciplina $disciplina = NULL)
     {
         $this->__load();
@@ -132,7 +156,7 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'codDepto', 'disciplina', 'ppc');
+        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'codDepto', 'numDisciplina', 'codPpc', 'disciplina', 'ppc');
     }
 
     public function __clone()

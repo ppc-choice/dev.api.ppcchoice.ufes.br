@@ -35,6 +35,16 @@ class ComponenteCurricular
     private $codDepto;
 
     /**
+     * @var integer
+     */
+    private $numDisciplina;
+
+    /**
+     * @var integer
+     */
+    private $codPpc;
+
+    /**
      * @var \Entities\Disciplina
      */
     private $disciplina;
@@ -158,6 +168,52 @@ class ComponenteCurricular
     public function getCodDepto()
     {
         return $this->codDepto;
+    }
+
+    /**
+     * Set numDisciplina
+     *
+     * @param integer $numDisciplina
+     * @return ComponenteCurricular
+     */
+    public function setNumDisciplina($numDisciplina)
+    {
+        $this->numDisciplina = $numDisciplina;
+    
+        return $this;
+    }
+
+    /**
+     * Get numDisciplina
+     *
+     * @return integer 
+     */
+    public function getNumDisciplina()
+    {
+        return $this->numDisciplina;
+    }
+
+    /**
+     * Set codPpc
+     *
+     * @param integer $codPpc
+     * @return ComponenteCurricular
+     */
+    public function setCodPpc($codPpc)
+    {
+        $this->codPpc = $codPpc;
+    
+        return $this;
+    }
+
+    /**
+     * Get codPpc
+     *
+     * @return integer 
+     */
+    public function getCodPpc()
+    {
+        return $this->codPpc;
     }
 
     /**
