@@ -4,9 +4,10 @@ namespace Entities\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-
+//AUTOR: Wellerson Prenholato
 class CursoRepository extends EntityRepository
-{
+{   
+
     public function getAll()
     {
 		
@@ -19,11 +20,6 @@ class CursoRepository extends EntityRepository
         
         $result = $qb->getResult();
         return $result;
-        //$result = $r;
-
-        //$curso = $this->entity_manager->getRepository('Entities\Curso')->getAll(array());
-        //$result = $this->doctrine_to_array($curso,TRUE);
-
 
     }
 }
