@@ -14,7 +14,7 @@ class CursoCtl extends API_Controller {
 	 *
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsido   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * @apiExample {curl} Exemplo:
 	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/1
 	 * @apiSuccessExample {JSON} Success-Response:
@@ -69,7 +69,7 @@ class CursoCtl extends API_Controller {
 	 * @apiSuccess {Number} codCurso   Identificador único do curso.
 	 * @apiSuccess {String} nome   Nome do curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsido   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * @apiExample {curl} Exemplo:
 	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
 	 * @apiSuccessExample {JSON} Success-Response:
