@@ -5,9 +5,10 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class UnidadeEnsinoCtl extends API_Controller
 {
     /**
-     * @api {get} unidades-ensino/ Listar todas as Unidades de Ensino
+     * @api {get} unidades-ensino Listar todas as Unidades de Ensino
      * @apiName getAll
      * @apiGroup Unidades de Ensino
+     * @apiError 404 Não encontrado
      *
      *
      * @apiSuccess {String} nome Nome da Unidade de Ensino.
@@ -43,6 +44,7 @@ class UnidadeEnsinoCtl extends API_Controller
      * @api {get} unidades-ensino/:codUnidadeEnsino Obter Unidade de Ensino pelo códigoda dela
      * @apiName getById
      * @apiGroup Unidades de Ensino
+     * @apiError 404 Não encontrado
      *
      * @apiParam {Number} codUnidadeEnsino Codigo unico de uma Unidade de Ensino.
      *
@@ -70,7 +72,7 @@ class UnidadeEnsinoCtl extends API_Controller
             $this->api_return(array(
                 'status' => false,
                 'message' => 'Não Encontrado'
-            ), 200);
+            ), 404);
         }
     }
 }

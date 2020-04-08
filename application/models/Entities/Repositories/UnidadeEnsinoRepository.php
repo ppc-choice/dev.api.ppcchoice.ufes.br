@@ -8,22 +8,29 @@ class UnidadeEnsinoRepository extends EntityRepository
 {
     public function findAll()
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
         ->select('i.nome, i.codIes, u.codUnidadeEnsino, u.nome, u.cnpj')
         ->from('Entities\UnidadeEnsino', 'u')
         ->innerJoin('u.ies', 'i')
-        ->getQuery()
-        ->getResult();
+        ->getQuery();
+
+        $result = $qb->getResult();
+
+        return $result;
     }
 
     public function findbyId($codUnidadeEnsino)
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
         ->select('i.codIes, u.nome, u.cnpj')
         ->from('Entities\UnidadeEnsino', 'u')
         ->innerJoin('u.ies', 'i')
-        ->where('u.codUnidadeEnsino = ' . $codUnidadeEnsino)
-        ->getQuery()
-        ->getResult();
+        ->where('u.codUnidadeEnsino = ?1')
+        ->setParameters(array(1 => $codUnidadeEnsino))
+        ->getQuery();
+
+        $result = $qb->getResult();
+
+        return $result;
     }
 }

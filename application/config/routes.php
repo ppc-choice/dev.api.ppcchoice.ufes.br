@@ -55,7 +55,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 # Rota para Disciplinas
 $route['disciplinas']['GET'] = 'DisciplinaCtl/getAll';
-$route['disciplinas/(:num)']['GET'] = 'DisciplinaCtl/getById/$1';
+$route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaCtl/getById/$1/$2';
 
 # Rota para Unidades de Ensino
 $route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/getAll';

@@ -6,9 +6,10 @@ class DisciplinaCtl extends API_Controller
 {
 
     /**
-     * @api {get} disciplinas/ Listar todas as Disciplinas dos Departamentos
+     * @api {get} /disciplinas Listar todas as Disciplinas dos Departamentos
      * @apiName getAll
      * @apiGroup Disciplinas
+     * @apiError 404 Não encontrado
      *
      *
      * @apiSuccess {Number} numDisciplina Codigo único de cada Disciplina.
@@ -36,23 +37,24 @@ class DisciplinaCtl extends API_Controller
             $this->api_return(array(
                 'status' => false,
                 'message' => 'Não Encontrado'
-            ), 200);
+            ), 404  );
         }
     }
 
     /**
-     * @api {get} disciplinas/ Listar todas as Disciplinas dos Departamentos
+     * @api {get} /disciplinas/:numDisciplina Listar todas as Disciplinas dos Departamentos
      * @apiName getAll
      * @apiGroup Disciplinas
+     * @apiError 404 Não encontrado
      *
      * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
+     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
      *
      * @apiSuccess {String} nome Nome da Disciplina.
      * @apiSuccess {Number} ch Carga Horária da Disciplina.
-     * @apiSuccess {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
      * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
      */
-    public function getById($numDisciplina)
+    public function getById($numDisciplina, $codDepto)
     {
         header("Access-Control-Allow-Origin: *");
 
@@ -60,7 +62,7 @@ class DisciplinaCtl extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findById($numDisciplina);
+        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findById($numDisciplina, $codDepto);
 
         if ( !empty($result) ){
             $this->api_return(array(
@@ -71,7 +73,7 @@ class DisciplinaCtl extends API_Controller
             $this->api_return(array(
                 'status' => false,
                 'message' => 'Não Encontrado'
-            ), 200);
+            ), 404);
         }
     }
 }
