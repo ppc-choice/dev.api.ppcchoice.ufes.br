@@ -137,7 +137,7 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
     *       "codCurso": 1   
     *   }
     * 
-    * @api {get} /projetos-pedagogicos-curso/$codPpc
+    * @api {get} /projetos-pedagogicos-curso/:codPpc
     * @apiErrorExample {json} Error-Response:
     *     HTTP/1.1 404 Not Found
     *     {

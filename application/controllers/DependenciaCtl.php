@@ -71,7 +71,7 @@ class DependenciaCtl extends API_Controller
     }
 
     /**
-    * @api {get} dependencias/:codCompCurric/:codPreReq Solicitar depêndencias entre componentes curriculares.
+    * @api {get} dependencias/:codCompCurric/:codPreReq/ Solicitar depêndencias entre componentes curriculares.
     *
     * @apiName getById
     * @apiGroup Dependência
@@ -139,7 +139,7 @@ class DependenciaCtl extends API_Controller
 
 
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
+    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias/ Solicitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
     *
     * @apiName getByIdPpc
     * @apiGroup Dependência

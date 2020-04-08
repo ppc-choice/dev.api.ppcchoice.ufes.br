@@ -352,7 +352,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/projetos-pedagogicos-curso/$codPpc",
+    "url": "/projetos-pedagogicos-curso/:codPpc",
     "title": "",
     "name": "getById",
     "group": "Projeto_Pedagógico_Curso",
@@ -499,7 +499,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.api.ppcchoice.ufes.br//projetos-pedagogicos-curso/$codPpc"
+        "url": "http://dev.api.ppcchoice.ufes.br//projetos-pedagogicos-curso/:codPpc"
       }
     ]
   }
