@@ -6,17 +6,14 @@ class UnidadeEnsinoCtl extends API_Controller
 {
     /**
      * @api {get} unidades-ensino Listar todas as Unidades de Ensino
-     * @apiName getAll
+     * @apiName findAll
      * @apiGroup Unidades de Ensino
      * @apiError 404 Não encontrado
      *
-     * @apiSuccess {String} nomeInstituicao Nome da Instituição de Ensino que a Unidade de Ensino pertence.
-     * @apiSuccess {String} nome Nome da Unidade de Ensino.
-     * @apiSuccess {Number} codUnEnsino Código da Unidade de Ensino.
-     * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
-     * @apiSuccess {Number} codIes Código da Instutuição de Ensino Superior que a Unidade de Ensino pertence.
+     * @apiSuccess {Number} codUnidadeEnsino Código da Unidade de Ensino.
+     * @apiSuccess {String} nome Nome da Instituição de Ensino cuja qual a Unidade de Ensino pertence.
      */
-    public function getAll()
+    public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
@@ -42,7 +39,7 @@ class UnidadeEnsinoCtl extends API_Controller
 
     /**
      * @api {get} unidades-ensino/:codUnidadeEnsino Obter Unidade de Ensino pelo códigoda dela
-     * @apiName getById
+     * @apiName findById
      * @apiGroup Unidades de Ensino
      * @apiError 404 Não encontrado
      *
@@ -54,7 +51,7 @@ class UnidadeEnsinoCtl extends API_Controller
      * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
      * @apiSuccess {Number} codIes Código da Instutuição de Ensino Superior que a Unidade de Ensino pertence.
      */
-    public function getById($codUnidadeEnsino)
+    public function findById($codUnidadeEnsino)
     {
         header("Access-Control-Allow-Origin: *");
 

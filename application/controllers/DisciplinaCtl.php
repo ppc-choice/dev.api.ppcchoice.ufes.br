@@ -7,7 +7,7 @@ class DisciplinaCtl extends API_Controller
 
     /**
      * @api {get} /disciplinas Listar todas as Disciplinas dos Departamentos
-     * @apiName getAll
+     * @apiName findAll
      * @apiGroup Disciplinas
      * @apiError 404 Não encontrado
      *
@@ -18,7 +18,7 @@ class DisciplinaCtl extends API_Controller
      * @apiSuccess {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
      * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
      */
-    public function getAll()
+    public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
@@ -43,7 +43,7 @@ class DisciplinaCtl extends API_Controller
 
     /**
      * @api {get} /disciplinas/:numDisciplina Listar todas as Disciplinas dos Departamentos
-     * @apiName getAll
+     * @apiName findById
      * @apiGroup Disciplinas
      * @apiError 404 Não encontrado
      *
@@ -54,7 +54,7 @@ class DisciplinaCtl extends API_Controller
      * @apiSuccess {Number} ch Carga Horária da Disciplina.
      * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
      */
-    public function getById($numDisciplina, $codDepto)
+    public function findById($numDisciplina, $codDepto)
     {
         header("Access-Control-Allow-Origin: *");
 

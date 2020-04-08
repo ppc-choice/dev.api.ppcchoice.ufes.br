@@ -54,9 +54,9 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 # Rota para Disciplinas
-$route['disciplinas']['GET'] = 'DisciplinaCtl/getAll';
-$route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaCtl/getById/$1/$2';
+$route['disciplinas']['GET'] = 'DisciplinaCtl/findAll';
+$route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaCtl/findById/$1/$2';
 
 # Rota para Unidades de Ensino
-$route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/getAll';
-$route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoCtl/getById/$1';
+$route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/findAll';
+$route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoCtl/findById/$1';
