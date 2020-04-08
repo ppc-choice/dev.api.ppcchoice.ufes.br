@@ -4,10 +4,54 @@ require_once APPPATH . 'libraries/API_Controller.php';
 
 class DisciplinaCtl extends API_Controller
 {
-    public function __construct() {
-        parent::__construct();
+
+    /**
+     * @api {get} disciplinas/ Listar todas as Disciplinas dos Departamentos
+     * @apiName getAll
+     * @apiGroup Disciplinas
+     *
+     *
+     * @apiSuccess {Number} numDisciplina Codigo único de cada Disciplina.
+     * @apiSuccess {String} nome Nome da Disciplina.
+     * @apiSuccess {Number} ch Carga Horária da Disciplina.
+     * @apiSuccess {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
+     */
+    public function getAll()
+    {
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiconfig(array(
+            'methods' => array('GET'),
+        ));
+
+        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findAll();
+
+        if ( !empty($result) ){
+            $this->api_return(array(
+                'status' => true,
+                'result' => $result
+            ), 200);
+        } else {
+            $this->api_return(array(
+                'status' => false,
+                'message' => 'Não Encontrado'
+            ), 200);
+        }
     }
 
+    /**
+     * @api {get} disciplinas/ Listar todas as Disciplinas dos Departamentos
+     * @apiName getAll
+     * @apiGroup Disciplinas
+     *
+     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
+     *
+     * @apiSuccess {String} nome Nome da Disciplina.
+     * @apiSuccess {Number} ch Carga Horária da Disciplina.
+     * @apiSuccess {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
+     */
     public function getById($numDisciplina)
     {
         header("Access-Control-Allow-Origin: *");
@@ -16,25 +60,17 @@ class DisciplinaCtl extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $qb = $this->entity_manager->createQueryBuilder()
-            ->select('d.nome, d.ch, d.codDepto, dep.nome')
-            ->from('Entities\Disciplina', 'd')
-            ->innerJoin('d.departamento', 'dep')
-            ->where('d.numDisciplina = ' . $numDisciplina)
-            ->getQuery();
+        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findById($numDisciplina);
 
-        $r = $qb->getResult();
-        $result = $this->doctrine_to_array($r);
-
-        if ( !is_null($result) ){
+        if ( !empty($result) ){
             $this->api_return(array(
                 'status' => true,
-                'result' => $result,
+                'result' => $result
             ), 200);
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => 'Não Encontrado',
+                'message' => 'Não Encontrado'
             ), 200);
         }
     }

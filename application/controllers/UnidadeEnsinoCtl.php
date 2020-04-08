@@ -23,27 +23,19 @@ class UnidadeEnsinoCtl extends API_Controller
             'methods' => array('GET'),
         ));
 
+        $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findAll();
+        
 
-        $qb = $this->entity_manager->
-            createQueryBuilder()
-            ->select('u.codUnEnsino', 'i.codIes', 'u.nome', 'u.cnpj')
-            ->from('Entities\UnidadeEnsino', 'u')
-            ->innerJoin('u.ies', 'i')
-            ->getQuery();
-
-        $r = $qb->getResult();
-        $result = $this->doctrine_to_array($r);
-
-        if ( !is_null($result) ){
+        if ( !empty($result) ){
             $this->api_return(array(
                 'status' => true,
-                'result' => $result,
+                'result' => $result
             ), 200);
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => 'Não Encontrado',
-            ), 200);
+                'message' => 'Não Encontrado'
+            ), 404);
         }
     }
 
@@ -67,27 +59,17 @@ class UnidadeEnsinoCtl extends API_Controller
             'methods' => array('GET'),
         ));
 
+        $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findById($codUnidadeEnsino);
 
-        $qb = $this->entity_manager->
-            createQueryBuilder()
-            ->select('i.codIes, u.nome, u.cnpj')
-            ->from('Entities\UnidadeEnsino', 'u')
-            ->innerJoin('u.ies', 'i')
-            ->where('u.codUnEnsino = ' . $codUnidadeEnsino)
-            ->getQuery();
-
-        $r = $qb->getResult();
-        $result = $this->doctrine_to_array($r);
-
-        if ( !is_null($result) ){
+        if ( !empty($result) ){
             $this->api_return(array(
                 'status' => true,
-                'result' => $result,
+                'result' => $result
             ), 200);
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => 'Não Encontrado',
+                'message' => 'Não Encontrado'
             ), 200);
         }
     }
