@@ -31,5 +31,6 @@ application/logs/*
 *.env.production
 
 ### APIDOC ###
+doc/*
+apidoc.json
 
-docs/*
