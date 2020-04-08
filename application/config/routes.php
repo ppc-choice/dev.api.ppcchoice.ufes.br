@@ -101,5 +101,6 @@ $route['transicoes'] = 'TransicaoCtl/findAll';
 $route['unidades-ensino/(:num)/transicoes'] = 'TransicaoCtl/findByCodUnidadeEnsino/$1';
 $route['projetos-pedagogicos-curso/(:num)/transicoes'] = 'TransicaoCtl/findByCodPpc/$1';
 
-
-
+// Usuario : Elyabe
+$route['usuarios'] = 'UsuarioCtl/findAll';
+$route['usuarios/(:num)'] = 'UsuarioCtl/findById/$1';
