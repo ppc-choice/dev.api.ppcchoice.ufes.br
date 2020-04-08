@@ -4,7 +4,7 @@ namespace Entities\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-
+//Autor: Hádamo
 class CorrespondenciaRepository extends EntityRepository
 {
     public function findAll()
