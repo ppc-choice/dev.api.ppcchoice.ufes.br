@@ -30,6 +30,8 @@ application/logs/*
 *.env.testing
 *.env.production
 
-#api doc
+
+### APIDOC ###
 doc/*
-*apidoc.json
+apidoc.json
+

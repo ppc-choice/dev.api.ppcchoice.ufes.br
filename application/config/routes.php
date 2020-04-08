@@ -53,6 +53,18 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+
+//Projeto Pedagógico de Curso
+
+$route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoCtl/findById/$1/';
+$route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoCtl/findAll/';
+
+//Depêndencia
+
+$route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/findById/$1/$2/';
+$route['dependencias'] = 'DependenciaCtl/findAll/';
+$route['projetos-pedagogicos-curso/(:num)/dependencias'] = 'DependenciaCtl/findByIdPpc/$1/';
+
 //Componente Curricular : Hadamo
 $route['componentes-curriculares'] = 'ComponenteCurricularCtl/findAll';
 $route['componentes-curriculares/(:num)'] = 'ComponenteCurricularCtl/findByCodCompCurric/$1';
@@ -67,3 +79,4 @@ $route['componentes-curriculares/(:num)/correspondencias'] = 'CorrespondenciaCtl
 $route['transicoes'] = 'TransicaoCtl/findAll';
 $route['unidades-ensino/(:num)/transicoes'] = 'TransicaoCtl/findByCodUnidadeEnsino/$1';
 $route['projetos-pedagogicos-curso/(:num)/transicoes'] = 'TransicaoCtl/findByCodPpc/$1';
+
