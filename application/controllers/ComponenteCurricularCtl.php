@@ -7,10 +7,10 @@ class ComponenteCurricularCtl extends API_Controller {
 
     
     /**
-     * @api {get} componentes-curriculares/ Listar todos os componentes curriculares
-     * @apiName getAll
+     * @api {get} componentes-curriculares Listar todas as componentes curriculares
+     * @apiName findAll
      * @apiGroup Componente Curricular
-     *
+     * @apiError  (Componente Curricular Não Encontrada 404) ComponenteCurricularNaoEncontrada Nenhuma componente curricular encontrada.
      *
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
@@ -42,17 +42,17 @@ class ComponenteCurricularCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma Componente curricular encontrada!'
+                    'message' =>  'Nenhuma componente curricular encontrada!'
                 ),404
             );
         }
         
     }
     /**
-     * @api {get} projetos-pedagogicos-curso/:codPpc/componentes-curriculares Requisitar todas componentes curriculares de um PPC, ordenados por período e componente curricular
-     * @apiName getByPpc
+     * @api {get} projetos-pedagogicos-curso/:codPpc/componentes-curriculares Listar todas componentes curriculares de um PPC, ordenados por período e componente curricular
+     * @apiName findByCodPpc
      * @apiGroup Componente Curricular
-     *
+     * @apiError  (Componente Curricular Não Encontrada 404) ComponenteCurricularNaoEncontrada Não foram encontradas componentes curriculares para o ppc solicitado
      * @apiParam {Number} codPpc Código único de projeto pedagógico de curso (PPC).
      * 
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
@@ -83,7 +83,7 @@ class ComponenteCurricularCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Não foram encontradas componentes curriculares para este PPC!'
+                    'message' =>  'Não foram encontradas componentes curriculares para o ppc solicitado.'
                 ),404
             );
         }
@@ -91,9 +91,10 @@ class ComponenteCurricularCtl extends API_Controller {
     
     /**
      * @api {get} componentes-curriculares/:codCompCurric Requisitar uma componente curricular
-     * @apiName getByCodCc
+     * @apiName findByCodCompCurric
      * @apiGroup Componente Curricular
-     *
+     * @apiError  (Componente Curricular Não Encontrada 404) ComponenteCurricularNaoEncontrada Componente curricular não encontrada.
+     * 
      * @apiParam {Number} codCompCurric Código único de componente curricular.
      *
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
@@ -128,7 +129,7 @@ class ComponenteCurricularCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Componente curricular não encontrada!'
+                    'message' =>  'Componente curricular não encontrada.'
                 ),404
             );
         }

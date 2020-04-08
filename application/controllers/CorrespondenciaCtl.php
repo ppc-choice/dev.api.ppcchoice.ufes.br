@@ -6,10 +6,10 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class CorrespondenciaCtl extends API_Controller {
 
     /**
-     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Requisitar todas as relações de correspondência entre os cursos referidos
-     * @apiName getAllByPPC
+     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Listar todas as relações de correspondência entre os cursos referidos
+     * @apiName findAllByCodPpc
      * @apiGroup Correspondência
-     *
+     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma relação de correspondência encontrada entre componentes dos ppc's solicitados.
      * @apiParam {Number} codPpcAtual Código unico do PPC atual .
      * @apiParam {Number} codPpcAlvo Código unico do PPC alvo.
      *
@@ -39,17 +39,17 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondencias não encontradas para os PPC atual e PPC alvo informados '
+                    'message' =>  'Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.'
                 ),404
             );
         }
     }
 
     /**
-     * @api {get} correspondencias/ Listar todas as correspondências de componentes curriculares.
-     * @apiName getAll
+     * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
+     * @apiName findAll
      * @apiGroup Correspondência
-     *
+     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma Correspondência encontrada.
      *
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
@@ -83,7 +83,7 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondência não encontrada!'
+                    'message' =>  'Nenhuma Correspondência encontrada.'
                 ),404
             );
         }
@@ -91,10 +91,11 @@ class CorrespondenciaCtl extends API_Controller {
 
 
     /**
-     * @api {get} componentes-curriculares/:codCompCurric/correspondencias Requisitar a correspondência de uma componente curricular
-     * @apiName get
+     * @api {get} componentes-curriculares/:codCompCurric/correspondencias Listar as correspondências de uma componente curricular
+     * @apiName findByCodCompCurric
      * @apiGroup Correspondência
-     *
+     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma correspondência encontrada para esta componente.
+     * 
      * @apiParam {Number} codCompCurric Código unico de componente curricular.
      *
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
@@ -129,7 +130,7 @@ class CorrespondenciaCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Correspondência não encontrada para esta componente!'
+                    'message' =>  'Nenhuma correspondência encontrada para esta componente.'
                 ),404
             );
         }

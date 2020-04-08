@@ -6,15 +6,17 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class TransicaoCtl extends API_Controller {
 
     /**
-     * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Requisitar os cursos atuais da unidade de ensino especificada para os quais há transição.
-     * @apiName getByUe
+     * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Listar os cursos atuais da unidade de ensino especificada para os quais há transição.
+     * @apiName findByCodUnidadeEnsino
      * @apiGroup Transição
-     *
+     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada  Nenhuma transição foi encontrada para os cursos da unidade de ensino solicitada.
+     * 
      * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
      *
      * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
      * @apiSuccess {Number} codPpc Código do ppc atual da transição.
      */
+    
 
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
 	{
@@ -37,7 +39,7 @@ class TransicaoCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Transição não encontrada!'
+                    'message' =>  'Nenhuma transição foi encontrada para a unidade de ensino solicitada.'
                 ),
                 404
             );
@@ -45,10 +47,10 @@ class TransicaoCtl extends API_Controller {
     }
 
     /**
-     * @api {get} transicoes/ Listar todos os componentes curriculares
-     * @apiName getAll
+     * @api {get} transicoes Listar todas as transições.
+     * @apiName findAll
      * @apiGroup Transição
-     *
+     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada Nenhuma transição encontrada.
      *
      * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
      * @apiSuccess {String} ppcAlvo Nome do curso e Ano de aprovação do ppc alvo da transição.
@@ -75,7 +77,7 @@ class TransicaoCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma transição encontrada!'
+                    'message' =>  'Nenhuma transição encontrada'
                 ),
                 404
             );
@@ -83,10 +85,10 @@ class TransicaoCtl extends API_Controller {
     }
 
     /**
-     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/transicoes/ Requisitar uma transição de ppcs pelo código do ppc atual.
-     * @apiName getByPpc
+     * @api {get} projetos-pedagogicos-curso/:codPpcAtual/transicoes Listar as transições mapeadas de um ppc.
+     * @apiName findByCodPpc
      * @apiGroup Transição
-     *
+     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada Não foi encontrada transição para o ppc solicitado.
      * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
      *
      * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
@@ -115,7 +117,7 @@ class TransicaoCtl extends API_Controller {
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Transicao não encontrada!'
+                    'message' =>  'Não foi encontrada transição para o ppc solicitado'
                 ),
                 404
             );
