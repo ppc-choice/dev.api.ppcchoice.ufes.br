@@ -10,8 +10,8 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiName findAllByCodPpc
      * @apiGroup Correspondência
      * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma relação de correspondência encontrada entre componentes dos ppc's solicitados.
-     * @apiParam {Number} codPpcAtual Código unico do PPC atual .
-     * @apiParam {Number} codPpcAlvo Código unico do PPC alvo.
+     * @apiParam {Number} codPpcAtual Código do PPC atual .
+     * @apiParam {Number} codPpcAlvo Código do PPC alvo.
      *
      * @apiSuccess {Number} codCompCurric Código da componente curricular correspondente.
      * @apiSuccess {Number} codCompCorresp Código da disciplina correspondente.
@@ -96,7 +96,7 @@ class CorrespondenciaCtl extends API_Controller {
      * @apiGroup Correspondência
      * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma correspondência encontrada para esta componente.
      * 
-     * @apiParam {Number} codCompCurric Código unico de componente curricular.
+     * @apiParam {Number} codCompCurric Código de componente curricular.
      *
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.

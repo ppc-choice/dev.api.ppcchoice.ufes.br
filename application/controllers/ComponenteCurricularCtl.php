@@ -53,7 +53,7 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiName findByCodPpc
      * @apiGroup Componente Curricular
      * @apiError  (Componente Curricular Não Encontrada 404) ComponenteCurricularNaoEncontrada Não foram encontradas componentes curriculares para o ppc solicitado
-     * @apiParam {Number} codPpc Código único de projeto pedagógico de curso (PPC).
+     * @apiParam {Number} codPpc Código de projeto pedagógico de curso (PPC).
      * 
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
@@ -95,7 +95,7 @@ class ComponenteCurricularCtl extends API_Controller {
      * @apiGroup Componente Curricular
      * @apiError  (Componente Curricular Não Encontrada 404) ComponenteCurricularNaoEncontrada Componente curricular não encontrada.
      * 
-     * @apiParam {Number} codCompCurric Código único de componente curricular.
+     * @apiParam {Number} codCompCurric Código de componente curricular.
      *
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
