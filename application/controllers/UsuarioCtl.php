@@ -95,32 +95,4 @@ class UsuarioCtl extends API_Controller {
 			'result' => $result,
 		), 200);
 	}
-
-
-	public function create(){
-
-		// $novaUE = new Entities\InstituicaoEnsinoSuperior;
-		
-		// $novaUE->setCodIes(8);
-		// $novaUE->setNome('Universidade Federal de Viçosa');
-		// $novaUE->setAbreviatura('UFV');
-
-
-		$novaUE = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',8);
-		// echo json_encode($this->doctrine_to_array($novaUE));
-		
-		// $this->entity_manager->persist($novaUE);
-		// $this->entity_manager->flush();
-
-		$ue = $this->entity_manager->find('Entities\UnidadeEnsino',1);
-
-		// $ue->setIes($novaUE);
-
-		// $this->entity_manager->merge($ue);
-		// $this->entity_manager->flush();
-		$ue = $this->entity_manager->find('Entities\UnidadeEnsino',1);
-		
-		echo json_encode($this->doctrine_to_array($ue));
-
-	}
 }
