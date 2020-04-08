@@ -1,6 +1,7 @@
 Entities\ComponenteCurricular:
   type: entity
   table: componente_curricular
+  repositoryClass: Entities\Repositories\ComponenteCurricularRepository
   uniqueConstraints:
     cod_comp_curric_index:
       columns:

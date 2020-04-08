@@ -1,6 +1,7 @@
 Entities\Correspondencia:
   type: entity
   table: correspondencia
+  repositoryClass: Entities\Repositories\CorrespondenciaRepository
   uniqueConstraints:
     corresp_index:
       columns:
