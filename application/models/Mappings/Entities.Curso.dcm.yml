@@ -1,6 +1,7 @@
 Entities\Curso:
   type: entity
   table: curso
+  repositoryClass: Entities\Repositories\CursoRepository
   uniqueConstraints:
     cod_curso_index:
       columns:
