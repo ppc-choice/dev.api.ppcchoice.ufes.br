@@ -22,7 +22,7 @@ class DisciplinaRepository extends EntityRepository
     public function findbyId($numDisciplina, $codDepto)
     {
         $qb = $this->_em->createQueryBuilder()
-        ->select('d.nome, d.ch, dep.nome AS nomeDep')
+        ->select('d.nome, d.ch, dep.nome AS nomeDepto')
         ->from('Entities\Disciplina', 'd')
         ->innerJoin('d.departamento', 'dep')
         ->where('d.numDisciplina = ?1 AND d.codDepto = ?2')

@@ -9,7 +9,7 @@ class UnidadeEnsinoRepository extends EntityRepository
     public function findAll()
     {
         $qb = $this->_em->createQueryBuilder()
-        ->select('i.nome, i.codIes, u.codUnidadeEnsino, u.nome, u.cnpj')
+        ->select('i.nome AS nomeInstituicao, i.codIes, u.codUnidadeEnsino, u.nome, u.cnpj')
         ->from('Entities\UnidadeEnsino', 'u')
         ->innerJoin('u.ies', 'i')
         ->getQuery();
@@ -22,7 +22,7 @@ class UnidadeEnsinoRepository extends EntityRepository
     public function findbyId($codUnidadeEnsino)
     {
         $qb = $this->_em->createQueryBuilder()
-        ->select('i.codIes, u.nome, u.cnpj')
+        ->select('i.nome AS nomeInstituicao, i.codIes, u.nome, u.cnpj')
         ->from('Entities\UnidadeEnsino', 'u')
         ->innerJoin('u.ies', 'i')
         ->where('u.codUnidadeEnsino = ?1')

@@ -10,7 +10,7 @@ class UnidadeEnsinoCtl extends API_Controller
      * @apiGroup Unidades de Ensino
      * @apiError 404 Não encontrado
      *
-     *
+     * @apiSuccess {String} nomeInstituicao Nome da Instituição de Ensino que a Unidade de Ensino pertence.
      * @apiSuccess {String} nome Nome da Unidade de Ensino.
      * @apiSuccess {Number} codUnEnsino Código da Unidade de Ensino.
      * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
@@ -48,6 +48,7 @@ class UnidadeEnsinoCtl extends API_Controller
      *
      * @apiParam {Number} codUnidadeEnsino Codigo unico de uma Unidade de Ensino.
      *
+     * @apiSuccess {String} nomeInstituicao Nome da Instituição de Ensino que a Unidade de Ensino pertence.
      * @apiSuccess {String} nome Nome da Unidade de Ensino.
      * @apiSuccess {Number} codUnEnsino Código da Unidade de Ensino.
      * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.

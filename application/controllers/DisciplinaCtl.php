@@ -37,7 +37,7 @@ class DisciplinaCtl extends API_Controller
             $this->api_return(array(
                 'status' => false,
                 'message' => 'Não Encontrado'
-            ), 404  );
+            ), 404);
         }
     }
 
