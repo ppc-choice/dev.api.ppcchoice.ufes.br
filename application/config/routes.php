@@ -54,20 +54,33 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-# Rota para Disciplinas
+//Instituicao de Ensino Superior - Wellerson
+$route['instituicoes-ensino-superior/(:num)']['get'] = 'InstituicaoEnsinoSuperiorCtl/getById/$1';
+$route['instituicoes-ensino-superior']['get'] = 'InstituicaoEnsinoSuperiorCtl/getAll';
+
+//Departamento : Wellerson
+$route['departamentos/(:num)']['get'] = 'DepartamentoCtl/getById/$1';
+$route['departamentos']['get'] = 'DepartamentoCtl/getAll';
+
+//Curso : Wellerson
+$route['cursos/(:num)']['get'] = 'CursoCtl/getById/$1';
+$route['cursos']['get'] = 'CursoCtl/getAll';
+
+
+# Rota para Disciplinas : Gabriel
 $route['disciplinas']['GET'] = 'DisciplinaCtl/findAll';
 $route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaCtl/findById/$1/$2';
 
-# Rota para Unidades de Ensino
+# Rota para Unidades de Ensino : Gabriel
 $route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/findAll';
 $route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoCtl/findById/$1';
 
-//Projeto Pedagógico de Curso
+//Projeto Pedagógico de Curso  : Guilherme
 
 $route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoCtl/findById/$1/';
 $route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoCtl/findAll/';
 
-//Depêndencia
+//Depêndencia : Guilherme
 
 $route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/findById/$1/$2/';
 $route['dependencias'] = 'DependenciaCtl/findAll/';
@@ -87,5 +100,6 @@ $route['componentes-curriculares/(:num)/correspondencias'] = 'CorrespondenciaCtl
 $route['transicoes'] = 'TransicaoCtl/findAll';
 $route['unidades-ensino/(:num)/transicoes'] = 'TransicaoCtl/findByCodUnidadeEnsino/$1';
 $route['projetos-pedagogicos-curso/(:num)/transicoes'] = 'TransicaoCtl/findByCodPpc/$1';
+
 
 
