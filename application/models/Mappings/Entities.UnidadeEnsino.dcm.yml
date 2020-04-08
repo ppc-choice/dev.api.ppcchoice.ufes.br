@@ -1,12 +1,13 @@
 Entities\UnidadeEnsino:
   type: entity
   table: unidade_ensino
+  repositoryClass: Entities\Repositories\UnidadeEnsinoRepository
   uniqueConstraints:
     cod_un_ensino_index:
       columns:
         - cod_un_ensino
   fields:
-    codUnEnsino:
+    codUnidadeEnsino:
       type: integer
       id: true
       nullable: false
@@ -19,6 +20,10 @@ Entities\UnidadeEnsino:
       type: string
       length: 20
       nullable: false
+    codIes:
+        type: integer
+        nullable: false
+        column: cod_ies
   manyToOne:
     ies:
       targetEntity: InstituicaoEnsinoSuperior

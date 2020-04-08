@@ -1,6 +1,7 @@
 Entities\Dependencia:
   type: entity
   table: dependencia
+  repositoryClass: Entities\Repositories\DependenciaRepository
   uniqueConstraints:
     dependencia_index:
       columns:

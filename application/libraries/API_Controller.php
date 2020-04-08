@@ -584,7 +584,7 @@ class API_Controller extends CI_Controller
    * @param $single execução em modo de recursão
    * @return array
   */
-    public function doctrine_to_array($data, $single = false, $dateFormat = 'Y-m-d') {
+    public function doctrine_to_array($data, $single = false, $dateFormat = 'c') {
         if (is_object($data)) { // Verifica se é array ou objeto
             $methods = get_class_methods($data);
             $methods = array_filter($methods, function($val){ return preg_match('/^get/', $val); });
@@ -593,7 +593,7 @@ class API_Controller extends CI_Controller
             if(count($methods)){
                 foreach($methods as $method){
                     $prop = lcfirst(preg_replace('/^get/', "", $method));
-                    $val = $data->$method();
+                    $val = $data->$method();    
                     
                     if ( $val instanceof DateTime ){
                         $val = $val->format($dateFormat);

@@ -1,6 +1,7 @@
 Entities\Disciplina:
   type: entity
   table: disciplina
+  repositoryClass: Entities\Repositories\DisciplinaRepository
   uniqueConstraints:
     num_cod_disc_index:
       columns:

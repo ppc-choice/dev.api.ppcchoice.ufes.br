@@ -12,7 +12,7 @@ class UnidadeEnsino
     /**
      * @var integer
      */
-    private $codUnEnsino;
+    private $codUnidadeEnsino;
 
     /**
      * @var string
@@ -25,32 +25,37 @@ class UnidadeEnsino
     private $cnpj;
 
     /**
+     * @var integer
+     */
+    private $codIes;
+
+    /**
      * @var \Entities\InstituicaoEnsinoSuperior
      */
     private $ies;
 
 
     /**
-     * Set codUnEnsino
+     * Set codUnidadeEnsino
      *
-     * @param integer $codUnEnsino
+     * @param integer $codUnidadeEnsino
      * @return UnidadeEnsino
      */
-    public function setCodUnEnsino($codUnEnsino)
+    public function setCodUnidadeEnsino($codUnidadeEnsino)
     {
-        $this->codUnEnsino = $codUnEnsino;
+        $this->codUnidadeEnsino = $codUnidadeEnsino;
     
         return $this;
     }
 
     /**
-     * Get codUnEnsino
+     * Get codUnidadeEnsino
      *
      * @return integer 
      */
-    public function getCodUnEnsino()
+    public function getCodUnidadeEnsino()
     {
-        return $this->codUnEnsino;
+        return $this->codUnidadeEnsino;
     }
 
     /**
@@ -97,6 +102,29 @@ class UnidadeEnsino
     public function getCnpj()
     {
         return $this->cnpj;
+    }
+
+    /**
+     * Set codIes
+     *
+     * @param integer $codIes
+     * @return UnidadeEnsino
+     */
+    public function setCodIes($codIes)
+    {
+        $this->codIes = $codIes;
+    
+        return $this;
+    }
+
+    /**
+     * Get codIes
+     *
+     * @return integer 
+     */
+    public function getCodIes()
+    {
+        return $this->codIes;
     }
 
     /**

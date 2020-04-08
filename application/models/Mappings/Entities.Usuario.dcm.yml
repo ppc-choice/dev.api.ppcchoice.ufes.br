@@ -1,5 +1,6 @@
 Entities\Usuario:
   type: entity
+  repositoryClass: Entities\Repositories\UsuarioRepository
   table: usuario
   uniqueConstraints:
     email_index:

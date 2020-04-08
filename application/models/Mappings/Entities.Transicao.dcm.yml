@@ -1,6 +1,7 @@
 Entities\Transicao:
   type: entity
   table: transicao
+  repositoryClass: Entities\Repositories\TransicaoRepository
   uniqueConstraints:
     ppc_atual_alvo_index:
       columns:
