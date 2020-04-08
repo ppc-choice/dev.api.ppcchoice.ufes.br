@@ -1,6 +1,7 @@
 Entities\ComponenteCurricular:
   type: entity
   table: componente_curricular
+  repositoryClass: Entities\Repositories\ComponenteCurricularRepository
   uniqueConstraints:
     cod_comp_curric_index:
       columns:
@@ -25,6 +26,14 @@ Entities\ComponenteCurricular:
       type: integer
       nullable: false
       column: cod_depto
+    numDisciplina:
+      type: integer
+      nullable: false
+      column: num_disciplina
+    codPpc: 
+      type: integer
+      nullable: false
+      column: cod_ppc
   manyToOne:
     disciplina:
       targetEntity: Disciplina
