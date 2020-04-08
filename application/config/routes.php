@@ -54,6 +54,14 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
+# Rota para Disciplinas
+$route['disciplinas']['GET'] = 'DisciplinaCtl/findAll';
+$route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaCtl/findById/$1/$2';
+
+# Rota para Unidades de Ensino
+$route['unidades-ensino']['GET'] = 'UnidadeEnsinoCtl/findAll';
+$route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoCtl/findById/$1';
+
 //Projeto Pedagógico de Curso
 
 $route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoCtl/findById/$1/';
@@ -79,4 +87,5 @@ $route['componentes-curriculares/(:num)/correspondencias'] = 'CorrespondenciaCtl
 $route['transicoes'] = 'TransicaoCtl/findAll';
 $route['unidades-ensino/(:num)/transicoes'] = 'TransicaoCtl/findByCodUnidadeEnsino/$1';
 $route['projetos-pedagogicos-curso/(:num)/transicoes'] = 'TransicaoCtl/findByCodPpc/$1';
+
 

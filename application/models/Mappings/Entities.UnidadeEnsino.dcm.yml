@@ -1,6 +1,7 @@
 Entities\UnidadeEnsino:
   type: entity
   table: unidade_ensino
+  repositoryClass: Entities\Repositories\UnidadeEnsinoRepository
   uniqueConstraints:
     cod_un_ensino_index:
       columns:

@@ -21,6 +21,7 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 
+
 ### CodeIgniter Patch ###
 
 # End of https://www.gitignore.io/api/codeigniter
@@ -34,4 +35,5 @@ application/logs/*
 ### APIDOC ###
 doc/*
 apidoc.json
+
 
