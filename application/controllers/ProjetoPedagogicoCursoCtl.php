@@ -14,52 +14,29 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
     }
 
     /**
-    * @api {get} projetos-pedagogicos-curso/ Solicitar todos Projetos Pedagógicos de Curso.
+    * @api {get} projetos-pedagogicos-curso Solicitar todos Projetos Pedagógicos de Curso.
     *
-    * @apiName getAll
+    * @apiName findAll
     * @apiGroup Projeto Pedagógico Curso
-    *
-    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
     * @apiSuccess {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
     * @apiSuccess {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
-    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extra que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
     * @apiSuccess {Number} chTotalAtividadeCmplt  Carga horária total de atividades complementares que o curso deve possuir.
     * @apiSuccess {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
     * @apiSuccess {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
     * @apiSuccess {Number} duracao  Tempo de duração do curso descrito por anos.
-    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal..
+    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
     * @apiSuccess {Number} chTotal  Carga horária total que as componentes curriculares do curso deve possuir.
     * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  .
-    * 
-    * apiExample {curl} Exemplo:
-    *   curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/
-    * @apiSuccessExample {JSON} Success-Response:
-    *   HHTP/1.1 200 OK
-    *   {
-    *       "codPpc": 1,
-    *       "dtInicioVigencia": "2011-08-01",
-    *       "dtTerminoVigencia": null,
-    *       "chTotalDisciplinaOpt": 240,
-    *       "chTotalDisciplinaOb": 3030,
-    *       "chTotalAtividadeExt": 0,
-    *       "chTotalAtividadeCmplt": 180,
-    *       "chTotalProjetoConclusao": 120,
-    *       "chTotalEstagio": 300,
-    *       "duracao": 5,
-    *       "qtdPeriodos": 10,
-    *       "chTotal": 3870,
-    *       "anoAprovacao": 2011,
-    *       "situacao": "ATIVO ANTERIOR",
-    *       "codCurso": 1   
-    *    }
+    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
+    *
     */
 
-    public function getAll()
+    public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
@@ -94,17 +71,17 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
         
     /**
     * @api {get} projetos-pedagogicos-curso/:codPpc Solicitar Projeto Pedagógico de Curso.
+    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
-    * @apiName getById
+    * @apiName findById
     * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
     * @apiSuccess {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
     * @apiSuccess {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
-    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extra que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
     * @apiSuccess {Number} chTotalAtividadeCmplt  Carga horária total de atividades complementares que o curso deve possuir.
     * @apiSuccess {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
     * @apiSuccess {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
@@ -118,7 +95,7 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
     * apiExample {curl} Exemplo:
     *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
     * @apiSuccessExample {JSON} Success-Response:
-    *   HHTP/1.1 200 OK
+    *   HTTP/1.1 200 OK
     *   {
     *       "codPpc": 1,
     *       "dtInicioVigencia": "2011-08-01",
@@ -136,16 +113,15 @@ class ProjetoPedagogicoCursoCtl extends API_Controller
     *       "situacao": "ATIVO ANTERIOR",
     *       "codCurso": 1   
     *   }
-    * 
-    * @api {get} /projetos-pedagogicos-curso/:codPpc
-    * @apiErrorExample {json} Error-Response:
+    *.
+    * @apiErrorExample {JSON} Error-Response:
     *     HTTP/1.1 404 Not Found
     *     {
     *       status": false,
     *       "message": "Projeto Pedagógico de Curso não encontrado!"
     *     }
     */
-    public function getById($codPpc)
+    public function findById($codPpc)
     {
         
         header("Access-Control-Allow-Origin: *");

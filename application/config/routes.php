@@ -55,11 +55,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 //Projeto Pedagógico de Curso
 
-$route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoCtl/getById/$1/';
-$route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoCtl/getAll/';
+$route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoCtl/findById/$1/';
+$route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoCtl/findAll/';
 
 //Depêndencia
 
-$route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/getById/$1/$2/';
-$route['dependencias'] = 'DependenciaCtl/getAll/';
-$route['projetos-pedagogicos-curso/(:num)/dependencias'] = 'DependenciaCtl/getByIdPpc/$1/';
+$route['dependencias/(:num)/(:num)'] = 'DependenciaCtl/findById/$1/$2/';
+$route['dependencias'] = 'DependenciaCtl/findAll/';
+$route['projetos-pedagogicos-curso/(:num)/dependencias'] = 'DependenciaCtl/findByIdPpc/$1/';

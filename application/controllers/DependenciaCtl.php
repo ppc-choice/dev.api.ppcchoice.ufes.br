@@ -14,9 +14,9 @@ class DependenciaCtl extends API_Controller
     }
 
     /**
-    * @api {get} dependencias/ Solicitar todas depêndencias existentes entre componentes curriculares.
+    * @api {get} dependencias Solicitar todas depêndencias existentes entre componentes curriculares.
     *
-    * @apiName getAll
+    * @apiName findAll
     * @apiGroup Dependência
     *
     * @apiSuccess {String} Curso Nome do curso que a componente curricular pertence.
@@ -25,20 +25,9 @@ class DependenciaCtl extends API_Controller
     * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
     * @apiSuccess {String} nomePreReq Nome do pré-requisito da componente curricular.
     * 
-    * @apiExample {curl} Exemplo:
-    *      curl -i http://dev.api.ppcchoice.ufes.br/dependencias/6/1
-    * @apiSuccessExample {JSON} Success-Response:
-    *   HTTP/1.1 200 OK
-    *   {
-    *     "Curso": "Ciência da Computação",
-    *     "codCompCurric": 6,
-    *     "nomeCompCurric": "Cálculo II",
-    *     "codPreRequisito": 1
-    *     "nomePreReq": "Cálculo II",
-    *   }
     */
 
-    public function getAll()
+    public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
@@ -71,9 +60,11 @@ class DependenciaCtl extends API_Controller
     }
 
     /**
-    * @api {get} dependencias/:codCompCurric/:codPreReq/ Solicitar depêndencias entre componentes curriculares.
+    * @api {get} dependencias/:codCompCurric/:codPreReq Solicitar depêndencias entre componentes curriculares.
+    * @apiParam {Number} codCompCurric Código de identificação de uma componente curricular.
+    * @apiParam {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
     *
-    * @apiName getById
+    * @apiName findById
     * @apiGroup Dependência
     *
     * @apiSuccess {String} Curso Nome do curso que a componente curricular pertence.
@@ -94,16 +85,15 @@ class DependenciaCtl extends API_Controller
     *     "nomePreReq": "Cálculo II",
     *   }
     *
-    * @api {get} http://dev.api.ppcchoice.ufes.br/dependencias/:codCompCurric/:codPreRequisito
-    * @apiErrorExample {json} Error-Response:
+    * @apiErrorExample {JSON} Error-Response:
     *    HTTP/1.1 404 Not Found
     *    {
-    *      status": false,
-    *      "message": "Dependência não encontrado!"
+    *      "status": false,
+    *      "message": "Dependência não encontrada!"
     *    }
     */
 
-    public function getById($codCompCurric, $codPreReq)
+    public function findById($codCompCurric, $codPreReq)
     {
         
         header("Access-Control-Allow-Origin: *");
@@ -139,34 +129,24 @@ class DependenciaCtl extends API_Controller
 
 
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias/ Solicitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
+    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
+    * @apiParam {Number} codPpc Código identificador de um projeto pedagógico de curso.
     *
-    * @apiName getByIdPpc
+    * @apiName findByIdPpc
     * @apiGroup Dependência
     *
     * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
     * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
     *
-    * @apiExample {curl} Exemplo:
-    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1/dependencias
-    * @apiSuccessExample {JSON} Success-Response:
-    * HTTP/1.1 200 OK
-    * 
-    * {
-    *     "codCompCurric": 6,
-    *     "codPreRequisito": 1
-    * }
-    *
-    * @api {get} http://dev.api.ppcchoice.ufes.br/dependencias/:codPpc
-    * @apiErrorExample {json} Error-Response:
+    * @apiErrorExample {JSON} Error-Response:
     *     HTTP/1.1 404 Not Found
     *     {
-    *       status": false,
-    *       "message": "Dependência não encontrado!"
+    *       "status": false,
+    *       "message": "Não foram encontradas dependências para este projeto pedagógico de curso!"
     *     }
     */
     
-    public function getByIdPpc($codPpc)
+    public function findByIdPpc($codPpc)
     {
         
         header("Access-Control-Allow-Origin: *");
@@ -185,7 +165,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $result[0],
+                    "result" => $result,
                 ),
             200); 
 
@@ -194,7 +174,7 @@ class DependenciaCtl extends API_Controller
             $this->api_return(
                 array(
                     'status' => false,
-                    "message" => 'Dependencia não encontrada!',
+                    "message" => 'Não foram encontradas dependências para este projeto pedagógico de curso!',
                 ),
             404);
         }
