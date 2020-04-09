@@ -3,7 +3,7 @@
 /**
  * API Key Header Name
  */
-$config['api_key_header_name'] = 'X-API-KEY';
+$config['api_key_header_name'] = 'X-PPC-KEY';
 
 
 /**
@@ -21,7 +21,7 @@ $config['api_key_post_name'] = 'key';
 /**
  * Set API Timezone 
  */
-$config['api_timezone'] = 'Asia/Kolkata';
+$config['api_timezone'] = 'America/Sao_Paulo';
 
 
 /**

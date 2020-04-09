@@ -36,4 +36,8 @@ application/logs/*
 doc/*
 apidoc.json
 
+## SQL FILE ###
+/database/
+*.sql
+
 

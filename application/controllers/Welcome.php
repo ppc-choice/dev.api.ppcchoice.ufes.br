@@ -22,6 +22,21 @@ class Welcome extends API_Controller {
 	 */
 	public function index()
 	{
+		$folder = 'database/';
+		foreach (glob($folder."*.sql" ) as $file) 
+		{
+			
+			$sql = file_get_contents($folder.basename($file));
+			
+			$sqls = explode(';', $sql);
+			array_pop($sqls);
+
+			foreach($sqls as $statement){
+				$statment = $statement . ";";
+				$this->db->query($statement);   
+			}
+		}
+
 		$this->load->view('welcome_message');
 	}
 
