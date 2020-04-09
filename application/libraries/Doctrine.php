@@ -55,7 +55,7 @@ class Doctrine
 
         // Database connection information
         $connectionOptions = array(
-            'driver' => getenv('DB_DRIVER'),
+            'driver' => getenv('DOCTRINE_DRIVER'),
             'user' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
             'host' => getenv('DB_HOST'),

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class DepartamentoCtl extends API_Controller {
+class DepartamentoController extends API_Controller {
 
 	/**
 	 * @api {get} departamentos/:codDepto Apresenta dados de um Departamento específico.

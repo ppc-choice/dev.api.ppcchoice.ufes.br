@@ -2,7 +2,7 @@
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class UnidadeEnsinoCtl extends API_Controller
+class UnidadeEnsinoController extends API_Controller
 {
     /**
      * @api {get} unidades-ensino Listar todas as Unidades de Ensino

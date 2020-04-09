@@ -2,7 +2,7 @@
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class DisciplinaCtl extends API_Controller
+class DisciplinaController extends API_Controller
 {
 
     /**

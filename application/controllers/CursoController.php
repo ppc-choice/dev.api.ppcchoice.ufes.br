@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class CursoCtl extends API_Controller {
+class CursoController extends API_Controller {
 
 	/**
 	 * @api {get} cursos/:codCurso Apresenta dados de um Curso específico.

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class UsuarioCtl extends API_Controller {
+class UsuarioController extends API_Controller {
 
 	/**
 	 * @api {get} usuarios/:id Solicitar dados de um usuário
