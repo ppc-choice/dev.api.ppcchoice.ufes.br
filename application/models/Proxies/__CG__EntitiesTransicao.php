@@ -99,7 +99,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codPpcAtual', 'codPpcAlvo', 'ppc_atual', 'ppc_alvo');
+        return array('__isInitialized__', 'codPpcAtual', 'codPpcAlvo', 'ppcAtual', 'ppcAlvo');
     }
 
     public function __clone()

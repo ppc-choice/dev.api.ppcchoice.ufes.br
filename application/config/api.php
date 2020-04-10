@@ -27,9 +27,9 @@ $config['api_timezone'] = 'America/Sao_Paulo';
 /**
  * API Limit database table name
  */
-$config['api_limit_table_name'] = 'api_limit';
+$config['api_limit_table_name'] = getenv('API_LIMIT_TBL_NAME');
 
 /**
  * API keys database table name 
  */
-$config['api_keys_table_name'] = 'api_keys';
+$config['api_keys_table_name'] = getenv('API_KEYS_TBL_NAME');

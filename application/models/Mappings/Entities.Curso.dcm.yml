@@ -20,7 +20,7 @@ Entities\Curso:
       type: integer
       nullable: false
       column: ano_criacao
-    codUnEnsino:
+    codUnidadeEnsino:
       type: integer
       nullable: false
       column: cod_un_ensino

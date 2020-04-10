@@ -43,11 +43,11 @@ class UsuarioController extends API_Controller {
 			)
 		);
 		
-		$user = $this->entity_manager->find('Entities\Usuario',$codUsuario);
+		$usuario = $this->entity_manager->find('Entities\Usuario',$codUsuario);
 		
 
-		if ( !is_null($user) ) {
-			$result = $this->doctrine_to_array($user);	
+		if ( !is_null($usuario) ) {
+			$result = $this->doctrine_to_array($usuario);	
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
@@ -86,9 +86,9 @@ class UsuarioController extends API_Controller {
 			)
 		);
 		
-		$users = $this->entity_manager->getRepository('Entities\Usuario')->findAll();
+		$usuarios = $this->entity_manager->getRepository('Entities\Usuario')->findAll();
 
-		$result = $this->doctrine_to_array($users);
+		$result = $this->doctrine_to_array($usuarios);
 
 		$this->api_return(array(
 			'status' => TRUE,

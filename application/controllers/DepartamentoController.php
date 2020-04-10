@@ -7,7 +7,7 @@ class DepartamentoController extends API_Controller {
 
 	/**
 	 * @api {get} departamentos/:codDepto Apresenta dados de um Departamento específico.
-	 * @apiName getById
+	 * @apiName findById
 	 * @apiGroup Departamentos
 	 *
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
@@ -36,7 +36,7 @@ class DepartamentoController extends API_Controller {
 	 *	"message": "Departamento não encontrado!"
 	 * }
 	 */
-    public function getById($codDepto)
+    public function findById($codDepto)
 	{
 		header("Access-Controll-Allow-Origin: *");
 
@@ -64,7 +64,7 @@ class DepartamentoController extends API_Controller {
 
 	/**
 	 * @api {get} departamentos/ Apresentar todos Departamentos registrados.
-	 * @apiName getAll
+	 * @apiName findAll
 	 * @apiGroup Departamentos
 	 * @apiSuccess {Number} codDepto   Identificador único da Departamento.
 	 * @apiSuccess {String} nome   Nome da Departamento.
@@ -125,7 +125,7 @@ class DepartamentoController extends API_Controller {
 	 *	"message": "Nenhuma Departamento cadastrado!"
 	 * }
 	 */
-    public function getAll()
+    public function findAll()
 	{
 		header("Access-Controll-Allow-Origin: *");
 
@@ -134,16 +134,7 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 
-		$qb = $this->entity_manager->createQueryBuilder()
-             ->select('depto.codDepto, depto.nome as nomeDepto, depto.abreviatura, uniEnsino.nome as nomeUnidadeEnsino')
-             ->from('Entities\Departamento','depto')
-             ->leftJoin('depto.unidadeEnsino', 'uniEnsino')
-			 ->getQuery();
-		
-		$result = $qb->getResult();
-		
-        //$depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll(array());
-        //$result = $this->doctrine_to_array($depto,TRUE);
+        $result = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
 
 		$this->api_return(array(
 			'status' => TRUE,
