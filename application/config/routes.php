@@ -77,33 +77,35 @@ $route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoController/findById/$1';
 
 //Projeto Pedagógico de Curso  : Guilherme
 
-$route['projetos-pedagogicos-curso/(:num)'] = 'ProjetoPedagogicoCursoController/findById/$1';
-$route['projetos-pedagogicos-curso'] = 'ProjetoPedagogicoCursoController/findAll';
+$route['projetos-pedagogicos-curso/(:num)']['GET'] = 'ProjetoPedagogicoCursoController/findById/$1';
+$route['projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findAll';
 
 //Depêndencia : Guilherme
 
-$route['dependencias/(:num)/(:num)'] = 'DependenciaController/findById/$1/$2';
-$route['dependencias'] = 'DependenciaController/findAll';
-$route['projetos-pedagogicos-curso/(:num)/dependencias'] = 'DependenciaController/findByIdPpc/$1';
+$route['dependencias/(:num)/(:num)']['GET'] = 'DependenciaController/findById/$1/$2';
+$route['dependencias']['GET'] = 'DependenciaController/findAll';
+$route['projetos-pedagogicos-curso/(:num)/dependencias']['GET'] = 'DependenciaController/findByIdPpc/$1';
 
 //Componente Curricular : Hadamo
-$route['componentes-curriculares'] = 'ComponenteCurricularController/findAll';
-$route['componentes-curriculares/(:num)'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
-$route['projetos-pedagogicos-curso/(:num)/componentes-curriculares'] = 'ComponenteCurricularController/findByCodPpc/$1';
+$route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
+$route['componentes-curriculares/(:num)']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
+$route['projetos-pedagogicos-curso/(:num)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
 
 //Correspondencia : Hadamo
-$route['correspondencias'] = 'CorrespondenciaController/findAll';
-$route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)'] = 'CorrespondenciaController/findAllByCodPpc/$1/$2';
-$route['componentes-curriculares/(:num)/correspondencias'] = 'CorrespondenciaController/findByCodCompCurric/$1';
+$route['correspondencias']['GET'] = 'CorrespondenciaController/findAll';
+$route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findAllByCodPpc/$1/$2';
+$route['componentes-curriculares/(:num)/correspondencias']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1';
 
 //Transicao : Hadamo
-$route['transicoes'] = 'TransicaoController/findAll';
-$route['unidades-ensino/(:num)/transicoes'] = 'TransicaoController/findByCodUnidadeEnsino/$1';
-$route['projetos-pedagogicos-curso/(:num)/transicoes'] = 'TransicaoController/findByCodPpc/$1';
+$route['transicoes']['GET'] = 'TransicaoController/findAll';
+$route['unidades-ensino/(:num)/transicoes']['GET'] = 'TransicaoController/findByCodUnidadeEnsino/$1';
+$route['projetos-pedagogicos-curso/(:num)/transicoes']['GET'] = 'TransicaoController/findByCodPpc/$1';
 
 // Usuario : Elyabe
-$route['usuarios'] = 'UsuarioController/findAll';
-$route['usuarios/(:num)'] = 'UsuarioController/findById/$1';
+$route['usuarios']['GET'] = 'UsuarioController/findAll';
+$route['usuarios/(:num)']['GET'] = 'UsuarioController/findById/$1';
+
+$route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 
 // Test
-$route['migrate'] = 'Welcome/updateSchema';
+$route['migrate']['GET'] = 'Welcome/updateSchema';
