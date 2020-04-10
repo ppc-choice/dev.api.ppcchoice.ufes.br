@@ -135,4 +135,79 @@ class CorrespondenciaController extends API_Controller {
             );
         }
     }
+
+
+    public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+
+        if (isset($payload['codCompCurric']) && isset($payload['codCompCurricCorresp']) && 
+            isset($payload['percentual']))
+        {
+            $corresp = new \Entities\Correspondencia;
+            $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+            $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
+            
+            if(!is_null($compCurric) && !is_null($compCorresp))
+            {
+                
+                $ppc1 = $compCurric->getCodPpc();
+                $ppc2 = $compCorresp->getCodPpc();
+
+                if($ppc1 != $ppc2)
+                {
+                    $corresp->setCodCompCurric($compCurric);
+                    $corresp->setCodCompCurricCorresp($compCorresp);
+                    
+                    if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
+                    {
+                        $corresp->setPercentual($payload['percentual']);
+
+                        try {
+                            $this->entity_manager->persist($usuario);
+                            $this->entity_manager->flush();
+            
+                            $this->api_return(array(
+                                'status' => TRUE,
+                                'result' => 'Correspondência criada com sucesso',
+                            ), 200);
+                        } catch (\Exception $e) {
+                            echo $e->getMessage();
+                        }
+
+                    }else{
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1',
+                        ), 400);
+                    }
+                    
+                }else{
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => 'Componentes pertencem ao mesmo ppc',
+                    ), 400);
+                }
+                
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Componente curricular não encontrado',
+                ), 404);
+            }
+
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado',
+            ), 400);
+        }
+    }
 }
