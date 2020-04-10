@@ -3,7 +3,7 @@
 require_once APPPATH . 'libraries/API_Controller.php';
 
 
-class InstituicaoEnsinoSuperiorCtl extends API_Controller
+class InstituicaoEnsinoSuperiorController extends API_Controller
 {
     public function __construct() {
         parent::__construct();

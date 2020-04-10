@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class CorrespondenciaCtl extends API_Controller {
+class CorrespondenciaController extends API_Controller {
 
     /**
      * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Listar todas as relações de correspondência entre os cursos referidos

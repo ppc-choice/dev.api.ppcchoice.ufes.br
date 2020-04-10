@@ -6,7 +6,7 @@
 require_once APPPATH . 'libraries/API_Controller.php';
 
 
-class ProjetoPedagogicoCursoCtl extends API_Controller
+class ProjetoPedagogicoCursoController extends API_Controller
 {
     
     public function __construct() {

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CursoRepository extends EntityRepository
 {   
 
-    public function getAll()
+    public function findAll()
     {
 		
         $qb = $this->_em->createQueryBuilder()

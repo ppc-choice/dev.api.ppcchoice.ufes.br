@@ -3,11 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class CursoCtl extends API_Controller {
+class CursoController extends API_Controller {
 
 	/**
 	 * @api {get} cursos/:codCurso Apresenta dados de um Curso específico.
-	 * @apiName getById
+	 * @apiName findById
 	 * @apiGroup Cursos
 	 *
 	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
@@ -36,7 +36,7 @@ class CursoCtl extends API_Controller {
 	 *	"message": "Curso não encontrado!"
 	 * }
 	 */
-    public function getById($codCurso)
+    public function findById($codCurso)
 	{   
 		header("Access-Controll-Allow-Origin: *");
 
@@ -64,7 +64,7 @@ class CursoCtl extends API_Controller {
     
 	/**
 	 * @api {get} cursos/ Apresentar todos Cursos registrados.
-	 * @apiName getAll
+	 * @apiName findAll
 	 * @apiGroup Cursos
 	 * @apiSuccess {Number} codCurso   Identificador único do curso.
 	 * @apiSuccess {String} nome   Nome do curso.
@@ -110,7 +110,7 @@ class CursoCtl extends API_Controller {
 	 *	"message": "Nenhum Curso cadastrado!"
 	 * }
 	 */
-    public function getAll()
+    public function findAll()
 	{   
 		header("Access-Controll-Allow-Origin: *");
 
@@ -119,7 +119,7 @@ class CursoCtl extends API_Controller {
 			)
 		);
 
-        $curso = $this->entity_manager->getRepository('Entities\Curso')->getAll();
+        $curso = $this->entity_manager->getRepository('Entities\Curso')->findAll();
         $result = $this->doctrine_to_array($curso,TRUE);
 
 		$this->api_return(array(

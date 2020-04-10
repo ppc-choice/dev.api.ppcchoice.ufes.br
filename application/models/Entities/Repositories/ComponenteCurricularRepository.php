@@ -38,7 +38,7 @@ class ComponenteCurricularRepository extends EntityRepository
 
     public function findByCodCompCurric($codCompCurric)
     {
-        return $this->_em->createQueryBuilder()
+        $result = $this->_em->createQueryBuilder()
             ->select('disc.nome, c.codCompCurric,disc.ch, c.periodo, c.credito, c.codDepto',
                     'dep.abreviatura as depto,  disc.numDisciplina',
                     'p.codPpc')
@@ -50,5 +50,7 @@ class ComponenteCurricularRepository extends EntityRepository
             ->setParameter('codCC',$codCompCurric)
             ->getQuery()
             ->getResult();
+
+        return $result[0];
     }
 }

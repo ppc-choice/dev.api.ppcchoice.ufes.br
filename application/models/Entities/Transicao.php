@@ -22,12 +22,12 @@ class Transicao
     /**
      * @var \Entities\ProjetoPedagogicoCurso
      */
-    private $ppc_atual;
+    private $ppcAtual;
 
     /**
      * @var \Entities\ProjetoPedagogicoCurso
      */
-    private $ppc_alvo;
+    private $ppcAlvo;
 
 
     /**
@@ -77,48 +77,48 @@ class Transicao
     }
 
     /**
-     * Set ppc_atual
+     * Set ppcAtual
      *
      * @param \Entities\ProjetoPedagogicoCurso $ppcAtual
      * @return Transicao
      */
     public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual = null)
     {
-        $this->ppc_atual = $ppcAtual;
+        $this->ppcAtual = $ppcAtual;
     
         return $this;
     }
 
     /**
-     * Get ppc_atual
+     * Get ppcAtual
      *
      * @return \Entities\ProjetoPedagogicoCurso 
      */
     public function getPpcAtual()
     {
-        return $this->ppc_atual;
+        return $this->ppcAtual;
     }
 
     /**
-     * Set ppc_alvo
+     * Set ppcAlvo
      *
      * @param \Entities\ProjetoPedagogicoCurso $ppcAlvo
      * @return Transicao
      */
     public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo = null)
     {
-        $this->ppc_alvo = $ppcAlvo;
+        $this->ppcAlvo = $ppcAlvo;
     
         return $this;
     }
 
     /**
-     * Get ppc_alvo
+     * Get ppcAlvo
      *
      * @return \Entities\ProjetoPedagogicoCurso 
      */
     public function getPpcAlvo()
     {
-        return $this->ppc_alvo;
+        return $this->ppcAlvo;
     }
 }

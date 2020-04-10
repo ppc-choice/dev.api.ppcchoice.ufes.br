@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class ComponenteCurricularCtl extends API_Controller {
+class ComponenteCurricularController extends API_Controller {
 
     
     /**

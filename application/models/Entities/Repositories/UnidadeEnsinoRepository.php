@@ -10,7 +10,6 @@ class UnidadeEnsinoRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder()
         ->select("u.codUnidadeEnsino, CONCAT(CONCAT(CONCAT(ies.nome, ' ('), CONCAT(ies.abreviatura, ')')), CONCAT('-', u.nome)) AS nome")
-            //'ies.nome AS nomeInstituicao, ies.abreviatura, ies.codIes, u.codUnidadeEnsino, u.nome, u.cnpj')
         ->from('Entities\UnidadeEnsino', 'u')
         ->innerJoin('u.ies', 'ies')
         ->getQuery();
@@ -32,6 +31,6 @@ class UnidadeEnsinoRepository extends EntityRepository
 
         $result = $qb->getResult();
 
-        return $result;
+        return $result[0];
     }
 }

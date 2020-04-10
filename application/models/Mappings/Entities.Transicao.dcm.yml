@@ -19,12 +19,12 @@ Entities\Transicao:
       nullable: false
       column: cod_ppc_alvo
   manyToOne:
-    ppc_atual:
+    ppcAtual:
       targetEntity: ProjetoPedagogicoCurso
       joinColumns:
         cod_ppc_atual:
           referencedColumnName: cod_ppc
-    ppc_alvo:
+    ppcAlvo:
       targetEntity: ProjetoPedagogicoCurso
       joinColumns:
         cod_ppc_alvo:

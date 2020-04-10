@@ -2,7 +2,7 @@
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
-class DisciplinaCtl extends API_Controller
+class DisciplinaController extends API_Controller
 {
 
     /**
@@ -54,7 +54,7 @@ class DisciplinaCtl extends API_Controller
      * @apiSuccess {Number} ch Carga Horária da Disciplina.
      * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
      */
-    public function findById($numDisciplina, $codDepto)
+    public function findById($codDepto, $numDisciplina)
     {
         header("Access-Control-Allow-Origin: *");
 
