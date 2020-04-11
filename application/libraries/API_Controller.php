@@ -578,8 +578,9 @@ class API_Controller extends CI_Controller
     }
 
 /** 
-   * Converte doctrine para array associativo
-   * @author Andrei Luiz Nenevê (https://gist.github.com/AndreiLN)
+   * Converte objeto doctrine para array associativo
+   * Adaptado de: 
+   * @author Andrei Luiz Nenevê (https://gist.github.com/AndreiLN) 
    * @param $data objeto a ser convertido
    * @param $single execução em modo de recursão
    * @return array

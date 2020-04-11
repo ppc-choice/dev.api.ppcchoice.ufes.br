@@ -134,7 +134,8 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 
-        $result = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
+        $deptos = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
+		$result = $this->doctrine_to_array($deptos);
 
 		$this->api_return(array(
 			'status' => TRUE,

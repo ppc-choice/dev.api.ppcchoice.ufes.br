@@ -11,7 +11,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
   
 	/**
 	 * @api {get} instituicoes-ensino-superior/ Apresentar todas Instituições de Ensino Superior registradas.
-	 * @apiName getAll
+	 * @apiName findAll
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
 	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
@@ -44,7 +44,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	 *	"message": "Instituicao de Ensino Superior não encontrada!"
 	 * }
 	 */
-    public function getAll()
+    public function findAll()
     {
 		header("Access-Controll-Allow-Origin: *");
 
@@ -66,7 +66,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 	/**
 	 * @api {get} instituicoes-ensino-superior/:codIes Apresentar dados de uma Instituição de Ensino Superior específica.
-	 * @apiName getById
+	 * @apiName findById
 	 * @apiGroup Instituições de Ensino Superior
 	 *
 	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior requerida.
@@ -93,7 +93,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	 *	"message": "Instituicao de Ensino Superior não encontrada!"
 	 * }
 	 */
-    public function getById($codIes)
+    public function findById($codIes)
     {   
         
         header("Access-Controll-Allow-Origin: *");
