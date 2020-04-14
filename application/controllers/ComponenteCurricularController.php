@@ -147,8 +147,7 @@ class ComponenteCurricularController extends API_Controller {
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if (isset($payload['codCompCurric'])    && isset($payload['periodo'])
-            && isset($payload['credito'])       && isset($payload['tipo']) 
+        if (  isset($payload['periodo'])  && isset($payload['credito'])  && isset($payload['tipo']) 
             && isset($payload['numDisciplina']) && isset($payload['codDepto'])
             && isset($payload['codPpc']))
         {
@@ -161,13 +160,11 @@ class ComponenteCurricularController extends API_Controller {
             if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
             if(strlen($msg) < 1)
             {
-                $compCurric->setCodCompCurric($payload['codCompCurric']);
                 $compCurric->setPeriodo($payload['periodo']);
                 $compCurric->setCredito($payload['credito']) ;
                 $compCurric->setTipo($payload['tipo']) ;
-                $compCurric->setCodDepto($payload['codDepto']) ;
+                $compCurric->setDisciplina($disciplina );
                 $compCurric->setPpc($ppc);
-                $compCurric->setDisciplina($disciplina) ;
 
                 try{
                     $this->entity_manager->persist($compCurric);
