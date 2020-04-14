@@ -127,5 +127,50 @@ class CursoController extends API_Controller {
 			'result' => $result,
 		), 200);
     }
-    
+	
+	
+	public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+ 
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+ 
+        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['anoCriacao'])){
+           
+			$curso = new \Entities\Curso;
+			//$curso->setCodCurso($payload['codCurso']);
+            //$curso->setUnidadeEnsino($payload['unidadeEnsino']);
+            $curso->setNome($payload['nome']);
+			$curso->setAnoCriacao($payload['anoCriacao']);
+			
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
+
+			if (!is_null($ues)){
+				$curso->setUnidadeEnsino($ues);
+			}
+           
+            try {
+                $this->entity_manager->persist($curso);
+                $this->entity_manager->flush();
+ 
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'result' => 'Curso criado com Sucesso!',
+                ), 200);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+ 
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado!',
+            ), 400);
+        }
+    }
 }

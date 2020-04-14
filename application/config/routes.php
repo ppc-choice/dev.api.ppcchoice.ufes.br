@@ -109,3 +109,8 @@ $route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 
 // Test
 $route['migrate']['GET'] = 'Welcome/updateSchema';
+
+// (POST) Instituição de Ensino Superior: Wellerson
+$route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
+$route['departamentos']['POST'] = 'DepartamentoController/add';
+$route['cursos']['POST'] = 'CursoController/add';

@@ -118,6 +118,52 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 			), 404);
 		}
 
+	}
+	
+
+
+	public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+ 
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+ 
+        if ( isset($payload['nome']) && isset($payload['codIes']) && isset($payload['abreviatura'])){
+           
+			$ies = new \Entities\InstituicaoEnsinoSuperior;
+            $ies->setCodIes($payload['codIes']);
+            $ies->setNome($payload['nome']);
+            $ies->setAbreviatura($payload['abreviatura']);
+           
+            /*if ( isset($payload['senha'])){
+                $ies->setSenha($payload['senha']);
+            } else {
+                $ies->setSenha('senhaPadrao');
+            }*/
+           
+            try {
+                $this->entity_manager->persist($ies);
+                $this->entity_manager->flush();
+ 
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
+                ), 200);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+ 
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio não encontrado!',
+            ), 400);
+        }
     }
    
 }

@@ -11,6 +11,8 @@ Entities\Curso:
       type: integer
       id: true
       nullable: false
+      generator: 
+        strategy: AUTO
       column: cod_curso
     nome:
       type: string

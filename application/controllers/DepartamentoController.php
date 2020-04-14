@@ -134,12 +134,60 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 
-        $result = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
+		$depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
+		$result = $this->doctrine_to_array($depto,TRUE);	
+
 
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
 		), 200);
+	}
+	
+
+	public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+ 
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+ 
+        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['abreviatura'])){
+           
+			$depto = new \Entities\Departamento;
+			//$depto->setCodDepto($payload['codDepto']);
+            //$depto->setUnidadeEnsino($payload['unidadeEnsino']);
+            $depto->setNome($payload['nome']);
+			$depto->setAbreviatura($payload['abreviatura']);
+			
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
+
+			if (!is_null($ues)){
+				$depto->setUnidadeEnsino($ues);
+			}
+           
+            try {
+                $this->entity_manager->persist($depto);
+                $this->entity_manager->flush();
+ 
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'result' => 'Departamento criado com Sucesso!',
+                ), 200);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+ 
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado!',
+            ), 400);
+        }
     }
     
 }
