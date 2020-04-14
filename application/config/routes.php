@@ -109,3 +109,9 @@ $route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 
 // Test
 $route['migrate']['GET'] = 'Welcome/updateSchema';
+
+// POST para Unidades de Ensino : Gabriel
+$route['unidades-ensino']['POST'] = 'UnidadeEnsinoController/add';
+
+// POST para Disciplinas : Gabriel
+$route['disciplinas']['POST'] = 'DisciplinaController/add';

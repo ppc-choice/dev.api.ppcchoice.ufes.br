@@ -11,6 +11,8 @@ Entities\UnidadeEnsino:
       type: integer
       id: true
       nullable: false
+      generator:
+        strategy: AUTO
       column: cod_un_ensino
     nome:
       type: string
