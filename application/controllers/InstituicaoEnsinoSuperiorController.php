@@ -140,12 +140,6 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
             $ies->setNome($payload['nome']);
             $ies->setAbreviatura($payload['abreviatura']);
            
-            /*if ( isset($payload['senha'])){
-                $ies->setSenha($payload['senha']);
-            } else {
-                $ies->setSenha('senhaPadrao');
-            }*/
-           
             try {
                 $this->entity_manager->persist($ies);
                 $this->entity_manager->flush();
