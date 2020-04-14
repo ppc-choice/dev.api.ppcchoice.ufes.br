@@ -10,13 +10,13 @@ class TransicaoRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select("CONCAT(CONCAT(cAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, t.codPpcAtual,
-                    CONCAT(CONCAT(cAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, t.codPpcAlvo")
+            ->select("CONCAT(CONCAT(cursoAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, pAtual.codPpc,
+                    CONCAT(CONCAT(cursoAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, pAlvo.codPpc")
             ->from('Entities\Transicao','t')
             ->innerJoin('t.ppcAtual','pAtual')
             ->innerJoin('t.ppcAlvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
+            ->innerJoin('pAtual.curso','cursoAtual')
+            ->innerJoin('pAlvo.curso','cursoAlvo')
             ->getQuery()
             ->getResult();
     }
@@ -38,14 +38,14 @@ class TransicaoRepository extends EntityRepository
     public function findByCodPpc($codPpcAtual)
     {
         return $this->_em->createQueryBuilder()
-            ->select("CONCAT(CONCAT(cAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, t.codPpcAtual,
-            CONCAT(CONCAT(cAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, t.codPpcAlvo")
+            ->select("CONCAT(CONCAT(cursoAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, pAtual.codPpc,
+                    CONCAT(CONCAT(cursoAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, pAlvo.codPpc")
             ->from('Entities\Transicao','t')
             ->innerJoin('t.ppcAtual','pAtual')
             ->innerJoin('t.ppcAlvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
-            ->where('t.codPpcAtual = :codPpcAtual')
+            ->innerJoin('pAtual.curso','cursoAtual')
+            ->innerJoin('pAlvo.curso','cursoAlvo')
+            ->where('pAtual.codPpc = :codPpcAtual')
             ->setParameter('codPpcAtual',$codPpcAtual )
             ->getQuery()
             ->getResult();

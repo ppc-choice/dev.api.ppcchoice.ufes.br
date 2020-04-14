@@ -146,19 +146,19 @@ class TransicaoController extends API_Controller {
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if(isset($payload['$codPpcAtual']) && isset($payload['$codPpcAlvo']) )
+        if( isset($payload['codPpcAtual']) && isset($payload['codPpcAlvo']) )
         {
-            $ppcAtual = find('Entities\ProjetoPedagogicoCurso',$payload['$codPpcAtual']);
-            $ppcAlvo = find('Entities\ProjetoPedagogicoCurso',$payload['$codPpcAlvo']);
+            $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+            $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
 
             $msg = '';
             if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
-            if(is_null($Alvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
-            if(strlen($msg) < 1)
+            if(is_null($ppcAlvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
+            if(empty($msg))
             {
                 $transicao = new Entities\Transicao;
-                $transicao->setCodPpcAtual($payload['$codPpcAtual']);
-                $transicao->setCodPpcAlvo($payload['$codPpcAlvo']);
+                $transicao->setPpcAtual($ppcAtual);
+                $transicao->setPpcAlvo($ppcAlvo);
 
                 try{
                     $this->entity_manager->persist($transicao);
@@ -183,7 +183,5 @@ class TransicaoController extends API_Controller {
                 'message' => 'Campo Obrigatorio Não Encontrado',
             ), 400);
         }
-
-
     }
 }
