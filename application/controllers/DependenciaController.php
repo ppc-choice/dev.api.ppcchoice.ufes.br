@@ -179,4 +179,45 @@ class DependenciaController extends API_Controller
             404);
         }
     } 
+
+    public function add()
+	{
+		$this->_apiConfig(array(
+			'methods' => array('POST'),
+			)
+		);
+
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
+
+		if ( isset($payload['codCompCurric']) && isset($payload['codPreRequisito'])){
+			
+			$componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
+			$preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito'] );
+			
+			if(!is_null($componenteCurricular) && !is_null($preRequisito))
+			{
+				$dependencia = new Entities\Dependencia;
+				$dependencia->setComponenteCurricular($componenteCurricular);
+				$dependencia->setPreRequisito($preRequisito);
+				
+				try {
+					$this->entity_manager->persist($dependencia);
+					$this->entity_manager->flush();
+
+					$this->api_return(array(
+						'status' => TRUE,
+						'result' => 'DependenciaCriadoComSucesso',
+					), 200);
+				} catch (\Exception $e) {
+					echo $e->getMessage();
+				}
+
+			} else {
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => 'CampoObrigatorioNaoEncontrado',
+            ), 400);
+            }
+        }
+    }
 } 
