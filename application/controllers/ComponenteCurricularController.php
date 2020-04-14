@@ -135,5 +135,63 @@ class ComponenteCurricularController extends API_Controller {
         }
         
     }
+
+    public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+
+        if (isset($payload['codCompCurric'])    && isset($payload['periodo'])
+            && isset($payload['credito'])       && isset($payload['tipo']) 
+            && isset($payload['numDisciplina']) && isset($payload['codDepto'])
+            && isset($payload['codPpc']))
+        {
+            $compCurric = new Entities\ComponenteCurricular;
+            $disciplina = $this->entity_manager->find('Entities\Disciplina',array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
+            $ppc =  $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
+            
+            $msg = '';
+            if(is_null($ppc)) $msg = $msg . 'PPC não encontrado. ';
+            if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
+            if(strlen($msg) < 1)
+            {
+                $compCurric->setCodCompCurric($payload['codCompCurric']);
+                $compCurric->setPeriodo($payload['periodo']);
+                $compCurric->setCredito($payload['credito']) ;
+                $compCurric->setTipo($payload['tipo']) ;
+                $compCurric->setCodDepto($payload['codDepto']) ;
+                $compCurric->setPpc($ppc);
+                $compCurric->setDisciplina($disciplina) ;
+
+                try{
+                    $this->entity_manager->persist($compCurric);
+                    $this->entity_manager->flush();
+    
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'result' => 'Componente curricular criada com sucesso',
+                    ), 200);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+            }else{              
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado',
+            ), 400);
+        }
+    }
     
 }

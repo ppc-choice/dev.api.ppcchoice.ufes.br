@@ -123,4 +123,67 @@ class TransicaoController extends API_Controller {
             );
         }
     }
+
+
+    /**
+     * @api {post} transicoes Criar transição
+     * @apiName add()
+     * @apiGroup Transição
+     * @apiError  (Campo obrigatorio não encontrado 400) CampoObrigatorioNaoEncontrado Algum campo obrigatório não foi inserido.
+     * @apiError  (PPC não encontrado 400) PPCNaoEncontrado Ppc Atual ou  Ppc Alvo não encontrado.
+     *
+     * @apiSuccess {String} Transição criada com sucesso
+     */
+    public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+
+        if(isset($payload['$codPpcAtual']) && isset($payload['$codPpcAlvo']) )
+        {
+            $ppcAtual = find('Entities\ProjetoPedagogicoCurso',$payload['$codPpcAtual']);
+            $ppcAlvo = find('Entities\ProjetoPedagogicoCurso',$payload['$codPpcAlvo']);
+
+            $msg = '';
+            if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
+            if(is_null($Alvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
+            if(strlen($msg) < 1)
+            {
+                $transicao = new Entities\Transicao;
+                $transicao->setCodPpcAtual($payload['$codPpcAtual']);
+                $transicao->setCodPpcAlvo($payload['$codPpcAlvo']);
+
+                try{
+                    $this->entity_manager->persist($transicao);
+                    $this->entity_manager->flush();
+    
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'result' => 'Transição criada com sucesso',
+                    ), 200);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado',
+            ), 400);
+        }
+
+
+    }
 }

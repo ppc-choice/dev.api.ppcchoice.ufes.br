@@ -163,15 +163,15 @@ class CorrespondenciaController extends API_Controller {
 
                 if($ppc1 != $ppc2)
                 {
-                    $corresp->setCodCompCurric($compCurric);
-                    $corresp->setCodCompCurricCorresp($compCorresp);
+                    $corresp->setCodCompCurric($payload['codCompCurric']);
+                    $corresp->setCodCompCurricCorresp($payload['codCompCurricCorresp']);
                     
                     if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
                     {
                         $corresp->setPercentual($payload['percentual']);
 
                         try {
-                            $this->entity_manager->persist($usuario);
+                            $this->entity_manager->persist($corresp);
                             $this->entity_manager->flush();
             
                             $this->api_return(array(
