@@ -20,10 +20,6 @@ Entities\UnidadeEnsino:
       type: string
       length: 20
       nullable: false
-    codIes:
-        type: integer
-        nullable: false
-        column: cod_ies
   manyToOne:
     ies:
       targetEntity: InstituicaoEnsinoSuperior

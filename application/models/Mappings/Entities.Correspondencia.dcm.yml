@@ -8,19 +8,14 @@ Entities\Correspondencia:
         - cod_comp_curric
         - cod_comp_curric_corresp
   fields:
-    codCompCurric:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_comp_curric
-    codCompCurricCorresp:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_comp_curric_corresp
     percentual:
       type: float
       nullable: false
+  id:
+    componenteCurricular:
+      associationKey: true
+    componenteCurricularCorresp:
+      associationKey: true
   manyToOne:
     componenteCurricular:
       targetEntity: ComponenteCurricular
