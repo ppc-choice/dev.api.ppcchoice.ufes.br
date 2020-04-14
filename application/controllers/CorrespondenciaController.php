@@ -158,13 +158,13 @@ class CorrespondenciaController extends API_Controller {
             if(!is_null($compCurric) && !is_null($compCorresp))
             {
                 
-                $ppc1 = $compCurric->getCodPpc();
-                $ppc2 = $compCorresp->getCodPpc();
+                $ppc1 = $compCurric->getPpc();
+                $ppc2 = $compCorresp->getPpc();
 
                 if($ppc1 != $ppc2)
                 {
-                    $corresp->setCodCompCurric($payload['codCompCurric']);
-                    $corresp->setCodCompCurricCorresp($payload['codCompCurricCorresp']);
+                    $corresp -> setComponenteCurricular($compCurric);
+                    $corresp -> setComponenteCurricularCorresp($compCorresp);
                     
                     if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
                     {
@@ -181,7 +181,6 @@ class CorrespondenciaController extends API_Controller {
                         } catch (\Exception $e) {
                             echo $e->getMessage();
                         }
-
                     }else{
                         $this->api_return(array(
                             'status' => FALSE,
