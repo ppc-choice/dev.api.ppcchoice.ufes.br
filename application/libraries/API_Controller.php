@@ -282,7 +282,7 @@ class API_Controller extends CI_Controller
                         $bad_date = mdate('%d-%m-%Y', time());
 
                         $start_date = nice_date($bad_date .' 12:00 AM', 'd-m-Y h:i A'); // {DATE} 12:00 AM
-                        $end_date = nice_date($bad_date .' 12:00 PM', 'd-m-Y h:i A'); // {DATE} 12:00 PM
+                        $end_date = nice_date($bad_date .' 11:59 PM', 'd-m-Y h:i A'); // {DATE} 12:00 PM
                         
                         $start_date_timestamp = strtotime($start_date);
                         $end_date_timestamp = strtotime($end_date);
@@ -595,7 +595,7 @@ class API_Controller extends CI_Controller
                     $prop = lcfirst(preg_replace('/^get/', "", $method));
                     $val = $data->$method();    
                     
-                    if ( $val instanceof DateTime ){
+                    if ( $val instanceof DateTime){
                         $val = $val->format($dateFormat);
                     }
 
