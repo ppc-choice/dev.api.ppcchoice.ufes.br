@@ -136,6 +136,28 @@ class ComponenteCurricularController extends API_Controller {
         
     }
 
+    /**
+     * @api {post} componentes-curriculares Criar Componente Curricular
+     * @apiName add
+     * @apiGroup Componente Curricular
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (PPC/Disciplina não encontrado 404) PPCNaoEncontrado PPC não encontrado. Disciplina não encontrada
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "periodo" : 2,
+	 *         "credito" : 5 ,
+	 *         "tipo" : "OPTATIVA" ,
+	 *         "codDepto" : 1,
+	 *         "numDisciplina" : 6,
+	 *         "codPpc" : 2
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "result": "Componente curricular criada com sucesso"
+     *     }
+     */
     public function add()
     {
         $this->_apiConfig(array(
@@ -172,7 +194,7 @@ class ComponenteCurricularController extends API_Controller {
     
                     $this->api_return(array(
                         'status' => TRUE,
-                        'result' => 'Componente curricular criada com sucesso',
+                        'result' => 'Componente curricular criada com sucesso.',
                     ), 200);
                 } catch (\Exception $e) {
                     echo $e->getMessage();
@@ -181,12 +203,12 @@ class ComponenteCurricularController extends API_Controller {
                 $this->api_return(array(
                     'status' => FALSE,
                     'message' => $msg,
-                ), 400);
+                ), 404);
             }
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado',
+                'message' => 'Campo Obrigatorio Não Encontrado.',
             ), 400);
         }
     }
