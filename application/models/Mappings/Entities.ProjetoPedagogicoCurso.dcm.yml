@@ -12,6 +12,8 @@ Entities\ProjetoPedagogicoCurso:
       id: true
       nullable: false
       column: cod_ppc
+      generator:
+        strategy: auto 
     dtInicioVigencia:
       type: date
       nullable: false
