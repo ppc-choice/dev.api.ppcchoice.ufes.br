@@ -127,12 +127,21 @@ class TransicaoController extends API_Controller {
 
     /**
      * @api {post} transicoes Criar transição
-     * @apiName add()
+     * @apiName add
      * @apiGroup Transição
-     * @apiError  (Campo obrigatorio não encontrado 400) CampoObrigatorioNaoEncontrado Algum campo obrigatório não foi inserido.
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
      * @apiError  (PPC não encontrado 400) PPCNaoEncontrado Ppc Atual ou  Ppc Alvo não encontrado.
-     *
-     * @apiSuccess {String} Transição criada com sucesso
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "codPpcAtual" : 1,
+	 *         "codPpcAlvo" : 4
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "result": "Transição criada com sucesso"
+     *     }
      */
     public function add()
     {
@@ -166,7 +175,7 @@ class TransicaoController extends API_Controller {
     
                     $this->api_return(array(
                         'status' => TRUE,
-                        'result' => 'Transição criada com sucesso',
+                        'result' => 'Transição criada com sucesso.',
                     ), 200);
                 } catch (\Exception $e) {
                     echo $e->getMessage();
@@ -175,12 +184,12 @@ class TransicaoController extends API_Controller {
                 $this->api_return(array(
                     'status' => FALSE,
                     'message' => $msg,
-                ), 400);
+                ), 404);
             }
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado',
+                'message' => 'Campo Obrigatorio Não Encontrado.',
             ), 400);
         }
     }
