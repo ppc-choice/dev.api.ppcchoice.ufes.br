@@ -111,6 +111,13 @@ $route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 $route['migrate']['GET'] = 'Welcome/updateSchema';
 
 
+// POST para Unidades de Ensino : Gabriel
+$route['unidades-ensino']['POST'] = 'UnidadeEnsinoController/add';
+
+// POST para Disciplinas : Gabriel
+$route['disciplinas']['POST'] = 'DisciplinaController/add';
+
+
 // (POST) Instituição de Ensino Superior: Wellerson
 $route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
 $route['departamentos']['POST'] = 'DepartamentoController/add';
@@ -127,5 +134,3 @@ $route['transicoes']['POST'] = 'TransicaoController/add';
 $route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/add';
 //Dependencia : Guilherme
 $route['dependencias']['POST'] = 'DependenciaController/add';
-
-

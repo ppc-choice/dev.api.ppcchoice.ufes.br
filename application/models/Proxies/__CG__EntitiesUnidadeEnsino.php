@@ -42,12 +42,6 @@ class UnidadeEnsino extends \Entities\UnidadeEnsino implements \Doctrine\ORM\Pro
     }
 
     
-    public function setCodUnidadeEnsino($codUnidadeEnsino)
-    {
-        $this->__load();
-        return parent::setCodUnidadeEnsino($codUnidadeEnsino);
-    }
-
     public function getCodUnidadeEnsino()
     {
         if ($this->__isInitialized__ === false) {

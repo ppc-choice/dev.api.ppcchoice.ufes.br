@@ -31,19 +31,6 @@ class UnidadeEnsino
 
 
     /**
-     * Set codUnidadeEnsino
-     *
-     * @param integer $codUnidadeEnsino
-     * @return UnidadeEnsino
-     */
-    public function setCodUnidadeEnsino($codUnidadeEnsino)
-    {
-        $this->codUnidadeEnsino = $codUnidadeEnsino;
-    
-        return $this;
-    }
-
-    /**
      * Get codUnidadeEnsino
      *
      * @return integer 
