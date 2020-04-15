@@ -86,11 +86,11 @@ class ProjetoPedagogicoCursoController extends API_Controller
     * @apiSuccess {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
     * @apiSuccess {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
     * @apiSuccess {Number} duracao  Tempo de duração do curso descrito por anos.
-    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal..
+    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
     * @apiSuccess {Number} chTotal  Carga horária total que as componentes curriculares do curso deve possuir.
     * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  .
+    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     * 
     * apiExample {curl} Exemplo:
     *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
@@ -154,6 +154,62 @@ class ProjetoPedagogicoCursoController extends API_Controller
             404);
         }
     }  
+
+    /**
+    * @api {post} projetos-pedagogicos-curso/ Adicionar novo Projeto Pedagógico de Curso.
+    *
+    * @apiName add
+    * @apiGroup Projeto Pedagógico Curso
+    *
+    *
+    * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
+    * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
+    * @apiSuccess {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
+    * @apiSuccess {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeCmplt  Carga horária total de atividades complementares que o curso deve possuir.
+    * @apiSuccess {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
+    * @apiSuccess {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
+    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
+    * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
+    * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
+    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
+    * 
+    * apiExample {curl} Exemplo:
+    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/
+    * @apiParamExample {JSON} Request-Example:
+    *   HTTP/1.1 200 OK
+    *   {
+    *       "codCurso": 1   
+    *       "dtInicioVigencia": "2011-08-01",
+    *       "dtTerminoVigencia": null,
+    *       "chTotalDisciplinaOpt": 240,
+    *       "chTotalDisciplinaOb": 3030,
+    *       "chTotalAtividadeExt": 0,
+    *       "chTotalAtividadeCmplt": 180,
+    *       "chTotalProjetoConclusao": 120,
+    *       "chTotalEstagio": 300,
+    *       "qtdPeriodos": 10,
+    *       "anoAprovacao": 2011,
+    *       "situacao": "ATIVO ANTERIOR",
+    *   }
+    *.
+    * @apiSuccessExample {JSON} Success-Response:
+    *     HTTP/1.1 200 OK
+    *     {
+    *       status": true,
+    *       "message": "Projeto Pedagógico de Curso criada com sucesso!"
+    *     }
+    *
+    * @apiError PpcNotFound Não foi possível adicionar um novo Projeto Pedagogico Curso.
+	* @apiSampleRequest cursos/
+	* @apiErrorExample {JSON} Error-Response:
+	* HTTP/1.1 404 Not Found
+	* {
+	*	"status": false,
+	*	"message": "Campo Obrigatorio Não Encontrado!"
+	* }
+    */
     
     public function add()
 	{
@@ -208,13 +264,16 @@ class ProjetoPedagogicoCursoController extends API_Controller
                                 $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
                                 $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
                                 $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-                        
-                                // $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
+
+                                $ppc->setDtInicioVigencia($payload['dtInicioVigencia']);
+
                                 $ppc->setDuracao($duracao);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
                                 $ppc->setSituacao($payload['situacao']);
                                 $ppc->setCurso($codCurso);
+                                // $ppc->setCodPpc($payload['codPpc']);
+
                             }
                             try {
                                 $this->entity_manager->persist($ppc);
@@ -242,29 +301,31 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         if($payload['dtInicioVigencia'] < $payload['dtTerminoVigencia'])
                         {
                             
-                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $$payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos'], $payload['situacao']))
+                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos'], $payload['situacao']))
                             {
                                 $ppc = new Entities\ProjetoPedagogicoCurso;
                                 $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
                                 $duracao = $payload['qtdPeriodos']/2;
                                 
-                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);    
                                 $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
                                 $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
                                 $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
                                 $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
                                 $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-                        
-                                $ppc->setComponenteCurricular($$payload['dtInicioVigencia']);
+                                $ppc->setChTotal($chtotal);
+                                
+                                $ppc->setDtinicioVigencia($payload['dtInicioVigencia']);
                                 $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
                                 $ppc->setDuracao($duracao);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
                                 $ppc->setSituacao($payload['situacao']);
-                                $ppc->setCodCurso($codCurso);
+                                $ppc->setCurso($codCurso);
+                                // $ppc->setCodPpc($payload['codPpc']);
                             }
                             try {
-                                $this->entity_manager->persist($dependencia);
+                                $this->entity_manager->persist($ppc);
                                 $this->entity_manager->flush();
             
                                 $this->api_return(array(

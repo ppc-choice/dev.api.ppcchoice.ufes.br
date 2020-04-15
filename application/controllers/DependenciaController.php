@@ -181,6 +181,42 @@ class DependenciaController extends API_Controller
         }
     } 
 
+    /**
+    * @api {post} dependencias Adicionar nova depêndencia entre componentes curriculares.
+    *
+    * @apiName add
+    * @apiGroup Dependência
+    *
+    * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
+    * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
+    * 
+    * @apiExample {curl} Exemplo:
+	*     curl -i http://dev.api.ppcchoice.ufes.br/dependencias
+	* @apiParamExample {json} Request-Example:
+    * {
+    *     "codCompCurric": 6,
+    *     "codPreRequisito": 1
+    * }
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Dependencia criada com sucesso!"
+	* {
+    *
+    * @apiError CursoNotFound Não foi possível registrar um novo Curso.
+	* @apiSampleRequest dependencias
+	* @apiErrorExample {JSON} Error-Response:
+	* HTTP/1.1 404 Not Found
+	* {
+	*	"status": false,
+	*	"message": "Campo Obrigatorio Não Encontrado!"
+	* }
+
+    */
+    
+
     public function add()
 	{
 		$this->_apiConfig(array(
@@ -207,7 +243,7 @@ class DependenciaController extends API_Controller
 
 					$this->api_return(array(
 						'status' => TRUE,
-						'result' => 'DependenciaCriadoComSucesso',
+						'result' => 'Dependencia criada com sucesso',
 					), 200);
 				} catch (\Exception $e) {
 					echo $e->getMessage();
@@ -216,7 +252,7 @@ class DependenciaController extends API_Controller
 			} else {
 				$this->api_return(array(
 					'status' => FALSE,
-					'message' => 'CampoObrigatorioNaoEncontrado',
+					'message' => 'Campo obrigatorio não encontrado',
             ), 400);
             }
         }
