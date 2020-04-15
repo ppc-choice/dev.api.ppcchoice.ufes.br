@@ -135,4 +135,101 @@ class CorrespondenciaController extends API_Controller {
             );
         }
     }
+
+    /**
+     * @api {post} correspondencias Criar correspondência
+     * @apiName add
+     * @apiGroup Correspondência
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Componente curricular não encontrada 404) ComponenteNaoEncontrada Componente curricular não encontrada.
+     * @apiError  (Componentes de mesmo ppc 400) BadRequest Componentes pertencem ao mesmo ppc.
+     * @apiError  (Valor de percentual errado 400) BadRequest Percentual de correspondência deve ser > 0 e <= 1.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "codCompCurric" : 220 ,
+	 *         "codCompCurricCorresp" : 221,
+	 *         "percentual" : 1
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Correspondência criada com sucesso."
+     *     }
+     */
+    public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+
+        if (isset( $payload['codCompCurric'], $payload['codCompCurricCorresp'], $payload['percentual'] ))
+        {
+            $corresp = new \Entities\Correspondencia;
+            $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+            $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
+            
+            if(!is_null($compCurric) && !is_null($compCorresp ))
+            {
+                
+                $ppc1 = $compCurric->getPpc();
+                $ppc2 = $compCorresp->getPpc();
+
+                if($ppc1 != $ppc2)
+                {
+                    $corresp -> setComponenteCurricular($compCurric);
+                    $corresp -> setComponenteCurricularCorresp($compCorresp);
+                    
+                    if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
+                    {
+                        $corresp->setPercentual($payload['percentual']);
+
+                        try {
+                            $this->entity_manager->persist($corresp);
+                            $this->entity_manager->flush();
+            
+                            $this->api_return(array(
+                                'status' => TRUE,
+                                'message' => 'Correspondência criada com sucesso.',
+                            ), 200);
+                        } catch (\Exception $e) {
+                            $e_msg = $e->getMessage();
+                            $this->api_return(array(
+                                'status' => FALSE,
+                                'message' => $e_msg
+                            ), 400);
+                        }
+                    }else{
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1.',
+                        ), 400);
+                    }
+                    
+                }else{
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => 'Componentes pertencem ao mesmo ppc.',
+                    ), 400);
+                }
+                
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Componente curricular não encontrada.',
+                ), 404);
+            }
+
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado.',
+            ), 400);
+        }
+    }
 }
