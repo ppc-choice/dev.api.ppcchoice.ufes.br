@@ -595,7 +595,7 @@ class API_Controller extends CI_Controller
                     $prop = lcfirst(preg_replace('/^get/', "", $method));
                     $val = $data->$method();    
                     
-                    if ( $val instanceof DateTime ){
+                    if ( $val instanceof DateTime){
                         $val = $val->format($dateFormat);
                     }
 

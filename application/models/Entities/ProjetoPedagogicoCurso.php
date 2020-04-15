@@ -86,19 +86,6 @@ class ProjetoPedagogicoCurso
 
 
     /**
-     * Set codPpc
-     *
-     * @param integer $codPpc
-     * @return ProjetoPedagogicoCurso
-     */
-    public function setCodPpc($codPpc)
-    {
-        $this->codPpc = $codPpc;
-    
-        return $this;
-    }
-
-    /**
      * Get codPpc
      *
      * @return integer 

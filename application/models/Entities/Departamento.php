@@ -31,19 +31,6 @@ class Departamento
 
 
     /**
-     * Set codDepto
-     *
-     * @param integer $codDepto
-     * @return Departamento
-     */
-    public function setCodDepto($codDepto)
-    {
-        $this->codDepto = $codDepto;
-    
-        return $this;
-    }
-
-    /**
      * Get codDepto
      *
      * @return integer 

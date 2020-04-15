@@ -42,12 +42,6 @@ class Curso extends \Entities\Curso implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function setCodCurso($codCurso)
-    {
-        $this->__load();
-        return parent::setCodCurso($codCurso);
-    }
-
     public function getCodCurso()
     {
         if ($this->__isInitialized__ === false) {

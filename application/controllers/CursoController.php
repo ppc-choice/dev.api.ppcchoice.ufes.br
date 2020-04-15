@@ -127,5 +127,85 @@ class CursoController extends API_Controller {
 			'result' => $result,
 		), 200);
     }
-    
+	
+	/**
+	 * @api {post} cursos/ Registrar um novo Curso.
+	 * @apiName add
+	 * @apiGroup Cursos
+	 * @apiSuccess {String} nome   Nome do Curso.
+	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiExample {curl} Exemplo:
+	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
+	 * @apiParamExample {json} Request-Example:
+     * {
+     *   "nome": "Novo Curso",
+     *	 "anoCriacao": 2020,
+     *	 "unidadeEnsino": 1
+     * }
+	 * @apiSuccessExample {JSON} Success-Response:
+	 * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Curso criado com Sucesso!"
+	* {
+	
+	 * @apiError CursoNotFound Não foi possível registrar um novo Curso.
+	 * @apiSampleRequest cursos/
+	 * @apiErrorExample {JSON} Error-Response:
+	 * HTTP/1.1 404 OK
+	 * {
+	 *	"status": false,
+	 *	"message": "Campo Obrigatorio Não Encontrado!"
+	 * }
+	 */
+	public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            )
+        );
+ 
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+ 
+        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['anoCriacao'])){
+           
+			$curso = new \Entities\Curso;
+            $curso->setNome($payload['nome']);
+			$curso->setAnoCriacao($payload['anoCriacao']);
+			
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
+			
+			if (!is_null($ues)){
+				$curso->setUnidadeEnsino($ues);
+				try {
+					$this->entity_manager->persist($curso);
+					$this->entity_manager->flush();
+	 
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Curso criado com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$mensagem = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $mensagem,
+					), 400);
+				}
+				
+			}else {
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => 'Unidade de Ensino não identificado!',
+				), 400);
+			}
+           
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado!',
+            ), 400);
+        }
+    }
 }

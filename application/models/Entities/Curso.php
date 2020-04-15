@@ -31,19 +31,6 @@ class Curso
 
 
     /**
-     * Set codCurso
-     *
-     * @param integer $codCurso
-     * @return Curso
-     */
-    public function setCodCurso($codCurso)
-    {
-        $this->codCurso = $codCurso;
-    
-        return $this;
-    }
-
-    /**
      * Get codCurso
      *
      * @return integer 

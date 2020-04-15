@@ -42,12 +42,6 @@ class ProjetoPedagogicoCurso extends \Entities\ProjetoPedagogicoCurso implements
     }
 
     
-    public function setCodPpc($codPpc)
-    {
-        $this->__load();
-        return parent::setCodPpc($codPpc);
-    }
-
     public function getCodPpc()
     {
         if ($this->__isInitialized__ === false) {
