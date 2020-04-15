@@ -14,7 +14,7 @@ class DepartamentoController extends API_Controller {
 	 *
 	 * @apiSuccess {String} nome   Nome do Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
-	 * @apiSuccess {Number} unidadeEnsido   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * @apiExample {curl} Exemplo:
 	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/1
 	 * @apiSuccessExample {JSON} Success-Response:
@@ -27,7 +27,7 @@ class DepartamentoController extends API_Controller {
 	 *	"abreviatura": "DCE",
 	 *	"nomeUnidadeEnsino": "Campus São Mateus"
 	 * }
-	 * @apiError UserNotFound O <code>codDepto</code> não corresponde a nenhum Departamento cadastrado.
+	 * @apiError DepartamentoNotFound O <code>codDepto</code> não corresponde a nenhum Departamento cadastrado.
 	 * @apiSampleRequest departamentos/:codDepto
 	 * @apiErrorExample {JSON} Error-Response:
 	 * HTTP/1.1 404 OK
@@ -66,10 +66,9 @@ class DepartamentoController extends API_Controller {
 	 * @api {get} departamentos/ Apresentar todos Departamentos registrados.
 	 * @apiName findAll
 	 * @apiGroup Departamentos
-	 * @apiSuccess {Number} codDepto   Identificador único da Departamento.
 	 * @apiSuccess {String} nome   Nome da Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
-	 * @apiSuccess {Number} unidadeEnsido   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * @apiExample {curl} Exemplo:
 	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
 	 * @apiSuccessExample {JSON} Success-Response:
@@ -116,13 +115,13 @@ class DepartamentoController extends API_Controller {
 	* 	]
 	* }
 
-	 * @apiError UserNotFound Nenhuma Departamento cadastrado.
+	 * @apiError DepartamentoNotFound Nenhum Departamento cadastrado.
 	 * @apiSampleRequest departamentos/
 	 * @apiErrorExample {JSON} Error-Response:
 	 * HTTP/1.1 404 OK
 	 * {
 	 *	"status": false,
-	 *	"message": "Nenhuma Departamento cadastrado!"
+	 *	"message": "Nenhum Departamento cadastrado!"
 	 * }
 	 */
     public function findAll()
@@ -144,7 +143,38 @@ class DepartamentoController extends API_Controller {
 		), 200);
 	}
 	
-
+	/**
+	 * @api {post} departamentos/ Registrar um novo departamento.
+	 * @apiName add
+	 * @apiGroup Departamentos
+	 * @apiSuccess {Number} codDepto   Identificador único auto incrementável do Departamento.
+	 * @apiSuccess {String} nome   Nome da Departamento.
+	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiExample {curl} Exemplo:
+	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
+	 * @apiParamExample {json} Request-Example:
+     * {
+     *   "nome": "Novo Departamento",
+     *	 "unidadeEnsino": 1,
+     *	 "abreviatura": "DNOVO"
+     * }
+	 * @apiSuccessExample {JSON} Success-Response:
+	 * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Departamento criado com Sucesso!"
+	* {
+	
+	 * @apiError DepartamentoNotFound Não foi possível realizar um novo cadastro de departamento.
+	 * @apiSampleRequest departamentos/
+	 * @apiErrorExample {JSON} Error-Response:
+	 * HTTP/1.1 404 OK
+	 * {
+	 *	"status": false,
+	 *	"message": "Campo Obrigatorio Não Encontrado!"
+	 * }
+	 */
 	public function add()
     {
         $this->_apiConfig(array(

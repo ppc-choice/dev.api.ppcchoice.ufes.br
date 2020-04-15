@@ -10,7 +10,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
     }
   
 	/**
-	 * @api {get} instituicoes-ensino-superior/ Apresentar todas Instituições de Ensino Superior registradas.
+	 * @api {get} instituicoes-ensino-superior/ Listar todas Instituições de Ensino Superior registradas.
 	 * @apiName getAll
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
@@ -65,7 +65,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 
 	/**
-	 * @api {get} instituicoes-ensino-superior/:codIes Apresentar dados de uma Instituição de Ensino Superior específica.
+	 * @api {get} instituicoes-ensino-superior/:codIes Listar dados de uma Instituição de Ensino Superior específica.
 	 * @apiName getById
 	 * @apiGroup Instituições de Ensino Superior
 	 *
@@ -120,8 +120,37 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 	}
 	
-
-
+	/**
+	 * @api {post} instituicoes-ensino-superior/ Registrar uma nova Instituição de Ensino Superior.
+	 * @apiName add
+	 * @apiGroup Instituições de Ensino Superior
+	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
+	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
+	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
+	 * @apiExample {curl} Exemplo:
+	 *     curl -i http://dev.api.ppcchoice.ufes.br/instituicoes-ensino-superior/
+	 * @apiParamExample {json} Request-Example:
+     * {
+	 * 	 "codIes": 111,
+     *   "nome": "Nova Instituição de Ensino Superior",
+     *	 "abreviatura": "NIES"
+     * }
+	 * @apiSuccessExample {JSON} Success-Response:
+	 * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Instituição de Ensino Superior criada com Sucesso!"
+	* {
+	
+	 * @apiError IesNotFound Não foi possível cadastrar uma nova Instituição de Ensino Superior.
+	 * @apiSampleRequest instituicoes-ensino-superior/
+	 * @apiErrorExample {JSON} Error-Response:
+	 * HTTP/1.1 404 OK
+	 * {
+	 *	"status": false,
+	 *	"message": "Campo Obrigatorio Não Encontrado!"
+	 * }
+	 */	
 	public function add()
     {
         $this->_apiConfig(array(

@@ -128,7 +128,37 @@ class CursoController extends API_Controller {
 		), 200);
     }
 	
+	/**
+	 * @api {post} cursos/ Registrar um novo Curso.
+	 * @apiName add
+	 * @apiGroup Cursos
+	 * @apiSuccess {String} nome   Nome do Curso.
+	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiExample {curl} Exemplo:
+	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
+	 * @apiParamExample {json} Request-Example:
+     * {
+     *   "nome": "Novo Curso",
+     *	 "anoCriacao": 2020,
+     *	 "unidadeEnsino": 1
+     * }
+	 * @apiSuccessExample {JSON} Success-Response:
+	 * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Curso criado com Sucesso!"
+	* {
 	
+	 * @apiError CursoNotFound Não foi possível registrar um novo Curso.
+	 * @apiSampleRequest cursos/
+	 * @apiErrorExample {JSON} Error-Response:
+	 * HTTP/1.1 404 OK
+	 * {
+	 *	"status": false,
+	 *	"message": "Campo Obrigatorio Não Encontrado!"
+	 * }
+	 */
 	public function add()
     {
         $this->_apiConfig(array(
