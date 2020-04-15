@@ -37,8 +37,9 @@ class DependenciaController extends API_Controller
 
         ));
         
-        $result = $this->entity_manager->getRepository('Entities\Dependencia')->findAll();
-
+        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findAll();
+        $result = $this->doctrine_to_array($dependencia);
+        
         if(!empty($result)){
             
             $this->api_return(
@@ -105,8 +106,8 @@ class DependenciaController extends API_Controller
         ));
         
         $result = $this->entity_manager->getRepository('Entities\Dependencia')->findById($codCompCurric, $codPreReq);
+    
 
-        
         if(!empty($result)){
             
             $this->api_return(
@@ -157,9 +158,9 @@ class DependenciaController extends API_Controller
 
         ));
     
-        $result = $this->entity_manager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        $result = $this->doctrine_to_array($dependencia);
 
-        
         if(!empty($result)){
             
             $this->api_return(
@@ -179,4 +180,84 @@ class DependenciaController extends API_Controller
             404);
         }
     } 
+
+    /**
+    * @api {post} dependencias Adicionar nova depêndencia entre componentes curriculares.
+    *
+    * @apiName add
+    * @apiGroup Dependência
+    *
+    * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
+    * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
+    * 
+    * @apiExample {curl} Exemplo:
+	*     curl -i http://dev.api.ppcchoice.ufes.br/dependencias
+	* @apiParamExample {json} Request-Example:
+    * {
+    *     "codCompCurric": 6,
+    *     "codPreRequisito": 1
+    * }
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Dependencia criada com sucesso!"
+	* {
+    *
+    * @apiError CursoNotFound Não foi possível registrar um novo Curso.
+	* @apiSampleRequest dependencias
+	* @apiErrorExample {JSON} Error-Response:
+	* HTTP/1.1 404 Not Found
+	* {
+	*	"status": false,
+	*	"message": "Campo Obrigatorio Não Encontrado!"
+	* }
+
+    */
+    
+
+    public function add()
+	{
+		$this->_apiConfig(array(
+			'methods' => array('POST'),
+			)
+		);
+
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
+
+		if ( isset($payload['codCompCurric']) && isset($payload['codPreRequisito'])){
+			
+			$componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
+			$preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito'] );
+			
+			if(!is_null($componenteCurricular) && !is_null($preRequisito))
+			{
+				$dependencia = new Entities\Dependencia;
+				$dependencia->setComponenteCurricular($componenteCurricular);
+				$dependencia->setPreRequisito($preRequisito);
+				
+				try {
+					$this->entity_manager->persist($dependencia);
+					$this->entity_manager->flush();
+
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Dependencia criada com sucesso',
+					), 200);
+				} catch (\Exception $e) {
+					$this->api_return(array(
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                    ), 400);
+				}
+
+			} else {
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => 'Campo obrigatorio não encontrado',
+            ), 400);
+            }
+        }
+    }
 } 
