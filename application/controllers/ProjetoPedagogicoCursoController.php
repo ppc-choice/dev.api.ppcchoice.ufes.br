@@ -223,15 +223,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
         if (isset($payload['codCurso'], $payload['situacao']))
         {
 
-			$codCurso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
-        
-            
+			$curso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
             $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
             $result = $this->doctrine_to_array($ppcs);
+
             $situacao = true; 
             $uppersituacao = strtoupper($payload['situacao']);
                    
-            if(!is_null($codCurso))
+            if(!is_null($curso))
             {
                 if($uppersituacao!="INATIVO")
                 {
@@ -255,7 +254,6 @@ class ProjetoPedagogicoCursoController extends API_Controller
                             {
                                 $ppc = new Entities\ProjetoPedagogicoCurso;
                                 $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
-                                $duracao = $payload['qtdPeriodos']/2;
                                 
                                 $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
                                 $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
@@ -267,11 +265,11 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
                                 $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
 
-                                $ppc->setDuracao($duracao);
+                                $ppc->setDuracao($payload['duracao']);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
                                 $ppc->setSituacao($uppersituacao);
-                                $ppc->setCurso($codCurso);
+                                $ppc->setCurso($curso);
                             }
                             try {
                                 $this->entity_manager->persist($ppc);
@@ -279,10 +277,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
             
                                 $this->api_return(array(
                                     'status' => TRUE,
-                                    'result' => 'PPCCriadoComSucesso',
+                                    'mesage' => 'PPCCriadoComSucesso',
                                 ), 200);
                             } catch (\Exception $e) {
-                                echo $e->getMessage();
+                                $this->api_return(array(
+                                    'status' => false,
+                                    'message' => $e->getMessage(),
+                                ), 400);
                             }
                         }else
                         {
@@ -303,7 +304,6 @@ class ProjetoPedagogicoCursoController extends API_Controller
                             {
                                 $ppc = new Entities\ProjetoPedagogicoCurso;
                                 $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
-                                $duracao = $payload['qtdPeriodos']/2;
                                 
                                 $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);    
                                 $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
@@ -315,22 +315,27 @@ class ProjetoPedagogicoCursoController extends API_Controller
                                 
                                 $ppc->setDtinicioVigencia(new DateTime($payload['dtInicioVigencia']));
                                 $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
-                                $ppc->setDuracao($duracao);
+
+                                $ppc->setDuracao($payload['duracao']);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
                                 $ppc->setSituacao($uppersituacao);
-                                $ppc->setCurso($codCurso);
-                            }
-                            try {
-                                $this->entity_manager->persist($ppc);
-                                $this->entity_manager->flush();
-            
-                                $this->api_return(array(
-                                    'status' => TRUE,
-                                    'result' => 'PPCCriadoComSucesso',
-                                ), 200);
-                            } catch (\Exception $e) {
-                                echo $e->getMessage();
+                                $ppc->setCurso($curso);
+                                
+                                try {
+                                    $this->entity_manager->persist($ppc);
+                                    $this->entity_manager->flush();
+                
+                                    $this->api_return(array(
+                                        'status' => TRUE,
+                                        'result' => 'PPC criado com sucesso',
+                                    ), 200);
+                                } catch (\Exception $e) {
+                                    $this->api_return(array(
+                                        'status' => false,
+                                        'message' => $e->getMessage(),
+                                    ), 400);
+                                }
                             }
                         }
                         else

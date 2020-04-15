@@ -243,10 +243,13 @@ class DependenciaController extends API_Controller
 
 					$this->api_return(array(
 						'status' => TRUE,
-						'result' => 'Dependencia criada com sucesso',
+						'message' => 'Dependencia criada com sucesso',
 					), 200);
 				} catch (\Exception $e) {
-					echo $e->getMessage();
+					$this->api_return(array(
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                    ), 400);
 				}
 
 			} else {
