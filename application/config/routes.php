@@ -79,14 +79,12 @@ $route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoController/findById/$1';
 
 $route['projetos-pedagogicos-curso/(:num)']['GET'] = 'ProjetoPedagogicoCursoController/findById/$1';
 $route['projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findAll';
-$route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/add';
 
 //Depêndencia : Guilherme
 
 $route['dependencias/(:num)/(:num)']['GET'] = 'DependenciaController/findById/$1/$2';
 $route['dependencias']['GET'] = 'DependenciaController/findAll';
 $route['projetos-pedagogicos-curso/(:num)/dependencias']['GET'] = 'DependenciaController/findByIdPpc/$1';
-$route['dependencias']['POST'] = 'DependenciaController/add';
 
 //Componente Curricular : Hadamo
 $route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
@@ -112,10 +110,22 @@ $route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 // Test
 $route['migrate']['GET'] = 'Welcome/updateSchema';
 
+
+// (POST) Instituição de Ensino Superior: Wellerson
+$route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
+$route['departamentos']['POST'] = 'DepartamentoController/add';
+$route['cursos']['POST'] = 'CursoController/add';
+
 //Componente Curricular : Hadamo
 $route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/add';
 //Correspondencia : Hadamo
 $route['correspondencias']['POST'] = 'CorrespondenciaController/add';
 //Transicao : Hadamo
 $route['transicoes']['POST'] = 'TransicaoController/add';
+
+//Projeto Pedagoico Curricular : Guilherme
+$route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/add';
+//Dependencia : Guilherme
+$route['dependencias']['POST'] = 'DependenciaController/add';
+
 
