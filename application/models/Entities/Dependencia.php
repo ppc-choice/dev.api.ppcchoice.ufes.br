@@ -10,16 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Dependencia
 {
     /**
-     * @var integer
-     */
-    private $codCompCurric;
-
-    /**
-     * @var integer
-     */
-    private $codPreRequisito;
-
-    /**
      * @var \Entities\ComponenteCurricular
      */
     private $componenteCurricular;
@@ -31,58 +21,12 @@ class Dependencia
 
 
     /**
-     * Set codCompCurric
-     *
-     * @param integer $codCompCurric
-     * @return Dependencia
-     */
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->codCompCurric = $codCompCurric;
-    
-        return $this;
-    }
-
-    /**
-     * Get codCompCurric
-     *
-     * @return integer 
-     */
-    public function getCodCompCurric()
-    {
-        return $this->codCompCurric;
-    }
-
-    /**
-     * Set codPreRequisito
-     *
-     * @param integer $codPreRequisito
-     * @return Dependencia
-     */
-    public function setCodPreRequisito($codPreRequisito)
-    {
-        $this->codPreRequisito = $codPreRequisito;
-    
-        return $this;
-    }
-
-    /**
-     * Get codPreRequisito
-     *
-     * @return integer 
-     */
-    public function getCodPreRequisito()
-    {
-        return $this->codPreRequisito;
-    }
-
-    /**
      * Set componenteCurricular
      *
      * @param \Entities\ComponenteCurricular $componenteCurricular
      * @return Dependencia
      */
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = null)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
     {
         $this->componenteCurricular = $componenteCurricular;
     
@@ -105,7 +49,7 @@ class Dependencia
      * @param \Entities\ComponenteCurricular $preRequisito
      * @return Dependencia
      */
-    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito = null)
+    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito)
     {
         $this->preRequisito = $preRequisito;
     

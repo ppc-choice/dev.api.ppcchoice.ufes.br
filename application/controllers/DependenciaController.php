@@ -178,5 +178,5 @@ class DependenciaController extends API_Controller
                 ),
             404);
         }
-    } 
+    }
 } 

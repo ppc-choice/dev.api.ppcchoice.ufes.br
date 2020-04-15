@@ -82,12 +82,12 @@ class UsuarioController extends API_Controller {
 		header("Access-Controll-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
+			'methods' => array('GET'),
+			// 'limit' => array(10,'ip','everyday'),
 			)
 		);
 		
 		$usuarios = $this->entity_manager->getRepository('Entities\Usuario')->findAll();
-
 		$result = $this->doctrine_to_array($usuarios);
 
 		$this->api_return(array(

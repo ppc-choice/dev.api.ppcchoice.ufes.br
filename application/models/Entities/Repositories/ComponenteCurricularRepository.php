@@ -10,7 +10,7 @@ class ComponenteCurricularRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-                ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.codDepto',
+                ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, disc.codDepto',
                         'dep.abreviatura as depto,  disc.numDisciplina',
                         'p.codPpc')
                 ->from('Entities\ComponenteCurricular','c')

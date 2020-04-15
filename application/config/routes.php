@@ -105,7 +105,10 @@ $route['projetos-pedagogicos-curso/(:num)/transicoes']['GET'] = 'TransicaoContro
 $route['usuarios']['GET'] = 'UsuarioController/findAll';
 $route['usuarios/(:num)']['GET'] = 'UsuarioController/findById/$1';
 
-$route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
+$route['usuarios']['POST'] = 'UsuarioController/add';
 
 // Test
 $route['migrate']['GET'] = 'Welcome/updateSchema';
+
+$route['correspondencias']['POST'] = 'CorrespondenciaController/add';
+

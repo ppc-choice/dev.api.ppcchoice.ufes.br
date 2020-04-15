@@ -7,20 +7,17 @@ Entities\Correspondencia:
       columns:
         - cod_comp_curric
         - cod_comp_curric_corresp
+  id:
+    componenteCurricular:
+      associationKey: true
+    componenteCurricularCorresp:
+      associationKey: true
   fields:
-    codCompCurric:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_comp_curric
-    codCompCurricCorresp:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_comp_curric_corresp
     percentual:
-      type: float
-      nullable: false
+        type: float
+        nullable: false
+        range: [0,1]
+        column: percentual
   manyToOne:
     componenteCurricular:
       targetEntity: ComponenteCurricular

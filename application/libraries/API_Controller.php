@@ -282,7 +282,7 @@ class API_Controller extends CI_Controller
                         $bad_date = mdate('%d-%m-%Y', time());
 
                         $start_date = nice_date($bad_date .' 12:00 AM', 'd-m-Y h:i A'); // {DATE} 12:00 AM
-                        $end_date = nice_date($bad_date .' 12:00 PM', 'd-m-Y h:i A'); // {DATE} 12:00 PM
+                        $end_date = nice_date($bad_date .' 11:59 PM', 'd-m-Y h:i A'); // {DATE} 12:00 PM
                         
                         $start_date_timestamp = strtotime($start_date);
                         $end_date_timestamp = strtotime($end_date);
@@ -579,37 +579,45 @@ class API_Controller extends CI_Controller
 
 /** 
    * Converte objeto doctrine para array associativo
-   * Adaptado de: 
+   * Adaptado por: Elyabe Alves (http://github.com/elyabe) 
    * @author Andrei Luiz Nenevê (https://gist.github.com/AndreiLN) 
    * @param $data objeto a ser convertido
    * @param $single execução em modo de recursão
+   * @param $dateFormat formato da data para atributos do tipo DateTime
    * @return array
   */
-    public function doctrine_to_array($data, $single = false, $dateFormat = 'c') {
-        if (is_object($data)) { // Verifica se é array ou objeto
+    public function doctrine_to_array($data, $single = false, $dateFormat = 'c') 
+    {
+        if (is_object($data)) 
+        { 
             $methods = get_class_methods($data);
             $methods = array_filter($methods, function($val){ return preg_match('/^get/', $val); });
     
             $return = array();
-            if(count($methods)){
-                foreach($methods as $method){
-                    $prop = lcfirst(preg_replace('/^get/', "", $method));
-                    $val = $data->$method();    
-                    
-                    if ( $val instanceof DateTime ){
-                        $val = $val->format($dateFormat);
-                    }
-
-                    if(!$single){
-                        $return[$prop] = $this->doctrine_to_array($val, $single, $dateFormat);
-                    } else {
-                        if(!is_array($val) && !is_object($val)){
-                            $return[$prop] = $val;
+            if(count($methods))
+            {
+                if ( $data instanceof DateTime )
+                {
+                    $return = $data->format($dateFormat);
+                } else {
+                    foreach($methods as $method)
+                    {
+                        $prop = lcfirst(preg_replace('/^get/', "", $method));
+                        $val = $data->$method();    
+                        
+                        if(!$single || $val instanceof DateTime ){
+                            $return[$prop] = $this->doctrine_to_array($val, $single, $dateFormat);
+                        } else {
+                            if(!is_array($val) && !is_object($val)){
+                                $return[$prop] = $val;
+                            }
                         }
                     }
                 }
+
             }
             return $return;
+            
         } else if(is_array($data)){
             if(count($data)){
                 foreach($data as $idx => $val){
@@ -617,6 +625,6 @@ class API_Controller extends CI_Controller
                 }
             }
         }
-        return $data; // Retorna o próprio valor se não for objeto
+        return $data; 
     }
 }

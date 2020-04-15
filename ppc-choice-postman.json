@@ -1,0 +1,857 @@
+{
+	"info": {
+		"_postman_id": "ccd4f535-1de1-4db1-986b-29662f998180",
+		"name": "PPC-CHOICE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "Componente Curricular",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/componentes-curriculares",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"componentes-curriculares"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/componentes-curriculares/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"componentes-curriculares",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findByCodPpc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso/(:num)/componentes-curriculares",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso",
+										"(:num)",
+										"componentes-curriculares"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Correspondencia",
+					"item": [
+						{
+							"name": "findByCodCompCurric",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/componentes-curriculares/(:num)/correspondencias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"componentes-curriculares",
+										"(:num)",
+										"correspondencias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAllByCodPpc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso/(:num)/correspondencias/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso",
+										"(:num)",
+										"correspondencias",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/correspondencias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"correspondencias"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Curso",
+					"item": [
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/cursos/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"cursos",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/cursos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"cursos"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Departamento",
+					"item": [
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/departamentos/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"departamentos",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/departamentos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"departamentos"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Dependencia",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/dependencias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"dependencias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}//dependencias/6/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"",
+										"dependencias",
+										"6",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findByIdPpc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}//projetos-pedagogicos-curso/1/dependencias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"",
+										"projetos-pedagogicos-curso",
+										"1",
+										"dependencias"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Disciplina",
+					"item": [
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/disciplinas/:(num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"disciplinas",
+										":(num)"
+									],
+									"variable": [
+										{
+											"key": "(num)",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/disciplinas",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"disciplinas"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Instituicao Ensino Superior",
+					"item": [
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instituicoes-ensino-superior/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instituicoes-ensino-superior",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instituicoes-ensino-superior",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instituicoes-ensino-superior"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Projeto Pedagogico Curso",
+					"item": [
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Transicao",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/transicoes",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"transicoes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findfindByCodUnidadeEnsino",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/unidades-ensino/(:num)/transicoes",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"unidades-ensino",
+										"(:num)",
+										"transicoes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findByCodPpc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso/(:num)/transicoes",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso",
+										"(:num)",
+										"transicoes"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Unidade Ensino",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/unidades-ensino",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"unidades-ensino"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/unidades-ensino/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"unidades-ensino",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Usuario",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/usuarios",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/usuarios/(:num)",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios",
+										"(:num)"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Componente Curricular",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/componentes-curriculares",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"componentes-curriculares"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Correspondencia",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/correspondencias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"correspondencias"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Curso",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/cursos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"cursos"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Departamento",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/departamentos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"departamentos"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Dependencia",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"codCompCurric\" : 6,\n\t\"codPreRequisito\" : 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/dependencias/6/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"dependencias",
+										"6",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Disciplina",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/disciplinas",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"disciplinas"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Instituicao Ensino Superior",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instituicoes-ensino-superior",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instituicoes-ensino-superior"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Projeto Pedagogico Curso",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"codCurso\": 2,\n\t\"situacao\": \"INATIVO\",\n\t\"dtInicioVigencia\": \"020-08-01T00:00:00-03:00\",\n\t\"dtTerminoVigencia\": \"020-08-01T00:00:00-03:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/projetos-pedagogicos-curso/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"projetos-pedagogicos-curso",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Transicao",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/transicoes",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"transicoes"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Unidade Ensino",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/unidades-ensino",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"unidades-ensino"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Usuario",
+					"item": [
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/usuarios",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -25,11 +25,6 @@ class UnidadeEnsino
     private $cnpj;
 
     /**
-     * @var integer
-     */
-    private $codIes;
-
-    /**
      * @var \Entities\InstituicaoEnsinoSuperior
      */
     private $ies;
@@ -102,29 +97,6 @@ class UnidadeEnsino
     public function getCnpj()
     {
         return $this->cnpj;
-    }
-
-    /**
-     * Set codIes
-     *
-     * @param integer $codIes
-     * @return UnidadeEnsino
-     */
-    public function setCodIes($codIes)
-    {
-        $this->codIes = $codIes;
-    
-        return $this;
-    }
-
-    /**
-     * Get codIes
-     *
-     * @return integer 
-     */
-    public function getCodIes()
-    {
-        return $this->codIes;
     }
 
     /**

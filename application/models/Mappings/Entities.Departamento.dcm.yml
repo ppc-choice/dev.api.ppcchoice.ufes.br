@@ -10,6 +10,8 @@ Entities\Departamento:
       type: integer
       id: true
       nullable: false
+      generator:
+        strategy: AUTO
       column: cod_depto
     nome:
       type: string
