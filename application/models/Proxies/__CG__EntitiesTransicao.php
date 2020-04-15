@@ -42,37 +42,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function setCodPpcAtual($codPpcAtual)
-    {
-        $this->__load();
-        return parent::setCodPpcAtual($codPpcAtual);
-    }
-
-    public function getCodPpcAtual()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codPpcAtual"];
-        }
-        $this->__load();
-        return parent::getCodPpcAtual();
-    }
-
-    public function setCodPpcAlvo($codPpcAlvo)
-    {
-        $this->__load();
-        return parent::setCodPpcAlvo($codPpcAlvo);
-    }
-
-    public function getCodPpcAlvo()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codPpcAlvo"];
-        }
-        $this->__load();
-        return parent::getCodPpcAlvo();
-    }
-
-    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual = NULL)
+    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual)
     {
         $this->__load();
         return parent::setPpcAtual($ppcAtual);
@@ -84,7 +54,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
         return parent::getPpcAtual();
     }
 
-    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo = NULL)
+    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo)
     {
         $this->__load();
         return parent::setPpcAlvo($ppcAlvo);
@@ -99,7 +69,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codPpcAtual', 'codPpcAlvo', 'ppcAtual', 'ppcAlvo');
+        return array('__isInitialized__', 'ppcAtual', 'ppcAlvo');
     }
 
     public function __clone()

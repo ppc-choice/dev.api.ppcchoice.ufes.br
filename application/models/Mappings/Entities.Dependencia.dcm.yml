@@ -7,17 +7,12 @@ Entities\Dependencia:
       columns:
         - cod_comp_curric
         - cod_pre_requisito
-  fields:
-    codCompCurric:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_comp_curric
-    codPreRequisito:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_pre_requisito
+  id:
+    componenteCurricular:
+      associationKey: true
+    preRequisito:
+      associationKey: true
+
   manyToOne:
     componenteCurricular:
       targetEntity: ComponenteCurricular

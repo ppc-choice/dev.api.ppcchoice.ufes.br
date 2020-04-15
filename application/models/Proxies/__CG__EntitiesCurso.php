@@ -81,18 +81,6 @@ class Curso extends \Entities\Curso implements \Doctrine\ORM\Proxy\Proxy
         return parent::getAnoCriacao();
     }
 
-    public function setCodUnidadeEnsino($codUnidadeEnsino)
-    {
-        $this->__load();
-        return parent::setCodUnidadeEnsino($codUnidadeEnsino);
-    }
-
-    public function getCodUnidadeEnsino()
-    {
-        $this->__load();
-        return parent::getCodUnidadeEnsino();
-    }
-
     public function setUnidadeEnsino(\Entities\UnidadeEnsino $unidadeEnsino = NULL)
     {
         $this->__load();
@@ -108,7 +96,7 @@ class Curso extends \Entities\Curso implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCurso', 'nome', 'anoCriacao', 'codUnidadeEnsino', 'unidadeEnsino');
+        return array('__isInitialized__', 'codCurso', 'nome', 'anoCriacao', 'unidadeEnsino');
     }
 
     public function __clone()

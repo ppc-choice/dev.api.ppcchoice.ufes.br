@@ -25,11 +25,6 @@ class Curso
     private $anoCriacao;
 
     /**
-     * @var integer
-     */
-    private $codUnidadeEnsino;
-
-    /**
      * @var \Entities\UnidadeEnsino
      */
     private $unidadeEnsino;
@@ -102,29 +97,6 @@ class Curso
     public function getAnoCriacao()
     {
         return $this->anoCriacao;
-    }
-
-    /**
-     * Set codUnidadeEnsino
-     *
-     * @param integer $codUnidadeEnsino
-     * @return Curso
-     */
-    public function setCodUnidadeEnsino($codUnidadeEnsino)
-    {
-        $this->codUnidadeEnsino = $codUnidadeEnsino;
-    
-        return $this;
-    }
-
-    /**
-     * Get codUnidadeEnsino
-     *
-     * @return integer 
-     */
-    public function getCodUnidadeEnsino()
-    {
-        return $this->codUnidadeEnsino;
     }
 
     /**
