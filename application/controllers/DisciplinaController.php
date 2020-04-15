@@ -109,6 +109,11 @@ class DisciplinaController extends API_Controller
             if ( !is_null($depto) ){
                 $disciplina->setDepartamento($depto);
                 $disciplina->setCodDepto($payload['codDepto']);
+            } else {
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Campo Obrigatório Não Encontrado'
+                ), 400);
             }
 
             try {
@@ -117,7 +122,7 @@ class DisciplinaController extends API_Controller
     
                 $this->api_return(array(
                     'status' => TRUE,
-                    'result' => 'Disciplina Criada Com Sucesso',
+                    'message' => 'Disciplina Criada Com Sucesso',
                 ), 200);
             } catch (\Exception $e){
                 echo $e->getMessage();

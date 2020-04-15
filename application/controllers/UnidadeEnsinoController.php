@@ -103,6 +103,11 @@ class UnidadeEnsinoController extends API_Controller
 
             if ( !is_null($ies) ){
                 $ues->setIes($ies);
+            } else {
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Campo Obrigatório Não Encontrado'
+                ), 400);
             }
 
             try {
@@ -111,7 +116,7 @@ class UnidadeEnsinoController extends API_Controller
     
                 $this->api_return(array(
                     'status' => TRUE,
-                    'result' => 'Unidade De Ensino Criada Com Sucesso',
+                    'message' => 'Unidade De Ensino Criada Com Sucesso',
                 ), 200);
             } catch (\Exception $e){
                 echo $e->getMessage();
