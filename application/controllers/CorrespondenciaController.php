@@ -136,7 +136,27 @@ class CorrespondenciaController extends API_Controller {
         }
     }
 
-
+    /**
+     * @api {post} correspondencias Criar correspondência
+     * @apiName add
+     * @apiGroup Correspondência
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Componente curricular não encontrada 404) ComponenteNaoEncontrada Componente curricular não encontrada.
+     * @apiError  (Componentes de mesmo ppc 400) BadRequest Componentes pertencem ao mesmo ppc.
+     * @apiError  (Valor de percentual errado 400) BadRequest Percentual de correspondência deve ser > 0 e <= 1.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "codCompCurric" : 220 ,
+	 *         "codCompCurricCorresp" : 221,
+	 *         "percentual" : 1
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "result": "Correspondência criada com sucesso."
+     *     }
+     */
     public function add()
     {
         $this->_apiConfig(array(
@@ -176,7 +196,7 @@ class CorrespondenciaController extends API_Controller {
             
                             $this->api_return(array(
                                 'status' => TRUE,
-                                'result' => 'Correspondência criada com sucesso',
+                                'result' => 'Correspondência criada com sucesso.',
                             ), 200);
                         } catch (\Exception $e) {
                             echo $e->getMessage();
@@ -184,28 +204,28 @@ class CorrespondenciaController extends API_Controller {
                     }else{
                         $this->api_return(array(
                             'status' => FALSE,
-                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1',
+                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1.',
                         ), 400);
                     }
                     
                 }else{
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => 'Componentes pertencem ao mesmo ppc',
+                        'message' => 'Componentes pertencem ao mesmo ppc.',
                     ), 400);
                 }
                 
             }else{
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => 'Componente curricular não encontrado',
+                    'message' => 'Componente curricular não encontrada.',
                 ), 404);
             }
 
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado',
+                'message' => 'Campo Obrigatorio Não Encontrado.',
             ), 400);
         }
     }
