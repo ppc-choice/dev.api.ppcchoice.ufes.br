@@ -140,7 +140,7 @@ class TransicaoController extends API_Controller {
      *     HTTP/1.1 200 OK
      *     {
      *       "status": true,
-     *       "result": "Transição criada com sucesso"
+     *       "message": "Transição criada com sucesso"
      *     }
      */
     public function add()
@@ -155,7 +155,7 @@ class TransicaoController extends API_Controller {
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if( isset($payload['codPpcAtual']) && isset($payload['codPpcAlvo']) )
+        if( isset($payload['codPpcAtual'], $payload['codPpcAlvo']) )
         {
             $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
             $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
@@ -175,10 +175,14 @@ class TransicaoController extends API_Controller {
     
                     $this->api_return(array(
                         'status' => TRUE,
-                        'result' => 'Transição criada com sucesso.',
+                        'message' => 'Transição criada com sucesso.',
                     ), 200);
                 } catch (\Exception $e) {
-                    echo $e->getMessage();
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
                 }
             }else{
                 $this->api_return(array(

@@ -154,7 +154,7 @@ class CorrespondenciaController extends API_Controller {
      *     HTTP/1.1 200 OK
      *     {
      *       "status": true,
-     *       "result": "Correspondência criada com sucesso."
+     *       "message": "Correspondência criada com sucesso."
      *     }
      */
     public function add()
@@ -168,14 +168,13 @@ class CorrespondenciaController extends API_Controller {
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if (isset($payload['codCompCurric']) && isset($payload['codCompCurricCorresp']) && 
-            isset($payload['percentual']))
+        if (isset( $payload['codCompCurric'], $payload['codCompCurricCorresp'], $payload['percentual'] ))
         {
             $corresp = new \Entities\Correspondencia;
             $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
             $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
             
-            if(!is_null($compCurric) && !is_null($compCorresp))
+            if(!is_null($compCurric) && !is_null($compCorresp ))
             {
                 
                 $ppc1 = $compCurric->getPpc();
@@ -196,10 +195,14 @@ class CorrespondenciaController extends API_Controller {
             
                             $this->api_return(array(
                                 'status' => TRUE,
-                                'result' => 'Correspondência criada com sucesso.',
+                                'message' => 'Correspondência criada com sucesso.',
                             ), 200);
                         } catch (\Exception $e) {
-                            echo $e->getMessage();
+                            $e_msg = $e->getMessage();
+                            $this->api_return(array(
+                                'status' => FALSE,
+                                'message' => $e_msg
+                            ), 400);
                         }
                     }else{
                         $this->api_return(array(

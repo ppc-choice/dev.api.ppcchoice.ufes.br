@@ -155,7 +155,7 @@ class ComponenteCurricularController extends API_Controller {
      *     HTTP/1.1 200 OK
      *     {
      *       "status": true,
-     *       "result": "Componente curricular criada com sucesso"
+     *       "message": "Componente curricular criada com sucesso"
      *     }
      */
     public function add()
@@ -169,9 +169,8 @@ class ComponenteCurricularController extends API_Controller {
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if (  isset($payload['periodo'])  && isset($payload['credito'])  && isset($payload['tipo']) 
-            && isset($payload['numDisciplina']) && isset($payload['codDepto'])
-            && isset($payload['codPpc']))
+        if (  isset($payload['periodo'], $payload['credito'], $payload['tipo'], $payload['numDisciplina'],
+            $payload['codDepto'], $payload['codPpc']))
         {
             $compCurric = new Entities\ComponenteCurricular;
             $disciplina = $this->entity_manager->find('Entities\Disciplina',array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
@@ -180,7 +179,7 @@ class ComponenteCurricularController extends API_Controller {
             $msg = '';
             if(is_null($ppc)) $msg = $msg . 'PPC não encontrado. ';
             if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
-            if(strlen($msg) < 1)
+            if(empty($msg))
             {
                 $compCurric->setPeriodo($payload['periodo']);
                 $compCurric->setCredito($payload['credito']) ;
@@ -194,10 +193,14 @@ class ComponenteCurricularController extends API_Controller {
     
                     $this->api_return(array(
                         'status' => TRUE,
-                        'result' => 'Componente curricular criada com sucesso.',
+                        'message' => 'Componente curricular criada com sucesso.',
                     ), 200);
                 } catch (\Exception $e) {
-                    echo $e->getMessage();
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
                 }
             }else{              
                 $this->api_return(array(
