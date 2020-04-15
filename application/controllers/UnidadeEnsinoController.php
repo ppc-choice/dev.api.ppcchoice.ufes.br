@@ -78,7 +78,8 @@ class UnidadeEnsinoController extends API_Controller
      * @api {post} unidades-ensino Cadastrar nova Unidade de Ensino no sistema
      * @apiName add
      * @apiGroup Unidades de Ensino
-     * @apiError 404 Campo Obrigatório Não Encontrado
+     * @apiError 400 Campo Obrigatório Não Encontrado
+     * @apiError 400 Instituição de Ensino Superior Não Encontrado
      *
      * @apiSuccess {String} nome Nome da Unidade de Ensino.
      * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
@@ -103,23 +104,28 @@ class UnidadeEnsinoController extends API_Controller
 
             if ( !is_null($ies) ){
                 $ues->setIes($ies);
+
+                try {
+                    $this->entity_manager->persist($ues);
+                    $this->entity_manager->flush();
+        
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Unidade De Ensino Criada Com Sucesso',
+                    ), 200);
+                } catch (\Exception $e){
+                    $msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $msg,
+                    ), 400);
+                }
+
             } else {
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => 'Campo Obrigatório Não Encontrado'
+                    'message' => 'Instituição de Ensino Superior Não Encontrado'
                 ), 400);
-            }
-
-            try {
-                $this->entity_manager->persist($ues);
-                $this->entity_manager->flush();
-    
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'message' => 'Unidade De Ensino Criada Com Sucesso',
-                ), 200);
-            } catch (\Exception $e){
-                echo $e->getMessage();
             }
 
         } else {

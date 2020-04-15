@@ -82,6 +82,7 @@ class DisciplinaController extends API_Controller
      * @apiName add
      * @apiGroup Disciplinas
      * @apiError 400 Campo Obrigatório Não Encontrado
+     * @apiError 400 Departamento Não Encontrado
      *
      * @apiSuccess {Number} numDisciplina Primeiro identificador da disciplina.
      * @apiSuccess {String} nome Nome da Disciplina.
@@ -109,23 +110,28 @@ class DisciplinaController extends API_Controller
             if ( !is_null($depto) ){
                 $disciplina->setDepartamento($depto);
                 $disciplina->setCodDepto($payload['codDepto']);
+
+                try {
+                    $this->entity_manager->persist($disciplina);
+                    $this->entity_manager->flush();
+        
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Disciplina Criada Com Sucesso',
+                    ), 200);
+                } catch (\Exception $e){
+                    $msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $msg,
+                    ), 400);
+                }
+                               
             } else {
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => 'Campo Obrigatório Não Encontrado'
+                    'message' => 'Departamento Não Encontrado'
                 ), 400);
-            }
-
-            try {
-                $this->entity_manager->persist($disciplina);
-                $this->entity_manager->flush();
-    
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'message' => 'Disciplina Criada Com Sucesso',
-                ), 200);
-            } catch (\Exception $e){
-                echo $e->getMessage();
             }
 
         } else {
