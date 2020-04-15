@@ -61,10 +61,6 @@ Entities\ProjetoPedagogicoCurso:
     situacao:
       type: string
       length: 255
-    codCurso:
-      type: integer
-      nullable: false
-      column: cod_curso
   manyToOne:
     curso:
       targetEntity: Curso

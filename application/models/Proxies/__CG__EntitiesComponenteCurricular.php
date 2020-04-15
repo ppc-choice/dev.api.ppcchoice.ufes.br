@@ -42,12 +42,6 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
     }
 
     
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->__load();
-        return parent::setCodCompCurric($codCompCurric);
-    }
-
     public function getCodCompCurric()
     {
         if ($this->__isInitialized__ === false) {
@@ -93,42 +87,6 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getTipo();
     }
 
-    public function setCodDepto($codDepto)
-    {
-        $this->__load();
-        return parent::setCodDepto($codDepto);
-    }
-
-    public function getCodDepto()
-    {
-        $this->__load();
-        return parent::getCodDepto();
-    }
-
-    public function setNumDisciplina($numDisciplina)
-    {
-        $this->__load();
-        return parent::setNumDisciplina($numDisciplina);
-    }
-
-    public function getNumDisciplina()
-    {
-        $this->__load();
-        return parent::getNumDisciplina();
-    }
-
-    public function setCodPpc($codPpc)
-    {
-        $this->__load();
-        return parent::setCodPpc($codPpc);
-    }
-
-    public function getCodPpc()
-    {
-        $this->__load();
-        return parent::getCodPpc();
-    }
-
     public function setDisciplina(\Entities\Disciplina $disciplina = NULL)
     {
         $this->__load();
@@ -156,7 +114,7 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'codDepto', 'numDisciplina', 'codPpc', 'disciplina', 'ppc');
+        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'disciplina', 'ppc');
     }
 
     public function __clone()

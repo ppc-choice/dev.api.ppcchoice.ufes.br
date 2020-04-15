@@ -42,6 +42,21 @@ class Disciplina extends \Entities\Disciplina implements \Doctrine\ORM\Proxy\Pro
     }
 
     
+    public function setCodDepto($codDepto)
+    {
+        $this->__load();
+        return parent::setCodDepto($codDepto);
+    }
+
+    public function getCodDepto()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int) $this->_identifier["codDepto"];
+        }
+        $this->__load();
+        return parent::getCodDepto();
+    }
+
     public function setNumDisciplina($numDisciplina)
     {
         $this->__load();
@@ -81,21 +96,6 @@ class Disciplina extends \Entities\Disciplina implements \Doctrine\ORM\Proxy\Pro
         return parent::getNome();
     }
 
-    public function setCodDepto($codDepto)
-    {
-        $this->__load();
-        return parent::setCodDepto($codDepto);
-    }
-
-    public function getCodDepto()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codDepto"];
-        }
-        $this->__load();
-        return parent::getCodDepto();
-    }
-
     public function setDepartamento(\Entities\Departamento $departamento = NULL)
     {
         $this->__load();
@@ -111,7 +111,7 @@ class Disciplina extends \Entities\Disciplina implements \Doctrine\ORM\Proxy\Pro
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'numDisciplina', 'ch', 'nome', 'codDepto', 'departamento');
+        return array('__isInitialized__', 'codDepto', 'numDisciplina', 'ch', 'nome', 'departamento');
     }
 
     public function __clone()

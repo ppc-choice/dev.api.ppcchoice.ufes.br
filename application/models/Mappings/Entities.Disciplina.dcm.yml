@@ -8,6 +8,11 @@ Entities\Disciplina:
         - cod_depto
         - num_disciplina
   fields:
+    codDepto:
+      type: integer
+      id: true
+      nullable: false
+      column: cod_depto
     numDisciplina:
       type: integer
       id: true
@@ -20,11 +25,6 @@ Entities\Disciplina:
       type: string
       length: 255
       nullable: false
-    codDepto:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_depto
   manyToOne:
     departamento:
       targetEntity: Departamento
