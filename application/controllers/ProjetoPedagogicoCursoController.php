@@ -222,23 +222,22 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
         if (isset($payload['codCurso'], $payload['situacao']))
         {
-            // $codPpc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpc']);
+
 			$codCurso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
-            // $codCurso = $this->entity_manager->getRepository('Entities\Curso')->findByCodCurso($payload['codCurso']);;
-            // $result = $this->doctrine_to_array($codCurso);
+        
             
-            
-            $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
-            $result = $this->doctrine_to_array($ppc);
+            $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
+            $result = $this->doctrine_to_array($ppcs);
             $situacao = true; 
-            
+            $uppersituacao = strtoupper($payload['situacao']);
+                   
             if(!is_null($codCurso))
             {
-                if($payload['situacao']!="INATIVO")
+                if($uppersituacao!="INATIVO")
                 {
                     foreach ($result as $ppc) 
                     {
-                        if($ppc["situacao"] == $payload['situacao'])
+                        if($uppersituacao == $ppc['situacao'])
                         {
                             $situacao = false;
                             $this->api_return(array(
@@ -252,7 +251,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     {   
                         if(!isset($payload['dtTerminoVigencia']))
                         {
-                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['qtdPeriodos'   ], $payload['anoAprovacao']))
+                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['qtdPeriodos'], $payload['anoAprovacao']))
                             {
                                 $ppc = new Entities\ProjetoPedagogicoCurso;
                                 $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
@@ -264,16 +263,15 @@ class ProjetoPedagogicoCursoController extends API_Controller
                                 $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
                                 $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
                                 $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+                                $ppc->setChTotal($chtotal);
 
-                                $ppc->setDtInicioVigencia($payload['dtInicioVigencia']);
+                                $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
 
                                 $ppc->setDuracao($duracao);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
-                                $ppc->setSituacao($payload['situacao']);
+                                $ppc->setSituacao($uppersituacao);
                                 $ppc->setCurso($codCurso);
-                                // $ppc->setCodPpc($payload['codPpc']);
-
                             }
                             try {
                                 $this->entity_manager->persist($ppc);
@@ -301,7 +299,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         if($payload['dtInicioVigencia'] < $payload['dtTerminoVigencia'])
                         {
                             
-                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos'], $payload['situacao']))
+                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos']))
                             {
                                 $ppc = new Entities\ProjetoPedagogicoCurso;
                                 $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
@@ -315,14 +313,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
                                 $ppc->setChTotalEstagio($payload['chTotalEstagio']);
                                 $ppc->setChTotal($chtotal);
                                 
-                                $ppc->setDtinicioVigencia($payload['dtInicioVigencia']);
-                                $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
+                                $ppc->setDtinicioVigencia(new DateTime($payload['dtInicioVigencia']));
+                                $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
                                 $ppc->setDuracao($duracao);
                                 $ppc->setQtdPeriodos($payload['qtdPeriodos']);
                                 $ppc->setAnoAprovacao($payload['anoAprovacao']);
-                                $ppc->setSituacao($payload['situacao']);
+                                $ppc->setSituacao($uppersituacao);
                                 $ppc->setCurso($codCurso);
-                                // $ppc->setCodPpc($payload['codPpc']);
                             }
                             try {
                                 $this->entity_manager->persist($ppc);
@@ -362,7 +359,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
         {
         	$this->api_return(array(
                 'status' => FALSE,
-                'message' => 'CampoObrigatorioNaoEncontrado',
+                'message' => 'Campo obrigatorio não encontrado',
             ), 400);
         }
     }   
