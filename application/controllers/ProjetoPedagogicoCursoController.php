@@ -47,14 +47,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
         ));
        
         $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findAll();
-        $result = $this->doctrine_to_array($ppc, TRUE);
+        // $result = $this->doctrine_to_array($ppc,TRUE);
 
-        if(!empty($result)){
+        if(!empty($ppc)){
             
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $result,
+                    "result" => $ppc,
                 ),
             200); 
 
@@ -132,7 +132,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
         ));
         
-        $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso', $codPpc);
+        $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findById($codPpc);
         $result = $this->doctrine_to_array($ppc, TRUE);
 
         if(!empty($result)){
@@ -166,100 +166,143 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
         if (isset($payload['codCurso'], $payload['situacao']))
         {
-			
-			// $codPpc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpc']);
-            // $codCurso = $this->entity_manager->find('Entities\Curso', $payload['codCurso'] );
+            // $codPpc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpc']);
+			$codCurso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
+            // $codCurso = $this->entity_manager->getRepository('Entities\Curso')->findByCodCurso($payload['codCurso']);;
+            // $result = $this->doctrine_to_array($codCurso);
             
-            $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCodCurso($payload['codCurso']);
+            
+            $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
             $result = $this->doctrine_to_array($ppc);
-            // $situacao = $ppc->getSituacao(); 
-
-            if($payload['situacao']!="INATIVO")
+            $situacao = true; 
+            
+            if(!is_null($codCurso))
             {
-                foreach ($result as $ppc) 
+                if($payload['situacao']!="INATIVO")
                 {
-                    if($ppc["situacao"] == $payload['situacao'])
+                    foreach ($result as $ppc) 
                     {
-                        $this->api_return(array(
+                        if($ppc["situacao"] == $payload['situacao'])
+                        {
+                            $situacao = false;
+                            $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'Não é permitido mais de um ppc com a situação corrente e ativo-anterior',
+                            ), 400);
+                            break;
+                        }                    
+                    }
+                    if($situacao)
+                    {   
+                        if(!isset($payload['dtTerminoVigencia']))
+                        {
+                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['qtdPeriodos'   ], $payload['anoAprovacao']))
+                            {
+                                $ppc = new Entities\ProjetoPedagogicoCurso;
+                                $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
+                                $duracao = $payload['qtdPeriodos']/2;
+                                
+                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+                                $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+                                $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+                                $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+                                $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+                                $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+                        
+                                // $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
+                                $ppc->setDuracao($duracao);
+                                $ppc->setQtdPeriodos($payload['qtdPeriodos']);
+                                $ppc->setAnoAprovacao($payload['anoAprovacao']);
+                                $ppc->setSituacao($payload['situacao']);
+                                $ppc->setCurso($codCurso);
+                            }
+                            try {
+                                $this->entity_manager->persist($ppc);
+                                $this->entity_manager->flush();
+            
+                                $this->api_return(array(
+                                    'status' => TRUE,
+                                    'result' => 'PPCCriadoComSucesso',
+                                ), 200);
+                            } catch (\Exception $e) {
+                                echo $e->getMessage();
+                            }
+                        }else
+                        {
+                            $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'A data de termino de vigência de PPCs com situação CORRENTE ou ATIVO-ANTERIOR deve ser null',
+                            ), 400);
+                        }
+                    
+                    }
+                }
+                else if(isset($payload['dtTerminoVigencia']))
+                {                      
+                        if($payload['dtInicioVigencia'] < $payload['dtTerminoVigencia'])
+                        {
+                            
+                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $$payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos'], $payload['situacao']))
+                            {
+                                $ppc = new Entities\ProjetoPedagogicoCurso;
+                                $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
+                                $duracao = $payload['qtdPeriodos']/2;
+                                
+                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+                                $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+                                $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+                                $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+                                $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+                                $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+                        
+                                $ppc->setComponenteCurricular($$payload['dtInicioVigencia']);
+                                $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
+                                $ppc->setDuracao($duracao);
+                                $ppc->setQtdPeriodos($payload['qtdPeriodos']);
+                                $ppc->setAnoAprovacao($payload['anoAprovacao']);
+                                $ppc->setSituacao($payload['situacao']);
+                                $ppc->setCodCurso($codCurso);
+                            }
+                            try {
+                                $this->entity_manager->persist($dependencia);
+                                $this->entity_manager->flush();
+            
+                                $this->api_return(array(
+                                    'status' => TRUE,
+                                    'result' => 'PPCCriadoComSucesso',
+                                ), 200);
+                            } catch (\Exception $e) {
+                                echo $e->getMessage();
+                            }
+                        }
+                        else
+                        {
+                            $this->api_return(array(
                                 'status' => FALSE,
-                                'message' => 'Já existe ppc com essa situacao',
-                        ), 400);
-                        break;
-                    }                    
-                }
-                if(!isset($payload['dtTerminoVigencia']))
+                                'message' => 'A data de inicio de vigência não pode ser maior que a data de termino de vigencia',
+                                ), 400);
+                        }
+                }else
                 {
-                    $this->api_return(array(
+                        $this->api_return(array(
                             'status' => FALSE,
-                            'message' => 'A data de termino de vigência de PPCs com situação CORRENTE ou ATIVO-ANTERIOR deve ser null',
-                    ), 400);
+                            'message' => 'A data de termino de vigência de PPCs com situação INATIVO não pode ser vazia',
+                            ), 400);
                 }
-            }
-            else 
+            }else
             {
-                if(!isset($payload['dtTerminoVigencia']))
-                {
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => 'A data de termino de vigência de PPCs com situação INATIVO não pode ser vazia',
-                        ), 400);
-                }
-                if($payload['dtInicioVigencia'] > $payload['dtTerminoVigencia'])
-                {
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => 'A data de termino de vigência de PPCs com situação INATIVO não pode ser vazia',
-                        ), 400);
-                }
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Curso não encontrado',
+                ), 400);
+
             }
-            
-            
-            // if(!is_null($codCurso) && ($situacao != $playload['situacao'])){
-            //     $ppc = new Entities\ProjetoPedagogicoCurso;
-
-                
-            //     if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $$payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos'], $payload['situacao']))
-            //     {
-            //         $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
-            //         $duracao = $payload['qtdPeriodos']/2;
-                    
-            //         $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
-            //         $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-            //         $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-            //         $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-            //         $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-            //         $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-            
-            //         $ppc->setComponenteCurricular($$payload['dtInicioVigencia']);
-            //         $ppc->setDtTerminoVigencia($payload['dtTerminoVigencia']);
-            //         $ppc->setDuracao($duracao);
-            //         $ppc->setQtdPeriodos($payload['qtdPeriodos']);
-            //         $ppc->setAnoAprovacao($payload['anoAprovacao']);
-            //         $ppc->setSituacao($payload['situacao']);
-            //         $ppc->setCodCurso($payload['codCurso']);
-                    
-
-
-			// 	try {
-			// 		$this->entity_manager->persist($dependencia);
-			// 		$this->entity_manager->flush();
-
-			// 		$this->api_return(array(
-			// 			'status' => TRUE,
-			// 			'result' => 'DependenciaCriadoComSucesso',
-			// 		), 200);
-			// 	} catch (\Exception $e) {
-			// 		echo $e->getMessage();
-			// 	}
-
         }else
         {
-			$this->api_return(array(
+        	$this->api_return(array(
                 'status' => FALSE,
                 'message' => 'CampoObrigatorioNaoEncontrado',
             ), 400);
         }
-
-    }
-   
+    }   
 }
