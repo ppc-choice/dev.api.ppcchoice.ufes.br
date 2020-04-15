@@ -37,8 +37,9 @@ class DependenciaController extends API_Controller
 
         ));
         
-        $result = $this->entity_manager->getRepository('Entities\Dependencia')->findAll();
-
+        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findAll();
+        $result = $this->doctrine_to_array($dependencia);
+        
         if(!empty($result)){
             
             $this->api_return(
@@ -105,8 +106,8 @@ class DependenciaController extends API_Controller
         ));
         
         $result = $this->entity_manager->getRepository('Entities\Dependencia')->findById($codCompCurric, $codPreReq);
+    
 
-        
         if(!empty($result)){
             
             $this->api_return(
@@ -157,9 +158,9 @@ class DependenciaController extends API_Controller
 
         ));
     
-        $result = $this->entity_manager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        $result = $this->doctrine_to_array($dependencia);
 
-        
         if(!empty($result)){
             
             $this->api_return(
