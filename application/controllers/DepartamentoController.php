@@ -179,8 +179,6 @@ class DepartamentoController extends API_Controller {
     {
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
  
@@ -189,8 +187,6 @@ class DepartamentoController extends API_Controller {
         if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['abreviatura'])){
            
 			$depto = new \Entities\Departamento;
-			//$depto->setCodDepto($payload['codDepto']);
-            //$depto->setUnidadeEnsino($payload['unidadeEnsino']);
             $depto->setNome($payload['nome']);
 			$depto->setAbreviatura($payload['abreviatura']);
 			
@@ -198,19 +194,28 @@ class DepartamentoController extends API_Controller {
 
 			if (!is_null($ues)){
 				$depto->setUnidadeEnsino($ues);
+				try {
+					$this->entity_manager->persist($depto);
+					$this->entity_manager->flush();
+	 
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Departamento criado com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$mensagem = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $mensagem,
+					), 400);
+				}
+
+			}else{
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => 'Unidade de Ensino não identificada!',
+				), 400);				
 			}
-           
-            try {
-                $this->entity_manager->persist($depto);
-                $this->entity_manager->flush();
- 
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'result' => 'Departamento criado com Sucesso!',
-                ), 200);
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
  
         } else {
             $this->api_return(array(

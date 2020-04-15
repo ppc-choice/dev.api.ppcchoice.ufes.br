@@ -163,8 +163,6 @@ class CursoController extends API_Controller {
     {
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
  
@@ -173,29 +171,36 @@ class CursoController extends API_Controller {
         if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['anoCriacao'])){
            
 			$curso = new \Entities\Curso;
-			//$curso->setCodCurso($payload['codCurso']);
-            //$curso->setUnidadeEnsino($payload['unidadeEnsino']);
             $curso->setNome($payload['nome']);
 			$curso->setAnoCriacao($payload['anoCriacao']);
 			
 			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
-
+			
 			if (!is_null($ues)){
 				$curso->setUnidadeEnsino($ues);
+				try {
+					$this->entity_manager->persist($curso);
+					$this->entity_manager->flush();
+	 
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Curso criado com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$mensagem = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $mensagem,
+					), 400);
+				}
+				
+			}else {
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => 'Unidade de Ensino não identificado!',
+				), 400);
 			}
            
-            try {
-                $this->entity_manager->persist($curso);
-                $this->entity_manager->flush();
- 
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'result' => 'Curso criado com Sucesso!',
-                ), 200);
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
- 
         } else {
             $this->api_return(array(
                 'status' => FALSE,
