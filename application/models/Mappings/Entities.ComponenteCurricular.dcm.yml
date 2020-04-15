@@ -11,6 +11,8 @@ Entities\ComponenteCurricular:
       type: integer
       id: true
       nullable: false
+      generator:
+        strategy: AUTO
       column: cod_comp_curric
     periodo:
       type: integer

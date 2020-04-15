@@ -41,19 +41,6 @@ class ComponenteCurricular
 
 
     /**
-     * Set codCompCurric
-     *
-     * @param integer $codCompCurric
-     * @return ComponenteCurricular
-     */
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->codCompCurric = $codCompCurric;
-    
-        return $this;
-    }
-
-    /**
      * Get codCompCurric
      *
      * @return integer 

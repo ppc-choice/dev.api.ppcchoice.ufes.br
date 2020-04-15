@@ -12,7 +12,6 @@ Entities\Dependencia:
       associationKey: true
     preRequisito:
       associationKey: true
-
   manyToOne:
     componenteCurricular:
       targetEntity: ComponenteCurricular

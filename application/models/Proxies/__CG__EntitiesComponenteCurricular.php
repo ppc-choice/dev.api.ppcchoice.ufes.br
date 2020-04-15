@@ -42,12 +42,6 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
     }
 
     
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->__load();
-        return parent::setCodCompCurric($codCompCurric);
-    }
-
     public function getCodCompCurric()
     {
         if ($this->__isInitialized__ === false) {

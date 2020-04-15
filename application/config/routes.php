@@ -111,3 +111,11 @@ $route['usuarios']['POST'] = 'UsuarioController/adicionarUsuario';
 
 // Test
 $route['migrate']['GET'] = 'Welcome/updateSchema';
+
+//Componente Curricular : Hadamo
+$route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/add';
+//Correspondencia : Hadamo
+$route['correspondencias']['POST'] = 'CorrespondenciaController/add';
+//Transicao : Hadamo
+$route['transicoes']['POST'] = 'TransicaoController/add';
+
