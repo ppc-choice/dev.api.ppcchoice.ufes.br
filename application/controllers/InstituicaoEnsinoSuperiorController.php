@@ -10,7 +10,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
     }
   
 	/**
-	 * @api {get} instituicoes-ensino-superior/ Listar todas Instituições de Ensino Superior registradas.
+	 * @api {get} instituicoes-ensino-superior/ Requisitar todas Instituições de Ensino Superior registradas.
 	 * @apiName getAll
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
@@ -65,7 +65,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 
 	/**
-	 * @api {get} instituicoes-ensino-superior/:codIes Listar dados de uma Instituição de Ensino Superior específica.
+	 * @api {get} instituicoes-ensino-superior/:codIes Requisitar dados de uma Instituição de Ensino Superior específica.
 	 * @apiName getById
 	 * @apiGroup Instituições de Ensino Superior
 	 *
@@ -178,7 +178,11 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
                     'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
                 ), 200);
             } catch (\Exception $e) {
-                echo $e->getMessage();
+				$msg = $e->getMessage();
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg,
+				), 400);
             }
  
         } else {
@@ -189,4 +193,62 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         }
     }
    
+
+	public function update($codIes)
+    {
+        $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+		$msg = '';
+		
+        if(!is_null($ies) && !empty($payload))
+        {            
+
+            if(empty($msg))
+            {
+                /*if(isset($payload['codIes']))
+                {
+                    $ies->setCodIes($payload['codIes']);
+                }*/
+                if(isset($payload['nome']))
+                {
+                    $ies->setNome($payload['nome']);
+                }
+                if(isset($payload['abreviatura']))
+                {
+                    $ies->setAbreviatura($payload['abreviatura']);
+				}
+				
+                try {
+                    $this->entity_manager->merge($ies);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Instituição de Ensino Superior atualizada com sucesso!'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg
+                ), 404);
+            } 
+        }elseif(empty($payload))
+        {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Corpo da Requisição vazio',
+            ), 400);
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Instituição de Ensino Superior não encontrada!',
+            ), 404);
+        }
+    }
 }
