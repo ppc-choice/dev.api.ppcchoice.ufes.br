@@ -112,5 +112,18 @@ $route['migrate']['GET'] = 'Welcome/updateSchema';
 
 // (POST) Instituição de Ensino Superior: Wellerson
 $route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
+
+// (POST) Departamento: Wellerson
 $route['departamentos']['POST'] = 'DepartamentoController/add';
+
+// (POST) Curso: Wellerson
 $route['cursos']['POST'] = 'CursoController/add';
+
+// (PUT) Instituição de Ensino Superior: Wellerson
+$route['instituicoes-ensino-superior/(:num)']['PUT'] = 'InstituicaoEnsinoSuperiorController/update/$1';
+
+// (PUT) Departamento: Wellerson
+$route['departamentos/(:num)']['PUT'] = 'DepartamentoController/update/$1';
+
+// (POST) Curso: Wellerson
+$route['cursos/(:num)']['PUT'] = 'CursoController/update/$1';
