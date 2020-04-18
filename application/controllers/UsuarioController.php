@@ -45,7 +45,6 @@ class UsuarioController extends API_Controller {
 		
 		$usuario = $this->entity_manager->find('Entities\Usuario',$codUsuario);
 		
-
 		if ( !is_null($usuario) ) {
 			$result = $this->doctrine_to_array($usuario);	
 			$this->api_return(array(
@@ -94,5 +93,33 @@ class UsuarioController extends API_Controller {
 			'status' => TRUE,
 			'result' => $result,
 		), 200);
+	}
+
+
+	public function add()
+	{
+		$usuario = new Entities\Usuario();
+
+		$usuario->setNome('joa1');
+		$usuario->setPapel('s');
+		$usuario->setEmail('elyabe@mail');
+
+		$valida = $this->validator->validate($usuario);
+	
+		if ( $valida->count() ){
+		
+			$msg = $valida->messageArray();
+
+			$this->api_return(array(
+				'status' => FALSE,
+				'message' => $msg,
+			), 400);	
+		} else {
+
+			$this->api_return(array(
+				'status' => TRUE,
+				'message' => "Usuário criado com sucesso.",
+			), 400);	
+		}
 	}
 }

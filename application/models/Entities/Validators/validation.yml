@@ -1,0 +1,17 @@
+# models/validation.yaml
+Entities\Usuario:
+    properties:
+        nome:
+            - NotBlank: ~
+        email:
+            - NotNull: ~
+            - Email: 
+                message: o endereço {{ value }} é inválido.
+                checkMX: true
+        papel:
+            - OneOf:
+                choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
+    constraints:    
+        - Callback:
+            methods: 
+                -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
