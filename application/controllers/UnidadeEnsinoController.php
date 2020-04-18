@@ -135,4 +135,50 @@ class UnidadeEnsinoController extends API_Controller
             ), 400);
         }
     }
+    
+    public function update($codUnidadeEnsino)
+    {
+        $this->_apiconfig(array(
+            'methods' => array('PUT')
+        ));
+
+        $ues = $this->entity_manager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
+
+        $payload = json_decode(file_get_contents('php://input'), TRUE);
+
+        if ( !is_null($ues) && !empty($payload) ){
+
+            if ( isset($payload['nome']) ) $ues->setNome($payload['nome']);
+
+            if ( isset($payload['cnpj']) ) $ues->setCnpj($payload['cnpj']);
+
+            try {
+                $this->entity_manager->merge($ues);
+                $this->entity_manager->flush();
+    
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Unidade de Ensino Atualizada Com Sucesso',
+                ), 200);
+            } catch (\Exception $e){
+                $msg =  $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }
+
+        } elseif ( empty($payload) ){
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Não há requisição',
+            ), 400);
+            
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Unidade de Ensino não encontrada',
+            ), 404);
+        }
+    }
 }
