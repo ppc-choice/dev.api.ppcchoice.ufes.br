@@ -3,7 +3,10 @@
 class Doctrine
 {
     // the Doctrine entity manager
-    public $em = null;
+    private $em = null;
+
+    // The Validator
+    private $validator = null;
 
     public function __construct()
     {
@@ -67,5 +70,28 @@ class Doctrine
         
         // store it as a member, for use in our CodeIgniter controllers.
         $this->em = $em;
+    }
+
+    /**
+    * @return Symfony\Component\Validator\Validation
+    */
+    public function getValidator() 
+    {
+        if ( is_null($this->validator) ) 
+        {
+            $this->validator = Symfony\Component\Validator\Validation::createValidatorBuilder()
+                ->addYamlMapping( APPPATH. 'models/Entities/Validators/validation.yml')
+                ->getValidator();        
+        }
+
+        return $this->validator;
+    } 
+    
+    /**
+    * @return Doctrine\ORM\EntityManager
+    */
+    public function getEntityManager()
+    {
+        return $this->em;
     }
 }

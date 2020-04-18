@@ -1,29 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-/*
-if( !function_exists('apache_request_headers') ) {
-        ///
-        function apache_request_headers() {
-          $arh = array();
-          $rx_http = '/\AHTTP_/';
-          foreach($_SERVER as $key => $val) {
-            if( preg_match($rx_http, $key) ) {
-              $arh_key = preg_replace($rx_http, '', $key);
-              $rx_matches = array();
-              // do some nasty string manipulations to restore the original letter case
-              // this should work in most cases
-              $rx_matches = explode('_', $arh_key);
-              if( count($rx_matches) > 0 and strlen($arh_key) > 2 ) {
-                foreach($rx_matches as $ak_key => $ak_val) $rx_matches[$ak_key] = ucfirst($ak_val);
-                $arh_key = implode('-', $rx_matches);
-              }
-              $arh[$arh_key] = $val;
-            }
-          }
-          return( $arh );
-        }
-    }
 
-*/
 /**
  * CodeIgniter API Controller
  *
@@ -36,8 +12,20 @@ if( !function_exists('apache_request_headers') ) {
  */
 class API_Controller extends CI_Controller
 {
-    protected $entityManager;
+    /**
+    * Entity Manager
+    *
+    * @var Doctrine\ORM\EntityManager
+    */
+    protected $entity_manager;
 
+    /**
+    * Doctrine Objects Validator
+    *
+    * @var Symfony\Component\Validator\Validation
+    */
+    protected $validator;
+    
     /**
      * List of allowed HTTP methods
      *
@@ -75,18 +63,6 @@ class API_Controller extends CI_Controller
      * The request has succeeded
      */
     const HTTP_OK = 200;
-
-    /**
-     * HTTP status codes and their respective description
-     */
-    // const HEADER_STATUS_STRINGS = array(
-    //     '405' => 'HTTP/1.1 405 Method Not Allowed',
-    //     '400' => 'BAD REQUEST',
-    //     '408' => 'Request Timeout',
-    //     '404' => 'NOT FOUND',
-    //     '401' => 'UNAUTHORIZED',
-    //     '200' => 'OK',
-    // );
 
     protected $HEADER_STATUS_STRINGS;
     /**
@@ -129,7 +105,8 @@ class API_Controller extends CI_Controller
         );
 
         $this->load->library('doctrine');
-        $this->entity_manager = $this->doctrine->em;
+        $this->entity_manager = $this->doctrine->getEntityManager();
+        $this->validator = $this->doctrine->getValidator();
     }
 
 
@@ -578,44 +555,53 @@ class API_Controller extends CI_Controller
     }
 
 /** 
-   * Converte doctrine para array associativo
-   * @author Andrei Luiz Nenevê (https://gist.github.com/AndreiLN)
+   * Converte objeto doctrine para array associativo
+   * Adaptado por: Elyabe Alves (http://github.com/elyabe) 
+   * @author Andrei Luiz Nenevê (https://gist.github.com/AndreiLN) 
    * @param $data objeto a ser convertido
    * @param $single execução em modo de recursão
+   * @param $dateFormat formato da data para atributos do tipo DateTime
    * @return array
   */
-    public function doctrine_to_array($data, $single = false, $dateFormat = 'c') {
-        if (is_object($data)) { // Verifica se é array ou objeto
-            $methods = get_class_methods($data);
-            $methods = array_filter($methods, function($val){ return preg_match('/^get/', $val); });
-    
-            $return = array();
-            if(count($methods)){
-                foreach($methods as $method){
-                    $prop = lcfirst(preg_replace('/^get/', "", $method));
-                    $val = $data->$method();    
-                    
-                    if ( $val instanceof DateTime){
-                        $val = $val->format($dateFormat);
-                    }
+  public function doctrine_to_array($data, $single = false, $dateFormat = 'c') 
+  {
+      if (is_object($data)) 
+      { 
+          $methods = get_class_methods($data);
+          $methods = array_filter($methods, function($val){ return preg_match('/^get/', $val); });
+  
+          $return = array();
+          if(count($methods))
+          {
+              if ( $data instanceof DateTime )
+              {
+                  $return = $data->format($dateFormat);
+              } else {
+                  foreach($methods as $method)
+                  {
+                      $prop = lcfirst(preg_replace('/^get/', "", $method));
+                      $val = $data->$method();    
+                      
+                      if(!$single || $val instanceof DateTime ){
+                          $return[$prop] = $this->doctrine_to_array($val, $single, $dateFormat);
+                      } else {
+                          if(!is_array($val) && !is_object($val)){
+                              $return[$prop] = $val;
+                          }
+                      }
+                  }
+              }
 
-                    if(!$single){
-                        $return[$prop] = $this->doctrine_to_array($val, $single, $dateFormat);
-                    } else {
-                        if(!is_array($val) && !is_object($val)){
-                            $return[$prop] = $val;
-                        }
-                    }
-                }
-            }
-            return $return;
-        } else if(is_array($data)){
-            if(count($data)){
-                foreach($data as $idx => $val){
-                    $data[$idx] = $this->doctrine_to_array($val, $single, $dateFormat);
-                }
-            }
-        }
-        return $data; // Retorna o próprio valor se não for objeto
-    }
+          }
+          return $return;
+          
+      } else if(is_array($data)){
+          if(count($data)){
+              foreach($data as $idx => $val){
+                  $data[$idx] = $this->doctrine_to_array($val, $single, $dateFormat);
+              }
+          }
+      }
+      return $data; 
+  }
 }
