@@ -243,16 +243,12 @@ class DepartamentoController extends API_Controller {
 				{
 					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
 				}
-				/*else{
-					if(isset($payload['unidadeEnsino']))
-                	{
-                    	$depto->setUnidadeEnsino($payload['unidadeEnsino']);
-					}
-				}*/
+
 			}
 			
             if(empty($msg))
             {
+				$depto->setUnidadeEnsino($ues);
                 if(isset($payload['nome']))
                 {
                     $depto->setNome($payload['nome']);
@@ -261,7 +257,7 @@ class DepartamentoController extends API_Controller {
                 {
                     $depto->setAbreviatura($payload['abreviatura']);
 				}
-
+				
                 try {
                     $this->entity_manager->merge($depto);
                     $this->entity_manager->flush();
