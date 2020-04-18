@@ -141,4 +141,51 @@ class DisciplinaController extends API_Controller
             ), 400);
         }
     }
+
+    public function update($codDepto, $numDisciplina)
+    {
+        $this->_apiconfig(array(
+            'methods' => array('PUT')
+        ));
+
+        $disciplina = $this->entity_manager->find('Entities\Disciplina', 
+        array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
+
+        $payload = json_decode(file_get_contents('php://input'), TRUE);
+
+        if ( !is_null($disciplina) && !empty($payload) ){
+
+            if ( isset($payload['nome']) ) $disciplina->setNome($payload['nome']);
+
+            if ( isset($payload['ch']) ) $disciplina->setCh($payload['ch']);
+
+            try {
+                $this->entity_manager->merge($disciplina);
+                $this->entity_manager->flush();
+    
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Disciplina Atualizada Com Sucesso',
+                ), 200);
+            } catch (\Exception $e){
+                $msg =  $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }
+
+        } elseif ( empty($payload) ){
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Não há requisição',
+            ), 400);
+            
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Disciplina não encontrada',
+            ), 404);
+        }
+    }
 }
