@@ -226,16 +226,11 @@ class CursoController extends API_Controller {
 				{
 					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
 				}
-				/*else{
-					if(isset($payload['unidadeEnsino']))
-                	{
-                    	$curso->setUnidadeEnsino($payload['unidadeEnsino']);
-					}
-				}*/
 			}
 			
             if(empty($msg))
             {
+				$curso->setUnidadeEnsino($ues);
                 if(isset($payload['nome']))
                 {
                     $curso->setNome($payload['nome']);
