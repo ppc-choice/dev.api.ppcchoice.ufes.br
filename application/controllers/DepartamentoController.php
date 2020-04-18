@@ -6,7 +6,7 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class DepartamentoController extends API_Controller {
 
 	/**
-	 * @api {get} departamentos/:codDepto Apresenta dados de um Departamento específico.
+	 * @api {get} departamentos/:codDepto Requisitar dados de um Departamento específico.
 	 * @apiName findById
 	 * @apiGroup Departamentos
 	 *
@@ -63,7 +63,7 @@ class DepartamentoController extends API_Controller {
     
 
 	/**
-	 * @api {get} departamentos/ Apresentar todos Departamentos registrados.
+	 * @api {get} departamentos/ Requisitar todos Departamentos registrados.
 	 * @apiName findAll
 	 * @apiGroup Departamentos
 	 * @apiSuccess {String} nome   Nome da Departamento.
@@ -222,6 +222,77 @@ class DepartamentoController extends API_Controller {
                 'status' => FALSE,
                 'message' => 'Campo Obrigatorio Não Encontrado!',
             ), 400);
+        }
+	}
+	
+
+
+	public function update($codDepto)
+    {
+        $depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+		$msg = '';
+		
+        if(!is_null($depto) && !empty($payload))
+        {            
+
+			if(isset($payload['unidadeEnsino']))
+            {
+                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['unidadeEnsino']);
+				if(is_null($ues))
+				{
+					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
+				}
+				/*else{
+					if(isset($payload['unidadeEnsino']))
+                	{
+                    	$depto->setUnidadeEnsino($payload['unidadeEnsino']);
+					}
+				}*/
+			}
+			
+            if(empty($msg))
+            {
+                if(isset($payload['nome']))
+                {
+                    $depto->setNome($payload['nome']);
+                }
+                if(isset($payload['abreviatura']))
+                {
+                    $depto->setAbreviatura($payload['abreviatura']);
+				}
+
+                try {
+                    $this->entity_manager->merge($depto);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Departamento atualizado com sucesso!'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg
+                ), 404);
+            } 
+        }elseif(empty($payload))
+        {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Corpo da Requisição vazio',
+            ), 400);
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Departamento não encontrado!',
+            ), 404);
         }
     }
     
