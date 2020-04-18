@@ -262,6 +262,8 @@ class ComponenteCurricularController extends API_Controller {
 
             if(empty($msg))
             {
+                $compCurric->setPpc($ppc);
+                $compCurric->setDisciplina($disciplina);
                 if(isset($payload['periodo']))
                 {
                     $compCurric->setPeriodo($payload['periodo']);
