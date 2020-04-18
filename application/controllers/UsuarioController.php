@@ -108,7 +108,7 @@ class UsuarioController extends API_Controller {
 	
 		if ( $valida->count() ){
 		
-			$msg = $valida->toArray();
+			$msg = $valida->messageArray();
 
 			$this->api_return(array(
 				'status' => FALSE,

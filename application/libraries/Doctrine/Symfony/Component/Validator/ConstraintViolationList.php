@@ -52,11 +52,11 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     }
 
     /**
-     * Converts the violation into a string for debugging purposes.
+     * Converts the violation into a string and add into array.
      *
-     * @return string The violation as string.
+     * @return array The violations messages.
      */
-    public function toArray()
+    public function messageArray()
     {
         $msg = array();
 
