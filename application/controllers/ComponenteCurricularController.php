@@ -257,7 +257,6 @@ class ComponenteCurricularController extends API_Controller {
                 $disciplina = $this->entity_manager->find('Entities\Disciplina',
                     array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
                 if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
-
             }
 
             if(empty($msg))
