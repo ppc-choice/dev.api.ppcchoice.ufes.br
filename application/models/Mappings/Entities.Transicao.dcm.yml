@@ -7,17 +7,11 @@ Entities\Transicao:
       columns:
         - cod_ppc_atual
         - cod_ppc_alvo
-  fields:
-    codPpcAtual:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_ppc_atual
-    codPpcAlvo:
-      type: integer
-      id: true
-      nullable: false
-      column: cod_ppc_alvo
+  id:
+    ppcAtual:
+      associationKey: true
+    ppcAlvo:
+      associationKey: true
   manyToOne:
     ppcAtual:
       targetEntity: ProjetoPedagogicoCurso

@@ -42,12 +42,6 @@ class ProjetoPedagogicoCurso extends \Entities\ProjetoPedagogicoCurso implements
     }
 
     
-    public function setCodPpc($codPpc)
-    {
-        $this->__load();
-        return parent::setCodPpc($codPpc);
-    }
-
     public function getCodPpc()
     {
         if ($this->__isInitialized__ === false) {
@@ -213,18 +207,6 @@ class ProjetoPedagogicoCurso extends \Entities\ProjetoPedagogicoCurso implements
         return parent::getSituacao();
     }
 
-    public function setCodCurso($codCurso)
-    {
-        $this->__load();
-        return parent::setCodCurso($codCurso);
-    }
-
-    public function getCodCurso()
-    {
-        $this->__load();
-        return parent::getCodCurso();
-    }
-
     public function setCurso(\Entities\Curso $curso = NULL)
     {
         $this->__load();
@@ -240,7 +222,7 @@ class ProjetoPedagogicoCurso extends \Entities\ProjetoPedagogicoCurso implements
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codPpc', 'dtInicioVigencia', 'dtTerminoVigencia', 'chTotalDisciplinaOpt', 'chTotalDisciplinaOb', 'chTotalAtividadeExt', 'chTotalAtividadeCmplt', 'chTotalProjetoConclusao', 'chTotalEstagio', 'duracao', 'qtdPeriodos', 'chTotal', 'anoAprovacao', 'situacao', 'codCurso', 'curso');
+        return array('__isInitialized__', 'codPpc', 'dtInicioVigencia', 'dtTerminoVigencia', 'chTotalDisciplinaOpt', 'chTotalDisciplinaOb', 'chTotalAtividadeExt', 'chTotalAtividadeCmplt', 'chTotalProjetoConclusao', 'chTotalEstagio', 'duracao', 'qtdPeriodos', 'chTotal', 'anoAprovacao', 'situacao', 'curso');
     }
 
     public function __clone()

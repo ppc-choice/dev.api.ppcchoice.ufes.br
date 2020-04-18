@@ -123,4 +123,148 @@ class TransicaoController extends API_Controller {
             );
         }
     }
+
+
+    /**
+     * @api {post} transicoes Criar transição
+     * @apiName add
+     * @apiGroup Transição
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (PPC não encontrado 400) PPCNaoEncontrado Ppc Atual ou  Ppc Alvo não encontrado.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "codPpcAtual" : 1,
+	 *         "codPpcAlvo" : 4
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Transição criada com sucesso"
+     *     }
+     */
+    public function add()
+    {
+        $this->_apiConfig(array(
+            'methods' => array('POST'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+
+        if( isset($payload['codPpcAtual'], $payload['codPpcAlvo']) )
+        {
+            $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+            $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+
+            $msg = '';
+            if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
+            if(is_null($ppcAlvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
+            if(empty($msg))
+            {
+                $transicao = new Entities\Transicao;
+                $transicao->setPpcAtual($ppcAtual);
+                $transicao->setPpcAlvo($ppcAlvo);
+
+                try{
+                    $this->entity_manager->persist($transicao);
+                    $this->entity_manager->flush();
+    
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Transição criada com sucesso.',
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 404);
+            }
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Campo Obrigatorio Não Encontrado.',
+            ), 400);
+        }
+    }
+
+    /**
+     * @api {put} transicao/:codPpcAtual/:codPpcAlvo Atualizar Correspondência
+     * @apiName update
+     * @apiGroup Correspondência
+     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Componente Curricular não encontrada 404) PPCNaoEncontrado Componente curricular ou componente correspondente não encontradas.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         percentual: 0.5
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Correspondência atualizada com sucesso"
+     *     }
+     */
+    public function update($codPpcAtual,$codPpcAlvo)
+    {
+        $transicao = $this->entity_manager->find('Entities\Transicao',
+                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $msg = '';
+        if(!is_null($transicao) && !empty($payload))
+        {
+            if(isset($payload['codPpcAtual']))
+            {
+                $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+                if(is_null($compCurric)) $msg = $msg . 'Ppc Atual não encontrado. ';
+            }
+            if(isset($payload['codPpcAlvo']))
+            {
+                $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+                if(is_null($compCurric)) $msg = $msg . 'Ppc Alvo não encontrado. ';
+            }
+            if(empty($msg))
+            {
+                $transicao->setPpcAtual($ppcAtual);
+                $transicao->setPpcAlvo($ppcAlvo);
+                try {
+                    $this->entity_manager->merge($transicao);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Transição atualizada com sucesso'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }
+        }elseif(empty($payload))
+        {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Corpo da Requisição vazio',
+            ), 400);
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Transição não encontrada',
+            ), 404);
+        }
+    }
 }
