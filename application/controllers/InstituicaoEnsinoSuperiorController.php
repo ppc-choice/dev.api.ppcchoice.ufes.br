@@ -155,8 +155,6 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
     {
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
  
