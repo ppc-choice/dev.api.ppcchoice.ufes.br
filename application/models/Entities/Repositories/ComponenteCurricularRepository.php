@@ -17,6 +17,7 @@ class ComponenteCurricularRepository extends EntityRepository
                 ->innerJoin('c.disciplina','disc')
                 ->innerJoin('disc.departamento','dep')
                 ->innerJoin('c.ppc','p')
+                ->orderBy('c.codCompCurric','ASC')
                 ->getQuery()
                 ->getResult();
     }
