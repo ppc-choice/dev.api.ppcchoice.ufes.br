@@ -119,11 +119,21 @@ $route['disciplinas']['POST'] = 'DisciplinaController/add';
 
 // (POST) Instituição de Ensino Superior: Wellerson
 $route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
+
 // (POST) Departamento: Wellerson
 $route['departamentos']['POST'] = 'DepartamentoController/add';
+
 // (POST) Curso: Wellerson
 $route['cursos']['POST'] = 'CursoController/add';
 
+// (PUT) Instituição de Ensino Superior: Wellerson
+$route['instituicoes-ensino-superior/(:num)']['PUT'] = 'InstituicaoEnsinoSuperiorController/update/$1';
+
+// (PUT) Departamento: Wellerson
+$route['departamentos/(:num)']['PUT'] = 'DepartamentoController/update/$1';
+
+// (PUT) Curso: Wellerson
+$route['cursos/(:num)']['PUT'] = 'CursoController/update/$1';
 //(POST) Componente Curricular : Hadamo
 $route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/add';
 //(POST) Correspondencia : Hadamo
@@ -137,8 +147,12 @@ $route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController
 $route['dependencias']['POST'] = 'DependenciaController/add';
 
 //(PUT) Componente Curricular: Hadamo
-$route['componentes-curriculares/(:num)']['put'] = 'ComponenteCurricularController/update/$1';
 
+$route['componentes-curriculares/(:num)']['PUT'] = 'ComponenteCurricularController/update/$1';
+//(PUT) Correspondencia: Hadamo
+$route['correspondencias/(:num)/(:num)']['PUT'] = 'CorrespondenciaController/update/$1/$2';
+//(PUT) Transicao: Hadamo
+$route['transicao/(:num)/(:num)']['PUT'] = 'TransicaoController/update/$1/$2';
 
 // (PUT) para Unidades de Ensino : Gabriel
 $route['unidades-ensino/(:num)']['PUT'] = 'UnidadeEnsinoController/update/$1';
