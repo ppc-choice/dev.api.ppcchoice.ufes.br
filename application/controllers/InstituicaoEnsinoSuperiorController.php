@@ -203,10 +203,6 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
             if(empty($msg))
             {
-                /*if(isset($payload['codIes']))
-                {
-                    $ies->setCodIes($payload['codIes']);
-                }*/
                 if(isset($payload['nome']))
                 {
                     $ies->setNome($payload['nome']);
