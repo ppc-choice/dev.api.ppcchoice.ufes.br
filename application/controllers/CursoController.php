@@ -6,7 +6,7 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class CursoController extends API_Controller {
 
 	/**
-	 * @api {get} cursos/:codCurso Apresenta dados de um Curso específico.
+	 * @api {get} cursos/:codCurso Requisitar dados de um Curso específico.
 	 * @apiName findById
 	 * @apiGroup Cursos
 	 *
@@ -63,7 +63,7 @@ class CursoController extends API_Controller {
     }
     
 	/**
-	 * @api {get} cursos/ Apresentar todos Cursos registrados.
+	 * @api {get} cursos/ Requisitar todos Cursos registrados.
 	 * @apiName findAll
 	 * @apiGroup Cursos
 	 * @apiSuccess {Number} codCurso   Identificador único do curso.
@@ -187,10 +187,10 @@ class CursoController extends API_Controller {
 						'message' => 'Curso criado com Sucesso!',
 					), 200);
 				} catch (\Exception $e) {
-					$mensagem = $e->getMessage();
+					$msg = $e->getMessage();
 					$this->api_return(array(
 						'status' => FALSE,
-						'message' => $mensagem,
+						'message' => $msg,
 					), 400);
 				}
 				
@@ -206,6 +206,71 @@ class CursoController extends API_Controller {
                 'status' => FALSE,
                 'message' => 'Campo Obrigatorio Não Encontrado!',
             ), 400);
+        }
+	}
+	
+
+	public function update($codCurso)
+    {
+        $curso = $this->entity_manager->find('Entities\Curso',$codCurso);
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+		$msg = '';
+		
+        if(!is_null($curso) && !empty($payload))
+        {            
+
+			if(isset($payload['unidadeEnsino']))
+            {
+                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['unidadeEnsino']);
+				if(is_null($ues))
+				{
+					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
+				}
+			}
+			
+            if(empty($msg))
+            {
+				$curso->setUnidadeEnsino($ues);
+                if(isset($payload['nome']))
+                {
+                    $curso->setNome($payload['nome']);
+                }
+                if(isset($payload['anoCriacao']))
+                {
+                    $curso->setAnoCriacao($payload['anoCriacao']);
+				}
+
+                try {
+                    $this->entity_manager->merge($curso);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Curso atualizado com sucesso!'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }else{
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg
+                ), 404);
+            } 
+        }elseif(empty($payload))
+        {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Corpo da Requisição vazio',
+            ), 400);
+        }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Curso não encontrado!',
+            ), 404);
         }
     }
 }
