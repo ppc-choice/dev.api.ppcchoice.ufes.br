@@ -129,7 +129,7 @@ class CursoController extends API_Controller {
     }
 	
 	/**
-	 * @api {post} cursos/ Registrar um novo Curso.
+	 * @api {post} cursos/ Criar um Curso.
 	 * @apiName add
 	 * @apiGroup Cursos
 	 * @apiSuccess {String} nome   Nome do Curso.
@@ -150,7 +150,7 @@ class CursoController extends API_Controller {
 	* 	"result": "Curso criado com Sucesso!"
 	* {
 	
-	 * @apiError CursoNotFound Não foi possível registrar um novo Curso.
+	 * @apiError CursoNotFound Não foi possível criar um novo Curso.
 	 * @apiSampleRequest cursos/
 	 * @apiErrorExample {JSON} Error-Response:
 	 * HTTP/1.1 404 OK
@@ -159,12 +159,14 @@ class CursoController extends API_Controller {
 	 *	"message": "Campo Obrigatorio Não Encontrado!"
 	 * }
 	 */
-	public function add()
+	public function create()
     {
-        $this->_apiConfig(array(
-            'methods' => array('POST'),
-            )
-        );
+        header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('POST'),
+			)
+		);
  
         $payload = json_decode(file_get_contents('php://input'),TRUE);
  
@@ -212,6 +214,13 @@ class CursoController extends API_Controller {
 
 	public function update($codCurso)
     {
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('PUT'),
+			)
+		);
+
         $curso = $this->entity_manager->find('Entities\Curso',$codCurso);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 		$msg = '';
