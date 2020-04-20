@@ -144,7 +144,7 @@ class DepartamentoController extends API_Controller {
 	}
 	
 	/**
-	 * @api {post} departamentos/ Registrar um novo departamento.
+	 * @api {post} departamentos/ Criar um Departamento.
 	 * @apiName add
 	 * @apiGroup Departamentos
 	 * @apiSuccess {Number} codDepto   Identificador único auto incrementável do Departamento.
@@ -166,7 +166,7 @@ class DepartamentoController extends API_Controller {
 	* 	"result": "Departamento criado com Sucesso!"
 	* {
 	
-	 * @apiError DepartamentoNotFound Não foi possível realizar um novo cadastro de departamento.
+	 * @apiError DepartamentoNotFound Não foi possível criar um novo cadastro de departamento.
 	 * @apiSampleRequest departamentos/
 	 * @apiErrorExample {JSON} Error-Response:
 	 * HTTP/1.1 404 OK
@@ -175,12 +175,14 @@ class DepartamentoController extends API_Controller {
 	 *	"message": "Campo Obrigatorio Não Encontrado!"
 	 * }
 	 */
-	public function add()
+	public function create()
     {
-        $this->_apiConfig(array(
-            'methods' => array('POST'),
-            )
-        );
+        header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('POST'),
+			)
+		);
  
         $payload = json_decode(file_get_contents('php://input'),TRUE);
  
@@ -229,6 +231,13 @@ class DepartamentoController extends API_Controller {
 
 	public function update($codDepto)
     {
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('PUT'),
+			)
+		);
+
         $depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 		$msg = '';
