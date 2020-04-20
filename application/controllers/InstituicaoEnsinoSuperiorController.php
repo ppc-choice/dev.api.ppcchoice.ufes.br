@@ -95,7 +95,6 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	 */
     public function getById($codIes)
     {   
-        
         header("Access-Controll-Allow-Origin: *");
 
 		$this->_apiConfig(array(
@@ -121,7 +120,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	}
 	
 	/**
-	 * @api {post} instituicoes-ensino-superior/ Registrar uma nova Instituição de Ensino Superior.
+	 * @api {post} instituicoes-ensino-superior/ Criar uma Instituição de Ensino Superior.
 	 * @apiName add
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
@@ -142,7 +141,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	* 	"result": "Instituição de Ensino Superior criada com Sucesso!"
 	* {
 	
-	 * @apiError IesNotFound Não foi possível cadastrar uma nova Instituição de Ensino Superior.
+	 * @apiError IesNotFound Não foi possível criar uma nova Instituição de Ensino Superior.
 	 * @apiSampleRequest instituicoes-ensino-superior/
 	 * @apiErrorExample {JSON} Error-Response:
 	 * HTTP/1.1 404 OK
@@ -151,8 +150,10 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	 *	"message": "Campo Obrigatorio Não Encontrado!"
 	 * }
 	 */	
-	public function add()
+	public function create()
     {
+		header("Access-Controll-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('POST'),
             )
@@ -194,6 +195,13 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 	public function update($codIes)
     {
+		header("Access-Controll-Allow-Origin: *");
+
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            )
+		);
+		
         $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 		$msg = '';
