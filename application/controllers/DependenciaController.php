@@ -219,6 +219,8 @@ class DependenciaController extends API_Controller
 
     public function add()
 	{
+        header("Access-Control-Allow-Origin: *");
+
 		$this->_apiConfig(array(
 			'methods' => array('POST'),
 			)
@@ -233,24 +235,39 @@ class DependenciaController extends API_Controller
 			
 			if(!is_null($componenteCurricular) && !is_null($preRequisito))
 			{
-				$dependencia = new Entities\Dependencia;
-				$dependencia->setComponenteCurricular($componenteCurricular);
-				$dependencia->setPreRequisito($preRequisito);
+                $dependencia = new Entities\Dependencia;
+                //verifica se as componentes curriculares pertecem ao mesmo ppc
+                if($componenteCurricular->getPpc()==$preRequisito->getPpc())
+				{
+                    // verifica se as componentes possuem periodos distintos
+                    if($componenteCurricular->getPeriodo()!= $preRequisito->getPeriodo())
+                    {
+                        $dependencia->setComponenteCurricular($componenteCurricular);
+                        $dependencia->setPreRequisito($preRequisito);
+                        try 
+                        {
+                            $this->entity_manager->persist($dependencia);
+                            $this->entity_manager->flush();
+        
+                            $this->api_return(array(
+                                'status' => TRUE,
+                                'message' => 'Dependencia criada com sucesso',
+                            ), 200);
+                        } catch (\Exception $e) {
+                            $this->api_return(array(
+                                'status' => false,
+                                'message' => $e->getMessage(),
+                            ), 400);
+                        }
+                    }else
+                    {
+                        echo "Componentes devem ter periodos distintos";
+                    }
+                }else
+                {
+                    echo " As componentes devem pertecer ao mesmo ppc"; 
+                }
 				
-				try {
-					$this->entity_manager->persist($dependencia);
-					$this->entity_manager->flush();
-
-					$this->api_return(array(
-						'status' => TRUE,
-						'message' => 'Dependencia criada com sucesso',
-					), 200);
-				} catch (\Exception $e) {
-					$this->api_return(array(
-                        'status' => false,
-                        'message' => $e->getMessage(),
-                    ), 400);
-				}
 
 			} else {
 				$this->api_return(array(
@@ -259,5 +276,180 @@ class DependenciaController extends API_Controller
             ), 400);
             }
         }
+    }
+
+    public function update($codCompCurric, $codPreRequisito)
+	{
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            )
+        );
+
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $dependencia = $this->entity_manager->find('Entities\Dependencia',array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
+        
+        
+        //Verifica se o corpo da requisição não é vazio
+        if(!empty($payload))
+        {     
+            //Verifica se  existe dependencia entre as componentes curriculares 
+            if(!is_null($dependencia))
+            {
+                //verifica se foram enviadas duas componentes curriculares para serem alteradas
+                if(isset($payload['codCompCurric'],$payload['codPreRequisito']))
+                {
+                    $cc = $this->entity_manager->find('Entities\ComponenteCurricular',array('codCompCurric' => $payload['codCompCurric']));
+                    $pr = $this->entity_manager->find('Entities\ComponenteCurricular', array('codCompCurric' => $payload['codPreRequisito']));
+                    
+                        //Verifica se as componentes curriculares possuem o mesmo ppc
+                        if($cc->getPpc()==$pr->getPpc())
+                        {                        
+
+                            //verifica se as novas componentes possuem periodos diferentes
+                            if($cc->getPeriodo()!=$pr->getPeriodo()) 
+                            {
+                                $dependencia->setComponenteCurricular($cc );
+                                $dependencia->setPreRequisito($pr);
+                                
+                                try
+                                {
+                                    $this->entity_manager->merge($dependencia);
+                                    $this->entity_manager->flush();
+                                    
+                                    $this->api_return(array(
+                                        'status' => TRUE,
+                                        'message' => 'Dependencia alterada com sucesso',
+                                    ), 200);
+                                } catch (\Exception $e) {
+                                    $this->api_return(array(
+                                        'status' => false,
+                                        'message' => $e->getMessage(),
+                                    ), 400);
+                                }
+                            }
+                            else
+                            {   echo "1";
+                                $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'Dependência não pode ter mesmo período',
+                                ), 400);
+                            }
+                        }else
+                        {
+                            $this->api_return(array(
+                                'status' => FALSE,
+                                'message' => 'Dependência deve pertencer ao mesmo ppc',
+                            ), 400);
+                        }
+
+                    }
+                    /*caso seja enviada apenas uma componente para alteração em seguida é verificado 
+                    se elas não irão pertencer ao mesmo ppc e ao mesmo periodo*/
+                    else  
+                    {
+                        if(isset($payload['codCompCurric']))
+                        { 
+                            $cc = $this->entity_manager->find('Entities\ComponenteCurricular',array('codCompCurric'=>$payload['codCompCurric']));
+                            $preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular',array('codCompCurric' => $codPreRequisito));
+                           
+                            if($cc->getPpc()==$preRequisito->getPpc())
+                            { 
+                                if($cc->getPeriodo()!=$preRequisito->getPeriodo())
+                                {
+                                    $dependencia->setComponenteCurricular($cc);
+
+                                    try
+                                    {
+                                        $this->entity_manager->merge($dependencia);
+                                        $this->entity_manager->flush();
+                                        
+                                        $this->api_return(array(
+                                            'status' => TRUE,
+                                            'message' => 'Dependencia alterada com sucesso',
+                                        ), 200);
+                                    } catch (\Exception $e) {
+                                        $this->api_return(array(
+                                            'status' => false,
+                                            'message' => $e->getMessage(),
+                                        ), 400);
+                                    }
+                                
+                                }
+                                else
+                                { 
+                                    $this->api_return(array(
+                                        'status' => FALSE,
+                                        'message' => 'Dependência não pode ter mesmo período',
+                                    ), 400);
+                                }
+                            }else
+                            {
+                                $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'Dependência deve pertencer ao mesmo ppc',
+                                ), 400);
+                            }
+                        } 
+                        if(isset($payload['codPreRequisito'])) 
+                        {
+                            $pr = $this->entity_manager->find('Entities\ComponenteCurricular', array('codCompCurric' => $payload['codPreRequisito']));
+                            $componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular',array('codCompCurric' => $codCompCurric));
+                            
+                            if($componenteCurricular->getPpc()==$pr->getPpc())
+                            { 
+                                if($pr->getPeriodo()!=$componenteCurricular->getPeriodo())
+                                {
+                                    $dependencia->setPreRequisito($pr);
+
+                                    try
+                                    {
+                                        $this->entity_manager->merge($dependencia);
+                                        $this->entity_manager->flush();
+                                        
+                                        $this->api_return(array(
+                                            'status' => TRUE,
+                                            'message' => 'Dependencia alterada com sucesso',
+                                        ), 200);
+                                    } catch (\Exception $e) {
+                                        $this->api_return(array(
+                                            'status' => false,
+                                            'message' => $e->getMessage(),
+                                        ), 400);
+                                    }
+                                }
+                                else
+                                {   
+                                    $this->api_return(array(
+                                        'status' => FALSE,
+                                        'message' => 'Dependência não pode ter mesmo período',
+                                    ), 400);
+                                }
+                            }else
+                            {
+                                $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'Dependência deve pertencer ao mesmo ppc',
+                                ), 400);
+                            }
+                        }
+
+                    }            
+                    
+                }else 
+                {
+                    $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => 'Dependência não encontrada',
+                    ), 400);
+                }
+            }else
+            {
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => 'Campo obrigatorio não encontrado',
+                ), 400);
+            }
     }
 } 
