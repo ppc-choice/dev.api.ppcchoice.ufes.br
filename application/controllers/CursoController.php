@@ -84,13 +84,7 @@ class CursoController extends API_Controller {
 *      "nomeUnidadeEnsino": "Campus São Mateus",
 *      "nomeIes": "Universidade Federal do Espírito Santo"
 *    },
-*    {
-*      "codCurso": 2,
-*      "nomeCurso": "Engenharia de Produção",
-*      "anoCriacao": 2006,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    },
+*   ...,
 *    {
 *      "codCurso": 3,
 *      "nomeCurso": "Matemática Industrial",
@@ -130,7 +124,7 @@ class CursoController extends API_Controller {
 	
 	/**
 	 * @api {post} cursos/ Criar um Curso.
-	 * @apiName add
+	 * @apiName create
 	 * @apiGroup Cursos
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
@@ -180,20 +174,33 @@ class CursoController extends API_Controller {
 			
 			if (!is_null($ues)){
 				$curso->setUnidadeEnsino($ues);
-				try {
-					$this->entity_manager->persist($curso);
-					$this->entity_manager->flush();
-	 
-					$this->api_return(array(
-						'status' => TRUE,
-						'message' => 'Curso criado com Sucesso!',
-					), 200);
-				} catch (\Exception $e) {
-					$msg = $e->getMessage();
+
+				$valida = $this->validator->validate($curso);
+
+				if ( $valida->count() ){
+		
+					$msg = $valida->messageArray();
+		
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg,
-					), 400);
+					), 400);	
+				} else {
+					try {
+						$this->entity_manager->persist($curso);
+						$this->entity_manager->flush();
+		 
+						$this->api_return(array(
+							'status' => TRUE,
+							'message' => 'Curso criado com Sucesso!',
+						), 200);
+					} catch (\Exception $e) {
+						$msg = $e->getMessage();
+						$this->api_return(array(
+							'status' => FALSE,
+							'message' => $msg,
+						), 400);
+					}
 				}
 				
 			}else {
@@ -235,11 +242,11 @@ class CursoController extends API_Controller {
 				{
 					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
 				}
+				$curso->setUnidadeEnsino($ues);
 			}
 			
             if(empty($msg))
             {
-				$curso->setUnidadeEnsino($ues);
                 if(isset($payload['nome']))
                 {
                     $curso->setNome($payload['nome']);
@@ -249,20 +256,32 @@ class CursoController extends API_Controller {
                     $curso->setAnoCriacao($payload['anoCriacao']);
 				}
 
-                try {
-                    $this->entity_manager->merge($curso);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Curso atualizado com sucesso!'
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
+				$valida = $this->validator->validate($curso);
+
+				if ( $valida->count() ){
+					$msg = $valida->messageArray();
+		
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $msg,
+					), 400);	
+				} else {
+					try {
+						$this->entity_manager->merge($curso);
+						$this->entity_manager->flush();
+						$this->api_return(array(
+							'status' => TRUE,
+							'message' => 'Curso atualizado com sucesso!'
+						), 200);
+					} catch (\Exception $e) {
+						$e_msg = $e->getMessage();
+						$this->api_return(array(
+							'status' => FALSE,
+							'message' => $e_msg
+						), 400);
+					}	
+				}
+
             }else{
                 $this->api_return(array(
                     'status' => FALSE,
@@ -281,5 +300,36 @@ class CursoController extends API_Controller {
                 'message' => 'Curso não encontrado!',
             ), 404);
         }
-    }
+	}
+	
+
+
+	public function delete($codCurso)
+	{
+		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
+		
+		if(!is_null($curso))
+		{
+			try {
+				$this->entity_manager->remove($curso);
+				$this->entity_manager->flush();
+				$this->api_return(array(
+					'status' => TRUE,
+					'message' => 'Curso removida com sucesso!'
+				), 200);
+				
+			} catch (\Exception $e) {
+				$msg = $e->getMessage();
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg
+				), 400);
+			}
+		}else{
+			$this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Curso não encontrada!',
+            ), 404);
+		}
+	}
 }
