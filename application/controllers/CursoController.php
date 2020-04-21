@@ -337,6 +337,13 @@ class CursoController extends API_Controller {
      */
 	public function delete($codCurso)
 	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('DELETE'),
+			)
+		);
+
 		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
 		
 		if(!is_null($curso))
