@@ -224,13 +224,13 @@ class UnidadeEnsinoController extends API_Controller
      *
      * @apiParam {Number} codUnidadeEnsino Codigo único de uma Unidade de Ensino.
      *
-    *  @apiSuccessExample {json} Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "status": true,
-    *       "message": "Unidade de Ensino Removida com Sucesso"
-    *     }
-    */
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Unidade de Ensino Removida com Sucesso"
+     *     }
+     */
     public function delete($codUnidadeEnsino)
     {
         $this->_apiconfig(array(
