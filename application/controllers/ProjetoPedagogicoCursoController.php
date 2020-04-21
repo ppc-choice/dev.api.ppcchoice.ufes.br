@@ -232,7 +232,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                    
             if(!is_null($curso))
             {
-                if($uppersituacao!="INATIVO")
+                if($uppersituacao!= STTS_PPC_INATIVO)
                 {
                     foreach ($result as $ppc) 
                     {
@@ -241,7 +241,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                             $situacao = false;
                             $this->api_return(array(
                                     'status' => FALSE,
-                                    'message' => 'Não é permitido mais de um Projeto Pedaogico de Curso com a situação corrente e ativo-anterior',
+                                    'message' => 'Não é permitido mais de um Projeto Pedagogico de Curso com a situação corrente e ativo-anterior',
                             ), 400);
                             break;
                         }                    
@@ -448,7 +448,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                
                 if(isset($payload['dtInicioVigencia']))
                 {
-                    if($ppc->getSituacao()=="INATIVO")
+                    if($ppc->getSituacao()== STTS_PPC_INATIVO)
                     {
                         if(new DateTime($payload['dtInicioVigencia']) < $ppc->getDtTerminoVigencia())
                             $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
@@ -464,7 +464,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                 }
                 if(isset($payload['dtTerminoVigencia']))
                 {
-                    if($ppc->getSituacao()=="INATIVO")
+                    if($ppc->getSituacao()== STTS_PPC_INATIVO)
                         $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
                     else
                     {   $this->api_return(array(
@@ -479,7 +479,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     $situacao = true;
                     $uppersituacao = strtoupper($payload['situacao']);
                     
-                    if($uppersituacao != "INATIVO")
+                    if($uppersituacao != STTS_PPC_INATIVO)
                     {
                         $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($ppc->getCurso());
                         $result = $this->doctrine_to_array($ppcs);
@@ -536,7 +536,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     if(!is_null($curso))
                     {
                         // verifica se já existe algum ppc com a situacao a ser alterada.
-                        foreach ($result as $aucPpc) 
+                        foreach ($result as $auXPpc) 
                         {
                             if($auxPpc['situacao'] == $auxPpc->getSituacao())
                             {

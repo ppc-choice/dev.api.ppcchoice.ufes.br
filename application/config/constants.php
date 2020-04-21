@@ -87,3 +87,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 // Constantes PPC
 define('STTS_PPC_INATIVO', 'INATIVO');
 define('STTS_PPC_ATIVO_ANTERIOR', 'ATIVO ANTERIOR');
+define('STTS_PPC_CORRENTE', 'CORRENTE');
