@@ -269,7 +269,19 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         }
 	}
 	
-
+	/**
+     * @api {delete} instituicoes-ensino-superior/:codIes Deletar Instituição de Ensino Superior
+     * @apiName delete
+     * @apiGroup Instituição de Ensino Superior
+     * @apiParam {Number} codIes Código de Instituição de Ensino Superior.
+     * @apiError  (Campo não encontrado 400) NotFound Instituição de Ensino Superior não encontrada.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Instituição de Ensino Superior removida com sucesso"
+     *     }
+     */
 	public function delete($codIes)
 	{
 		$ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
