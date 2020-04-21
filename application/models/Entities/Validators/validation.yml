@@ -15,3 +15,28 @@ Entities\Usuario:
         - Callback:
             methods: 
                 -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+Entities\InstituicaoEnsinoSuperior:
+    properties:
+        nome:
+            - NotBlank: 
+                message: o nome {{ value }} é inválido.
+        abreviatura:
+            - NotBlank: 
+                message: a abreviatura {{ value }} é inválido.
+Entities\Departamento:
+    properties:
+        nome:
+            - NotBlank: 
+                message: o nome {{ value }} é inválido.    
+        abreviatura:
+            - NotBlank: 
+                message: a abreviatura {{ value }} é inválido.
+Entities\Curso:
+    properties:
+        nome:
+            - NotBlank: 
+                message: o nome {{ value }} é inválido.     
+        anoCriacao:
+            - NotBlank: 
+                message: o ano de criacao {{ value }} é inválido.
+   
