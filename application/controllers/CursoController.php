@@ -303,7 +303,19 @@ class CursoController extends API_Controller {
 	}
 	
 
-
+	/**
+     * @api {delete} cursos/:codCurso Deletar Curso
+     * @apiName delete
+     * @apiGroup Curso
+     * @apiParam {Number} codCurso Código do Curso.
+     * @apiError  (Campo não encontrado 400) NotFound Curso não encontrado.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Curso removido com sucesso"
+     *     }
+     */
 	public function delete($codCurso)
 	{
 		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
