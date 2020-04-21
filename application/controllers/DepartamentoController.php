@@ -301,7 +301,19 @@ class DepartamentoController extends API_Controller {
 	}
 	
 
-
+	/**
+     * @api {delete} departamentos/:codDepto Deletar Departamento
+     * @apiName delete
+     * @apiGroup Departamento
+     * @apiParam {Number} codDepto Código do Departamento.
+     * @apiError  (Campo não encontrado 400) NotFound Departamento não encontrado.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Departamento removido com sucesso"
+     *     }
+     */
 	public function delete($codDepto)
 	{
 		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
