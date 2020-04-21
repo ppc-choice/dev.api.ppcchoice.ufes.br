@@ -121,7 +121,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	
 	/**
 	 * @api {post} instituicoes-ensino-superior/ Criar uma Instituição de Ensino Superior.
-	 * @apiName add
+	 * @apiName create
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
 	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
@@ -167,22 +167,33 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
             $ies->setCodIes($payload['codIes']);
             $ies->setNome($payload['nome']);
             $ies->setAbreviatura($payload['abreviatura']);
-           
-            try {
-                $this->entity_manager->persist($ies);
-                $this->entity_manager->flush();
- 
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
-                ), 200);
-            } catch (\Exception $e) {
-				$msg = $e->getMessage();
+		   
+			$valida = $this->validator->validate($ies);
+
+			if ( $valida->count() ){		
+				$msg = $valida->messageArray();
+	
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);
-            }
+				), 400);	
+			}else {
+				try {
+					$this->entity_manager->persist($ies);
+					$this->entity_manager->flush();
+	 
+					$this->api_return(array(
+						'status' => TRUE,
+						'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$msg = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $msg,
+					), 400);
+				}	
+			} 
  
         } else {
             $this->api_return(array(
@@ -204,42 +215,46 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 		
         $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-		$msg = '';
 		
         if(!is_null($ies) && !empty($payload))
         {            
+			if(isset($payload['nome']))
+			{
+				$ies->setNome($payload['nome']);
+			}
+			if(isset($payload['abreviatura']))
+			{
+				$ies->setAbreviatura($payload['abreviatura']);
+			}
+			
+			$valida = $this->validator->validate($ies);
 
-            if(empty($msg))
-            {
-                if(isset($payload['nome']))
-                {
-                    $ies->setNome($payload['nome']);
-                }
-                if(isset($payload['abreviatura']))
-                {
-                    $ies->setAbreviatura($payload['abreviatura']);
-				}
-				
-                try {
-                    $this->entity_manager->merge($ies);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Instituição de Ensino Superior atualizada com sucesso!'
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg
-                ), 404);
-            } 
+			if ( $valida->count() ){
+		
+				$msg = $valida->messageArray();
+	
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg,
+				), 400);	
+			} else {
+				try {
+					$this->entity_manager->merge($ies);
+					$this->entity_manager->flush();
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Instituição de Ensino Superior atualizada com sucesso!'
+					), 200);
+					
+				} catch (\Exception $e) {
+					$msg = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $msg
+					), 400);
+				}	
+			}
+
         }elseif(empty($payload))
         {
             $this->api_return(array(
@@ -252,5 +267,35 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
                 'message' => 'Instituição de Ensino Superior não encontrada!',
             ), 404);
         }
-    }
+	}
+	
+
+	public function delete($codIes)
+	{
+		$ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
+		
+		if(!is_null($ies))
+		{
+			try {
+				$this->entity_manager->remove($ies);
+				$this->entity_manager->flush();
+				$this->api_return(array(
+					'status' => TRUE,
+					'message' => 'Instituição de Ensino Superior removida com sucesso!'
+				), 200);
+				
+			} catch (\Exception $e) {
+				$msg = $e->getMessage();
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg
+				), 400);
+			}
+		}else{
+			$this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Instituição de Ensino Superior não encontrada!',
+            ), 404);
+		}
+	}
 }
