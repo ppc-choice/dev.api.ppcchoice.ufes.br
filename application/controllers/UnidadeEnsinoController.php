@@ -85,7 +85,7 @@ class UnidadeEnsinoController extends API_Controller
      * @apiSuccess {String} cnpj CNPJ da Unidade de Ensino.
      * @apiSuccess {Number} codIes Código da Instutuição de Ensino Superior que a Unidade de Ensino pertence.
      */
-    public function add()
+    public function create()
     {
         $this->_apiconfig(array(
             'methods' => array('POST')
@@ -105,20 +105,31 @@ class UnidadeEnsinoController extends API_Controller
             if ( !is_null($ies) ){
                 $ues->setIes($ies);
 
-                try {
-                    $this->entity_manager->persist($ues);
-                    $this->entity_manager->flush();
-        
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Unidade De Ensino Criada Com Sucesso',
-                    ), 200);
-                } catch (\Exception $e){
-                    $msg =  $e->getMessage();
+                $validador = $this->validator->validate($ues);
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $msg,
+                        'message' => $message
                     ), 400);
+
+                } else {
+                    try {
+                        $this->entity_manager->persist($ues);
+                        $this->entity_manager->flush();
+            
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Unidade De Ensino Criada Com Sucesso',
+                        ), 200);
+                    } catch (\Exception $e){
+                        $msg =  $e->getMessage();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $msg,
+                        ), 400);
+                    }
                 }
 
             } else {
@@ -173,7 +184,7 @@ class UnidadeEnsinoController extends API_Controller
             }
 
             if ( empty($msg) ){
-                
+
                 if ( isset($payload['nome']) ) $ues->setNome($payload['nome']);
 
                 if ( isset($payload['cnpj']) ) $ues->setCnpj($payload['cnpj']);
@@ -236,7 +247,7 @@ class UnidadeEnsinoController extends API_Controller
      *
      * @apiParam {Number} codUnidadeEnsino Codigo único de uma Unidade de Ensino.
      *
-     *  @apiSuccessExample {json} Success-Response:
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "status": true,
@@ -252,7 +263,6 @@ class UnidadeEnsinoController extends API_Controller
         $ues = $this->entity_manager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         if ( !is_null($ues) ){
-
             try {
                 $this->entity_manager->remove($ues);
                 $this->entity_manager->flush();

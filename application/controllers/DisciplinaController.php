@@ -89,7 +89,7 @@ class DisciplinaController extends API_Controller
      * @apiSuccess {Number} ch Carga Horária da Disciplina.
      * @apiSuccess {Number} codDepto Segundo identificador da disciplina e código do Departamento que ela pertence.
      */
-    public function add()
+    public function create()
     {
         $this->_apiconfig(array(
             'methods' => array('POST')
@@ -111,20 +111,31 @@ class DisciplinaController extends API_Controller
                 $disciplina->setDepartamento($depto);
                 $disciplina->setCodDepto($payload['codDepto']);
 
-                try {
-                    $this->entity_manager->persist($disciplina);
-                    $this->entity_manager->flush();
-        
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Disciplina Criada Com Sucesso',
-                    ), 200);
-                } catch (\Exception $e){
-                    $msg =  $e->getMessage();
+                $validador = $this->validator->validate($disciplina);
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $msg,
+                        'message' => $message
                     ), 400);
+    
+                } else {
+                    try {
+                        $this->entity_manager->persist($disciplina);
+                        $this->entity_manager->flush();
+            
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Disciplina Criada Com Sucesso',
+                        ), 200);
+                    } catch (\Exception $e){
+                        $msg =  $e->getMessage();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $msg,
+                        ), 400);
+                    }
                 }
                                
             } else {
@@ -171,21 +182,32 @@ class DisciplinaController extends API_Controller
             if ( isset($payload['nome']) ) $disciplina->setNome($payload['nome']);
 
             if ( isset($payload['ch']) ) $disciplina->setCh($payload['ch']);
-
-            try {
-                $this->entity_manager->merge($disciplina);
-                $this->entity_manager->flush();
-    
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'message' => 'Disciplina Atualizada Com Sucesso',
-                ), 200);
-            } catch (\Exception $e){
-                $msg =  $e->getMessage();
+            
+            $validador = $this->validator->validate($disciplina);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $msg,
+                    'message' => $message
                 ), 400);
+
+            }else{
+                try {
+                    $this->entity_manager->merge($disciplina);
+                    $this->entity_manager->flush();
+        
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Disciplina Atualizada Com Sucesso',
+                    ), 200);
+                } catch (\Exception $e){
+                    $msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $msg,
+                    ), 400);
+                }
             }
 
         } elseif ( empty($payload) ){
@@ -212,7 +234,7 @@ class DisciplinaController extends API_Controller
      * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
      * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
      *
-     *  @apiSuccessExample {json} Success-Response:
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "status": true,
@@ -229,30 +251,20 @@ class DisciplinaController extends API_Controller
         array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
 
         if ( !is_null($disciplina) ){
-            $validador = $this->validator->validate($disciplina);
-            if($validador->count())
-            {
-                $message = $validador->messageArray();
+            try {
+                $this->entity_manager->remove($disciplina);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Disciplina Removida com Sucesso'
+                ), 200);
+            
+            } catch ( \Exception $e ){
+                $e_msg = $e->getMessage();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $message
+                    'message' => $e_msg
                 ), 400);
-            }else{
-                try {
-                    $this->entity_manager->remove($disciplina);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Disciplina Removida com Sucesso'
-                    ), 200);
-                
-                } catch ( \Exception $e ){
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
             }
 
         } else {
