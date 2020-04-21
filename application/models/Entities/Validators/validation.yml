@@ -24,18 +24,20 @@ Entities\ComponenteCurricular:
                 minMessage: Período não pode ser valor menor que 1. 
         credito:
             - NotNull: ~
+
             - Range:
                 min:  0, 
                 minMessage: Crédito deve ter valor positivo. 
         tipo:
             - NotNull: ~
+            - NotBlank: ~
             - OneOf:
                 choices: [OPTATIVA, ESTAGIO, ATIVIDADE COMPLEMENTAR, ATIVIDADE EXTENSAO, PROJETO CONCLUSAO]
                 message: O tipo da componente deve ser obrigatoriamente um dos seguintes (OPTATIVA, ESTAGIO, ATIVIDADE COMPLEMENTAR, ATIVIDADE EXTENSAO, PROJETO CONCLUSAO)
 Entities\Correspondencia:
     properties:
         percentual:
-            - NotBlank: ~
+            - NotNull: ~
             - Range:
                 min: 0.1
                 max: 1
