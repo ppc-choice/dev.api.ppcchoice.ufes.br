@@ -335,6 +335,13 @@ class DepartamentoController extends API_Controller {
      */
 	public function delete($codDepto)
 	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('DELETE'),
+			)
+		);
+		
 		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
 		
 		if(!is_null($depto))
