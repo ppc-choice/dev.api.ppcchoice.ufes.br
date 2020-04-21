@@ -82,30 +82,7 @@ class DepartamentoController extends API_Controller {
 	* 		"abreviatura": "DCE",
 	*		"nomeUnidadeEnsino": "Campus São Mateus"
 	* 	},
-	* 	{
-	* 		"codDepto": 2,
-	* 		"nome": "Departamento de Matemática Aplicada",
-	* 		"abreviatura": "DMA",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	*	},
-	* 	{
-	* 		"codDepto": 3,
-	* 		"nome": "Departamento de Ciências Naturais",
-	* 		"abreviatura": "DCN",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 4,
-	* 		"nome": "Departamento de Engenharias  e Tecnologias",
-	* 		"abreviatura": "DET",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 5,
-	* 		"nome": "Departamento de Educação e Ciências Humanas",
-	* 		"abreviatura": "ECH",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
+	* ...,
 	* 	{
 	* 		"codDepto": 6,
 	* 		"nome": "Departamento Não Especificado",
@@ -196,22 +173,33 @@ class DepartamentoController extends API_Controller {
 
 			if (!is_null($ues)){
 				$depto->setUnidadeEnsino($ues);
-				try {
-					$this->entity_manager->persist($depto);
-					$this->entity_manager->flush();
-	 
-					$this->api_return(array(
-						'status' => TRUE,
-						'message' => 'Departamento criado com Sucesso!',
-					), 200);
-				} catch (\Exception $e) {
-					$mensagem = $e->getMessage();
+
+				$valida = $this->validator->validate($depto);
+
+				if ( $valida->count() ){		
+					$msg = $valida->messageArray();
+		
 					$this->api_return(array(
 						'status' => FALSE,
-						'message' => $mensagem,
-					), 400);
+						'message' => $msg,
+					), 400);	
+				} else {
+					try {
+						$this->entity_manager->persist($depto);
+						$this->entity_manager->flush();
+		 
+						$this->api_return(array(
+							'status' => TRUE,
+							'message' => 'Departamento criado com Sucesso!',
+						), 200);
+					} catch (\Exception $e) {
+						$mensagem = $e->getMessage();
+						$this->api_return(array(
+							'status' => FALSE,
+							'message' => $mensagem,
+						), 400);
+					}
 				}
-
 			}else{
 				$this->api_return(array(
 					'status' => FALSE,
@@ -252,12 +240,11 @@ class DepartamentoController extends API_Controller {
 				{
 					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
 				}
-
+				$depto->setUnidadeEnsino($ues);
 			}
 			
             if(empty($msg))
             {
-				$depto->setUnidadeEnsino($ues);
                 if(isset($payload['nome']))
                 {
                     $depto->setNome($payload['nome']);
@@ -267,20 +254,32 @@ class DepartamentoController extends API_Controller {
                     $depto->setAbreviatura($payload['abreviatura']);
 				}
 				
-                try {
-                    $this->entity_manager->merge($depto);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Departamento atualizado com sucesso!'
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
+				$valida = $this->validator->validate($depto);
+
+				if ( $valida->count() ){
+					$msg = $valida->messageArray();
+		
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $msg,
+					), 400);	
+				} else {
+					try {
+						$this->entity_manager->merge($depto);
+						$this->entity_manager->flush();
+						$this->api_return(array(
+							'status' => TRUE,
+							'message' => 'Departamento atualizado com sucesso!'
+						), 200);
+					} catch (\Exception $e) {
+						$e_msg = $e->getMessage();
+						$this->api_return(array(
+							'status' => FALSE,
+							'message' => $e_msg
+						), 400);
+					}	
+				}
+
             }else{
                 $this->api_return(array(
                     'status' => FALSE,
@@ -299,6 +298,37 @@ class DepartamentoController extends API_Controller {
                 'message' => 'Departamento não encontrado!',
             ), 404);
         }
-    }
+	}
+	
+
+
+	public function delete($codDepto)
+	{
+		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
+		
+		if(!is_null($depto))
+		{
+			try {
+				$this->entity_manager->remove($depto);
+				$this->entity_manager->flush();
+				$this->api_return(array(
+					'status' => TRUE,
+					'message' => 'Departamento removido com sucesso!'
+				), 200);
+				
+			} catch (\Exception $e) {
+				$msg = $e->getMessage();
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg
+				), 400);
+			}
+		}else{
+			$this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Departamento não encontrado!',
+            ), 404);
+		}
+	}
     
 }
