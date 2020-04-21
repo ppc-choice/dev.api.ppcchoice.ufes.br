@@ -216,7 +216,26 @@ class DepartamentoController extends API_Controller {
 	}
 	
 
-
+	/**
+     * @api {put} departamentos/:codDepto Atualizar Departamento.
+     * @apiName update
+     * @apiGroup Departamentos
+     * @apiParam {Number} codDepto Código do Departamento.
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Departamento não encontrado 404) Departamento não encontrado.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "nome" : "Departamento de Ciência de Dados",
+	 *         "abreviatura" : "DCD",
+	 *         "unidadeEnsino" : 1
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Departamento atualizado com sucesso"
+     *     }
+     */
 	public function update($codDepto)
     {
 		header("Access-Controll-Allow-Origin: *");
@@ -302,9 +321,9 @@ class DepartamentoController extends API_Controller {
 	
 
 	/**
-     * @api {delete} departamentos/:codDepto Deletar Departamento
+     * @api {delete} departamentos/:codDepto Deletar Departamento.
      * @apiName delete
-     * @apiGroup Departamento
+     * @apiGroup Departamentos
      * @apiParam {Number} codDepto Código do Departamento.
      * @apiError  (Campo não encontrado 400) NotFound Departamento não encontrado.
      *  @apiSuccessExample {json} Success-Response:
