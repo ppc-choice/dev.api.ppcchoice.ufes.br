@@ -14,7 +14,7 @@ class DependenciaController extends API_Controller
     }
 
     /**
-    * @api {get} dependencias Solicitar todas depêndencias existentes entre componentes curriculares.
+    * @api {get} dependencias Requisitar todas depêndencias existentes entre componentes curriculares.
     *
     * @apiName findAll
     * @apiGroup Dependência
@@ -61,7 +61,7 @@ class DependenciaController extends API_Controller
     }
 
     /**
-    * @api {get} dependencias/:codCompCurric/:codPreReq Solicitar depêndencias entre componentes curriculares.
+    * @api {get} dependencias/:codCompCurric/:codPreReq Requisitar depêndencias entre componentes curriculares.
     * @apiParam {Number} codCompCurric Código de identificação de uma componente curricular.
     * @apiParam {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
     *
@@ -130,7 +130,7 @@ class DependenciaController extends API_Controller
 
 
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
+    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias Requisitar todas depêndencias entre componentes as curriculares de um Projeto Pedagógico de Curso.
     * @apiParam {Number} codPpc Código identificador de um projeto pedagógico de curso.
     *
     * @apiName findByIdPpc
@@ -182,7 +182,7 @@ class DependenciaController extends API_Controller
     } 
 
     /**
-    * @api {post} dependencias Adicionar nova depêndencia entre componentes curriculares.
+    * @api {post} dependencias Criar nova depêndencia entre componentes curriculares.
     *
     * @apiName add
     * @apiGroup Dependência
@@ -208,13 +208,7 @@ class DependenciaController extends API_Controller
     * @apiError CursoNotFound Não foi possível registrar um novo Curso.
 	* @apiSampleRequest dependencias
 	* @apiErrorExample {JSON} Error-Response:
-	* HTTP/1.1 404 Not Found
-	* {
-	*	"status": false,
-	*	"message": "Campo Obrigatorio Não Encontrado!"
-	* }
-
-    */
+	*/
     
 
     public function add()
@@ -261,11 +255,17 @@ class DependenciaController extends API_Controller
                         }
                     }else
                     {
-                        echo "Componentes devem ter periodos distintos";
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'As componentes curriculares devem ter periodos distintos',
+                        ), 200);
                     }
                 }else
                 {
-                    echo " As componentes devem pertecer ao mesmo ppc"; 
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'As componentes curriculares devem pertecer ao mesmo ppc',
+                    ), 200);
                 }
 				
 
@@ -278,6 +278,35 @@ class DependenciaController extends API_Controller
         }
     }
 
+    /**
+    * @api {PUT} dependencias Criar nova depêndencia entre componentes curriculares.
+    *
+    * @apiName update
+    * @apiGroup Dependência
+    *
+    * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
+    * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
+    * 
+    * @apiExample {curl} Exemplo:
+	*     curl -i http://dev.api.ppcchoice.ufes.br/dependencias/6/1
+	* @apiParamExample {json} Request-Example:
+    * {
+    *     "codCompCurric": 8,
+    *     "codPreRequisito": 1
+    * }
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Dependencia atualizada com sucesso!"
+	* {
+    *
+    * @apiError CursoNotFound Não foi possível atualizar Dependeência.
+	* @apiSampleRequest dependencias
+	* @apiErrorExample {JSON} Error-Response:
+	*/
+    
     public function update($codCompCurric, $codPreRequisito)
 	{
         header("Access-Control-Allow-Origin: *");
@@ -320,7 +349,7 @@ class DependenciaController extends API_Controller
                                     
                                     $this->api_return(array(
                                         'status' => TRUE,
-                                        'message' => 'Dependencia alterada com sucesso',
+                                        'message' => 'Dependencia atualizada com sucesso',
                                     ), 200);
                                 } catch (\Exception $e) {
                                     $this->api_return(array(
@@ -453,6 +482,29 @@ class DependenciaController extends API_Controller
             }
     }
 
+    /**
+    * @api {DELETE} dependencias Deletar depêndencia entre componentes curriculares.
+    *
+    * @apiName update
+    * @apiGroup Dependência
+    *
+    * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
+    * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
+    * 
+    * @apiExample {curl} Exemplo:
+	*     curl -i http://dev.api.ppcchoice.ufes.br/dependencias/6/1
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    * HTTP/1.1 200 OK
+	* {
+	* 	"status": true,
+	* 	"result": "Dependencia deletada com sucesso!"
+	* {
+    *
+    * @apiError CursoNotFound Não foi possível deletar Dependeência.
+	* @apiSampleRequest dependencias
+	* @apiErrorExample {JSON} Error-Response:
+    */
     public function delete($codCompCurric, $codPreRequisito)
 	{
         header("Access-Control-Allow-Origin: *");

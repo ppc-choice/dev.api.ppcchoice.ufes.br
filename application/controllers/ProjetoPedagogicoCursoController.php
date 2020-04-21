@@ -14,10 +14,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
     }
 
     /**
-    * @api {get} projetos-pedagogicos-curso Solicitar todos Projetos Pedagógicos de Curso.
+    * @api {get} projetos-pedagogicos-curso Requisitar todos Projetos Pedagógicos de Curso.
     *
     * @apiName findAll
     * @apiGroup Projeto Pedagógico Curso
+    *
+    * 
+    * @apiExample {curl} Exemplo:
+    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/
     *
     * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
@@ -70,12 +74,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
     }
         
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc Solicitar Projeto Pedagógico de Curso.
+    * @api {get} projetos-pedagogicos-curso/:codPpc Requisitar Projeto Pedagógico de Curso.
     * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiName findById
     * @apiGroup Projeto Pedagógico Curso
     *
+    * @apiExample {curl} Exemplo:
+    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
     *
     * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
@@ -90,10 +96,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
     * @apiSuccess {Number} chTotal  Carga horária total que as componentes curriculares do curso deve possuir.
     * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
-    * 
-    * apiExample {curl} Exemplo:
-    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
+    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.      
     * @apiSuccessExample {JSON} Success-Response:
     *   HTTP/1.1 200 OK
     *   {
@@ -163,7 +166,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
     *
     *
     * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
-    * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso.
+    * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso (Obrigatório para projeto pedagógicos de cursos INATIVOS)..
     * @apiSuccess {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
     * @apiSuccess {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
     * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
@@ -175,8 +178,9 @@ class ProjetoPedagogicoCursoController extends API_Controller
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
     * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     * 
-    * apiExample {curl} Exemplo:
+    * @apiExample {curl} Exemplo:
     *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/
+    *
     * @apiParamExample {JSON} Request-Example:
     *   HTTP/1.1 200 OK
     *   {
@@ -193,22 +197,16 @@ class ProjetoPedagogicoCursoController extends API_Controller
     *       "anoAprovacao": 2011,
     *       "situacao": "ATIVO ANTERIOR",
     *   }
-    *.
+    *
+    *
     * @apiSuccessExample {JSON} Success-Response:
     *     HTTP/1.1 200 OK
     *     {
     *       status": true,
-    *       "message": "Projeto Pedagógico de Curso criada com sucesso!"
+    *       "message": "Projeto Pedagógico de Curso criado com sucesso!"
     *     }
     *
     * @apiError PpcNotFound Não foi possível adicionar um novo Projeto Pedagogico Curso.
-	* @apiSampleRequest cursos/
-	* @apiErrorExample {JSON} Error-Response:
-	* HTTP/1.1 404 Not Found
-	* {
-	*	"status": false,
-	*	"message": "Campo Obrigatorio Não Encontrado!"
-	* }
     */
     
     public function add()
@@ -243,7 +241,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                             $situacao = false;
                             $this->api_return(array(
                                     'status' => FALSE,
-                                    'message' => 'Não é permitido mais de um ppc com a situação corrente e ativo-anterior',
+                                    'message' => 'Não é permitido mais de um Projeto Pedaogico de Curso com a situação corrente e ativo-anterior',
                             ), 400);
                             break;
                         }                    
@@ -279,7 +277,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
             
                                 $this->api_return(array(
                                     'status' => TRUE,
-                                    'mesage' => 'PPCCriadoComSucesso',
+                                    'mesage' => 'Projeto Pedaogico de Curso criado com sucesso',
                                 ), 200);
                             } catch (\Exception $e) {
                                 $this->api_return(array(
@@ -291,7 +289,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         {
                             $this->api_return(array(
                                     'status' => FALSE,
-                                    'message' => 'A data de termino de vigência de PPCs com situação CORRENTE ou ATIVO-ANTERIOR deve ser null',
+                                    'message' => 'A data de termino de vigência de Projeto Pedaogico de Curso com situação CORRENTE ou ATIVO-ANTERIOR deve ser vazia',
                             ), 400);
                         }
                     
@@ -330,7 +328,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                 
                                     $this->api_return(array(
                                         'status' => TRUE,
-                                        'result' => 'PPC criado com sucesso',
+                                        'result' => 'Projeto Pedagogico de Curso criado com sucesso',
                                     ), 200);
                                 } catch (\Exception $e) {
                                     $this->api_return(array(
@@ -351,7 +349,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
                 {
                         $this->api_return(array(
                             'status' => FALSE,
-                            'message' => 'A data de termino de vigência de PPCs com situação INATIVO não pode ser vazia',
+                            'message' => 'A data de termino de vigência de Projeto Pedagogico de Curso com situação INATIVO não pode ser vazia',
                             ), 400);
                 }
             }else
@@ -371,6 +369,55 @@ class ProjetoPedagogicoCursoController extends API_Controller
         }
     }   
 
+    /**
+    * @api {PUT} projetos-pedagogicos-curso/:codPpc Atualizar Projeto Pedagógico de Curso.
+    *
+    * @apiName update
+    * @apiGroup Projeto Pedagógico Curso
+    *
+    * @apiExample {curl} Exemplo:
+    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
+    *
+    * @apiSuccess {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
+    * @apiSuccess {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso (Obrigatório para projeto pedagógicos de cursos INATIVOS).
+    * @apiSuccess {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
+    * @apiSuccess {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
+    * @apiSuccess {Number} chTotalAtividadeCmplt  Carga horária total de atividades complementares que o curso deve possuir.
+    * @apiSuccess {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
+    * @apiSuccess {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
+    * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
+    * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
+    * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
+    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
+    * 
+    * @apiParamExample {JSON} Request-Example:
+    *   HTTP/1.1 200 OK
+    *   {
+    *       "codCurso": 1   
+    *       "dtInicioVigencia": "2011-08-01",
+    *       "dtTerminoVigencia": null,
+    *       "chTotalDisciplinaOpt": 240,
+    *       "chTotalDisciplinaOb": 3030,
+    *       "chTotalAtividadeExt": 0,
+    *       "chTotalAtividadeCmplt": 180,
+    *       "chTotalProjetoConclusao": 120,
+    *       "chTotalEstagio": 300,
+    *       "qtdPeriodos": 10,
+    *       "anoAprovacao": 2011,
+    *       "situacao": "INATIVO",
+    *   }
+    *
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    *     HTTP/1.1 200 OK
+    *     {
+    *       status": true,
+    *       "message": "Projeto Pedagógico de Curso atualizado com sucesso!"
+    *     }
+    *
+    * @apiError PpcNotFound Não foi possível atualizar Projeto Pedagogico Curso.
+    */
     public function update($codPpc)
     {
         header("Access-Control-Allow-Origin: *");
@@ -406,7 +453,11 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         if(new DateTime($payload['dtInicioVigencia']) < $ppc->getDtTerminoVigencia())
                             $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
                         else
-                            echo 'a data de inicio de vigencia não pode ser menor que a de termino de vigencia';
+                        {   $this->api_return(array(
+                                'status' => false,
+                                'message' => "A data de inicio de vigencia não pode ser menor que a de termino de vigencia",
+                            ), 400); 
+                        }
                     }
                     else
                         $ppc->setDtTerminoVigencia(new DateTime($payload['dtInicioVigencia']));
@@ -416,7 +467,11 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     if($ppc->getSituacao()=="INATIVO")
                         $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
                     else
-                        echo "ppc com situação corrente ou inativa não deve possuir data de termino de vigencia";
+                    {   $this->api_return(array(
+                            'status' => false,
+                            'message' => "Projeto Pedagogico de Curso com situação corrente ou inativa não deve possuir data de termino de vigencia",
+                        ), 400); 
+                    }
                 }
 
                 if(isset($payload['situacao']))
@@ -437,14 +492,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
                                 $situacao = false;
                                 $this->api_return(array(
                                         'status' => FALSE,
-                                        'message' => 'Não é permitido mais de um ppc com a situação corrente e ativo-anterior',
+                                        'message' => 'Não é permitido mais de um Projeto Pedagogico de Curso com a situação corrente e ativo-anterior',
                                 ), 400);
                                 break;
                             }  
                         }                  
                         if($situacao)//se não existir ppcs com mesma situação de corrente e ativo anterior
                         {
-                            echo "situacao alterada";
                             $ppc->setSituacao($uppersituacao);
                         }
                     }else
@@ -453,10 +507,20 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         {
                             if(new DateTime($payload['dtInicioVigencia']) < $payload['dtTerminoVigencia'])
                                 $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+                            else
+                            {
+                                $this->api_return(array(
+                                    'status' => FALSE,
+                                    'message' => 'A data de inicio de vigência não pode ser maior que a data de termino de vigencia',
+                                    ), 400);
+                            }
 
                         }else
                         {
-                            echo "Data de termino de vigencia é obrigatória para ppcs inativos";
+                            $this->api_return(array(
+                                'status' => FALSE,
+                                'message' => 'A data de termino de vigencia é obrigatória para ppcs inativos',
+                                ), 400);
                         }
                     }    
                 }
@@ -485,13 +549,16 @@ class ProjetoPedagogicoCursoController extends API_Controller
                             }  
                         }                  
                         if($situacao)//se não existir ppcs com mesma situação de corrente e ativo anterior
-                        {
-                            echo "curso do ppc alterado";
                             $ppc->setCurso($curso);
-                        }
+                        
                     }
                     else
-                    echo"curso nao encontrado";
+                    {
+                        $this->api_return(array(
+                            'status' => false,
+                            'message' => "Curso não encontrado",
+                        ), 400);
+                    }
                 }
 
                 try
@@ -512,31 +579,55 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
             }else
             {
-                echo "campo obrigatorio vazio";
+                $this->api_return(array(
+                    'status' => false,
+                    'message' => "Campo obrigatorio vazio",
+                ), 400);
             }
         }else
         {
-            echo "ppc não encontrado";
+            $this->api_return(array(
+                'status' => false,
+                'message' => "Projeto Pedagogico de Curso não encontrado",
+            ), 400);
         }
     }
 
+    /**
+    * @api {DELETE} projetos-pedagogicos-curso/:codPpc Deletar Projeto Pedagógico de Curso.
+    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
+    * @apiName update
+    * @apiGroup Projeto Pedagógico Curso
+    *
+    * @apiExample {curl} Exemplo:
+    *      curl -i http://dev.api.ppcchoice.ufes.br/projetos-pedagogicos-curso/1
+    *
+    * @apiSuccessExample {JSON} Success-Response:
+    *     HTTP/1.1 200 OK
+    *     {
+    *       status": true,
+    *       "message": "Projeto Pedagógico de Curso deletado com sucesso!"
+    *     }
+    *
+    * @apiError PpcNotFound Não foi possível deletar um novo Projeto Pedagogico Curso.
+    */
     public function delete($codPpc)
 	{
         header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-			'methods' => array('GET'),
+			'methods' => array('DELETE'),
 			)
 		);
 
 	
-        $ppc = $this->entity_manager->find('Entities\Dependencia',$codPpc);
+        $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
             
         if(!is_null($ppc))
         {
             try
             {
-                $this->entity_manager->merge($ppc);
+                $this->entity_manager->remove($ppc);
                 $this->entity_manager->flush();
                 
                 $this->api_return(array(
