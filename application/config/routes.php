@@ -8,13 +8,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 
 
-
 // Instituicao de Ensino Superior : Wellerson
 $route['instituicoes-ensino-superior/(:num)']['GET'] = 'InstituicaoEnsinoSuperiorController/getById/$1';
 $route['instituicoes-ensino-superior']['GET'] = 'InstituicaoEnsinoSuperiorController/getAll';
 $route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
 $route['instituicoes-ensino-superior/(:num)']['PUT'] = 'InstituicaoEnsinoSuperiorController/update/$1';
-
 
 
 
@@ -26,7 +24,6 @@ $route['departamentos/(:num)']['PUT'] = 'DepartamentoController/update/$1';
 
 
 
-
 // Curso : Wellerson
 $route['cursos/(:num)']['GET'] = 'CursoController/findById/$1';
 $route['cursos']['GET'] = 'CursoController/findAll';
@@ -35,13 +32,11 @@ $route['cursos/(:num)']['PUT'] = 'CursoController/update/$1';
 
 
 
-
 // Disciplinas : Gabriel
 $route['disciplinas']['GET'] = 'DisciplinaController/findAll';
 $route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaController/findById/$1/$2';
 $route['disciplinas']['POST'] = 'DisciplinaController/add';
 $route['disciplinas/(:num)/(:num)']['PUT'] = 'DisciplinaController/update/$1/$2';
-
 
 
 
@@ -72,27 +67,28 @@ $route['dependencias']['POST'] = 'DependenciaController/add';
 $route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
 $route['componentes-curriculares/(:num)']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
 $route['projetos-pedagogicos-curso/(:num)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
-$route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/add';
+$route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/create';
 $route['componentes-curriculares/(:num)']['PUT'] = 'ComponenteCurricularController/update/$1';
-
+$route['componentes-curriculares/(:num)']['DELETE'] = 'ComponenteCurricularController/delete/$1';
 
 
 // Correspondencia : Hadamo
-
 $route['correspondencias']['GET'] = 'CorrespondenciaController/findAll';
 $route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findAllByCodPpc/$1/$2';
 $route['componentes-curriculares/(:num)/correspondencias']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1';
-$route['correspondencias']['POST'] = 'CorrespondenciaController/add';
+$route['correspondencias']['POST'] = 'CorrespondenciaController/create';
 $route['correspondencias/(:num)/(:num)']['PUT'] = 'CorrespondenciaController/update/$1/$2';
+$route['correspondencias/(:num)/(:num)']['DELETE'] = 'CorrespondenciaController/delete/$1/$2';
+
 
 
 // Transicao : Hadamo
-
 $route['transicoes']['GET'] = 'TransicaoController/findAll';
 $route['unidades-ensino/(:num)/transicoes']['GET'] = 'TransicaoController/findByCodUnidadeEnsino/$1';
 $route['projetos-pedagogicos-curso/(:num)/transicoes']['GET'] = 'TransicaoController/findByCodPpc/$1';
-$route['transicoes']['POST'] = 'TransicaoController/add';
-$route['transicao/(:num)/(:num)']['PUT'] = 'TransicaoController/update/$1/$2';
+$route['transicoes']['POST'] = 'TransicaoController/create';
+$route['transicoes/(:num)/(:num)']['PUT'] = 'TransicaoController/update/$1/$2';
+$route['transicoes/(:num)/(:num)']['DELETE'] = 'TransicaoController/delete/$1/$2';
 
 
 
