@@ -218,7 +218,26 @@ class CursoController extends API_Controller {
         }
 	}
 	
-
+	/**
+     * @api {put} cursos/:codCurso Atualizar Curso
+     * @apiName update
+     * @apiGroup Cursos
+     * @apiParam {Number} codCurso Código do Curso.
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Curso não encontrado 404) Curso não encontrada
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "nome" : "Ciência dos Dados",
+	 *         "anoCriacao" : 2020 ,
+	 *         "unidadeEnsino" : 1
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Curso atualizado com sucesso"
+     *     }
+     */
 	public function update($codCurso)
     {
 		header("Access-Controll-Allow-Origin: *");
@@ -303,7 +322,19 @@ class CursoController extends API_Controller {
 	}
 	
 
-
+		/**
+     * @api {delete} cursos/:codCurso Deletar Curso.
+     * @apiName delete
+     * @apiGroup Cursos
+     * @apiParam {Number} codCurso Código do Curso.
+     * @apiError  (Campo não encontrado 400) NotFound Curso não encontrado.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Curso removido com sucesso"
+     *     }
+     */
 	public function delete($codCurso)
 	{
 		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
