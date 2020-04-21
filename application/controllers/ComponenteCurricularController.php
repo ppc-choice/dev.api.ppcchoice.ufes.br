@@ -138,7 +138,7 @@ class ComponenteCurricularController extends API_Controller {
 
     /**
      * @api {post} componentes-curriculares Criar Componente Curricular
-     * @apiName add
+     * @apiName createa
      * @apiGroup Componente Curricular
      * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
      * @apiError  (PPC/Disciplina não encontrado 404) PPCNaoEncontrado PPC não encontrado. Disciplina não encontrada
@@ -158,7 +158,7 @@ class ComponenteCurricularController extends API_Controller {
      *       "message": "Componente curricular criada com sucesso"
      *     }
      */
-    public function add()
+    public function create()
     {
         $this->_apiConfig(array(
             'methods' => array('POST'),
@@ -187,21 +187,33 @@ class ComponenteCurricularController extends API_Controller {
                 $compCurric->setDisciplina($disciplina );
                 $compCurric->setPpc($ppc);
 
-                try{
-                    $this->entity_manager->persist($compCurric);
-                    $this->entity_manager->flush();
-    
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Componente curricular criada com sucesso.',
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
+                $validador = $this->validator->validate($compCurric);
+                
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $e_msg
+                        'message' => $message
                     ), 400);
+                }else{
+                    try{
+                        $this->entity_manager->persist($compCurric);
+                        $this->entity_manager->flush();
+        
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Componente curricular criada com sucesso.',
+                        ), 200);
+                    } catch (\Exception $e) {
+                        $e_msg = $e->getMessage();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $e_msg
+                        ), 400);
+                    }
                 }
+                
             }else{              
                 $this->api_return(array(
                     'status' => FALSE,
@@ -246,7 +258,6 @@ class ComponenteCurricularController extends API_Controller {
         $msg = '';
         if(!is_null($compCurric) && !empty($payload))
         {
-            
             if(isset($payload['codPpc']))
             {
                 $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
@@ -258,7 +269,6 @@ class ComponenteCurricularController extends API_Controller {
                     array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
                 if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
             }
-
             if(empty($msg))
             {
                 $compCurric->setPpc($ppc);
@@ -275,19 +285,30 @@ class ComponenteCurricularController extends API_Controller {
                 {
                     $compCurric->setTipo($payload['tipo']);
                 }
-                try {
-                    $this->entity_manager->merge($compCurric);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Componente Curricular atualizada com sucesso'
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
+                
+                $validador = $this->validator->validate($compCurric);
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $e_msg
+                        'message' => $message
                     ), 400);
+                }else{
+                    try {
+                        $this->entity_manager->merge($compCurric);
+                        $this->entity_manager->flush();
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Componente Curricular atualizada com sucesso'
+                        ), 200);
+                    } catch (\Exception $e) {
+                        $e_msg = $e->getMessage();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $e_msg
+                        ), 400);
+                    }
                 }
             }else{
                 $this->api_return(array(
@@ -295,18 +316,58 @@ class ComponenteCurricularController extends API_Controller {
                     'message' => $msg
                 ), 404);
             } 
-        }elseif(empty($payload))
+        }elseif(empty($payload)) //se corpo da requisicao esta vazio
         {
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Corpo da Requisição vazio',
             ), 400);
-        }else{
+        }else{ //se componente nao existe
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Componente Curricular não encontrada',
             ), 404);
         }
-
     }
+
+    /**
+     * @api {delete} componentes-curriculares/:codCompCurric Deletar Componente Curricular
+     * @apiName delete
+     * @apiGroup Componente Curricular
+     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiError  (Campo não encontrado 400) NotFound Componente Curricular não encontrada.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Componente curricular removida com sucesso"
+     *     }
+     */
+    public function delete($codCompCurric)
+    {
+        $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$codCompCurric);
+        if(!is_null($compCurric))
+        {
+            try {
+                $this->entity_manager->remove($compCurric);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Componente Curricular removida com sucesso'
+                ), 200);
+            } catch (\Exception $e) {
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            }
+        }else{ 
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Componente Curricular não encontrada',
+            ), 404);
+        }
+    }
+
 }
