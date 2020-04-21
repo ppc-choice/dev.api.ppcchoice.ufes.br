@@ -302,6 +302,13 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
      */
 	public function delete($codIes)
 	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('DELETE'),
+			)
+		);
+		
 		$ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
 		
 		if(!is_null($ies))
