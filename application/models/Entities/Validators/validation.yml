@@ -19,24 +19,24 @@ Entities\InstituicaoEnsinoSuperior:
     properties:
         nome:
             - NotNull:
-                message: o nome é inválido.
+                message: o nome não pode ser nulo.
             - NotBlank: 
                 message: o nome é inválido.
         abreviatura:
             - NotNull:
-                message: a abreviatura é inválido.
+                message: a abreviatura não pode ser nula.
             - NotBlank: 
-                message: a abreviatura é inválido.
+                message: a abreviatura é inválida.
 Entities\Departamento:
     properties:
         nome:
             - NotNull:
-                message: o nome é inválido.
+                message: o nome não pode ser nulo.
             - NotBlank: 
                 message: o nome é inválido.    
         abreviatura:
             - NotNull:
-                message: a abreviatura é inválido.
+                message: a abreviatura não pode ser nula.
             - NotBlank: 
                 message: a abreviatura é inválido.
         unidadeEnsino:
@@ -46,13 +46,17 @@ Entities\Curso:
     properties:
         nome:
             - NotNull:
-                message: o nome é inválido.
+                message: o nome não pode ser nulo.
             - NotBlank: 
                 message: o nome é inválido.     
         anoCriacao:
             - NotNull:
+                message: o ano de criacao não pode ser nulo.
+            - NotBlank: 
                 message: o ano de criacao é inválido.
-            - Type: interger
+            - Type:
+                type: integer
+                message: o ano de criacao nao é do tipo inteiro.
         unidadeEnsino:
             - NotNull:
                 message: o Unidade de Ensino é inválida.
