@@ -9,6 +9,7 @@ Entities\Usuario:
                 message: o endereço {{ value }} é inválido.
                 checkMX: true
         papel:
+            - NotNull: ~
             - OneOf:
                 choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
     constraints:    

@@ -31,7 +31,7 @@ class ProjetoPedagogicoCursoRepository extends EntityRepository
 
         $result = $qb->getResult();
 
-        return $result;
+        return $result[0];
       
     } 
 } 
