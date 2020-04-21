@@ -41,6 +41,7 @@ $route['disciplinas']['GET'] = 'DisciplinaController/findAll';
 $route['disciplinas/(:num)/(:num)']['GET'] = 'DisciplinaController/findById/$1/$2';
 $route['disciplinas']['POST'] = 'DisciplinaController/add';
 $route['disciplinas/(:num)/(:num)']['PUT'] = 'DisciplinaController/update/$1/$2';
+$route['disciplinas/(:num)/(:num)']['DELETE'] = 'DisciplinaController/delete/$1/$2';
 
 
 
@@ -50,6 +51,7 @@ $route['unidades-ensino']['GET'] = 'UnidadeEnsinoController/findAll';
 $route['unidades-ensino/(:num)']['GET'] = 'UnidadeEnsinoController/findById/$1';
 $route['unidades-ensino']['POST'] = 'UnidadeEnsinoController/add';
 $route['unidades-ensino/(:num)']['PUT'] = 'UnidadeEnsinoController/update/$1';
+$route['unidades-ensino/(:num)']['DELETE'] = 'UnidadeEnsinoController/delete/$1';
 
 
 

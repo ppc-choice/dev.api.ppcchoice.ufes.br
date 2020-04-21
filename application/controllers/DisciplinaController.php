@@ -6,7 +6,7 @@ class DisciplinaController extends API_Controller
 {
 
     /**
-     * @api {get} /disciplinas Listar todas as Disciplinas dos Departamentos
+     * @api {get} disciplinas Listar todas as Disciplinas dos Departamentos
      * @apiName findAll
      * @apiGroup Disciplinas
      * @apiError 404 Não encontrado
@@ -42,7 +42,7 @@ class DisciplinaController extends API_Controller
     }
 
     /**
-     * @api {get} /disciplinas/:numDisciplina Listar todas as Disciplinas dos Departamentos
+     * @api {get} disciplinas/:codDepto/:numDisciplina Listar todas as Disciplinas dos Departamentos
      * @apiName findById
      * @apiGroup Disciplinas
      * @apiError 404 Não encontrado
@@ -142,6 +142,19 @@ class DisciplinaController extends API_Controller
         }
     }
 
+    /**
+     * @api {put} disciplinas/:codDepto/:numDisciplina Atualizar uma Disciplina específica
+     * @apiName update
+     * @apiGroup Disciplinas
+     * @apiError 404 Não encontrado
+     * @apiError 400 Requisição nula
+     *
+     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
+     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     *
+     * @apiSuccess {String} nome Nome da Disciplina.
+     * @apiSuccess {Number} ch Carga Horária da Disciplina.
+     */
     public function update($codDepto, $numDisciplina)
     {
         $this->_apiconfig(array(
@@ -185,6 +198,58 @@ class DisciplinaController extends API_Controller
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Disciplina não encontrada',
+            ), 404);
+        }
+    }
+
+    /**
+     * @api {delete} disciplinas/:codDepto/:numDisciplina Remover uma Disciplina específica
+     * @apiName delete
+     * @apiGroup Disciplinas
+     * @apiError 404 Não encontrado
+     * @apiError 400 Requisição nula
+     *
+     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
+     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     *
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Disciplina Removida com Sucesso"
+     *     }
+     */
+    public function delete($codDepto, $numDisciplina)
+    {
+        $this->_apiconfig(array(
+            'methods' => array('DELETE')
+        ));
+
+        $disciplina = $this->entity_manager->find('Entities\Disciplina', 
+        array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
+
+        if ( !is_null($disciplina) ){
+
+            try {
+                $this->entity_manager->remove($disciplina);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Disciplina Removida com Sucesso'
+                ), 200);
+            
+            } catch ( \Exception $e ){
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            } 
+
+        } else {
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Disciplina não Encontrada'
             ), 404);
         }
     }

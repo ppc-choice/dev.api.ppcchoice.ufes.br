@@ -15,3 +15,17 @@ Entities\Usuario:
         - Callback:
             methods: 
                 -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+Entities\Disciplina:
+    properties:
+        nome:
+            - NotBlank: ~   
+        ch:
+            - NotBlank: ~
+Entities\UnidadeEnsino:
+    properties:
+        nome:
+            - NotBlank: ~     
+        cnpj:
+            - NotBlank: ~
+        ies:
+            - NotBlank: ~
