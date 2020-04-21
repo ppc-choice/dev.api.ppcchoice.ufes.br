@@ -138,7 +138,7 @@ class CorrespondenciaController extends API_Controller {
 
     /**
      * @api {post} correspondencias Criar correspondência
-     * @apiName add
+     * @apiName create
      * @apiGroup Correspondência
      * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
      * @apiError  (Componente curricular não encontrada 404) ComponenteNaoEncontrada Componente curricular não encontrada.
@@ -157,7 +157,7 @@ class CorrespondenciaController extends API_Controller {
      *       "message": "Correspondência criada com sucesso."
      *     }
      */
-    public function add()
+    public function create()
     {
         $this->_apiConfig(array(
             'methods' => array('POST'),
@@ -185,10 +185,19 @@ class CorrespondenciaController extends API_Controller {
                     $corresp -> setComponenteCurricular($compCurric);
                     $corresp -> setComponenteCurricularCorresp($compCorresp);
                     
-                    if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
+                    if( (0 < $payload['percentual']))
                     {
                         $corresp->setPercentual($payload['percentual']);
-
+                    }
+                    $validador = $this->validator->validate($corresp);
+                    if($validador->count())
+                    {
+                        $message = $validador->messageArray();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $message
+                        ), 400);
+                    }else{
                         try {
                             $this->entity_manager->persist($corresp);
                             $this->entity_manager->flush();
@@ -204,13 +213,7 @@ class CorrespondenciaController extends API_Controller {
                                 'message' => $e_msg
                             ), 400);
                         }
-                    }else{
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1.',
-                        ), 400);
                     }
-                    
                 }else{
                     $this->api_return(array(
                         'status' => FALSE,
@@ -264,53 +267,98 @@ class CorrespondenciaController extends API_Controller {
             {
                 $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
                 if(is_null($compCurric)) $msg = $msg . 'Componente curricular não encontrada. ';
+                else $correspondencia->setComponenteCurricular($compCurric);
             }
             if(isset($payload['codCompCurricCorresp']))
             {
                 $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
                 if(is_null($compCorresp)) $msg = $msg . 'Componente curricular correspondente não encontrada.';
+                else $correspondencia->setComponenteCurricularCorresp($compCorresp);
             }
-            if(empty($msg))
+            if(empty($msg)){
                 if(isset($payload['percentual']))
                 {
-                    if( (0 < $payload['percentual']) && ( $payload['percentual'] <= 1 ) )
-                    {
-                        $correspondencia->setPercentual($payload['percentual']);
-                        $correspondencia->setComponenteCurricular($compCurric);
-                        $correspondencia->setComponenteCurricularCorresp($compCorresp);
-                        try {
-                            $this->entity_manager->merge($correspondencia);
-                            $this->entity_manager->flush();
-                            $this->api_return(array(
-                                'status' => TRUE,
-                                'message' => 'Correspondência atualizada com sucesso'
-                            ), 200);
-                        } catch (\Exception $e) {
-                            $e_msg = $e->getMessage();
-                            $this->api_return(array(
-                                'status' => FALSE,
-                                'message' => $e_msg
-                            ), 400);
-                        }
-                    }else{
+                    $correspondencia->setPercentual($payload['percentual']);
+                }
+                $validador = $this->validator->validate($correspondencia);
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $message
+                    ), 400);
+                }else{
+                    try {
+                        $this->entity_manager->merge($correspondencia);
+                        $this->entity_manager->flush();
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Correspondência atualizada com sucesso'
+                        ), 200);
+                    } catch (\Exception $e) {
+                        $e_msg = $e->getMessage();
                         $this->api_return(array(
                             'status' => FALSE,
-                            'message' => 'Percentual de correspondência deve ser > 0 e <= 1.',
+                            'message' => $e_msg
                         ), 400);
                     }
+                }
             }else{
                 $this->api_return(array(
                     'status' => FALSE,
                     'message' => $msg
                 ), 404);
             }
-        }elseif(empty($payload))
+        } elseif(empty($payload))
         {
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Corpo da Requisição vazio',
             ), 400);
         }else{
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Correspondência não encontrada',
+            ), 404);
+        }
+    }
+
+    /**
+     * @api {delete} correspondencias/:codCompCurric/:codCompCorresp Deletar Correspondência
+     * @apiName delete
+     * @apiGroup Correspondência
+     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
+     * @apiError  (Campo não encontrado 400) NotFound Correspondência não encontrada.
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Correspondência removida com sucesso"
+     *     }
+     */
+    public function delete($codCompCurric,$codCompCorresp)
+    {
+        $correspondencia = $this->entity_manager->find('Entities\Correspondencia',
+                array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
+        if(!is_null($correspondencia))
+        {
+            try {
+                $this->entity_manager->remove($correspondencia);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Correspondência removida com sucesso'
+                ), 200);
+            } catch (\Exception $e) {
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            }
+        }else{ 
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Correspondência não encontrada',
