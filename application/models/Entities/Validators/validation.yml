@@ -18,25 +18,41 @@ Entities\Usuario:
 Entities\InstituicaoEnsinoSuperior:
     properties:
         nome:
+            - NotNull:
+                message: o nome é inválido.
             - NotBlank: 
-                message: o nome {{ value }} é inválido.
+                message: o nome é inválido.
         abreviatura:
+            - NotNull:
+                message: a abreviatura é inválido.
             - NotBlank: 
-                message: a abreviatura {{ value }} é inválido.
+                message: a abreviatura é inválido.
 Entities\Departamento:
     properties:
         nome:
+            - NotNull:
+                message: o nome é inválido.
             - NotBlank: 
-                message: o nome {{ value }} é inválido.    
+                message: o nome é inválido.    
         abreviatura:
+            - NotNull:
+                message: a abreviatura é inválido.
             - NotBlank: 
-                message: a abreviatura {{ value }} é inválido.
+                message: a abreviatura é inválido.
+        unidadeEnsino:
+            - NotNull:
+                message: o Unidade de Ensino é inválida.
 Entities\Curso:
     properties:
         nome:
+            - NotNull:
+                message: o nome é inválido.
             - NotBlank: 
-                message: o nome {{ value }} é inválido.     
+                message: o nome é inválido.     
         anoCriacao:
-            - NotBlank: 
-                message: o ano de criacao {{ value }} é inválido.
-   
+            - NotNull:
+                message: o ano de criacao é inválido.
+            - Type: interger
+        unidadeEnsino:
+            - NotNull:
+                message: o Unidade de Ensino é inválida.
