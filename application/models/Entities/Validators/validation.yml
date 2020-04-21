@@ -24,8 +24,8 @@ Entities\Disciplina:
 Entities\UnidadeEnsino:
     properties:
         nome:
-            - NotBlank: ~     
+            - NotBlank: ~   
         cnpj:
             - NotBlank: ~
         ies:
-            - NotBlank: ~
+            - NotNull: ~

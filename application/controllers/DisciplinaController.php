@@ -229,22 +229,31 @@ class DisciplinaController extends API_Controller
         array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
 
         if ( !is_null($disciplina) ){
-
-            try {
-                $this->entity_manager->remove($disciplina);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'message' => 'Disciplina Removida com Sucesso'
-                ), 200);
-            
-            } catch ( \Exception $e ){
-                $e_msg = $e->getMessage();
+            $validador = $this->validator->validate($disciplina);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $e_msg
+                    'message' => $message
                 ), 400);
-            } 
+            }else{
+                try {
+                    $this->entity_manager->remove($disciplina);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Disciplina Removida com Sucesso'
+                    ), 200);
+                
+                } catch ( \Exception $e ){
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }
 
         } else {
             $this->api_return(array(

@@ -173,25 +173,37 @@ class UnidadeEnsinoController extends API_Controller
             }
 
             if ( empty($msg) ){
-
+                
                 if ( isset($payload['nome']) ) $ues->setNome($payload['nome']);
 
                 if ( isset($payload['cnpj']) ) $ues->setCnpj($payload['cnpj']);
 
-                try {
-                    $this->entity_manager->merge($ues);
-                    $this->entity_manager->flush();
-        
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Unidade de Ensino Atualizada Com Sucesso',
-                    ), 200);
-                } catch (\Exception $e){
-                    $e_msg =  $e->getMessage();
+                $validador = $this->validator->validate($ues);
+                if($validador->count())
+                {
+                    $message = $validador->messageArray();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $e_msg,
+                        'message' => $message
                     ), 400);
+
+                }else{
+
+                    try {
+                        $this->entity_manager->merge($ues);
+                        $this->entity_manager->flush();
+            
+                        $this->api_return(array(
+                            'status' => TRUE,
+                            'message' => 'Unidade de Ensino Atualizada Com Sucesso',
+                        ), 200);
+                    } catch (\Exception $e){
+                        $e_msg =  $e->getMessage();
+                        $this->api_return(array(
+                            'status' => FALSE,
+                            'message' => $e_msg,
+                        ), 400);
+                    }
                 }
 
             } else {
