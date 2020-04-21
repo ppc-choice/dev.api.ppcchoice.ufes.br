@@ -93,50 +93,43 @@ class UnidadeEnsinoController extends API_Controller
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( isset($payload['nome']) && isset($payload['codIes']) 
-                && isset($payload['cnpj'])){
+        if ( isset($payload['nome'], $payload['codIes'], $payload['cnpj']) ){
 
+            // Cria novo objeto Unidade de Ensino Superior
             $ues = new \Entities\UnidadeEnsino;
             $ues->setNome($payload['nome']);
             $ues->setCnpj($payload['cnpj']);
 
+            // Insere a Instituição de Ensino Superior do código dado.
+            // Será analisado pelo validator posteriormente em caso de existência ou não.
             $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
+            $ues->setIes($ies);
 
-            if ( !is_null($ies) ){
-                $ues->setIes($ies);
-
-                $validador = $this->validator->validate($ues);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-
-                } else {
-                    try {
-                        $this->entity_manager->persist($ues);
-                        $this->entity_manager->flush();
-            
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Unidade De Ensino Criada Com Sucesso',
-                        ), 200);
-                    } catch (\Exception $e){
-                        $msg =  $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $msg,
-                        ), 400);
-                    }
-                }
-
-            } else {
+            $validador = $this->validator->validate($ues);
+            if ( $validador->count() ){
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => 'Instituição de Ensino Superior Não Encontrado'
+                    'message' => $message
                 ), 400);
+
+            } else {
+                try {
+                    $this->entity_manager->persist($ues);
+                    $this->entity_manager->flush();
+            
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Unidade De Ensino Criada Com Sucesso',
+                    ), 200);
+                
+                } catch (\Exception $e){
+                    $msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $msg,
+                    ), 400);
+                }
             }
 
         } else {
@@ -169,59 +162,44 @@ class UnidadeEnsinoController extends API_Controller
         $ues = $this->entity_manager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
-        $msg = '';
 
-        if ( !is_null($ues) && !empty($payload) ){
+        if ( !is_null($ues) ){
 
-            if ( isset($payload['ies']) ){
-                $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['ies']);
-                
-                if ( is_null($ies) ){
-                    $msg = $msg . 'Instituição de Ensino Superior não encontrada. ';
-                }
-
+            if ( isset($payload['codIes']) ){
+                $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
                 $ues->setIes($ies);
             }
 
-            if ( empty($msg) ){
+            if ( isset($payload['nome']) ) $ues->setNome($payload['nome']);
+            if ( isset($payload['cnpj']) ) $ues->setCnpj($payload['cnpj']);
 
-                if ( isset($payload['nome']) ) $ues->setNome($payload['nome']);
-
-                if ( isset($payload['cnpj']) ) $ues->setCnpj($payload['cnpj']);
-
-                $validador = $this->validator->validate($ues);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-
-                }else{
-
-                    try {
-                        $this->entity_manager->merge($ues);
-                        $this->entity_manager->flush();
-            
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Unidade de Ensino Atualizada Com Sucesso',
-                        ), 200);
-                    } catch (\Exception $e){
-                        $e_msg =  $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg,
-                        ), 400);
-                    }
-                }
-
-            } else {
+            $validador = $this->validator->validate($ues);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $msg
-                ), 404);
+                    'message' => $message
+                ), 400);
+
+            }else{
+
+                try {
+                    $this->entity_manager->merge($ues);
+                    $this->entity_manager->flush();
+            
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Unidade de Ensino Atualizada Com Sucesso',
+                    ), 200);
+
+                } catch (\Exception $e){
+                    $e_msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg,
+                    ), 400);
+                }
             }
 
         } elseif ( empty($payload) ){

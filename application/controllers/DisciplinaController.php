@@ -97,52 +97,46 @@ class DisciplinaController extends API_Controller
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( isset($payload['numDisciplina']) && isset($payload['ch'])
-                && isset($payload['nome']) && isset($payload['codDepto']) ){
+        if ( isset($payload['numDisciplina'], $payload['ch'],
+                    $payload['nome'], $payload['codDepto']) ){
 
+            // Cria novo objeto Disciplina
             $disciplina = new \Entities\Disciplina;
             $disciplina->setNumDisciplina($payload['numDisciplina']);
             $disciplina->setCh($payload['ch']);
             $disciplina->setNome($payload['nome']);
 
+            // Insere o Departamento do código de Departamento dado.
+            // Será analisado pelo validator posteriormente em caso de existência ou não.
             $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
+            $disciplina->setDepartamento($depto);
+            $disciplina->setCodDepto($payload['codDepto']);
 
-            if ( !is_null($depto) ){
-                $disciplina->setDepartamento($depto);
-                $disciplina->setCodDepto($payload['codDepto']);
-
-                $validador = $this->validator->validate($disciplina);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-    
-                } else {
-                    try {
-                        $this->entity_manager->persist($disciplina);
-                        $this->entity_manager->flush();
-            
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Disciplina Criada Com Sucesso',
-                        ), 200);
-                    } catch (\Exception $e){
-                        $msg =  $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $msg,
-                        ), 400);
-                    }
-                }
-                               
-            } else {
+            $validador = $this->validator->validate($disciplina);
+            if ( $validador->count() ){
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => 'Departamento Não Encontrado'
+                    'message' => $message
                 ), 400);
+    
+            } else {
+                try {
+                    $this->entity_manager->persist($disciplina);
+                    $this->entity_manager->flush();
+            
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Disciplina Criada Com Sucesso',
+                    ), 200);
+                
+                } catch (\Exception $e){
+                    $msg =  $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $msg,
+                    ), 400);
+                }
             }
 
         } else {
@@ -177,15 +171,14 @@ class DisciplinaController extends API_Controller
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( !is_null($disciplina) && !empty($payload) ){
+        if ( !is_null($disciplina) ){
 
             if ( isset($payload['nome']) ) $disciplina->setNome($payload['nome']);
 
             if ( isset($payload['ch']) ) $disciplina->setCh($payload['ch']);
             
             $validador = $this->validator->validate($disciplina);
-            if($validador->count())
-            {
+            if ( $validador->count() ){
                 $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,

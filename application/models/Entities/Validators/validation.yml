@@ -19,22 +19,30 @@ Entities\Disciplina:
     properties:
         numDisciplina:
             - NotNull:
-                message: o código da disciplina não deve ser nula.
-            - Type: integer
+                message: o número da disciplina não deve ser nulo (ou valor inexistente).
+            - Type: 
+                type: integer
+                message: o número da disciplina deve ser um valor numérico.
         codDepto:
             - NotNull:
-                message: o código do departamento não deve ser nulo.
-            - Type: integer
+                message: o código do departamento não deve ser nulo (ou valor inexistente).
+            - Type:
+                type: integer
+                message: o código do departamento deve ser um valor numérico.
         nome:
             - NotNull:
-                message: o nome não deve ser nulo.
+                message: o nome não deve ser nulo (ou valor inexistente).
             - NotBlank:
                 message: o nome não deve estar em branco.
-            - Type: string
+            - Type: 
+                type: string
+                message: o nome da disciplina deve ser do tipo String (sequência de carateres).
         ch:
             - NotNull: 
-                message: a carga Horária não deve ser nula.
-            - Type: integer
+                message: a carga horária não deve ser nula (ou valor inexistente).
+            - Type: 
+                type: integer
+                message: a carga horária deve ser um valor numérico.
             - Range:
                 min: 0,
                 minMessage: a carga horária deve ser um valor não negativo.
@@ -44,21 +52,25 @@ Entities\Disciplina:
 Entities\UnidadeEnsino:
     properties:
         codUnidadeEnsino:
-            - NotNull:
-                message: o código da unidade de ensino não deve ser nula.
-            - Type: integer
+            - Type: 
+                type: integer
+                message: o código da unidade de ensino deve ser um valor numérico.
         nome:
             - NotNull:
-                message: o nome não deve ser nulo.
+                message: o nome não deve ser nulo (ou valor inexistente).
             - NotBlank:
                 message: o nome não deve estar em branco.
-            - Type: string
+            - Type: 
+                type: string
+                message: o nome da unidade de ensino deve ser do tipo String (sequência de carateres).
         cnpj:
             - NotNull:
-                message: o cnpj não deve ser nulo.
+                message: o cnpj não deve ser nulo (ou valor inexistente).
             - NotBlank:
                 message: o cnpj não deve estar em branco.
-            - Type: string
+            - Type: 
+                type: string
+                message: o cnpj da unidade de ensino deve ser do tipo String (sequência de carateres).
         ies:
             - NotNull:
-                message: a instituição de ensino superior não deve ser nula.
+                message: a instituição de ensino superior não deve ser nula (ou valor inexistente).
