@@ -452,4 +452,46 @@ class DependenciaController extends API_Controller
                 ), 400);
             }
     }
+
+    public function delete($codCompCurric, $codPreRequisito)
+	{
+        header("Access-Control-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+			'methods' => array('GET'),
+			)
+		);
+
+	
+        $dependencia = $this->entity_manager->find('Entities\Dependencia',array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
+            
+        if(!is_null($dependencia))
+        {
+            try
+            {
+                $this->entity_manager->merge($dependencia);
+                $this->entity_manager->flush();
+                
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Dependencia deletada com sucesso',
+                ), 200);
+            } catch (\Exception $e) {
+                $this->api_return(array(
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ), 400);
+            }
+        }
+        else
+        {   
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Dependência não encontrada',
+            ), 400);
+
+        }
+        	
+			
+    }
 } 
