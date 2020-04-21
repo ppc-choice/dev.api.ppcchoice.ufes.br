@@ -20,6 +20,7 @@ class CorrespondenciaRepository extends EntityRepository
                 ->innerJoin('cor.componenteCurricularCorresp','cc2')
                 ->innerJoin('cc2.disciplina','disc2')
                 ->innerJoin('disc2.departamento','dep2')
+                ->orderBy('cc1.codCompCurric, cc2.codCompCurric','ASC')
                 ->getQuery()
                 ->getResult();
        
@@ -36,6 +37,7 @@ class CorrespondenciaRepository extends EntityRepository
                 ->innerJoin('cc2.ppc','ppcAlvo')
                 ->where('ppcAtual.codPpc = ?1 AND ppcAlvo.codPpc = ?2')
                 ->setParameters(array(1 => $codPpcAtual, 2 => $codPpcAlvo))
+                ->orderBy('cc1.codCompCurric, cc2.codCompCurric','ASC')
                 ->getQuery()
                 ->getResult(); 
     }
@@ -55,6 +57,7 @@ class CorrespondenciaRepository extends EntityRepository
                 ->innerJoin('disc2.departamento','dep2')
                 ->where('cc1.codCompCurric = :codCC OR cc2.codCompCurric = :codCC')
                 ->setParameter('codCC',$codCompCurric)
+                ->orderBy('cc1.codCompCurric, cc2.codCompCurric','ASC')
                 ->getQuery()
                 ->getResult();     
     }
