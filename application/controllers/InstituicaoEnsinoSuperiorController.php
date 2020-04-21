@@ -203,7 +203,25 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         }
     }
    
-
+	/**
+     * @api {put} instituicoes-ensino-superior/:codIes Atualizar Instituição de Ensino Superior.
+     * @apiName update
+     * @apiGroup Instituições de Ensino Superior
+     * @apiParam {Number} codIes Código da Instituição de Ensino Superior.
+     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
+     * @apiError  (Instituição de Ensino Superior não encontrado 404) Instituição de Ensino Superior não encontrada.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "nome" : "Universidade Federal de Nova Venécia",
+	 *         "abreviatura" : "UFNV"
+     *     }
+     *  @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status": true,
+     *       "message": "Instituição de Ensino Superior atualizada com sucesso"
+     *     }
+     */
 	public function update($codIes)
     {
 		header("Access-Controll-Allow-Origin: *");
@@ -270,10 +288,10 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	}
 	
 	/**
-     * @api {delete} instituicoes-ensino-superior/:codIes Deletar Instituição de Ensino Superior
+     * @api {delete} instituicoes-ensino-superior/:codIes Deletar Instituição de Ensino Superior.
      * @apiName delete
-     * @apiGroup Instituição de Ensino Superior
-     * @apiParam {Number} codIes Código de Instituição de Ensino Superior.
+     * @apiGroup Instituições de Ensino Superior
+     * @apiParam {Number} codIes Código da Instituição de Ensino Superior.
      * @apiError  (Campo não encontrado 400) NotFound Instituição de Ensino Superior não encontrada.
      *  @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
