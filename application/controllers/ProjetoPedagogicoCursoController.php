@@ -156,7 +156,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
     }  
 
     /**
-    * @api {post} projetos-pedagogicos-curso/ Adicionar novo Projeto Pedagógico de Curso.
+    * @api {post} projetos-pedagogicos-curso/ Criar novo Projeto Pedagógico de Curso.
     *
     * @apiName add
     * @apiGroup Projeto Pedagógico Curso
@@ -519,96 +519,44 @@ class ProjetoPedagogicoCursoController extends API_Controller
             echo "ppc não encontrado";
         }
     }
+
+    public function delete($codPpc)
+	{
+        header("Access-Control-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+			'methods' => array('GET'),
+			)
+		);
+
+	
+        $ppc = $this->entity_manager->find('Entities\Dependencia',$codPpc);
+            
+        if(!is_null($ppc))
+        {
+            try
+            {
+                $this->entity_manager->merge($ppc);
+                $this->entity_manager->flush();
+                
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Projeto Pedagogico de Curso deletado com sucesso',
+                ), 200);
+            } catch (\Exception $e) {
+                $this->api_return(array(
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ), 400);
+            }
+        }
+        else
+        {   
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => 'Projeto Pedagogico de curso não encontrado',
+            ), 400);
+
+        }		
+    }
 }
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // if(isset($payload['situacao']))
-                // {   
-                //     $situacao = true;
-                //     $uppersituacao = strtoupper($payload['situacao']);
-                    
-                //     if($uppersituacao != "INATIVO")
-                //     {
-                //         $ppcs = $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($ppc->getCurso());
-                //         $result = $this->doctrine_to_array($ppcs);
-                //         $situacao = true;
-                //         // verifica se já existe algum ppc com a situacao a ser alterada.
-                //         foreach ($result as $ppc) 
-                //         {
-                //             if($uppersituacao == $ppc['situacao'])
-                //             {
-                //                 $situacao = false;
-                //                 $this->api_return(array(
-                //                         'status' => FALSE,
-                //                         'message' => 'Não é permitido mais de um ppc com a situação corrente e ativo-anterior',
-                //                 ), 400);
-                //                 break;
-                //             }  
-                //         }                  
-                //         if($situacao)
-                //         {
-                //             echo "sitaucao alterada";
-                //             // $ppc->setSituacao($uppersituacao);
-                //         }
-                //     }
-                // }else
-                // {
-                    
-                // }
-        //         }if(isset($uppersituacao))$ppc->setSituacao($uppersituacao);
-        //         }
-        //         if(isset($payload['chTotalDisciplinaOpt']))$ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);    
-        //         if(isset($payload['chTotalDisciplinaOb']))$ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-        //         if(isset($payload['chTotalAtividadeExt']))$ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-        //         if(isset($payload['chTotalAtividadeCmplt']))$ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-        //         if(isset($payload['chTotalProjetoConclusao']))$ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-        //         if(isset($payload['chTotalEstagio']))$ppc->setChTotalEstagio($payload['chTotalEstagio']);
-        //         // if(isset())$ppc->setChTotal($chtotal);
-                
-        //         if(isset($payload['dtInicioVigencia']))$ppc->setDtinicioVigencia(new DateTime($payload['dtInicioVigencia']));
-        //         if(isset($payload['dtTerminoVigencia']))$ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
-
-        //         if(isset($payload['duracao']))$ppc->setDuracao($payload['duracao']);
-        //         if(isset($payload['qtdPeriodos']))$ppc->setQtdPeriodos($payload['qtdPeriodos']);
-        //         if(isset($payload['anoAprovacao']))$ppc->setAnoAprovacao($payload['anoAprovacao']);
-                
-        //         if(isset($curso))$ppc->setCurso($curso);
-
-        //         try
-        //             {
-        //                 $this->entity_manager->merge($ppc);
-        //                 $this->entity_manager->flush();
-                        
-        //                 $this->api_return(array(
-        //                     'status' => TRUE,
-        //                     'message' => 'PPC alterado com sucesso',
-        //                 ), 200);
-        //             } catch (\Exception $e) {
-        //                 $this->api_return(array(
-        //                     'status' => false,
-        //                     'message' => $e->getMessage(),
-        //                 ), 400);
-        //             }
-        //     }
-        
