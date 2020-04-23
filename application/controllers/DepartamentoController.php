@@ -113,7 +113,6 @@ class DepartamentoController extends API_Controller {
 		$depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
 		$result = $this->doctrine_to_array($depto,TRUE);	
 
-
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
@@ -161,58 +160,45 @@ class DepartamentoController extends API_Controller {
 			)
 		);
  
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
- 
-        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['abreviatura'])){
-           
-			$depto = new \Entities\Departamento;
-            $depto->setNome($payload['nome']);
-			$depto->setAbreviatura($payload['abreviatura']);
-			
-			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
-
-			if (!is_null($ues)){
-				$depto->setUnidadeEnsino($ues);
-
-				$valida = $this->validator->validate($depto);
-
-				if ( $valida->count() ){		
-					$msg = $valida->messageArray();
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
 		
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $msg,
-					), 400);	
-				} else {
-					try {
-						$this->entity_manager->persist($depto);
-						$this->entity_manager->flush();
-		 
-						$this->api_return(array(
-							'status' => TRUE,
-							'message' => 'Departamento criado com Sucesso!',
-						), 200);
-					} catch (\Exception $e) {
-						$mensagem = $e->getMessage();
-						$this->api_return(array(
-							'status' => FALSE,
-							'message' => $mensagem,
-						), 400);
-					}
-				}
-			}else{
+		$depto = new \Entities\Departamento;
+
+		if ( isset($payload['nome']) ) $depto->setNome($payload['nome']);
+		if ( isset($payload['abreviatura']) ) $depto->setAbreviatura($payload['abreviatura']);
+
+        if (isset($payload['codUnidadeEnsino'])){
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$depto->setUnidadeEnsino($ues);
+		}
+
+			$validacao = $this->validator->validate($depto);
+
+			if ( $validacao->count() ){		
+				$msg = $validacao->messageArray();
+	
 				$this->api_return(array(
 					'status' => FALSE,
-					'message' => 'Unidade de Ensino não identificada!',
-				), 400);				
+					'message' => $msg,
+				), 400);	
+			} else {
+				try {
+					$this->entity_manager->persist($depto);
+					$this->entity_manager->flush();
+		
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Departamento criado com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$mensagem = $e->getMessage();
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $mensagem,
+					), 400);
+				}
 			}
- 
-        } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado!',
-            ), 400);
-        }
+
 	}
 	
 
@@ -247,32 +233,18 @@ class DepartamentoController extends API_Controller {
 
         $depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-		$msg = '';
 		
-        if(!is_null($depto) && !empty($payload))
+        if(!is_null($depto))
         {            
-
-			if(isset($payload['unidadeEnsino']))
+			if(isset($payload['codUnidadeEnsino'])) //Verificar resultados de isset e is_null
             {
-                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['unidadeEnsino']);
-				if(is_null($ues))
-				{
-					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
-				}
+                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$depto->setUnidadeEnsino($ues);
 			}
-			
-            if(empty($msg))
-            {
-                if(isset($payload['nome']))
-                {
-                    $depto->setNome($payload['nome']);
-                }
-                if(isset($payload['abreviatura']))
-                {
-                    $depto->setAbreviatura($payload['abreviatura']);
-				}
-				
+
+				if(isset($payload['nome'])) $depto->setNome($payload['nome']);
+				if(isset($payload['abreviatura'])) $depto->setAbreviatura($payload['abreviatura']);
+
 				$valida = $this->validator->validate($depto);
 
 				if ( $valida->count() ){
@@ -299,12 +271,6 @@ class DepartamentoController extends API_Controller {
 					}	
 				}
 
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg
-                ), 404);
-            } 
         }elseif(empty($payload))
         {
             $this->api_return(array(
@@ -319,7 +285,6 @@ class DepartamentoController extends API_Controller {
         }
 	}
 	
-
 	/**
      * @api {delete} departamentos/:codDepto Deletar Departamento.
      * @apiName delete
@@ -341,7 +306,7 @@ class DepartamentoController extends API_Controller {
 				'methods' => array('DELETE'),
 			)
 		);
-		
+
 		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
 		
 		if(!is_null($depto))
