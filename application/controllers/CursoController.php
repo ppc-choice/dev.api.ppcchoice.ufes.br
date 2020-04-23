@@ -162,60 +162,44 @@ class CursoController extends API_Controller {
 			)
 		);
  
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		
+		$curso = new \Entities\Curso;
+
+		if ( isset($payload['nome']) ) $curso->setNome($payload['nome']);
+		if ( isset($payload['anoCriacao']) ) $curso->setAnoCriacao($payload['anoCriacao']);
  
-        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['anoCriacao'])){
-           
-			$curso = new \Entities\Curso;
-            $curso->setNome($payload['nome']);
-			$curso->setAnoCriacao($payload['anoCriacao']);
-			
-			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
-			
-			if (!is_null($ues)){
-				$curso->setUnidadeEnsino($ues);
+        if (isset($payload['codUnidadeEnsino'])){
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$curso->setUnidadeEnsino($ues);
+		}
 
-				$valida = $this->validator->validate($curso);
+			$validacao = $this->validator->validate($curso);
 
-				if ( $valida->count() ){
+			if ( $validacao->count() ){
+				$msg = $validacao->messageArray();
+	
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg,
+				), 400);	
+			} else {
+				try {
+					$this->entity_manager->persist($curso);
+					$this->entity_manager->flush();
 		
-					$msg = $valida->messageArray();
-		
+					$this->api_return(array(
+						'status' => TRUE,
+						'message' => 'Curso criado com Sucesso!',
+					), 200);
+				} catch (\Exception $e) {
+					$msg = $e->getMessage();
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg,
-					), 400);	
-				} else {
-					try {
-						$this->entity_manager->persist($curso);
-						$this->entity_manager->flush();
-		 
-						$this->api_return(array(
-							'status' => TRUE,
-							'message' => 'Curso criado com Sucesso!',
-						), 200);
-					} catch (\Exception $e) {
-						$msg = $e->getMessage();
-						$this->api_return(array(
-							'status' => FALSE,
-							'message' => $msg,
-						), 400);
-					}
+					), 400);
 				}
-				
-			}else {
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => 'Unidade de Ensino não identificado!',
-				), 400);
 			}
-           
-        } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado!',
-            ), 400);
-        }
 	}
 	
 	/**
@@ -249,36 +233,22 @@ class CursoController extends API_Controller {
 
         $curso = $this->entity_manager->find('Entities\Curso',$codCurso);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-		$msg = '';
 		
-        if(!is_null($curso) && !empty($payload))
+        if(!is_null($curso))
         {            
-
-			if(isset($payload['unidadeEnsino']))
+			if(isset($payload['codUnidadeEnsino']))
             {
-                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['unidadeEnsino']);
-				if(is_null($ues))
-				{
-					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
-				}
+                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$curso->setUnidadeEnsino($ues);
 			}
 			
-            if(empty($msg))
-            {
-                if(isset($payload['nome']))
-                {
-                    $curso->setNome($payload['nome']);
-                }
-                if(isset($payload['anoCriacao']))
-                {
-                    $curso->setAnoCriacao($payload['anoCriacao']);
-				}
+                if(isset($payload['nome'])) $curso->setNome($payload['nome']);
+                if(isset($payload['anoCriacao'])) $curso->setAnoCriacao($payload['anoCriacao']);
 
-				$valida = $this->validator->validate($curso);
+				$validacao = $this->validator->validate($curso);
 
-				if ( $valida->count() ){
-					$msg = $valida->messageArray();
+				if ( $validacao->count() ){
+					$msg = $validacao->messageArray();
 		
 					$this->api_return(array(
 						'status' => FALSE,
@@ -301,12 +271,6 @@ class CursoController extends API_Controller {
 					}	
 				}
 
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg
-                ), 404);
-            } 
         }elseif(empty($payload))
         {
             $this->api_return(array(
@@ -320,9 +284,8 @@ class CursoController extends API_Controller {
             ), 404);
         }
 	}
-	
 
-		/**
+	/**
      * @api {delete} cursos/:codCurso Deletar Curso.
      * @apiName delete
      * @apiGroup Cursos
