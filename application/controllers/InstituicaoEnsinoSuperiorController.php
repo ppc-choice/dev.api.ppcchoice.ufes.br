@@ -160,47 +160,39 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         );
  
         $payload = json_decode(file_get_contents('php://input'),TRUE);
- 
-        if ( isset($payload['nome']) && isset($payload['codIes']) && isset($payload['abreviatura'])){
-           
-			$ies = new \Entities\InstituicaoEnsinoSuperior;
-            $ies->setCodIes($payload['codIes']);
-            $ies->setNome($payload['nome']);
-            $ies->setAbreviatura($payload['abreviatura']);
-		   
-			$valida = $this->validator->validate($ies);
 
-			if ( $valida->count() ){		
-				$msg = $valida->messageArray();
+		$ies = new \Entities\InstituicaoEnsinoSuperior;
+		if ( isset($payload['codIes']) ) $ies->setCodIes($payload['codIes']);
+		if ( isset($payload['nome']) ) $ies->setNome($payload['nome']);
+		if ( isset($payload['abreviatura']) ) $ies->setAbreviatura($payload['abreviatura']);
+
+		$validacao = $this->validator->validate($ies);
+
+		if ( $validacao->count() ){		
+			$msg = $validacao->messageArray();
+
+			$this->api_return(array(
+				'status' => FALSE,
+				'message' => $msg,
+			), 400);	
+		}else {
+			try {
+				$this->entity_manager->persist($ies);
+				$this->entity_manager->flush();
 	
+				$this->api_return(array(
+					'status' => TRUE,
+					'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
+				), 200);
+			} catch (\Exception $e) {
+				$msg = $e->getMessage();
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);	
-			}else {
-				try {
-					$this->entity_manager->persist($ies);
-					$this->entity_manager->flush();
-	 
-					$this->api_return(array(
-						'status' => TRUE,
-						'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
-					), 200);
-				} catch (\Exception $e) {
-					$msg = $e->getMessage();
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $msg,
-					), 400);
-				}	
-			} 
+				), 400);
+			}	
+		} 
  
-        } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Campo Obrigatorio não encontrado!',
-            ), 400);
-        }
     }
    
 	/**
@@ -234,22 +226,15 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 		
-        if(!is_null($ies) && !empty($payload))
+        if(!is_null($ies))
         {            
-			if(isset($payload['nome']))
-			{
-				$ies->setNome($payload['nome']);
-			}
-			if(isset($payload['abreviatura']))
-			{
-				$ies->setAbreviatura($payload['abreviatura']);
-			}
+			if(isset($payload['nome'])) $ies->setNome($payload['nome']);
+			if(isset($payload['abreviatura'])) $ies->setAbreviatura($payload['abreviatura']);
 			
-			$valida = $this->validator->validate($ies);
+			$validacao = $this->validator->validate($ies);
 
-			if ( $valida->count() ){
-		
-				$msg = $valida->messageArray();
+			if ( $validacao->count() ){
+				$msg = $validacao->messageArray();
 	
 				$this->api_return(array(
 					'status' => FALSE,
@@ -308,7 +293,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				'methods' => array('DELETE'),
 			)
 		);
-		
+
 		$ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
 		
 		if(!is_null($ies))
