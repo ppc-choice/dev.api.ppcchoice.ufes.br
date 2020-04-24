@@ -211,7 +211,7 @@ class DependenciaController extends API_Controller
 	*/
     
 
-    public function add()
+    public function create()
 	{
         header("Access-Control-Allow-Origin: *");
 
@@ -221,63 +221,47 @@ class DependenciaController extends API_Controller
 		);
 
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-
-		if ( isset($payload['codCompCurric']) && isset($payload['codPreRequisito'])){
-			
-			$componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
-			$preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito'] );
-			
-			if(!is_null($componenteCurricular) && !is_null($preRequisito))
-			{
-                $dependencia = new Entities\Dependencia;
-                //verifica se as componentes curriculares pertecem ao mesmo ppc
-                if($componenteCurricular->getPpc()==$preRequisito->getPpc())
-				{
-                    // verifica se as componentes possuem periodos distintos
-                    if($componenteCurricular->getPeriodo()!= $preRequisito->getPeriodo())
-                    {
-                        $dependencia->setComponenteCurricular($componenteCurricular);
-                        $dependencia->setPreRequisito($preRequisito);
-                        try 
-                        {
-                            $this->entity_manager->persist($dependencia);
-                            $this->entity_manager->flush();
+        $dependencia = new Entities\Dependencia;
         
-                            $this->api_return(array(
-                                'status' => TRUE,
-                                'message' => 'Dependencia criada com sucesso',
-                            ), 200);
-                        } catch (\Exception $e) {
-                            $this->api_return(array(
-                                'status' => false,
-                                'message' => $e->getMessage(),
-                            ), 400);
-                        }
-                    }else
-                    {
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'As componentes curriculares devem ter periodos distintos',
-                        ), 200);
-                    }
-                }else
-                {
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'As componentes curriculares devem pertecer ao mesmo ppc',
-                    ), 200);
-                }
-				
+        if ( isset($payload['codCompCurric']))
+        {
+            $componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
+            $dependencia->setComponenteCurricular($componenteCurricular);
+        }
+        if( isset($payload['codPreRequisito'])) 
+        {
+            $preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito']);
+            $dependencia->setPreRequisito($preRequisito);
+        }
+        
+        $validador = $this->validator->validate($dependencia);
 
-			} else {
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => 'Campo obrigatorio não encontrado',
+        if ( $validador->count() ){
+    
+            $msg = $validador->messageArray();
+
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => $msg,
             ), 400);
+        }else{
+            try {
+                $this->entity_manager->persist($dependencia);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Dependencia criada com sucesso'
+                ), 200);
+
+            } catch ( \Exception $e ){
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
             }
         }
-    }
-
+    }   		
     /**
     * @api {PUT} dependencias Criar nova depêndencia entre componentes curriculares.
     *
@@ -359,7 +343,7 @@ class DependenciaController extends API_Controller
                                 }
                             }
                             else
-                            {   echo "1";
+                            {  
                                 $this->api_return(array(
                                     'status' => FALSE,
                                     'message' => 'Dependência não pode ter mesmo período',
@@ -510,7 +494,7 @@ class DependenciaController extends API_Controller
         header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-			'methods' => array('GET'),
+			'methods' => array('DELETE'),
 			)
 		);
 
@@ -521,7 +505,7 @@ class DependenciaController extends API_Controller
         {
             try
             {
-                $this->entity_manager->merge($dependencia);
+                $this->entity_manager->remove($dependencia);
                 $this->entity_manager->flush();
                 
                 $this->api_return(array(
