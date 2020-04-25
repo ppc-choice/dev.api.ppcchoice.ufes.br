@@ -9,13 +9,16 @@ class CorrespondenciaController extends API_Controller {
      * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Listar todas as relações de correspondência entre os cursos referidos
      * @apiName findAllByCodPpc
      * @apiGroup Correspondência
-     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma relação de correspondência encontrada entre componentes dos ppc's solicitados.
+     * 
      * @apiParam {Number} codPpcAtual Código do PPC atual .
      * @apiParam {Number} codPpcAlvo Código do PPC alvo.
      *
+     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
      * @apiSuccess {Number} codCompCurric Código da componente curricular correspondente.
      * @apiSuccess {Number} codCompCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
+     * 
+     * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
      */
     public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
 	{
@@ -32,15 +35,15 @@ class CorrespondenciaController extends API_Controller {
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
-                ),200
+                ),self::HTTP_OK
             );
             
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.'
-                ),404
+                    'message' =>  array('Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.')
+                ),self::HTTP_NOT_FOUND
             );
         }
     }
@@ -49,15 +52,11 @@ class CorrespondenciaController extends API_Controller {
      * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
      * @apiName findAll
      * @apiGroup Correspondência
-     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma Correspondência encontrada.
+     * @apiError  404 NotFound Nenhuma Correspondência encontrada.
      *
-     * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
-     * @apiSuccess {Number} codCompCurric Código da componente curricular.
-     * @apiSuccess {String} codDisc Código da disciplina.
-     * @apiSuccess {String} nomeDiscCorresp Nome da disciplina correspondente que a componente correspondente integraliza no projeto pedagógico de curso.
-     * @apiSuccess {Number} codCompCorresp Código da componente curricular correspondente.
-     * @apiSuccess {String} codDiscCorresp Código da disciplina correspondente.
-     * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
+     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
+     * 
+     * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
      */
     public function findAll()
 	{
@@ -76,15 +75,15 @@ class CorrespondenciaController extends API_Controller {
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
-                ),200
+                ),self::HTTP_OK
             );
             
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma Correspondência encontrada.'
-                ),404
+                    'message' =>  array('Nenhuma Correspondência encontrada.')
+                ),self::HTTP_NOT_FOUND
             );
         }
     }
@@ -94,7 +93,7 @@ class CorrespondenciaController extends API_Controller {
      * @api {get} componentes-curriculares/:codCompCurric/correspondencias Listar as correspondências de uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Correspondência
-     * @apiError  (Correspondência Não Encontrada 404) CorrespondenciaNaoEncontrada Nenhuma correspondência encontrada para esta componente.
+     * @apiError  404 NotFound Nenhuma correspondência encontrada para esta componente.
      * 
      * @apiParam {Number} codCompCurric Código de componente curricular.
      *
@@ -105,6 +104,8 @@ class CorrespondenciaController extends API_Controller {
      * @apiSuccess {Number} codCompCorresp Código da componente curricular correspondente.
      * @apiSuccess {String} codDiscCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
+     * 
+     * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a ppc cadastrado.
      */
     public function findByCodCompCurric($codCompCurric)
 	{
@@ -123,15 +124,15 @@ class CorrespondenciaController extends API_Controller {
                 array(
                     'status' => true,
                     'result' =>  $correspondencia
-                ),200
+                ),self::HTTP_OK
             );
             
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma correspondência encontrada para esta componente.'
-                ),404
+                    'message' =>  array('Nenhuma correspondência encontrada para esta componente.')
+                ),self::HTTP_NOT_FOUND
             );
         }
     }
@@ -140,22 +141,17 @@ class CorrespondenciaController extends API_Controller {
      * @api {post} correspondencias Criar correspondência
      * @apiName create
      * @apiGroup Correspondência
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Componente curricular não encontrada 404) ComponenteNaoEncontrada Componente curricular não encontrada.
-     * @apiError  (Componentes de mesmo ppc 400) BadRequest Componentes pertencem ao mesmo ppc.
-     * @apiError  (Valor de percentual errado 400) BadRequest Percentual de correspondência deve ser > 0 e <= 1.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "codCompCurric" : 220 ,
-	 *         "codCompCurricCorresp" : 221,
-	 *         "percentual" : 1
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
+     * 
+     * @apiParam (Request Body/JSON) {String} codCompCurric  Código da componente curricular.
+     * @apiParam (Request Body/JSON) {String} codCompCurricCorresp  Código da componente curricular correspondente.
+     * 
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "status": true,
      *       "message": "Correspondência criada com sucesso."
      *     }
+     * 
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function create()
     {
@@ -193,7 +189,7 @@ class CorrespondenciaController extends API_Controller {
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => $message
-            ), 400);
+            ),self::HTTP_BAD_REQUEST);
         }else{
             try {
                 $this->entity_manager->persist($corresp);
@@ -201,14 +197,14 @@ class CorrespondenciaController extends API_Controller {
 
                 $this->api_return(array(
                     'status' => TRUE,
-                    'message' => 'Correspondência criada com sucesso.',
-                ), 200);
+                    'message' => array('Correspondência criada com sucesso.'),
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
-                $e_msg = $e->getMessage();
+                $eMsg = array($e->getMessage());
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $e_msg
-                ), 400);
+                    'message' => $eMsg
+                ),self::HTTP_BAD_REQUEST);
             }
         }         
     }
@@ -217,20 +213,20 @@ class CorrespondenciaController extends API_Controller {
      * @api {put} correspondencia/:codCompCurric/:codCompCorresp Atualizar Correspondência
      * @apiName update
      * @apiGroup Correspondência
+     * 
      * @apiParam {Number} codCompCurric Código de componente curricular.
      * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Componente Curricular não encontrada 404) PPCNaoEncontrado Componente curricular ou componente correspondente não encontradas.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         percentual: 0.5
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
+     * @apiParam (Request Body/JSON) {String} codCompCurric  Código da componente curricular.
+     * @apiParam (Request Body/JSON) {String} codCompCurricCorresp  Código da componente curricular correspondente.
+     * 
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "status": true,
      *       "message": "Correspondência atualizada com sucesso"
      *     }
+     * 
+     * @apiError {String[]} 404 O <code>codCompCurric</code> ou <code>codCompCorresp</code> não correspondem a componentes cadastradas.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function update($codCompCurric,$codCompCorresp)
     {
@@ -243,28 +239,32 @@ class CorrespondenciaController extends API_Controller {
         $corresp = $this->entity_manager->find('Entities\Correspondencia',
                 array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        // echo json_encode(var_dump($corresp,TRUE));
-        // exit;
+
         if(!is_null($corresp))
         {
-            if (isset( $payload['codCompCurric']))
+            //usar array_key_exists para tratar o caso de setar null e ser pego pelo validador
+            //para gerar mensagem de erro, mas eh necessário colocar "= null" no argumento do setter
+            //da chave no arquivo da entidade
+            if (array_key_exists('codCompCurric', $payload))
             {
-                $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
-                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-                // aceita null, e a execução da erro antes de chegar no validador
-                // se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
-                if(!is_null($compCurric)) $corresp->setComponenteCurricular($compCurric);
+                if(isset($payload['codCompCurric']))
+                    $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+                else{
+                    $compCurric = null;
+                }
+                $corresp->setComponenteCurricular($compCurric);
             }
-            if (isset($payload['codCompCurricCorresp']))
+            if (array_key_exists('codCompCurricCorresp',$payload))
             {
-                $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
-                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-                // aceita null, e a execução da erro antes de chegar no validador
-                //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
-                if(!is_null($compCorresp)) $corresp->setComponenteCurricularCorresp($compCorresp);
+                if(isset($payload['codCompCurricCorresp']))
+                    $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);           
+                else{
+                    $compCorresp = null;
+                } 
+                $corresp->setComponenteCurricularCorresp($compCorresp);
             } 
             
-            if(isset($payload['percentual'])) $corresp->setPercentual($payload['percentual']);
+            if(array_key_exists('percentual',$payload)) $corresp->setPercentual($payload['percentual']);
             
             $validador = $this->validator->validate($corresp);
             if($validador->count())
@@ -273,7 +273,7 @@ class CorrespondenciaController extends API_Controller {
                 $this->api_return(array(
                     'status' => FALSE,
                     'message' => $message
-                ), 400);
+                ),self::HTTP_BAD_REQUEST);
             }else{
                 try {
                     $this->entity_manager->merge($corresp);
@@ -281,21 +281,21 @@ class CorrespondenciaController extends API_Controller {
 
                     $this->api_return(array(
                         'status' => TRUE,
-                        'message' => 'Correspondência atualizada com sucesso.',
-                    ), 200);
+                        'message' => array('Correspondência atualizada com sucesso.'),
+                    ), self::HTTP_OK);
                 } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
+                    $eMsg = array($e->getMessage());
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
+                        'message' => $eMsg
+                    ),self::HTTP_BAD_REQUEST);
                 }
             }
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Correspondência não encontrada',
-            ), 404);
+                'message' => array('Correspondência não encontrada'),
+            ),self::HTTP_NOT_FOUND);
         }
     }
 
@@ -303,15 +303,18 @@ class CorrespondenciaController extends API_Controller {
      * @api {delete} correspondencias/:codCompCurric/:codCompCorresp Deletar Correspondência
      * @apiName delete
      * @apiGroup Correspondência
+     * 
      * @apiParam {Number} codCompCurric Código de componente curricular.
      * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
-     * @apiError  (Campo não encontrado 400) NotFound Correspondência não encontrada.
-     *  @apiSuccessExample {json} Success-Response:
+     * 
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "status": true,
      *       "message": "Correspondência removida com sucesso"
      *     }
+     * 
+     * @apiError {String[]} 404 O <code>codCompCurric</code> ou <code>codCompCorresp</code> não correspondem a componentes cadastradas.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function delete($codCompCurric,$codCompCorresp)
     {
@@ -329,20 +332,20 @@ class CorrespondenciaController extends API_Controller {
                 $this->entity_manager->flush();
                 $this->api_return(array(
                     'status' => TRUE,
-                    'message' => 'Correspondência removida com sucesso'
-                ), 200);
+                    'message' => array('Correspondência removida com sucesso')
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
-                $e_msg = $e->getMessage();
+                $eMsg = array($e->getMessage());
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $e_msg
-                ), 400);
+                    'message' => $eMsg
+                ),self::HTTP_BAD_REQUEST);
             }
         }else{ 
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Correspondência não encontrada',
-            ), 404);
+                'message' => array('Correspondência não encontrada'),
+            ),self::HTTP_NOT_FOUND);
         }
     }
 }
