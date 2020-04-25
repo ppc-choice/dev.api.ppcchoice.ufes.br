@@ -15,3 +15,97 @@ Entities\Usuario:
         - Callback:
             methods: 
                 -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+
+Entities\Dependencia:
+    properties:
+        componenteCurricular:
+            - NotNull:
+                message: A componente curricular não pode ser vazia.
+        preRequisito:
+            - NotNull:
+                message: O pré-requisito não pode ser vazia.
+    constraints:    
+        - Callback:
+            methods: 
+                - [Entities\Validators\DependenciaValidator, notEqualPpc]
+                - [Entities\Validators\DependenciaValidator,equalPeriodo]
+
+Entities\ProjetoPedagogicoCurso:
+    properties:
+        dtInicioVigencia:
+            - NotNull:
+                message: A data de início de vigência não pode ser vazia.
+            - DateTime:
+                message: Formato de data inválido.
+        dtTerminoVigencia:
+            - DateTime:
+                message: Formato de data inválido.
+
+        chTotalDisciplinaOpt:
+            - NotNull:
+                message: A carga horária total de disciplina optativa não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de disciplina optativa deve ser um número inteiro.
+        chTotalDisciplinaOb: 
+            - NotNull:
+                message: A carga horária total de disciplina obrigatória não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de disciplina obrigatória deve ser um número inteiro.
+        chTotalAtividadeExt:
+            - NotNull:
+                message: A carga horária total de atividade de extensão não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de atividade de extensão deve ser um número inteiro.
+        chTotalAtividadeCmplt:
+            - NotNull:
+                message: A carga horária total de atividade complementar não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de atividade complementar deve ser um número inteiro.
+        chTotalProjetoConclusao:
+            - NotNull:
+                message: A carga horária total de projeto de conclusão de curso não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de projeto de conclusão de curso deve ser um número inteiro.
+        chTotalEstagio:
+            - NotNull:
+                message: A carga horária total de estágio não pode ser vazia.
+            - Type:
+                type: int
+                message: A carga horária de estágio deve ser um número inteiro.
+        duracao:
+            - NotNull:
+                message: A duração do curso não pode ser vazia.
+            - Type:
+                type: float
+                message: A duração do curso deve ser um número real
+        qtdPeriodos:
+            - NotNull:
+                message: A quantidade de períodos não pode ser vazia.
+            - Type:
+                type: int
+                message: A quantidade de períodos deve ser um número inteiro.
+        anoAprovacao:
+            - NotNull:
+                message: O ano de aprovação não pode ser vazia.
+            - Type:
+                type: int
+                message: O ano de aprovação deve ser um número inteiro.
+        situacao:
+            - OneOf:
+                choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
+                message: Situação {{ value }} não válido.
+        curso:
+            - NotNull:
+                message: Curso não encontrado.
+            - valid:
+    constraints:    
+        - Callback:
+            methods: 
+                - [Entities\Validators\ProjetoPedagogicoCursoValidator, dataVazia]
+                - [Entities\Validators\ProjetoPedagogicoCursoValidator, menorData]
+                - [Entities\Validators\ProjetoPedagogicoCursoValidator, situacaoPpc]
