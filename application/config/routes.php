@@ -96,7 +96,9 @@ $route['transicao/(:num)/(:num)']['PUT'] = 'TransicaoController/update/$1/$2';
 
 
 
-// (GET) Usuario : Elyabe
+// Usuario : Elyabe
 $route['usuarios']['GET'] = 'UsuarioController/findAll';
 $route['usuarios/(:num)']['GET'] = 'UsuarioController/findById/$1';
-
+$route['usuarios']['POST'] = 'UsuarioController/create';
+$route['usuarios/(:num)']['PUT'] = 'UsuarioController/update/$1';
+$route['usuarios/(:num)']['DELETE'] = 'UsuarioController/delete/$1';

@@ -1,18 +1,49 @@
-# models/validation.yaml
+# models/Entities/Validators/validation.yaml
 Entities\Usuario:
     properties:
         nome:
-            - NotBlank: ~
+            - Type: 
+                type: string
+                message: o valor deve ser do tipo {{ type }}
+            - NotBlank: 
+                message: o campo nome não pode ser vazio
+            - Regex:
+                pattern: "/\d/"
+                match:   false
+                message: Nome não deve conter números
         email:
-            - NotNull: ~
+            - Type: 
+                type: string
+                message: o valor deve ser do tipo {{ type }}
+            - NotNull: 
+                message: o campo e-mail é obrigatório
             - Email: 
                 message: o endereço {{ value }} é inválido.
                 checkMX: true
         papel:
-            - NotNull: ~
+            - Type: 
+                type: string
+                message: o valor deve ser do tipo {{ type }}
+            - NotNull: 
+                message: o campo papel é obrigatório
             - OneOf:
                 choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
-    constraints:    
+                message: O papel escolhido não é um dos tipos predefinidos
+        senha:
+            - Type: 
+                type: string
+                message: o valor deve ser do tipo {{ type }}
+            - NotNull: 
+                    message: o campo senha é obrigatório 
+            - NotBlank: 
+                message: Campo senha não pode ser vazio
+        dtUltimoAcesso:
+            - Type: 
+                type: DateTime
+                message: o valor deve ser do tipo {{ type }}me
+            - NotNull: 
+                    message: o dtUltimoAcesso é obrigatório
+    constraints:
         - Callback:
             methods: 
-                -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+            - [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
