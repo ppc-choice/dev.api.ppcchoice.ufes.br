@@ -224,7 +224,7 @@ class UsuarioController extends API_Controller
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => array("Usuário não encontrado."),
-			), self::HTTP_BAD_REQUEST);
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 
@@ -269,7 +269,7 @@ class UsuarioController extends API_Controller
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => array("Usuário não encontrado."),
-			), self::HTTP_BAD_REQUEST);
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 }
