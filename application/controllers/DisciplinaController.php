@@ -79,7 +79,7 @@ class DisciplinaController extends API_Controller
 
     /**
      * @api {post} disciplinas Cadastrar nova Disciplina no sistema
-     * @apiName add
+     * @apiName create
      * @apiGroup Disciplinas
      * @apiError 400 Campo Obrigatório Não Encontrado
      * @apiError 400 Departamento Não Encontrado
@@ -203,12 +203,6 @@ class DisciplinaController extends API_Controller
                 }
             }
 
-        } elseif ( empty($payload) ){
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Não há requisição',
-            ), 400);
-            
         } else {
             $this->api_return(array(
                 'status' => FALSE,

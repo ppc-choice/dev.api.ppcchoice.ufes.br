@@ -76,7 +76,7 @@ class UnidadeEnsinoController extends API_Controller
 
     /**
      * @api {post} unidades-ensino Cadastrar nova Unidade de Ensino no sistema
-     * @apiName add
+     * @apiName create
      * @apiGroup Unidades de Ensino
      * @apiError 400 Campo Obrigatório Não Encontrado
      * @apiError 400 Instituição de Ensino Superior Não Encontrado
@@ -201,12 +201,6 @@ class UnidadeEnsinoController extends API_Controller
                     ), 400);
                 }
             }
-
-        } elseif ( empty($payload) ){
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Não há requisição',
-            ), 400);
             
         } else {
             $this->api_return(array(
