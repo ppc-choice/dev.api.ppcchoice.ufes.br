@@ -160,6 +160,7 @@ class ComponenteCurricularController extends API_Controller {
      */
     public function create()
     {
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('POST'),
             // 'limit' => array(2,'ip','everyday'),
@@ -168,63 +169,47 @@ class ComponenteCurricularController extends API_Controller {
         );
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $compCurric = new Entities\ComponenteCurricular;
 
-        if (  isset($payload['periodo'], $payload['credito'], $payload['tipo'], $payload['numDisciplina'],
-            $payload['codDepto'], $payload['codPpc']))
+        if(isset($payload['periodo'])) $compCurric->setPeriodo($payload['periodo']);
+        if(isset($payload['credito'])) $compCurric->setCredito($payload['credito']);
+        if(isset($payload['tipo'])) $compCurric->setTipo($payload['tipo']);
+        if(isset($payload['numDisciplina'], $payload['codDepto'])) 
         {
-            $compCurric = new Entities\ComponenteCurricular;
-            $disciplina = $this->entity_manager->find('Entities\Disciplina',array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
+            $disciplina = $this->entity_manager->find('Entities\Disciplina',
+            array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
+            $compCurric->setDisciplina($disciplina );
+        }
+        if(isset($payload['codPpc']))
+        {
             $ppc =  $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
-            
-            $msg = '';
-            if(is_null($ppc)) $msg = $msg . 'PPC não encontrado. ';
-            if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
-            if(empty($msg))
-            {
-                $compCurric->setPeriodo($payload['periodo']);
-                $compCurric->setCredito($payload['credito']) ;
-                $compCurric->setTipo($payload['tipo']) ;
-                $compCurric->setDisciplina($disciplina );
-                $compCurric->setPpc($ppc);
+            $compCurric->setPpc($ppc);
+        }
 
-                $validador = $this->validator->validate($compCurric);
-                
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-                }else{
-                    try{
-                        $this->entity_manager->persist($compCurric);
-                        $this->entity_manager->flush();
-        
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Componente curricular criada com sucesso.',
-                        ), 200);
-                    } catch (\Exception $e) {
-                        $e_msg = $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg
-                        ), 400);
-                    }
-                }
-                
-            }else{              
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), 404);
-            }
-        }else{
+        $validador = $this->validator->validate($compCurric);
+        if($validador->count())
+        {
+            $message = $validador->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado.',
+                'message' => $message
             ), 400);
+        }else{
+            try{
+                $this->entity_manager->persist($compCurric);
+                $this->entity_manager->flush();
+
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Componente curricular criada com sucesso.',
+                ), 200);
+            } catch (\Exception $e) {
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            }
         }
     }
  
@@ -253,76 +238,68 @@ class ComponenteCurricularController extends API_Controller {
      */
     public function update($codCompCurric)
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+
         $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$codCompCurric);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $msg = '';
-        if(!is_null($compCurric) && !empty($payload))
+
+        if(!is_null($compCurric))
         {
             if(isset($payload['codPpc']))
             {
                 $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
-                if(is_null($ppc)) $msg = $msg . 'PPC não encontrado. ';
+                $compCurric->setPpc($ppc);
             }
             if(isset($payload['numDisciplina'],$payload['codDepto']))
             {
                 $disciplina = $this->entity_manager->find('Entities\Disciplina',
                     array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
-                if(is_null($disciplina)) $msg = $msg . 'Disciplina não encontrada. ';
-            }
-            if(empty($msg))
-            {
-                $compCurric->setPpc($ppc);
                 $compCurric->setDisciplina($disciplina);
-                if(isset($payload['periodo']))
-                {
-                    $compCurric->setPeriodo($payload['periodo']);
-                }
-                if(isset($payload['credito']))
-                {
-                    $compCurric->setCredito($payload['credito']);
-                }
-                if(isset($payload['tipo']))
-                {
-                    $compCurric->setTipo($payload['tipo']);
-                }
-                
-                $validador = $this->validator->validate($compCurric);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-                }else{
-                    try {
-                        $this->entity_manager->merge($compCurric);
-                        $this->entity_manager->flush();
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Componente Curricular atualizada com sucesso'
-                        ), 200);
-                    } catch (\Exception $e) {
-                        $e_msg = $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg
-                        ), 400);
-                    }
-                }
-            }else{
+            }
+            if(isset($payload['periodo']))
+            {
+                $compCurric->setPeriodo($payload['periodo']);
+            }
+            if(isset($payload['credito']))
+            {
+                $compCurric->setCredito($payload['credito']);
+            }
+            if(isset($payload['tipo']))
+            {
+                $compCurric->setTipo($payload['tipo']);
+            }
+            
+            $validador = $this->validator->validate($compCurric);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $msg
-                ), 404);
-            } 
-        }elseif(empty($payload)) //se corpo da requisicao esta vazio
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
-            ), 400);
-        }else{ //se componente nao existe
+                    'message' => $message
+                ), 400);
+            }else{
+                try {
+                    $this->entity_manager->merge($compCurric);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Componente Curricular atualizada com sucesso'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
+            }
+        }else{ 
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Componente Curricular não encontrada',
@@ -345,6 +322,12 @@ class ComponenteCurricularController extends API_Controller {
      */
     public function delete($codCompCurric)
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('DELETE'),
+            )
+        );
+
         $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$codCompCurric);
         if(!is_null($compCurric))
         {

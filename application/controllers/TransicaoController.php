@@ -20,9 +20,13 @@ class TransicaoController extends API_Controller {
 
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('get'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
 
@@ -59,9 +63,13 @@ class TransicaoController extends API_Controller {
      */
     public function findAll()
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('GET'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao = $this->entity_manager->getRepository('Entities\Transicao')->findAll();
         $retorno = $this->doctrine_to_array($transicao);
@@ -98,9 +106,13 @@ class TransicaoController extends API_Controller {
      */
     public function findByCodPpc($codPpcAtual)
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('get'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
 
@@ -145,66 +157,58 @@ class TransicaoController extends API_Controller {
      */
     public function create()
     {
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('POST'),
             // 'limit' => array(2,'ip','everyday'),
             // 'requireAuthorization' => TRUE
             )
-
         );
 
+        $transicao = new Entities\Transicao;
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if( isset($payload['codPpcAtual'], $payload['codPpcAlvo']) )
+        if( isset($payload['codPpcAtual']))
         {
             $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // aceita null, e a execução da erro antes de chegar no validador
+            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
+        }
+        if( isset($payload['codPpcAlvo']))
+        {
             $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // aceita null, e a execução da erro antes de chegar no validador
+            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
+        }
 
-            $msg = '';
-            if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
-            if(is_null($ppcAlvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
-            if(empty($msg))
-            {
-                $transicao = new Entities\Transicao;
-                $transicao->setPpcAtual($ppcAtual);
-                $transicao->setPpcAlvo($ppcAlvo);
-
-                $validador = $this->validator->validate($transicao);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-                }else{
-                    try{
-                        $this->entity_manager->persist($transicao);
-                        $this->entity_manager->flush();
-        
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Transição criada com sucesso.',
-                        ), 200);
-                    } catch (\Exception $e) {
-                        $e_msg = $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg
-                        ), 400);
-                    }
-                }
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), 404);
-            }
-        }else{
+        $validador = $this->validator->validate($transicao);
+        if($validador->count())
+        {
+            $message = $validador->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado.',
+                'message' => $message
             ), 400);
+        }else{
+            try{
+                $this->entity_manager->persist($transicao);
+                $this->entity_manager->flush();
+
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Transição criada com sucesso.',
+                ), 200);
+            } catch (\Exception $e) {
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            }
         }
     }
 
@@ -228,57 +232,59 @@ class TransicaoController extends API_Controller {
      */
     public function update($codPpcAtual,$codPpcAlvo)
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
         $transicao = $this->entity_manager->find('Entities\Transicao',
                 array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $msg = '';
-        if(!is_null($transicao) && !empty($payload))
+        if(!is_null($transicao))
         {
-            if(isset($payload['codPpcAtual']))
+            if( isset($payload['codPpcAtual']))
             {
                 $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-                if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
-                else $transicao->setPpcAtual($ppcAtual);
+                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+                // aceita null, e a execução da erro antes de chegar no validador
+                //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+                if(!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
             }
-            if(isset($payload['codPpcAlvo']))
+            if( isset($payload['codPpcAlvo']))
             {
                 $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
-                if(is_null($ppcAlvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
-                else $transicao->setPpcAlvo($ppcAlvo);
+                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+                // aceita null, e a execução da erro antes de chegar no validador
+                //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+                if(!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
             }
-            if(empty($msg))
+            
+            $validador = $this->validator->validate($transicao);
+            if($validador->count())
             {
-                $validador = $this->validator->validate($transicao);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
+                $message = $validador->messageArray();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $message
+                ), 400);
+            }else{
+                try {
+                    $this->entity_manager->merge($transicao);
+                    $this->entity_manager->flush();
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Transição atualizada com sucesso'
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $message
+                        'message' => $e_msg
                     ), 400);
-                }else{
-                    try {
-                        $this->entity_manager->merge($transicao);
-                        $this->entity_manager->flush();
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Transição atualizada com sucesso'
-                        ), 200);
-                    } catch (\Exception $e) {
-                        $e_msg = $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg
-                        ), 400);
-                    }
-                }
+                } 
             }
-        }elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
-            ), 400);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
@@ -303,6 +309,13 @@ class TransicaoController extends API_Controller {
      */
     public function delete($codPpcAtual,$codPpcAlvo )
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('DELETE'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
         $transicao = $this->entity_manager->find('Entities\Transicao',
                 array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
         if(!is_null($transicao))

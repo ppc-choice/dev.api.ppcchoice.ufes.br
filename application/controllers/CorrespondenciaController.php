@@ -111,7 +111,7 @@ class CorrespondenciaController extends API_Controller {
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
-            ));
+        ));
 
               
         $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric);
@@ -159,81 +159,58 @@ class CorrespondenciaController extends API_Controller {
      */
     public function create()
     {
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $corresp = new \Entities\Correspondencia;
 
-        if (isset( $payload['codCompCurric'], $payload['codCompCurricCorresp'], $payload['percentual'] ))
+        if (isset( $payload['codCompCurric']))
         {
-            $corresp = new \Entities\Correspondencia;
             $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+            // // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // // aceita null, e a execução da erro antes de chegar no validador
+            // // se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($compCurric)) $corresp->setComponenteCurricular($compCurric);
+        }
+        if (isset($payload['codCompCurricCorresp']))
+        {
             $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
-            
-            if(!is_null($compCurric) && !is_null($compCorresp ))
-            {
-                
-                $ppc1 = $compCurric->getPpc();
-                $ppc2 = $compCorresp->getPpc();
-
-                if($ppc1 != $ppc2)
-                {
-                    $corresp -> setComponenteCurricular($compCurric);
-                    $corresp -> setComponenteCurricularCorresp($compCorresp);
-                    
-                    if( (0 < $payload['percentual']))
-                    {
-                        $corresp->setPercentual($payload['percentual']);
-                    }
-                    $validador = $this->validator->validate($corresp);
-                    if($validador->count())
-                    {
-                        $message = $validador->messageArray();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $message
-                        ), 400);
-                    }else{
-                        try {
-                            $this->entity_manager->persist($corresp);
-                            $this->entity_manager->flush();
-            
-                            $this->api_return(array(
-                                'status' => TRUE,
-                                'message' => 'Correspondência criada com sucesso.',
-                            ), 200);
-                        } catch (\Exception $e) {
-                            $e_msg = $e->getMessage();
-                            $this->api_return(array(
-                                'status' => FALSE,
-                                'message' => $e_msg
-                            ), 400);
-                        }
-                    }
-                }else{
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => 'Componentes pertencem ao mesmo ppc.',
-                    ), 400);
-                }
-                
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => 'Componente curricular não encontrada.',
-                ), 404);
-            }
-
-        }else{
+            // // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // // aceita null, e a execução da erro antes de chegar no validador
+            // //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($compCorresp)) $corresp->setComponenteCurricularCorresp($compCorresp);
+        } 
+        if (isset($payload['percentual'])) $corresp->setPercentual($payload['percentual']);
+        
+        $validador = $this->validator->validate($corresp);
+        if($validador->count())
+        {
+            $message = $validador->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado.',
+                'message' => $message
             ), 400);
-        }
+        }else{
+            try {
+                $this->entity_manager->persist($corresp);
+                $this->entity_manager->flush();
+
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => 'Correspondência criada com sucesso.',
+                ), 200);
+            } catch (\Exception $e) {
+                $e_msg = $e->getMessage();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $e_msg
+                ), 400);
+            }
+        }         
     }
 
     /**
@@ -257,65 +234,63 @@ class CorrespondenciaController extends API_Controller {
      */
     public function update($codCompCurric,$codCompCorresp)
     {
-        $correspondencia = $this->entity_manager->find('Entities\Correspondencia',
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            )
+        );
+
+        $corresp = $this->entity_manager->find('Entities\Correspondencia',
                 array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $msg = '';
-        if(!is_null($correspondencia) && !empty($payload))
+        // echo json_encode(var_dump($corresp,TRUE));
+        // exit;
+        if(!is_null($corresp))
         {
-            if(isset($payload['codCompCurric']))
+            if (isset( $payload['codCompCurric']))
             {
                 $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
-                if(is_null($compCurric)) $msg = $msg . 'Componente curricular não encontrada. ';
-                else $correspondencia->setComponenteCurricular($compCurric);
+                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+                // aceita null, e a execução da erro antes de chegar no validador
+                // se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+                if(!is_null($compCurric)) $corresp->setComponenteCurricular($compCurric);
             }
-            if(isset($payload['codCompCurricCorresp']))
+            if (isset($payload['codCompCurricCorresp']))
             {
                 $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
-                if(is_null($compCorresp)) $msg = $msg . 'Componente curricular correspondente não encontrada.';
-                else $correspondencia->setComponenteCurricularCorresp($compCorresp);
-            }
-            if(empty($msg)){
-                if(isset($payload['percentual']))
-                {
-                    $correspondencia->setPercentual($payload['percentual']);
-                }
-                $validador = $this->validator->validate($correspondencia);
-                if($validador->count())
-                {
-                    $message = $validador->messageArray();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $message
-                    ), 400);
-                }else{
-                    try {
-                        $this->entity_manager->merge($correspondencia);
-                        $this->entity_manager->flush();
-                        $this->api_return(array(
-                            'status' => TRUE,
-                            'message' => 'Correspondência atualizada com sucesso'
-                        ), 200);
-                    } catch (\Exception $e) {
-                        $e_msg = $e->getMessage();
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => $e_msg
-                        ), 400);
-                    }
-                }
-            }else{
+                // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+                // aceita null, e a execução da erro antes de chegar no validador
+                //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+                if(!is_null($compCorresp)) $corresp->setComponenteCurricularCorresp($compCorresp);
+            } 
+            
+            if(isset($payload['percentual'])) $corresp->setPercentual($payload['percentual']);
+            
+            $validador = $this->validator->validate($corresp);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $msg
-                ), 404);
+                    'message' => $message
+                ), 400);
+            }else{
+                try {
+                    $this->entity_manager->merge($corresp);
+                    $this->entity_manager->flush();
+
+                    $this->api_return(array(
+                        'status' => TRUE,
+                        'message' => 'Correspondência atualizada com sucesso.',
+                    ), 200);
+                } catch (\Exception $e) {
+                    $e_msg = $e->getMessage();
+                    $this->api_return(array(
+                        'status' => FALSE,
+                        'message' => $e_msg
+                    ), 400);
+                }
             }
-        } elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
-            ), 400);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
@@ -340,6 +315,11 @@ class CorrespondenciaController extends API_Controller {
      */
     public function delete($codCompCurric,$codCompCorresp)
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('DELETE'),
+            )
+        );
         $correspondencia = $this->entity_manager->find('Entities\Correspondencia',
                 array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
         if(!is_null($correspondencia))
