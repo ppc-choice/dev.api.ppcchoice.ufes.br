@@ -56,7 +56,7 @@ $route['unidades-ensino/(:num)']['PUT'] = 'UnidadeEnsinoController/update/$1';
 // Projeto Pedagógico de Curso : Guilherme
 $route['projetos-pedagogicos-curso/(:num)']['GET'] = 'ProjetoPedagogicoCursoController/findById/$1';
 $route['projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findAll';
-$route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/add';
+$route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/create';
 $route['projetos-pedagogicos-curso/(:num)']['PUT'] = 'ProjetoPedagogicoCursoController/update/$1';
 $route['projetos-pedagogicos-curso/(:num)']['DELETE'] = 'ProjetoPedagogicoCursoController/delete/$1';
 
@@ -66,7 +66,7 @@ $route['projetos-pedagogicos-curso/(:num)']['DELETE'] = 'ProjetoPedagogicoCursoC
 $route['dependencias/(:num)/(:num)']['GET'] = 'DependenciaController/findById/$1/$2';
 $route['dependencias']['GET'] = 'DependenciaController/findAll';
 $route['projetos-pedagogicos-curso/(:num)/dependencias']['GET'] = 'DependenciaController/findByIdPpc/$1';
-$route['dependencias']['POST'] = 'DependenciaController/add';
+$route['dependencias']['POST'] = 'DependenciaController/create';
 $route['dependencias/(:num)/(:num)']['PUT'] = 'DependenciaController/update/$1/$2';
 $route['dependencias/(:num)/(:num)']['DELETE'] = 'DependenciaController/delete/$1/$2';
 
