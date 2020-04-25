@@ -209,7 +209,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
     * @apiError PpcNotFound Não foi possível adicionar um novo Projeto Pedagogico Curso.
     */
     
-    public function add()
+    public function create()
 	{
         header("Access-Control-Allow-Origin: *");
 
@@ -219,154 +219,71 @@ class ProjetoPedagogicoCursoController extends API_Controller
 		);
 
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-
-        if (isset($payload['codCurso'], $payload['situacao']))
+        
+        $ppc = new Entities\ProjetoPedagogicoCurso;
+        
+        if(isset($payload['codCurso'])) 
         {
-
-			$curso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
-            $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
-            $result = $this->doctrine_to_array($ppcs);
-
-            $situacao = true; 
-            $uppersituacao = strtoupper($payload['situacao']);
-                   
-            if(!is_null($curso))
-            {
-                if($uppersituacao!= STTS_PPC_INATIVO)
-                {
-                    foreach ($result as $ppc) 
-                    {
-                        if($uppersituacao == $ppc['situacao'])
-                        {
-                            $situacao = false;
-                            $this->api_return(array(
-                                    'status' => FALSE,
-                                    'message' => 'Não é permitido mais de um Projeto Pedagogico de Curso com a situação corrente e ativo-anterior',
-                            ), 400);
-                            break;
-                        }                    
-                    }
-                    if($situacao)
-                    {   
-                        if(!isset($payload['dtTerminoVigencia']))
-                        {
-                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['qtdPeriodos'], $payload['anoAprovacao']))
-                            {
-                                $ppc = new Entities\ProjetoPedagogicoCurso;
-                                $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
-                                
-                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
-                                $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-                                $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-                                $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-                                $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-                                $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-                                $ppc->setChTotal($chtotal);
-
-                                $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
-
-                                $ppc->setDuracao($payload['duracao']);
-                                $ppc->setQtdPeriodos($payload['qtdPeriodos']);
-                                $ppc->setAnoAprovacao($payload['anoAprovacao']);
-                                $ppc->setSituacao($uppersituacao);
-                                $ppc->setCurso($curso);
-                            }
-                            try {
-                                $this->entity_manager->persist($ppc);
-                                $this->entity_manager->flush();
+            $curso = $this->entity_manager->find('Entities\Curso',$payload['codCurso']);
+            $ppc->setCurso($curso);
+        } 
             
-                                $this->api_return(array(
-                                    'status' => TRUE,
-                                    'mesage' => 'Projeto Pedaogico de Curso criado com sucesso',
-                                ), 200);
-                            } catch (\Exception $e) {
-                                $this->api_return(array(
-                                    'status' => false,
-                                    'message' => $e->getMessage(),
-                                ), 400);
-                            }
-                        }else
-                        {
-                            $this->api_return(array(
-                                    'status' => FALSE,
-                                    'message' => 'A data de termino de vigência de Projeto Pedaogico de Curso com situação CORRENTE ou ATIVO-ANTERIOR deve ser vazia',
-                            ), 400);
-                        }
-                    
-                    }
-                }
-                else if(isset($payload['dtTerminoVigencia']))
-                {                      
-                        if($payload['dtInicioVigencia'] < $payload['dtTerminoVigencia'])
-                        {
-                            
-                            if(isset($payload['chTotalDisciplinaOpt'], $payload['chTotalDisciplinaOb'], $payload['chTotalAtividadeExt'], $payload['chTotalAtividadeCmplt'], $payload['chTotalProjetoConclusao'], $payload['chTotalEstagio'], $payload['dtInicioVigencia'], $payload['dtTerminoVigencia'], $payload['qtdPeriodos']))
-                            {
-                                $ppc = new Entities\ProjetoPedagogicoCurso;
-                                $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];
-                                
-                                $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);    
-                                $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-                                $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-                                $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-                                $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-                                $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-                                $ppc->setChTotal($chtotal);
-                                
-                                $ppc->setDtinicioVigencia(new DateTime($payload['dtInicioVigencia']));
-                                $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+        
+        if(isset($payload['situacao'])) $ppc->setSituacao(strtoupper($payload['situacao']));
+        
+        if(isset($payload['dtTerminoVigencia'])) $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+        
+        if(isset($payload['chTotalDisciplinaOpt'])) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+        
+        if(isset($payload['chTotalDisciplinaOb'])) $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+        
+        if(isset($payload['chTotalAtividadeExt'])) $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+        
+        if(isset($payload['chTotalAtividadeCmplt'])) $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+        
+        if(isset($payload['chTotalProjetoConclusao'])) $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+        
+        if(isset($payload['chTotalEstagio'])) $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+        
+        if(isset($payload['dtInicioVigencia'])) $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
+        
+        if(isset($payload['qtdPeriodos'])) $ppc->setQtdPeriodos($payload['qtdPeriodos']);
+        
+        if(isset($payload['anoAprovacao'])) $ppc->setAnoAprovacao($payload['anoAprovacao']);
+        
+        if(isset($payload['duracao'])) $ppc->setDuracao($payload['duracao']);
+        
+        $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];                                
+        $ppc->setChTotal($chtotal);
+        
+        $validador = $this->validator->validate($ppc);
 
-                                $ppc->setDuracao($payload['duracao']);
-                                $ppc->setQtdPeriodos($payload['qtdPeriodos']);
-                                $ppc->setAnoAprovacao($payload['anoAprovacao']);
-                                $ppc->setSituacao($uppersituacao);
-                                $ppc->setCurso($curso);
-                                
-                                try {
-                                    $this->entity_manager->persist($ppc);
-                                    $this->entity_manager->flush();
-                
-                                    $this->api_return(array(
-                                        'status' => TRUE,
-                                        'result' => 'Projeto Pedagogico de Curso criado com sucesso',
-                                    ), 200);
-                                } catch (\Exception $e) {
-                                    $this->api_return(array(
-                                        'status' => false,
-                                        'message' => $e->getMessage(),
-                                    ), 400);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            $this->api_return(array(
-                                'status' => FALSE,
-                                'message' => 'A data de inicio de vigência não pode ser maior que a data de termino de vigencia',
-                                ), 400);
-                        }
-                }else
-                {
-                        $this->api_return(array(
-                            'status' => FALSE,
-                            'message' => 'A data de termino de vigência de Projeto Pedagogico de Curso com situação INATIVO não pode ser vazia',
-                            ), 400);
-                }
-            }else
-            {
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => 'Curso não encontrado',
-                ), 400);
-
-            }
-        }else
-        {
-        	$this->api_return(array(
+        if ( $validador->count() ){
+    
+            $msg = $validador->messageArray();
+            
+            $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo obrigatorio não encontrado',
+                'message' => $msg,
             ), 400);
         }
+        else{
+            try {
+                $this->entity_manager->persist($ppc);
+                $this->entity_manager->flush();
+
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'mesage' => 'Projeto Pedaogico de Curso criado com sucesso',
+                ), 200);
+            } catch (\Exception $e) {
+                $this->api_return(array(
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ), 400);
+            }
+        }
+
     }   
 
     /**
@@ -423,152 +340,63 @@ class ProjetoPedagogicoCursoController extends API_Controller
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-			'methods' => array('POST'),
+			'methods' => array('PUT'),
 			)
 		);
 
-
         $payload = json_decode(file_get_contents('php://input'),TRUE);
         $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
-
+        
         if(!is_null($ppc))
         {
-            if(!empty($payload))
-            {   
+            if(isset($payload['codCurso'])) 
+            {
+                $curso = $this->entity_manager->find('Entities\Curso',$payload['codCurso']);
+                $ppc->setCurso($curso);
+            }    
+            if(isset($payload['situacao'])) $ppc->setSituacao(strtoupper($payload['situacao']));
+            
+            if(isset($payload['dtTerminoVigencia'])) $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            
+            if(isset($payload['chTotalDisciplinaOpt'])) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+            
+            if(isset($payload['chTotalDisciplinaOb'])) $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+            
+            if(isset($payload['chTotalAtividadeExt'])) $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+            
+            if(isset($payload['chTotalAtividadeCmplt'])) $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+            
+            if(isset($payload['chTotalProjetoConclusao'])) $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+            
+            if(isset($payload['chTotalEstagio'])) $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+            
+            if(isset($payload['dtInicioVigencia'])) $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
+            
+            if(isset($payload['qtdPeriodos'])) $ppc->setQtdPeriodos($payload['qtdPeriodos']);
+            
+            if(isset($payload['anoAprovacao'])) $ppc->setAnoAprovacao($payload['anoAprovacao']);
+            
+            if(isset($payload['duracao'])) $ppc->setDuracao((float)$payload['duracao']);
+    
+            $validador = $this->validator->validate($ppc);
 
-                if(isset($payload['chTotalDisciplinaOpt']))$ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);    
-                if(isset($payload['chTotalDisciplinaOb']))$ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-                if(isset($payload['chTotalAtividadeExt']))$ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-                if(isset($payload['chTotalAtividadeCmplt']))$ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-                if(isset($payload['chTotalProjetoConclusao']))$ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-                if(isset($payload['chTotalEstagio']))$ppc->setChTotalEstagio($payload['chTotalEstagio']);
-                if(isset($payload['duracao']))$ppc->setDuracao($payload['duracao']);
-                if(isset($payload['qtdPeriodos']))$ppc->setQtdPeriodos($payload['qtdPeriodos']);
-                if(isset($payload['anoAprovacao']))$ppc->setAnoAprovacao($payload['anoAprovacao']);
-               
-                if(isset($payload['dtInicioVigencia']))
-                {
-                    if($ppc->getSituacao()== STTS_PPC_INATIVO)
-                    {
-                        if(new DateTime($payload['dtInicioVigencia']) < $ppc->getDtTerminoVigencia())
-                            $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
-                        else
-                        {   $this->api_return(array(
-                                'status' => false,
-                                'message' => "A data de inicio de vigencia não pode ser menor que a de termino de vigencia",
-                            ), 400); 
-                        }
-                    }
-                    else
-                        $ppc->setDtTerminoVigencia(new DateTime($payload['dtInicioVigencia']));
-                }
-                if(isset($payload['dtTerminoVigencia']))
-                {
-                    if($ppc->getSituacao()== STTS_PPC_INATIVO)
-                        $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
-                    else
-                    {   $this->api_return(array(
-                            'status' => false,
-                            'message' => "Projeto Pedagogico de Curso com situação corrente ou inativa não deve possuir data de termino de vigencia",
-                        ), 400); 
-                    }
-                }
-
-                if(isset($payload['situacao']))
-                {   
-                    $situacao = true;
-                    $uppersituacao = strtoupper($payload['situacao']);
-                    
-                    if($uppersituacao != STTS_PPC_INATIVO)
-                    {
-                        $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($ppc->getCurso());
-                        $result = $this->doctrine_to_array($ppcs);
-                        $situacao = true;
-                        // verifica se já existe algum ppc com a situacao a ser alterada.
-                        foreach ($result as $p) 
-                        {
-                            if($uppersituacao == $p['situacao'])
-                            {
-                                $situacao = false;
-                                $this->api_return(array(
-                                        'status' => FALSE,
-                                        'message' => 'Não é permitido mais de um Projeto Pedagogico de Curso com a situação corrente e ativo-anterior',
-                                ), 400);
-                                break;
-                            }  
-                        }                  
-                        if($situacao)//se não existir ppcs com mesma situação de corrente e ativo anterior
-                        {
-                            $ppc->setSituacao($uppersituacao);
-                        }
-                    }else
-                    {
-                        if(isset($payload['dtTerminoVigencia']))
-                        {
-                            if(new DateTime($payload['dtInicioVigencia']) < $payload['dtTerminoVigencia'])
-                                $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
-                            else
-                            {
-                                $this->api_return(array(
-                                    'status' => FALSE,
-                                    'message' => 'A data de inicio de vigência não pode ser maior que a data de termino de vigencia',
-                                    ), 400);
-                            }
-
-                        }else
-                        {
-                            $this->api_return(array(
-                                'status' => FALSE,
-                                'message' => 'A data de termino de vigencia é obrigatória para ppcs inativos',
-                                ), 400);
-                        }
-                    }    
-                }
-
-                if(isset($payload['codCurso']))
-                {
-                    $curso = $this->entity_manager->find('Entities\Curso', $payload['codCurso']);
-
-                    $ppcs = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($payload['codCurso']);
-                    $result = $this->doctrine_to_array($ppcs);
-                    $situacao = true;
-
-                    if(!is_null($curso))
-                    {
-                        // verifica se já existe algum ppc com a situacao a ser alterada.
-                        foreach ($result as $auXPpc) 
-                        {
-                            if($auxPpc['situacao'] == $auxPpc->getSituacao())
-                            {
-                                $situacao = false;
-                                $this->api_return(array(
-                                        'status' => FALSE,
-                                        'message' => 'Não é permitido mais de um ppc com a situação corrente e ativo-anterior',
-                                ), 400);
-                                break;
-                            }  
-                        }                  
-                        if($situacao)//se não existir ppcs com mesma situação de corrente e ativo anterior
-                            $ppc->setCurso($curso);
-                        
-                    }
-                    else
-                    {
-                        $this->api_return(array(
-                            'status' => false,
-                            'message' => "Curso não encontrado",
-                        ), 400);
-                    }
-                }
-
-                try
-                {
+            if ( $validador->count() )
+            {
+        
+                $msg = $validador->messageArray();
+                
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }else{
+                try {
                     $this->entity_manager->merge($ppc);
                     $this->entity_manager->flush();
-                    
+    
                     $this->api_return(array(
                         'status' => TRUE,
-                        'message' => 'PPC alterado com sucesso',
+                        'mesage' => 'Projeto Pedaogico de Curso alterado com sucesso',
                     ), 200);
                 } catch (\Exception $e) {
                     $this->api_return(array(
@@ -576,21 +404,15 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         'message' => $e->getMessage(),
                     ), 400);
                 }
-
-            }else
-            {
-                $this->api_return(array(
-                    'status' => false,
-                    'message' => "Campo obrigatorio vazio",
-                ), 400);
             }
+            
         }else
         {
             $this->api_return(array(
                 'status' => false,
-                'message' => "Projeto Pedagogico de Curso não encontrado",
+                'message' => "Projeto Pedagogico de Curso não encontrado.",
             ), 400);
-        }
+        }        
     }
 
     /**
