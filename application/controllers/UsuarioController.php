@@ -158,12 +158,12 @@ class UsuarioController extends API_Controller
 	 * @apiGroup Usuario
 	 * 
 	 * @apiPermission ADMINISTRATOR
-	 * @apiParam (Request Body/JSON ) {String} [email] Optional Endereço de e-mail do usuário. 
-	 * @apiParam (Request Body/JSON ) {String} [nome] Optional   Nome do usuário.
-	 * @apiParam (Request Body/JSON ) {String} [papel] Optional  Categoria que define o acesso administrativo do usuário
-	 * @apiParam (Request Body/JSON ) {String} [senha] Optional Senha de acesso encriptada.
-	 * @apiParam (Request Body/JSON ) {DateTime} [dtUltimoAcesso] Optional  Data do último acesso realizado pelo usuário.
-	 * @apiParam (Request Body/JSON ) {JSON} [conjuntoSelecao] Optional Conjunto de componente curriculares selecionadas pelo usuário.
+	 * @apiParam (Request Body/JSON ) {String} [email] Endereço de e-mail do usuário. 
+	 * @apiParam (Request Body/JSON ) {String} [nome]   Nome do usuário.
+	 * @apiParam (Request Body/JSON ) {String} [papel]  Categoria que define o acesso administrativo do usuário
+	 * @apiParam (Request Body/JSON ) {String} [senha] Senha de acesso encriptada.
+	 * @apiParam (Request Body/JSON ) {DateTime} [dtUltimoAcesso]  Data do último acesso realizado pelo usuário.
+	 * @apiParam (Request Body/JSON ) {JSON} [conjuntoSelecao] Conjunto de componente curriculares selecionadas pelo usuário.
 	 *
 	 * @apiSuccess {String} message Usuário atualizado com sucesso.
 	 * 
@@ -232,7 +232,10 @@ class UsuarioController extends API_Controller
 	 * @api {delete} usuarios/:id Excluir um usuário
 	 * @apiName delete
 	 * @apiGroup Usuario
-	 *
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam {Number} id Identificador único do usuário. 
+	 * 
 	 * @apiSuccess {String} message  Usuário deletado com sucesso.
 	 * 
 	 * @apiError {String[]} 404 O <code>id</code> não corresponde a um usuário cadastrado.
