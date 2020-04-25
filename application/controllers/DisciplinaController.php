@@ -36,7 +36,7 @@ class DisciplinaController extends API_Controller
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => 'Não Encontrado'
+                'message' => array('Não Encontrado')
             ), 404);
         }
     }
@@ -72,7 +72,7 @@ class DisciplinaController extends API_Controller
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => 'Não Encontrado'
+                'message' => array('Não Encontrado')
             ), 404);
         }
     }
@@ -97,53 +97,46 @@ class DisciplinaController extends API_Controller
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( isset($payload['numDisciplina'], $payload['ch'],
-                    $payload['nome'], $payload['codDepto']) ){
+        // Cria novo objeto Disciplina
+        $disciplina = new \Entities\Disciplina;
 
-            // Cria novo objeto Disciplina
-            $disciplina = new \Entities\Disciplina;
-            $disciplina->setNumDisciplina($payload['numDisciplina']);
-            $disciplina->setCh($payload['ch']);
-            $disciplina->setNome($payload['nome']);
+        if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
+        if ( array_key_exists('ch', $payload) )             $disciplina->setCh($payload['ch']);
+        if ( array_key_exists('nome', $payload) )           $disciplina->setNome($payload['nome']);
 
-            // Insere o Departamento do código de Departamento dado.
-            // Será analisado pelo validator posteriormente em caso de existência ou não.
+        // Insere o Departamento do código de Departamento dado.
+        // Será analisado pelo validator posteriormente em caso de existência ou não.
+        if ( array_key_exists('codDepto', $payload) ){
             $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
             $disciplina->setDepartamento($depto);
             $disciplina->setCodDepto($payload['codDepto']);
+        }
 
-            $validador = $this->validator->validate($disciplina);
-            if ( $validador->count() ){
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ), 400);
-    
-            } else {
-                try {
-                    $this->entity_manager->persist($disciplina);
-                    $this->entity_manager->flush();
-            
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Disciplina Criada Com Sucesso',
-                    ), 200);
-                
-                } catch (\Exception $e){
-                    $msg =  $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $msg,
-                    ), 400);
-                }
-            }
-
-        } else {
+        $validador = $this->validator->validate($disciplina);
+        if ( $validador->count() ){
+            $message = $validador->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatório Não Encontrado'
+                'message' => $message
             ), 400);
+    
+        } else {
+            try {
+                $this->entity_manager->persist($disciplina);
+                $this->entity_manager->flush();
+            
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => array('Disciplina Criada Com Sucesso'),
+                ), 200);
+                
+            } catch (\Exception $e){
+                $msg =  array($e->getMessage());
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), 400);
+            }
         }
     }
 
@@ -167,16 +160,13 @@ class DisciplinaController extends API_Controller
         ));
 
         $disciplina = $this->entity_manager->find('Entities\Disciplina', 
-        array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
-
+            array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( !is_null($disciplina) ){
-
-            if ( isset($payload['nome']) ) $disciplina->setNome($payload['nome']);
-
-            if ( isset($payload['ch']) ) $disciplina->setCh($payload['ch']);
-            
+        if ( !empty($payload) ){
+            if ( array_key_exists('nome', $payload) )   $disciplina->setNome($payload['nome']);
+            if ( array_key_exists('ch', $payload) )     $disciplina->setCh($payload['ch']);
+                
             $validador = $this->validator->validate($disciplina);
             if ( $validador->count() ){
                 $message = $validador->messageArray();
@@ -192,22 +182,22 @@ class DisciplinaController extends API_Controller
         
                     $this->api_return(array(
                         'status' => TRUE,
-                        'message' => 'Disciplina Atualizada Com Sucesso',
+                        'message' => array('Disciplina Atualizada Com Sucesso'),
                     ), 200);
                 } catch (\Exception $e){
-                    $msg =  $e->getMessage();
+                    $msg =  array($e->getMessage());
                     $this->api_return(array(
                         'status' => FALSE,
                         'message' => $msg,
                     ), 400);
                 }
             }
-
+        
         } else {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Disciplina não encontrada',
-            ), 404);
+                'message' => array('Requisição Vazia'),
+            ), 400);
         }
     }
 
@@ -243,11 +233,11 @@ class DisciplinaController extends API_Controller
                 $this->entity_manager->flush();
                 $this->api_return(array(
                     'status' => TRUE,
-                    'message' => 'Disciplina Removida com Sucesso'
+                    'message' => array('Disciplina Removida com Sucesso')
                 ), 200);
             
             } catch ( \Exception $e ){
-                $e_msg = $e->getMessage();
+                $e_msg = array($e->getMessage());
                 $this->api_return(array(
                     'status' => FALSE,
                     'message' => $e_msg
@@ -257,7 +247,7 @@ class DisciplinaController extends API_Controller
         } else {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Disciplina não Encontrada'
+                'message' => array('Disciplina não Encontrada')
             ), 404);
         }
     }

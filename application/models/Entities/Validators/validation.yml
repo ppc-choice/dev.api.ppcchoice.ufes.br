@@ -74,6 +74,10 @@ Entities\UnidadeEnsino:
             - Type: 
                 type: string
                 message: o valor {{ value }} deve ser do tipo {{ type }}.
+            - Regex:
+                pattern: "/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/"
+                match: false
+                message: o valor não possui o padrão de CNPJ.
         ies:
             - NotNull:
                 message: a instituição de ensino superior não deve ser nula (ou valor inexistente).
