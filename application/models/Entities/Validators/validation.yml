@@ -3,7 +3,7 @@ Entities\Usuario:
     properties:
         nome:
             - NotNull: 
-                message: Um valor deve ser informado
+                message: Este valor não deve ser nulo.
             - Type: 
                 type: string
                 message: Este valor deve ser do tipo {{ type }}.
@@ -45,7 +45,3 @@ Entities\Usuario:
                 message: Este valor não é uma data válida..
             - NotNull: 
                     message: Este valor não deve ser nulo.
-    constraints:
-        - Callback:
-            methods: 
-            - [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
