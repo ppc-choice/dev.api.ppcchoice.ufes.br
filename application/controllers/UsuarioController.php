@@ -75,7 +75,12 @@ class UsuarioController extends API_Controller
 			'status' => TRUE,
 			'result' => $result,
 		), self::HTTP_OK);
-	}
+	}Optional
+	Optional
+	Optional
+	Optional
+	Optional
+	Optional
 
 	/**
 	 * @api {post} usuarios Criar um usuário
@@ -156,8 +161,8 @@ class UsuarioController extends API_Controller
 	 * @api {put} usuarios/:id Atualizar dados de um usuário
 	 * @apiName update
 	 * @apiGroup Usuario
-	 * 
 	 * @apiPermission ADMINISTRATOR
+	 * 
 	 * @apiParam (Request Body/JSON ) {String} [email] Endereço de e-mail do usuário. 
 	 * @apiParam (Request Body/JSON ) {String} [nome]   Nome do usuário.
 	 * @apiParam (Request Body/JSON ) {String} [papel]  Categoria que define o acesso administrativo do usuário

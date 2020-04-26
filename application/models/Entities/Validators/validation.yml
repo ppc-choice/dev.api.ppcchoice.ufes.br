@@ -2,11 +2,13 @@
 Entities\Usuario:
     properties:
         nome:
+            - NotNull: 
+                message: Um valor deve ser informado
             - Type: 
                 type: string
-                message: o valor deve ser do tipo {{ type }}
+                message: Este valor deve ser do tipo {{ type }}.
             - NotBlank: 
-                message: o campo nome não pode ser vazio
+                message: Este valor não deve ser vazio.
             - Regex:
                 pattern: "/\d/"
                 match:   false
@@ -14,35 +16,35 @@ Entities\Usuario:
         email:
             - Type: 
                 type: string
-                message: o valor deve ser do tipo {{ type }}
+                message: Este valor deve ser do tipo {{ type }}.
             - NotNull: 
-                message: o campo e-mail é obrigatório
+                message: Este valor não deve ser nulo.
             - Email: 
-                message: o endereço {{ value }} é inválido.
+                message: Este valor não é um endereço de e-mail válido.
                 checkMX: true
         papel:
             - Type: 
                 type: string
-                message: o valor deve ser do tipo {{ type }}
+                message: Este valor deve ser do tipo {{ type }}.
             - NotNull: 
-                message: o campo papel é obrigatório
+                message: Este valor não deve ser nulo.
             - OneOf:
                 choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
-                message: O papel escolhido não é um dos tipos predefinidos
+                message: O valor selecionado não é uma opção válida.
         senha:
             - Type: 
                 type: string
-                message: o valor deve ser do tipo {{ type }}
+                message: Este valor deve ser do tipo {{ type }}.
             - NotNull: 
-                    message: o campo senha é obrigatório 
+                    message: Este valor não deve ser nulo.
             - NotBlank: 
-                message: Campo senha não pode ser vazio
+                message: Este valor não deve ser vazio.
         dtUltimoAcesso:
             - Type: 
                 type: DateTime
-                message: o valor deve ser do tipo {{ type }}me
+                message: Este valor não é uma data válida..
             - NotNull: 
-                    message: o dtUltimoAcesso é obrigatório
+                    message: Este valor não deve ser nulo.
     constraints:
         - Callback:
             methods: 
