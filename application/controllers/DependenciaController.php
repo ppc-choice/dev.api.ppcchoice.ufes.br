@@ -92,7 +92,6 @@ class DependenciaController extends API_Controller
                     'result' => $dependencia,
                 ), self::HTTP_OK
             ); 
-
         }else{
             
             $this->api_return(

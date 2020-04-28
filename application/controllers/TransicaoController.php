@@ -9,20 +9,25 @@ class TransicaoController extends API_Controller {
      * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Listar os cursos atuais da unidade de ensino especificada para os quais há transição.
      * @apiName findByCodUnidadeEnsino
      * @apiGroup Transição
-     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada  Nenhuma transição foi encontrada para os cursos da unidade de ensino solicitada.
      * 
      * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
-     *
+     * 
      * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
      * @apiSuccess {Number} codPpc Código do ppc atual da transição.
+     * 
+     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
+     * 
      */
-    
 
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('get'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
 
@@ -33,15 +38,15 @@ class TransicaoController extends API_Controller {
                     'status' => true,
                     'result' =>  $transicao
                 ),
-                200
+                self::HTTP_OK
             );
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma transição foi encontrada para a unidade de ensino solicitada.'
+                    'message' =>  array('Nenhuma transição foi encontrada para a unidade de ensino solicitada.')
                 ),
-                404
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -50,18 +55,20 @@ class TransicaoController extends API_Controller {
      * @api {get} transicoes Listar todas as transições.
      * @apiName findAll
      * @apiGroup Transição
-     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada Nenhuma transição encontrada.
      *
-     * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
-     * @apiSuccess {String} ppcAlvo Nome do curso e Ano de aprovação do ppc alvo da transição.
-     * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
-     * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
+     * @apiSuccess {Transicao[]} Transicoes Array de objetos do tipo transição.
+     *
+     * @apiError {String[]} 404 Nenhuma transição encontrada.
      */
     public function findAll()
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('GET'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao = $this->entity_manager->getRepository('Entities\Transicao')->findAll();
         $retorno = $this->doctrine_to_array($transicao);
@@ -71,15 +78,15 @@ class TransicaoController extends API_Controller {
                     'status' => true,
                     'result' =>  $retorno
                 ),
-                200
+                self::HTTP_OK
             );
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Nenhuma transição encontrada'
+                    'message' =>  array('Nenhuma transição encontrada')
                 ),
-                404
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -88,19 +95,25 @@ class TransicaoController extends API_Controller {
      * @api {get} projetos-pedagogicos-curso/:codPpcAtual/transicoes Listar as transições mapeadas de um ppc.
      * @apiName findByCodPpc
      * @apiGroup Transição
-     * @apiError  (Transição Não Encontrada 404) TransicaoNaoEncontrada Não foi encontrada transição para o ppc solicitado.
+     *
      * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
      *
      * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
      * @apiSuccess {String} ppcAlvo Nome do curso e Ano de aprovação do ppc alvo da transição.
      * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
      * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
+     * 
+     * @apiError {String[]} 404 O <code>codPpcAtual</code> não corresponde a um ppc cadastrado.
      */
     public function findByCodPpc($codPpcAtual)
 	{
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-            'methods' => array('GET'), 
-        ));
+            'methods' => array('get'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
 
         $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
 
@@ -111,15 +124,15 @@ class TransicaoController extends API_Controller {
                     'status' => true,
                     'result' =>  $transicao
                 ),
-                200
+                self::HTTP_OK
             );
         }else{
             $this->api_return(
                 array(
                     'status' => false,
-                    'message' =>  'Não foi encontrada transição para o ppc solicitado'
+                    'message' =>  array('Não foi encontrada transição para o ppc solicitado')
                 ),
-                404
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -127,144 +140,212 @@ class TransicaoController extends API_Controller {
 
     /**
      * @api {post} transicoes Criar transição
-     * @apiName add
+     * @apiName create
      * @apiGroup Transição
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (PPC não encontrado 400) PPCNaoEncontrado Ppc Atual ou  Ppc Alvo não encontrado.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "codPpcAtual" : 1,
-	 *         "codPpcAlvo" : 4
-     *     }
+     * 
+     * @apiParam (Request Body/JSON) {String} codPpcAtual  Código do ppc atual.
+     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Código do ppc alvo.
+     * 
      *  @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "status": true,
      *       "message": "Transição criada com sucesso"
      *     }
+     * 
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
-    public function add()
+    public function create()
     {
+        header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('POST'),
             // 'limit' => array(2,'ip','everyday'),
             // 'requireAuthorization' => TRUE
             )
-
         );
 
+        $transicao = new Entities\Transicao;
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
-        if( isset($payload['codPpcAtual'], $payload['codPpcAlvo']) )
+        if( isset($payload['codPpcAtual']))
         {
             $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // aceita null, e a execução da erro antes de chegar no validador
+            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
+        }
+        if( isset($payload['codPpcAlvo']))
+        {
             $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
+            // aceita null, e a execução da erro antes de chegar no validador
+            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            if(!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
+        }
 
-            $msg = '';
-            if(is_null($ppcAtual)) $msg = $msg . 'Ppc Atual não encontrado. ';
-            if(is_null($ppcAlvo)) $msg = $msg . 'Ppc Alvo não encontrado. ';
-            if(empty($msg))
-            {
-                $transicao = new Entities\Transicao;
-                $transicao->setPpcAtual($ppcAtual);
-                $transicao->setPpcAlvo($ppcAlvo);
-
-                try{
-                    $this->entity_manager->persist($transicao);
-                    $this->entity_manager->flush();
-    
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Transição criada com sucesso.',
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), 404);
-            }
-        }else{
+        $validador = $this->validator->validate($transicao);
+        if($validador->count())
+        {
+            $message = $validador->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado.',
-            ), 400);
+                'message' => $message
+            ), self::HTTP_BAD_REQUEST);
+        }else{
+            try{
+                $this->entity_manager->persist($transicao);
+                $this->entity_manager->flush();
+
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => array('Transição criada com sucesso.'),
+                ), self::HTTP_OK);
+            } catch (\Exception $e) {
+                $eMsg = array($e->getMessage());
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $eMsg
+                ), self::HTTP_BAD_REQUEST);
+            }
         }
     }
 
     /**
-     * @api {put} transicao/:codPpcAtual/:codPpcAlvo Atualizar Correspondência
+     * @api {put} transicao/:codPpcAtual/:codPpcAlvo Atualizar transição
      * @apiName update
-     * @apiGroup Correspondência
-     * @apiParam {Number} codCompCurric Código de componente curricular.
-     * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Componente Curricular não encontrada 404) PPCNaoEncontrado Componente curricular ou componente correspondente não encontradas.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         percentual: 0.5
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
+     * @apiGroup Transição
+     * 
+     * @apiParam {Number} codPpcAtual Código de ppc.
+     * @apiParam {Number} codPpcAlvo Código de ppc.
+     * @apiParam (Request Body/JSON) {String} codPpcAtual  Código do ppc atual.
+     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Código do ppc alvo.
+     * 
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "status": true,
-     *       "message": "Correspondência atualizada com sucesso"
+     *       "message": "Transição atualizada com sucesso"
      *     }
+     * 
+     * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function update($codPpcAtual,$codPpcAlvo)
     {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('PUT'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
         $transicao = $this->entity_manager->find('Entities\Transicao',
                 array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $msg = '';
-        if(!is_null($transicao) && !empty($payload))
+        if(!is_null($transicao))
         {
-            if(isset($payload['codPpcAtual']))
-            {
-                $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-                if(is_null($compCurric)) $msg = $msg . 'Ppc Atual não encontrado. ';
-            }
-            if(isset($payload['codPpcAlvo']))
-            {
-                $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
-                if(is_null($compCurric)) $msg = $msg . 'Ppc Alvo não encontrado. ';
-            }
-            if(empty($msg))
-            {
+            //usar array_key_exists para tratar o caso de setar null e ser pego pelo validador
+            //para gerar mensagem de erro, mas eh necessário colocar "= null" no argumento do setter
+            //da chave no arquivo da entidade
+            if(array_key_exists('codPpcAtual',$payload)){
+                if( isset($payload['codPpcAtual']))
+                    $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+                else{
+                    $ppcAtual = null;
+                } 
                 $transicao->setPpcAtual($ppcAtual);
+            }
+            if( array_key_exists('codPpcAlvo',$payload))
+            {
+                if(isset($payload['codPpcAlvo']))
+                    $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+                else{
+                    $ppcAlvo = null;
+                }
                 $transicao->setPpcAlvo($ppcAlvo);
+            }
+            
+            $validador = $this->validator->validate($transicao);
+            if($validador->count())
+            {
+                $message = $validador->messageArray();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $message
+                ), self::HTTP_BAD_REQUEST);
+            }else{
                 try {
                     $this->entity_manager->merge($transicao);
                     $this->entity_manager->flush();
                     $this->api_return(array(
                         'status' => TRUE,
-                        'message' => 'Transição atualizada com sucesso'
-                    ), 200);
+                        'message' => array('Transição atualizada com sucesso')
+                    ), self::HTTP_OK);
                 } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
+                    $eMsg = array($e->getMessage());
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
+                        'message' => $eMsg
+                    ), self::HTTP_BAD_REQUEST);
+                } 
             }
-        }elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
-            ), 400);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Transição não encontrada',
-            ), 404);
+                'message' => array('Transição não encontrada'),
+            ),self::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @api {delete} transicoes/:codPpcAtual/:codPpcAlvo Deletar Componente Curricular
+     * @apiName delete
+     * @apiGroup Transição
+     * 
+     * @apiParam {Number} codPpcAtual Código de ppc.
+     * @apiParam {Number} codPpcAlvo Código de ppc.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "message": "Transição removida com sucesso"
+     *     }
+     * 
+     * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     */
+    public function delete($codPpcAtual,$codPpcAlvo )
+    {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+            'methods' => array('DELETE'),
+            // 'limit' => array(2,'ip','everyday'),
+            // 'requireAuthorization' => TRUE
+            )
+        );
+        $transicao = $this->entity_manager->find('Entities\Transicao',
+                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+        if(!is_null($transicao))
+        {
+            try {
+                $this->entity_manager->remove($transicao);
+                $this->entity_manager->flush();
+                $this->api_return(array(
+                    'status' => TRUE,
+                    'message' => array('Transição removida com sucesso')
+                ), self::HTTP_OK);
+            } catch (\Exception $e) {
+                $eMsg = array($e->getMessage());
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $eMsg
+                ), self::HTTP_BAD_REQUEST);
+            }
+        }else{ 
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => array('Transição não encontrada'),
+            ),self::HTTP_NOT_FOUND);
         }
     }
 }
