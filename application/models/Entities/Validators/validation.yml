@@ -49,6 +49,75 @@ Entities\Usuario:
         - Callback:
             methods: 
                 -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+Entities\Disciplina:
+    properties:
+        numDisciplina:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+        codDepto:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+        nome:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - NotBlank:
+                message: Este valor não deve ser vazio.
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+        ch:
+            - NotNull: 
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+            - Range:
+                min: 0,
+                minMessage: Este valor deve ser não negativo.
+        departamento:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: object
+                message: Este valor deve ser do tipo {{ type }}.
+Entities\UnidadeEnsino:
+    properties:
+        codUnidadeEnsino:
+            - Type: 
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+        nome:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - NotBlank:
+                message: Este valor não deve ser vazio.
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+        cnpj:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - NotBlank:
+                message: Este valor não deve ser vazio.
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - Regex:
+                pattern: '/^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/'
+                match: true
+                message: O valor não possui o padrão de CNPJ.
+        ies:
+            - NotNull:
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: object
+                message: Este valor deve ser do tipo {{ type }}.
 Entities\ComponenteCurricular:
     properties:
         periodo:
