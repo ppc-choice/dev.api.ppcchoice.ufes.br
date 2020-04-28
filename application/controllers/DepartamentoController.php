@@ -236,13 +236,13 @@ class DepartamentoController extends API_Controller {
 		
         if(!is_null($depto))
         {            
-			if(isset($payload['codUnidadeEnsino'])) //Verificar resultados de isset e is_null
+			if(isset($payload['codUnidadeEnsino']))
             {
                 $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$depto->setUnidadeEnsino($ues);
 			}
-				if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
-				if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
+				if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
+				if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
 				$valida = $this->validator->validate($depto);
 
