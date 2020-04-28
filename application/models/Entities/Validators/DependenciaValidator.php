@@ -12,7 +12,7 @@ class DependenciaValidator
         {
             if($dependencia->getComponenteCurricular()->getPpc()->getCodPpc() !=  $dependencia->getPreRequisito()->getPpc()->getCodPpc()){
                 $context->addViolationAt(
-                    'Dependencia',
+                    'componenteCurricular',
                     'As componentes curriculares devem pertencer ao mesmo ppc',
                     array(),
                     null
@@ -29,7 +29,7 @@ class DependenciaValidator
             if($dependencia->getComponenteCurricular()->getPeriodo() ==  $dependencia->getPreRequisito()->getPeriodo())
             {
                 $context->addViolationAt(
-                    'Dependencia',
+                    'componenteCurricular',
                     'As componentes curriculares devem ter periodos distintos',
                     array(),
                     null
