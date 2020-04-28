@@ -53,7 +53,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
 
     /**
      * Converts the violation into a string and add into array.
-     *
+     * @author Elyabe Alves <elyabe@outlook.com> / github.com/elyabe
      * @return array The violations messages.
      */
     public function messageArray()
@@ -65,6 +65,16 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
         }
 
         return $msg;
+    }
+
+    /**
+     * Verify if object is valid
+     * @author Elyabe Alves <elyabe@outlook.com> / github.com/elyabe
+     * @return boolean Flag : TRUE if object is valid or FALSE.
+     */
+    public function success()
+    {
+        return $this->count() === 0;
     }
 
     /**

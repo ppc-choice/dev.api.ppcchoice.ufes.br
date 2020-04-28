@@ -54,7 +54,7 @@ class Correspondencia
      * @param \Entities\ComponenteCurricular $componenteCurricular
      * @return Correspondencia
      */
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = null)
     {
         $this->componenteCurricular = $componenteCurricular;
     
@@ -77,7 +77,7 @@ class Correspondencia
      * @param \Entities\ComponenteCurricular $componenteCurricularCorresp
      * @return Correspondencia
      */
-    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp)
+    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp = null)
     {
         $this->componenteCurricularCorresp = $componenteCurricularCorresp;
     

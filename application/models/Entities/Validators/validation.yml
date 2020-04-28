@@ -1,16 +1,50 @@
-# models/validation.yaml
+# models/Entities/Validators/validation.yaml
 Entities\Usuario:
     properties:
         nome:
-            - NotBlank: ~
+            - NotNull: 
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
+            - Regex:
+                pattern: '/\d/'
+                match:   false
+                message: Este valor não deve conter caracteres numéricos
         email:
-            - NotNull: ~
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                message: Este valor não deve ser nulo.
             - Email: 
-                message: o endereço {{ value }} é inválido.
+                message: Este valor não é um endereço de e-mail válido.
                 checkMX: true
         papel:
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                message: Este valor não deve ser nulo.
             - OneOf:
                 choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
+                message: O valor selecionado não é uma opção válida.
+        senha:
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                    message: Este valor não deve ser nulo.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
+        dtUltimoAcesso:
+            - Type: 
+                type: DateTime
+                message: Este valor não é uma data válida..
+            - NotNull: 
+                message: Este valor não deve ser nulo.
     constraints:    
         - Callback:
             methods: 
@@ -84,3 +118,75 @@ Entities\UnidadeEnsino:
             - Type: 
                 type: object
                 message: Este valor deve ser do tipo {{ type }}.
+Entities\ComponenteCurricular:
+    properties:
+        periodo:
+            - NotNull: 
+                message: Período não pode ser null.
+            - Type:
+                type: integer
+                message: O período informado ({{ value }}) não é do tipo {{ type }}.
+            - Range:
+                min:  1
+                minMessage: Período não pode ser valor menor que 1. 
+                invalidMessage: valor não é valido
+        credito:
+            - NotNull: 
+                message: Crédito não pode ser null.
+            - Type:
+                type: integer
+                message: O crédito informado ({{ value }}) não é do tipo {{ type }}.
+            - Range:
+                min:  0 
+                minMessage: Crédito deve ter valor positivo. 
+        tipo:
+            - NotNull: 
+                message: Tipo não pode ser null.
+            - NotBlank: 
+                message: Tipo não pode estar em branco.
+            - OneOf:
+                choices: [OBRIGATORIA, OPTATIVA, ESTAGIO, ATIVIDADE COMPLEMENTAR, ATIVIDADE EXTENSAO, PROJETO CONCLUSAO]
+                message: O tipo {{ value }} não é um dos valores aceitáveis.
+        disciplina:
+            - NotNull: 
+                message: Disciplina é null ou não existe.
+            - Valid: ~
+        ppc:
+            - NotNull: 
+                message: ppc é null ou não existe.
+            - Valid: ~
+Entities\Correspondencia:
+    properties:
+        componenteCurricular:
+            - NotNull: 
+                message: Componente curricular é null ou não existe.
+        componenteCurricularCorresp:
+            - NotNull: 
+                message: Componente curricular correspondente é null ou não existe.
+        percentual:
+            - NotNull: 
+                message: Percentual não pode ser null.
+            - Type:
+                type: float
+                message: O valor ({{ value }}) não é do tipo {{ type }}.
+            - Range:
+                min: 0.1
+                max: 1
+                minMessage: Correspondência deve ser maior que 0%.
+                maxMessage: Correspondência não pode ser maior que 100%.
+    constraints:    
+        - Callback:
+            methods: 
+                -    [Entities\Validators\CorrespondenciaValidator, ppcIgual]
+Entities\Transicao:
+    properties:
+        ppcAtual:
+            - NotNull: 
+                message: Ppc Atual é null ou não existe.
+        ppcAlvo:
+            - NotNull: 
+                message: Ppc Alvo é null ou não existe.
+    constraints:    
+        - Callback:
+            methods: 
+                -    [Entities\Validators\TransicaoValidator, ppcIgual]
