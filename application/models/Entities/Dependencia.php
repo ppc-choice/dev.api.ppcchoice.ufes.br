@@ -26,7 +26,7 @@ class Dependencia
      * @param \Entities\ComponenteCurricular $componenteCurricular
      * @return Dependencia
      */
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = null)
     {
         $this->componenteCurricular = $componenteCurricular;
     
@@ -49,7 +49,7 @@ class Dependencia
      * @param \Entities\ComponenteCurricular $preRequisito
      * @return Dependencia
      */
-    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito)
+    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito = null)
     {
         $this->preRequisito = $preRequisito;
     
