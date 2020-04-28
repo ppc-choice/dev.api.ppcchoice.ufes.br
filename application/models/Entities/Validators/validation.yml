@@ -22,7 +22,8 @@ Entities\InstituicaoEnsinoSuperior:
                 message: Nome não pode ser null.
             - NotBlank: 
                 message: Nome é inválido.
-            - Type: string
+            - Type: 
+                type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
                 pattern: "/\d/"
@@ -33,7 +34,8 @@ Entities\InstituicaoEnsinoSuperior:
                 message: Abreviatura não pode ser null.
             - NotBlank: 
                 message: Abreviatura é inválida.
-            - Type: string
+            - Type: 
+                type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
                 pattern: "/\d/"
@@ -46,7 +48,8 @@ Entities\Departamento:
                 message: Nome não pode ser null.
             - NotBlank: 
                 message: Nome é inválido.
-            - Type: string
+            - Type: 
+                type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
                 pattern: "/\d/"
@@ -57,7 +60,8 @@ Entities\Departamento:
                 message: Abreviatura não pode ser null.
             - NotBlank: 
                 message: Abreviatura é inválida.
-            - Type: string
+            - Type: 
+                type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
                 pattern: "/\d/"
@@ -73,7 +77,8 @@ Entities\Curso:
                 message: Nome não pode ser null.
             - NotBlank: 
                 message: Nome é inválido.
-            - Type: string
+            - Type: 
+                type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
                 pattern: "/\d/"
