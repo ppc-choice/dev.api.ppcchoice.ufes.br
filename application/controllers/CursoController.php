@@ -53,12 +53,12 @@ class CursoController extends API_Controller {
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
-			), 200);
+			), self::HTTP_OK);
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => 'Curso não encontrado!',
-			), 404);
+			), self::HTTP_NOT_FOUND);
 		}
     }
     
@@ -119,7 +119,7 @@ class CursoController extends API_Controller {
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
-		), 200);
+		), self::HTTP_OK);
     }
 	
 	/**
@@ -182,7 +182,7 @@ class CursoController extends API_Controller {
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);	
+				), self::HTTP_BAD_REQUEST);	
 			} else {
 				try {
 					$this->entity_manager->persist($curso);
@@ -191,13 +191,13 @@ class CursoController extends API_Controller {
 					$this->api_return(array(
 						'status' => TRUE,
 						'message' => 'Curso criado com Sucesso!',
-					), 200);
+					), self::HTTP_OK);
 				} catch (\Exception $e) {
 					$msg = $e->getMessage();
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg,
-					), 400);
+					), self::HTTP_BAD_REQUEST);
 				}
 			}
 	}
@@ -253,7 +253,7 @@ class CursoController extends API_Controller {
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg,
-					), 400);	
+					), self::HTTP_BAD_REQUEST);	
 				} else {
 					try {
 						$this->entity_manager->merge($curso);
@@ -261,13 +261,13 @@ class CursoController extends API_Controller {
 						$this->api_return(array(
 							'status' => TRUE,
 							'message' => 'Curso atualizado com sucesso!'
-						), 200);
+						), self::HTTP_OK);
 					} catch (\Exception $e) {
 						$e_msg = $e->getMessage();
 						$this->api_return(array(
 							'status' => FALSE,
 							'message' => $e_msg
-						), 400);
+						), self::HTTP_BAD_REQUEST);
 					}	
 				}
 
@@ -276,12 +276,12 @@ class CursoController extends API_Controller {
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Corpo da Requisição vazio',
-            ), 400);
+            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Curso não encontrado!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
         }
 	}
 
@@ -317,20 +317,20 @@ class CursoController extends API_Controller {
 				$this->api_return(array(
 					'status' => TRUE,
 					'message' => 'Curso removida com sucesso!'
-				), 200);
+				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
 				$msg = $e->getMessage();
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg
-				), 400);
+				), self::HTTP_BAD_REQUEST);
 			}
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Curso não encontrada!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
 		}
 	}
 }
