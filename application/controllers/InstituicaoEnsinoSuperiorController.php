@@ -10,39 +10,12 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
     }
   
 	/**
-	 * @api {get} instituicoes-ensino-superior/ Requisitar todas Instituições de Ensino Superior registradas.
+	 * @api {get} instituicoes-ensino-superior/ Solicitar dados de todas Instituições de Ensino Superior.
 	 * @apiName getAll
 	 * @apiGroup Instituições de Ensino Superior
-	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
-	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
-	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/instituicoes-ensino-superior/
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": [
-	 *	{
-	*		"codIes": 8,
-	*		"nome": "Harvard",
-	*		"abreviatura": "HAR"
-	 *		},
-	 *		{
-	 *		"codIes": 573,
-	 *		"nome": "Universidade Federal do Espírito Santo",
-	 *		"abreviatura": "UFES"
-	 *		}
-	 *	]
-	 * }
-	 * @apiError UserNotFound Nenhuma Instituição de Ensino Superior cadastrada.
-	 * @apiSampleRequest instituicoes-ensino-superior/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Instituicao de Ensino Superior não encontrada!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {instituicoes-ensino-superior[]} InstituicoesEnsinoSuperior Array de objetos do tipo Instituição de Ensino Superior.
 	 */
     public function getAll()
     {
@@ -65,33 +38,18 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 
 	/**
-	 * @api {get} instituicoes-ensino-superior/:codIes Requisitar dados de uma Instituição de Ensino Superior específica.
+	 * @api {get} instituicoes-ensino-superior/:codIes Solicitar dados de uma Instituição de Ensino Superior.
 	 * @apiName getById
 	 * @apiGroup Instituições de Ensino Superior
+	 * @apiPermission ADMINISTRATOR
 	 *
 	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior requerida.
 	 *
 	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
 	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/instituicoes-ensino-superior/573
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": {
-	 *	"codIes": 573,
-	 *	"nome": "Universidade Federal do Espírito Santo",
-	 *	"abreviatura": "UFES"
-	 * }
-	 * @apiError UserNotFound O <code>codIes</code> não corresponde a nenhuma Instituição de Ensino Superior cadastrada.
-	 * @apiSampleRequest instituicoes-ensino-superior/:codIes
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Instituicao de Ensino Superior não encontrada!"
-	 * }
+	 * 
+	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
     public function getById($codIes)
     {   
@@ -119,36 +77,21 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 
 	}
 	
+
 	/**
 	 * @api {post} instituicoes-ensino-superior/ Criar uma Instituição de Ensino Superior.
 	 * @apiName create
 	 * @apiGroup Instituições de Ensino Superior
-	 * @apiSuccess {Number} codIes   Identificador único da Instituição de Ensino Superior.
-	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
-	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/instituicoes-ensino-superior/
-	 * @apiParamExample {json} Request-Example:
-     * {
-	 * 	 "codIes": 111,
-     *   "nome": "Nova Instituição de Ensino Superior",
-     *	 "abreviatura": "NIES"
-     * }
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": "Instituição de Ensino Superior criada com Sucesso!"
-	* {
-	
-	 * @apiError IesNotFound Não foi possível criar uma nova Instituição de Ensino Superior.
-	 * @apiSampleRequest instituicoes-ensino-superior/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Campo Obrigatorio Não Encontrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {Number} codIes   Identificador único da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
+	 * 
+	 * @apiSuccess {String} message  Instituição de Ensino Superior criada com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
@@ -196,25 +139,21 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
  
     }
    
+
 	/**
-     * @api {put} instituicoes-ensino-superior/:codIes Atualizar Instituição de Ensino Superior.
+     * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
      * @apiName update
      * @apiGroup Instituições de Ensino Superior
-     * @apiParam {Number} codIes Código da Instituição de Ensino Superior.
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Instituição de Ensino Superior não encontrado 404) Instituição de Ensino Superior não encontrada.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "nome" : "Universidade Federal de Nova Venécia",
-	 *         "abreviatura" : "UFNV"
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Instituição de Ensino Superior atualizada com sucesso"
-     *     }
-     */
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
+	 * 
+	 * @apiSuccess {String} message  Instituição de Ensino Superior atualizada com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 */	
 	public function update($codIes)
     {
 		header("Access-Controll-Allow-Origin: *");
@@ -273,18 +212,18 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         }
 	}
 	
+
 	/**
-     * @api {delete} instituicoes-ensino-superior/:codIes Deletar Instituição de Ensino Superior.
+     * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
      * @apiName delete
      * @apiGroup Instituições de Ensino Superior
-     * @apiParam {Number} codIes Código da Instituição de Ensino Superior.
-     * @apiError  (Campo não encontrado 400) NotFound Instituição de Ensino Superior não encontrada.
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Instituição de Ensino Superior removida com sucesso"
-     *     }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
+   	 * 
+	 * @apiSuccess {String} message  Instituição de Ensino Superior deletada com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
      */
 	public function delete($codIes)
 	{
