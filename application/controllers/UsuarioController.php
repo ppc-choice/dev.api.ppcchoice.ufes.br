@@ -75,12 +75,7 @@ class UsuarioController extends API_Controller
 			'status' => TRUE,
 			'result' => $result,
 		), self::HTTP_OK);
-	}Optional
-	Optional
-	Optional
-	Optional
-	Optional
-	Optional
+	}
 
 	/**
 	 * @api {post} usuarios Criar um usuário

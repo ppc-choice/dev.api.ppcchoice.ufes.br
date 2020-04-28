@@ -10,9 +10,9 @@ Entities\Usuario:
             - NotBlank: 
                 message: Este valor não deve ser vazio.
             - Regex:
-                pattern: "/\d/"
+                pattern: '/\d/'
                 match:   false
-                message: Nome não deve conter números
+                message: Este valor não deve conter caracteres numéricos
         email:
             - Type: 
                 type: string
@@ -44,4 +44,4 @@ Entities\Usuario:
                 type: DateTime
                 message: Este valor não é uma data válida..
             - NotNull: 
-                    message: Este valor não deve ser nulo.
+                message: Este valor não deve ser nulo.
