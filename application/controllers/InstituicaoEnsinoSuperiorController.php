@@ -15,7 +15,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {instituicoes-ensino-superior[]} InstituicoesEnsinoSuperior Array de objetos do tipo Instituição de Ensino Superior.
+	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
 	 */
     public function getAll()
     {
@@ -173,7 +173,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 			
 			$validacao = $this->validator->validate($ies);
 
-			if ( $validacao->count() ){
+			if ( $validacao->count()){
 				$msg = $validacao->messageArray();
 	
 				$this->api_return(array(
