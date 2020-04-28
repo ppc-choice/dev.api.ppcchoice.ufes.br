@@ -164,8 +164,8 @@ class DepartamentoController extends API_Controller {
 		
 		$depto = new \Entities\Departamento;
 
-		if ( isset($payload['nome']) ) $depto->setNome($payload['nome']);
-		if ( isset($payload['abreviatura']) ) $depto->setAbreviatura($payload['abreviatura']);
+		if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
+		if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
         if (isset($payload['codUnidadeEnsino'])){
 			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
@@ -241,9 +241,8 @@ class DepartamentoController extends API_Controller {
                 $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$depto->setUnidadeEnsino($ues);
 			}
-
-				if(isset($payload['nome'])) $depto->setNome($payload['nome']);
-				if(isset($payload['abreviatura'])) $depto->setAbreviatura($payload['abreviatura']);
+				if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
+				if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
 
 				$valida = $this->validator->validate($depto);
 
