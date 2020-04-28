@@ -20,10 +20,10 @@ Entities\Dependencia:
     properties:
         componenteCurricular:
             - NotNull:
-                message: A componente curricular não pode ser vazia.
+                message: Este valor deve ser nulo.
         preRequisito:
             - NotNull:
-                message: O pré-requisito não pode ser vazio.
+                message: Este valor deve ser nulo.
     constraints:    
         - Callback:
             methods: 
@@ -34,105 +34,105 @@ Entities\ProjetoPedagogicoCurso:
     properties:
         dtInicioVigencia:
             - NotNull:
-                message: A data de início de vigência não pode ser vazia.
+                message: Este valor deve ser nulo.
             - DateTime:
-                message: Formato de data inválido.
+                message: Este valor não é uma data e hora válida.
         dtTerminoVigencia:
             - DateTime:
-                message: Formato de data inválido.
+                message: Este valor não é uma data e hora válida.
 
         chTotalDisciplinaOpt:
             - NotNull:
-                message: A carga horária total de disciplina optativa não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de disciplina optativa deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         chTotalDisciplinaOb: 
             - NotNull:
-                message: A carga horária total de disciplina obrigatória não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de disciplina obrigatória deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         chTotalAtividadeExt:
             - NotNull:
-                message: A carga horária total de atividade de extensão não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de atividade de extensão deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         chTotalAtividadeCmplt:
             - NotNull:
-                message: A carga horária total de atividade complementar não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de atividade complementar deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         chTotalProjetoConclusao:
             - NotNull:
-                message: A carga horária total de projeto de conclusão de curso não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de projeto de conclusão de curso deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         chTotalEstagio:
             - NotNull:
-                message: A carga horária total de estágio não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A carga horária de estágio deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         duracao:
             - NotNull:
-                message: A duração do curso não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: float
-                message: A duração do curso deve ser um número real
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         qtdPeriodos:
             - NotNull:
-                message: A quantidade de períodos não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: A quantidade de períodos deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
         anoAprovacao:
             - NotNull:
-                message: O ano de aprovação não pode ser vazia.
+                message: Este valor deve ser nulo.
             - Type:
                 type: int
-                message: O ano de aprovação deve ser um número inteiro.
+                message: Este valor deve ser do tipo {{ type }}.
         situacao:
             - OneOf:
                 choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
-                message: Situação {{ value }} não é válida.
+                message: O valor selecionado não é uma opção válida.
         curso:
             - NotNull:
-                message: Curso não encontrado.
+                message: Este valor deve ser nulo.
             - valid:
             - Type:
                 type: object
-                message: O tipo do curso deve ser um objeto.    
+                message: Este valor deve ser do tipo {{ type }}.    
     constraints:    
         - Callback:
             methods: 
-                - [Entities\Validators\ProjetoPedagogicoCursoValidator, dataVazia]
+                - [Entities\Validators\ProjetoPedagogicoCursoValidator, dtTerminoVigenciaVazia]
                 - [Entities\Validators\ProjetoPedagogicoCursoValidator, menorData]
                 - [Entities\Validators\ProjetoPedagogicoCursoValidator, situacaoPpc]
