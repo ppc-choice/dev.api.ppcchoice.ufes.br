@@ -23,12 +23,12 @@ Entities\Dependencia:
                 message: A componente curricular não pode ser vazia.
         preRequisito:
             - NotNull:
-                message: O pré-requisito não pode ser vazia.
+                message: O pré-requisito não pode ser vazio.
     constraints:    
         - Callback:
             methods: 
-                - [Entities\Validators\DependenciaValidator, notEqualPpc]
-                - [Entities\Validators\DependenciaValidator,equalPeriodo]
+                - [Entities\Validators\DependenciaValidator, ppcDiferente]
+                - [Entities\Validators\DependenciaValidator, periodoIgual]
 
 Entities\ProjetoPedagogicoCurso:
     properties:
@@ -47,48 +47,72 @@ Entities\ProjetoPedagogicoCurso:
             - Type:
                 type: int
                 message: A carga horária de disciplina optativa deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         chTotalDisciplinaOb: 
             - NotNull:
                 message: A carga horária total de disciplina obrigatória não pode ser vazia.
             - Type:
                 type: int
                 message: A carga horária de disciplina obrigatória deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         chTotalAtividadeExt:
             - NotNull:
                 message: A carga horária total de atividade de extensão não pode ser vazia.
             - Type:
                 type: int
                 message: A carga horária de atividade de extensão deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         chTotalAtividadeCmplt:
             - NotNull:
                 message: A carga horária total de atividade complementar não pode ser vazia.
             - Type:
                 type: int
                 message: A carga horária de atividade complementar deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         chTotalProjetoConclusao:
             - NotNull:
                 message: A carga horária total de projeto de conclusão de curso não pode ser vazia.
             - Type:
                 type: int
                 message: A carga horária de projeto de conclusão de curso deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         chTotalEstagio:
             - NotNull:
                 message: A carga horária total de estágio não pode ser vazia.
             - Type:
                 type: int
                 message: A carga horária de estágio deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         duracao:
             - NotNull:
                 message: A duração do curso não pode ser vazia.
             - Type:
                 type: float
                 message: A duração do curso deve ser um número real
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         qtdPeriodos:
             - NotNull:
                 message: A quantidade de períodos não pode ser vazia.
             - Type:
                 type: int
                 message: A quantidade de períodos deve ser um número inteiro.
+            - Range:
+                min: 0
+                minMessage: O valor mínimo aceitável é 0.
         anoAprovacao:
             - NotNull:
                 message: O ano de aprovação não pode ser vazia.
@@ -98,11 +122,14 @@ Entities\ProjetoPedagogicoCurso:
         situacao:
             - OneOf:
                 choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
-                message: Situação {{ value }} não válido.
+                message: Situação {{ value }} não é válida.
         curso:
             - NotNull:
                 message: Curso não encontrado.
             - valid:
+            - Type:
+                type: object
+                message: O tipo do curso deve ser um objeto.    
     constraints:    
         - Callback:
             methods: 

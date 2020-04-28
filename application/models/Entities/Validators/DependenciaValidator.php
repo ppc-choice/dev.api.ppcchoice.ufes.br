@@ -6,31 +6,35 @@ use Entities\Dependencia;
 
 class DependenciaValidator
 {
-    public static function notEqualPpc(Dependencia $dp, ExecutionContext $context)
+    public static function ppcDiferente(Dependencia $dependencia, ExecutionContext $context)
     {
-        
-
-        if($dp->getComponenteCurricular()->getPpc()->getCodPpc() !=  $dp->getPreRequisito()->getPpc()->getCodPpc()){
-            $context->addViolationAt(
-                'Dependencia',
-                'As componentes curriculares devem pertencer ao mesmo ppc',
-                array(),
-                null
-            );
+        if(!is_null($dependencia->getComponenteCurricular()) && !is_null($dependencia->getPreRequisito()))
+        {
+            if($dependencia->getComponenteCurricular()->getPpc()->getCodPpc() !=  $dependencia->getPreRequisito()->getPpc()->getCodPpc()){
+                $context->addViolationAt(
+                    'Dependencia',
+                    'As componentes curriculares devem pertencer ao mesmo ppc',
+                    array(),
+                    null
+                );
+            }
         }
     }
 
-    public static function equalPeriodo(Dependencia $dp, ExecutionContext $context)
+    public static function periodoIgual(Dependencia $dependencia, ExecutionContext $context)
     {
         
-
-        if($dp->getComponenteCurricular()->getPeriodo() ==  $dp->getPreRequisito()->getPeriodo()){
-            $context->addViolationAt(
-                'Dependencia',
-                'As componentes curriculares devem ter periodos distintos',
-                array(),
-                null
-            );
+        if(!is_null($dependencia->getPreRequisito() ) && !is_null($dependencia->getComponenteCurricular()))
+        {
+            if($dependencia->getComponenteCurricular()->getPeriodo() ==  $dependencia->getPreRequisito()->getPeriodo())
+            {
+                $context->addViolationAt(
+                    'Dependencia',
+                    'As componentes curriculares devem ter periodos distintos',
+                    array(),
+                    null
+                );
+            }
         }
     }
 

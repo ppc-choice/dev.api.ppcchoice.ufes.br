@@ -47,7 +47,7 @@ class ProjetoPedagogicoCursoValidator
             if(!is_null($ppc->getDtTerminoVigencia()))
             {
                 $context->addViolationAt(
-                    'situacao',
+                    'dtTerminoVigencia',
                     'Projeto pedagógico de curso com situação corrente e ativo-anterior a data de termino de vigência deve ser vazia.',
                     array(),
                     null
@@ -65,7 +65,7 @@ class ProjetoPedagogicoCursoValidator
                 if($ppc->getDtTerminoVigencia() < $ppc->getDtInicioVigencia())
                 {
                     $context->addViolationAt(
-                        'situacao',
+                        'dtTerminoVigencia',
                         'A data de termino de vigência deve ser maior que a data de inicio de vigência.',
                         array(),
                         null
@@ -74,7 +74,7 @@ class ProjetoPedagogicoCursoValidator
             }else{
                 
                 $context->addViolationAt(
-                    'situacao',
+                    'dtTerminoVigencia',
                     'A data de termino de vigência em projeto pedagogico de curso com situacao INATIVO não pode ser vazia.',
                     array(),
                     null
