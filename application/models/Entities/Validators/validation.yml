@@ -19,26 +19,50 @@ Entities\InstituicaoEnsinoSuperior:
     properties:
         nome:
             - NotNull:
-                message: o nome não pode ser nulo.
+                message: Nome não pode ser null.
             - NotBlank: 
-                message: o nome é inválido.
+                message: Nome é inválido.
+            - Type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.
         abreviatura:
             - NotNull:
-                message: a abreviatura não pode ser nula.
+                message: Abreviatura não pode ser null.
             - NotBlank: 
-                message: a abreviatura é inválida.
+                message: Abreviatura é inválida.
+            - Type: string
+                message: Abreviatura deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Abreviatura não deve conter números.                
 Entities\Departamento:
     properties:
         nome:
             - NotNull:
-                message: o nome não pode ser nulo.
+                message: Nome não pode ser null.
             - NotBlank: 
-                message: o nome é inválido.    
+                message: Nome é inválido.
+            - Type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.                  
         abreviatura:
             - NotNull:
-                message: a abreviatura não pode ser nula.
+                message: Abreviatura não pode ser null.
             - NotBlank: 
-                message: a abreviatura é inválido.
+                message: Abreviatura é inválida.
+            - Type: string
+                message: Abreviatura deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Abreviatura não deve conter números.                
         unidadeEnsino:
             - NotNull:
                 message: o Unidade de Ensino é inválida.
@@ -46,9 +70,15 @@ Entities\Curso:
     properties:
         nome:
             - NotNull:
-                message: o nome não pode ser nulo.
+                message: Nome não pode ser null.
             - NotBlank: 
-                message: o nome é inválido.     
+                message: Nome é inválido.
+            - Type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.     
         anoCriacao:
             - NotNull:
                 message: o ano de criacao não pode ser nulo.
