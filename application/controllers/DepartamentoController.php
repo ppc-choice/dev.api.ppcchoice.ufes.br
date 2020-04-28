@@ -6,35 +6,20 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class DepartamentoController extends API_Controller {
 
 	/**
-	 * @api {get} departamentos/:codDepto Requisitar dados de um Departamento específico.
+	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
 	 * @apiName findById
 	 * @apiGroup Departamentos
-	 *
+	 * @apiPermission ADMINISTRATOR
+	 * 
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
 	 *
 	 * @apiSuccess {String} nome   Nome do Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/1
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": {
-	 *	"codDepto": 1,
-	 *	"nome": "Departamento de Computação e Eletrônica",
-	 *	"abreviatura": "DCE",
-	 *	"nomeUnidadeEnsino": "Campus São Mateus"
-	 * }
-	 * @apiError DepartamentoNotFound O <code>codDepto</code> não corresponde a nenhum Departamento cadastrado.
-	 * @apiSampleRequest departamentos/:codDepto
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Departamento não encontrado!"
-	 * }
+	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * 
 	 */
     public function findById($codDepto)
 	{
@@ -63,43 +48,12 @@ class DepartamentoController extends API_Controller {
     
 
 	/**
-	 * @api {get} departamentos/ Requisitar todos Departamentos registrados.
-	 * @apiName findAll
+	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
+	 * @apiName getAll
 	 * @apiGroup Departamentos
-	 * @apiSuccess {String} nome   Nome da Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": [
-	* 	{
-	* 		"codDepto": 1,
-	* 		"nome": "Departamento de Computação e Eletrônica",
-	* 		"abreviatura": "DCE",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* ...,
-	* 	{
-	* 		"codDepto": 6,
-	* 		"nome": "Departamento Não Especificado",
-	* 		"abreviatura": "DNE",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	}
-	* 	]
-	* }
-
-	 * @apiError DepartamentoNotFound Nenhum Departamento cadastrado.
-	 * @apiSampleRequest departamentos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Nenhum Departamento cadastrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
 	 */
     public function findAll()
 	{
@@ -121,36 +75,20 @@ class DepartamentoController extends API_Controller {
 	
 	/**
 	 * @api {post} departamentos/ Criar um Departamento.
-	 * @apiName add
+	 * @apiName create
 	 * @apiGroup Departamentos
-	 * @apiSuccess {Number} codDepto   Identificador único auto incrementável do Departamento.
-	 * @apiSuccess {String} nome   Nome da Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
-	 * @apiParamExample {json} Request-Example:
-     * {
-     *   "nome": "Novo Departamento",
-     *	 "unidadeEnsino": 1,
-     *	 "abreviatura": "DNOVO"
-     * }
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": "Departamento criado com Sucesso!"
-	* {
-	
-	 * @apiError DepartamentoNotFound Não foi possível criar um novo cadastro de departamento.
-	 * @apiSampleRequest departamentos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Campo Obrigatorio Não Encontrado!"
-	 * }
-	 */
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {Number} codDepto   Identificador único do Departamento.
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 * 
+	 * @apiSuccess {String} message  Departamento criado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 */	
 	public function create()
     {
         header("Access-Controll-Allow-Origin: *");
@@ -203,25 +141,20 @@ class DepartamentoController extends API_Controller {
 	
 
 	/**
-     * @api {put} departamentos/:codDepto Atualizar Departamento.
+     * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
      * @apiName update
      * @apiGroup Departamentos
-     * @apiParam {Number} codDepto Código do Departamento.
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Departamento não encontrado 404) Departamento não encontrado.
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "nome" : "Departamento de Ciência de Dados",
-	 *         "abreviatura" : "DCD",
-	 *         "unidadeEnsino" : 1
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Departamento atualizado com sucesso"
-     *     }
-     */
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 *  
+	 * @apiSuccess {String} message  Departamento atualizado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 */	
 	public function update($codDepto)
     {
 		header("Access-Controll-Allow-Origin: *");
@@ -286,17 +219,16 @@ class DepartamentoController extends API_Controller {
 	}
 	
 	/**
-     * @api {delete} departamentos/:codDepto Deletar Departamento.
+     * @api {delete} departamentos/:codDepto Excluir um Departamento.
      * @apiName delete
      * @apiGroup Departamentos
-     * @apiParam {Number} codDepto Código do Departamento.
-     * @apiError  (Campo não encontrado self::HTTP_BAD_REQUEST) NotFound Departamento não encontrado.
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Departamento removido com sucesso"
-     *     }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam {Number} codDepto Identificador único do Departamento.
+   	 * 
+	 * @apiSuccess {String} message  Departamento deletado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
      */
 	public function delete($codDepto)
 	{
