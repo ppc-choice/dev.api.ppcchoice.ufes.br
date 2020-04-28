@@ -52,12 +52,12 @@ class DepartamentoController extends API_Controller {
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
-			), 200);
+			), self::HTTP_OK);
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => 'Departamento não encontrado!',
-			), 404);
+			), self::HTTP_NOT_FOUND);
 		}
     }
     
@@ -116,7 +116,7 @@ class DepartamentoController extends API_Controller {
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
-		), 200);
+		), self::HTTP_OK);
 	}
 	
 	/**
@@ -180,7 +180,7 @@ class DepartamentoController extends API_Controller {
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);	
+				), self::HTTP_BAD_REQUEST);	
 			} else {
 				try {
 					$this->entity_manager->persist($depto);
@@ -189,13 +189,13 @@ class DepartamentoController extends API_Controller {
 					$this->api_return(array(
 						'status' => TRUE,
 						'message' => 'Departamento criado com Sucesso!',
-					), 200);
+					), self::HTTP_OK);
 				} catch (\Exception $e) {
 					$mensagem = $e->getMessage();
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $mensagem,
-					), 400);
+					), self::HTTP_BAD_REQUEST);
 				}
 			}
 
@@ -253,7 +253,7 @@ class DepartamentoController extends API_Controller {
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg,
-					), 400);	
+					), self::HTTP_BAD_REQUEST);	
 				} else {
 					try {
 						$this->entity_manager->merge($depto);
@@ -261,13 +261,13 @@ class DepartamentoController extends API_Controller {
 						$this->api_return(array(
 							'status' => TRUE,
 							'message' => 'Departamento atualizado com sucesso!'
-						), 200);
+						), self::HTTP_OK);
 					} catch (\Exception $e) {
 						$e_msg = $e->getMessage();
 						$this->api_return(array(
 							'status' => FALSE,
 							'message' => $e_msg
-						), 400);
+						), self::HTTP_BAD_REQUEST);
 					}	
 				}
 
@@ -276,12 +276,12 @@ class DepartamentoController extends API_Controller {
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Corpo da Requisição vazio',
-            ), 400);
+            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Departamento não encontrado!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
         }
 	}
 	
@@ -290,7 +290,7 @@ class DepartamentoController extends API_Controller {
      * @apiName delete
      * @apiGroup Departamentos
      * @apiParam {Number} codDepto Código do Departamento.
-     * @apiError  (Campo não encontrado 400) NotFound Departamento não encontrado.
+     * @apiError  (Campo não encontrado self::HTTP_BAD_REQUEST) NotFound Departamento não encontrado.
      *  @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -317,21 +317,20 @@ class DepartamentoController extends API_Controller {
 				$this->api_return(array(
 					'status' => TRUE,
 					'message' => 'Departamento removido com sucesso!'
-				), 200);
+				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
 				$msg = $e->getMessage();
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg
-				), 400);
+				), self::HTTP_BAD_REQUEST);
 			}
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Departamento não encontrado!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
 		}
 	}
-    
 }
