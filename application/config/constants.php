@@ -88,8 +88,16 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define('STTS_PPC_INATIVO', 'INATIVO');
 define('STTS_PPC_ATIVO_ANTERIOR', 'ATIVO ANTERIOR');
 
+// Tipos de componente curricular
+define('TP_CC_OBRIGATORIA', 'OBRIGATORIA');
+define('TP_CC_OPTATIVA', 'OPTATIVA');
+define('TP_CC_ESTAGIO', 'ESTAGIO');
+define('TP_CC_ATV_CMPLT', 'ATIVIDADE COMPLEMENTAR');
+define('TP_CC_ATV_EXT', 'ATIVIDADE EXTENSAO');
+define('TP_CC_PROJ_CONC', 'PROJETO CONCLUSAO');
 
 // Papeis de usuário
 define('PAPEL_USUARIO_ADMINISTRATOR', 'ADMINISTRATOR');
 define('PAPEL_USUARIO_SUPERVISOR', 'SUPERVISOR');
 define('PAPEL_USUARIO_VISITOR', 'VISITOR');
+
