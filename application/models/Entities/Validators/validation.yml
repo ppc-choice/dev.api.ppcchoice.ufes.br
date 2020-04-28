@@ -45,10 +45,6 @@ Entities\Usuario:
                 message: Este valor não é uma data válida..
             - NotNull: 
                 message: Este valor não deve ser nulo.
-    constraints:    
-        - Callback:
-            methods: 
-                -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
 Entities\InstituicaoEnsinoSuperior:
     properties:
         nome:
