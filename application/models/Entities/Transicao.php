@@ -26,7 +26,7 @@ class Transicao
      * @param \Entities\ProjetoPedagogicoCurso $ppcAtual
      * @return Transicao
      */
-    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual)
+    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual = null)
     {
         $this->ppcAtual = $ppcAtual;
     
@@ -49,7 +49,7 @@ class Transicao
      * @param \Entities\ProjetoPedagogicoCurso $ppcAlvo
      * @return Transicao
      */
-    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo)
+    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo = null)
     {
         $this->ppcAlvo = $ppcAlvo;
     
