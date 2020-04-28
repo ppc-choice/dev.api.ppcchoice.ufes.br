@@ -11,15 +11,13 @@ class CursoRepository extends EntityRepository
     public function findAll()
     {
 		
-        $qb = $this->_em->createQueryBuilder()
-             ->select('curso.codCurso, curso.nome as nomeCurso, curso.anoCriacao, uniEnsino.nome as nomeUnidadeEnsino, ies.nome as nomeIes')
-             ->from('Entities\Curso','curso')
-             ->leftJoin('curso.unidadeEnsino', 'uniEnsino')
-             ->leftJoin('uniEnsino.ies', 'ies')
-             ->getQuery();
-        
-        $result = $qb->getResult();
-        return $result;
-
+        return $this->_em->createQueryBuilder()
+            ->select('curso.codCurso, curso.nome as nomeCurso, curso.anoCriacao', 
+                'uniEnsino.nome as nomeUnidadeEnsino, ies.nome as nomeIes')
+            ->from('Entities\Curso','curso')
+            ->innerJoin('curso.unidadeEnsino', 'uniEnsino')
+            ->innerJoin('uniEnsino.ies', 'ies')
+            ->getQuery()
+            ->getResult();
     }
 }
