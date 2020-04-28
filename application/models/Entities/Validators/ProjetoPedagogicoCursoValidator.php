@@ -40,7 +40,7 @@ class ProjetoPedagogicoCursoValidator
         }
     }
         
-    public static function dataVazia(ProjetoPedagogicoCurso $ppc, ExecutionContext $context)
+    public static function dtTerminoVigenciaVazia(ProjetoPedagogicoCurso $ppc, ExecutionContext $context)
     {
         if($ppc->getSituacao()!=STTS_PPC_INATIVO)
         {

@@ -169,7 +169,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
         
         if(array_key_exists('anoAprovacao', $payload)) $ppc->setAnoAprovacao($payload['anoAprovacao']);
         
-        if(array_key_exists('duracao', $payload)) $ppc->setDuracao($payload['duracao']);
+        if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
         
         $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];                                
         $ppc->setChTotal($chtotal);
@@ -272,7 +272,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
             
             if(array_key_exists('anoAprovacao', $payload)) $ppc->setAnoAprovacao($payload['anoAprovacao']);
             
-            if(array_key_exists('duracao', $payload)) $ppc->setDuracao(float($payload['duracao']));
+            if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
     
             $validador = $this->validator->validate($ppc);
 

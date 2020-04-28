@@ -251,7 +251,7 @@ class DependenciaController extends API_Controller
             if(array_key_exists('codCompCurric', $payload)){
                 if(isset($payload['codCompCurric'])){
                   
-                    $componenteCurricular = $this->entity_manager->find('Entities\c', $payload['codCompCurric']);
+                    $componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
 
                 }else{
                     $componenteCurricular = null;    
