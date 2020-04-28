@@ -162,9 +162,10 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 
 		$ies = new \Entities\InstituicaoEnsinoSuperior;
-		if ( isset($payload['codIes']) ) $ies->setCodIes($payload['codIes']);
-		if ( isset($payload['nome']) ) $ies->setNome($payload['nome']);
-		if ( isset($payload['abreviatura']) ) $ies->setAbreviatura($payload['abreviatura']);
+
+		if ( array_key_exists('codIes', $payload) ) $ies->setCodIes($payload['codIes']);
+		if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
+		if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
 
 		$validacao = $this->validator->validate($ies);
 
@@ -228,8 +229,8 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 		
         if(!is_null($ies))
         {            
-			if(isset($payload['nome'])) $ies->setNome($payload['nome']);
-			if(isset($payload['abreviatura'])) $ies->setAbreviatura($payload['abreviatura']);
+			if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
+			if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
 			
 			$validacao = $this->validator->validate($ies);
 
