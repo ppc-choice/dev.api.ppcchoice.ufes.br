@@ -60,7 +60,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
-		), 200);
+		), self::HTTP_OK);
 	}
 
 
@@ -109,12 +109,12 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
-			), 200);
+			), self::HTTP_OK);
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => 'Instituicao de Ensino Superior não encontrada!',
-			), 404);
+			), self::HTTP_NOT_FOUND);
 		}
 
 	}
@@ -174,7 +174,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 			$this->api_return(array(
 				'status' => FALSE,
 				'message' => $msg,
-			), 400);	
+			), self::HTTP_BAD_REQUEST);	
 		}else {
 			try {
 				$this->entity_manager->persist($ies);
@@ -183,13 +183,13 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				$this->api_return(array(
 					'status' => TRUE,
 					'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
-				), 200);
+				), self::HTTP_OK);
 			} catch (\Exception $e) {
 				$msg = $e->getMessage();
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);
+				), self::HTTP_BAD_REQUEST);
 			}	
 		} 
  
@@ -239,7 +239,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
-				), 400);	
+				), self::HTTP_BAD_REQUEST);	
 			} else {
 				try {
 					$this->entity_manager->merge($ies);
@@ -247,14 +247,14 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 					$this->api_return(array(
 						'status' => TRUE,
 						'message' => 'Instituição de Ensino Superior atualizada com sucesso!'
-					), 200);
+					), self::HTTP_OK);
 					
 				} catch (\Exception $e) {
 					$msg = $e->getMessage();
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg
-					), 400);
+					), self::HTTP_BAD_REQUEST);
 				}	
 			}
 
@@ -263,12 +263,12 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Corpo da Requisição vazio',
-            ), 400);
+            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Instituição de Ensino Superior não encontrada!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
         }
 	}
 	
@@ -304,20 +304,20 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				$this->api_return(array(
 					'status' => TRUE,
 					'message' => 'Instituição de Ensino Superior removida com sucesso!'
-				), 200);
+				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
 				$msg = $e->getMessage();
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg
-				), 400);
+				), self::HTTP_BAD_REQUEST);
 			}
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
                 'message' => 'Instituição de Ensino Superior não encontrada!',
-            ), 404);
+            ), self::HTTP_NOT_FOUND);
 		}
 	}
 }
