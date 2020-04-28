@@ -113,7 +113,7 @@ class DependenciaController extends API_Controller
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $result[0],
+                    "result" => $result,
                 ),
             200); 
 

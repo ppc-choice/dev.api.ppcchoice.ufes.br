@@ -1,16 +1,50 @@
-# models/validation.yaml
+# models/Entities/Validators/validation.yaml
 Entities\Usuario:
     properties:
         nome:
-            - NotBlank: ~
+            - NotNull: 
+                message: Este valor não deve ser nulo.
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
+            - Regex:
+                pattern: '/\d/'
+                match:   false
+                message: Este valor não deve conter caracteres numéricos
         email:
-            - NotNull: ~
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                message: Este valor não deve ser nulo.
             - Email: 
-                message: o endereço {{ value }} é inválido.
+                message: Este valor não é um endereço de e-mail válido.
                 checkMX: true
         papel:
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                message: Este valor não deve ser nulo.
             - OneOf:
                 choices: [ADMINISTRATOR, SUPERVISOR, VISITOR]
+                message: O valor selecionado não é uma opção válida.
+        senha:
+            - Type: 
+                type: string
+                message: Este valor deve ser do tipo {{ type }}.
+            - NotNull: 
+                    message: Este valor não deve ser nulo.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
+        dtUltimoAcesso:
+            - Type: 
+                type: DateTime
+                message: Este valor não é uma data válida..
+            - NotNull: 
+                message: Este valor não deve ser nulo.
     constraints:    
         - Callback:
             methods: 
@@ -27,7 +61,6 @@ Entities\ComponenteCurricular:
                 min:  1
                 minMessage: Período não pode ser valor menor que 1. 
                 invalidMessage: valor não é valido
-
         credito:
             - NotNull: 
                 message: Crédito não pode ser null.
@@ -76,7 +109,6 @@ Entities\Correspondencia:
         - Callback:
             methods: 
                 -    [Entities\Validators\CorrespondenciaValidator, ppcIgual]
-
 Entities\Transicao:
     properties:
         ppcAtual:

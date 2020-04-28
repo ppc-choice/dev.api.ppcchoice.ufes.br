@@ -47,14 +47,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
         ));
        
         $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findAll();
-        // $result = $this->doctrine_to_array($ppc,TRUE);
+        
 
         if(!empty($ppc)){
-            
+            $result = $this->doctrine_to_array($ppc);    
             $this->api_return(
                 array(
                     'status' => true,
-                    "result" => $ppc,
+                    "result" => $result,
                 ),
             200); 
 
