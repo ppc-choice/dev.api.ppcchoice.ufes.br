@@ -24,7 +24,7 @@ class UnidadeEnsinoController extends API_Controller
 
         $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findAll();
         
-        if ( !empty($result) ){
+        if ( !is_null($result) ){
             $this->api_return(array(
                 'status' => true,
                 'result' => $result
@@ -62,7 +62,7 @@ class UnidadeEnsinoController extends API_Controller
 
         $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findById($codUnidadeEnsino);
 
-        if ( !empty($result) ){
+        if ( !is_null($result) ){
             $this->api_return(array(
                 'status' => true,
                 'result' => $result

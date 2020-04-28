@@ -28,7 +28,7 @@ class DisciplinaController extends API_Controller
 
         $result = $this->entity_manager->getRepository('Entities\Disciplina')->findAll();
 
-        if ( !empty($result) ){
+        if ( !is_null($result) ){
             $this->api_return(array(
                 'status' => true,
                 'result' => $result
@@ -65,7 +65,7 @@ class DisciplinaController extends API_Controller
 
         $result = $this->entity_manager->getRepository('Entities\Disciplina')->findById($numDisciplina, $codDepto);
 
-        if ( !empty($result) ){
+        if ( !is_null($result) ){
             $this->api_return(array(
                 'status' => true,
                 'result' => $result

@@ -55,8 +55,6 @@ Entities\Disciplina:
 Entities\UnidadeEnsino:
     properties:
         codUnidadeEnsino:
-            - NotNull:
-                message: Este valor não deve ser nulo.
             - Type: 
                 type: integer
                 message: Este valor deve ser do tipo {{ type }}.
