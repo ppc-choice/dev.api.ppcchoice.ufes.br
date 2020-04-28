@@ -166,8 +166,8 @@ class CursoController extends API_Controller {
 		
 		$curso = new \Entities\Curso;
 
-		if ( isset($payload['nome']) ) $curso->setNome($payload['nome']);
-		if ( isset($payload['anoCriacao']) ) $curso->setAnoCriacao($payload['anoCriacao']);
+		if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+		if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
  
         if (isset($payload['codUnidadeEnsino'])){
 			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
@@ -241,9 +241,8 @@ class CursoController extends API_Controller {
                 $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$curso->setUnidadeEnsino($ues);
 			}
-			
-                if(isset($payload['nome'])) $curso->setNome($payload['nome']);
-                if(isset($payload['anoCriacao'])) $curso->setAnoCriacao($payload['anoCriacao']);
+				if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+                if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
 
 				$validacao = $this->validator->validate($curso);
 
