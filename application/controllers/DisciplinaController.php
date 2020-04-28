@@ -6,17 +6,17 @@ class DisciplinaController extends API_Controller
 {
 
     /**
-     * @api {get} disciplinas Listar todas as Disciplinas dos Departamentos
+     * @api {get} disciplinas Solicitar dados de todas as disciplinas
      * @apiName findAll
-     * @apiGroup Disciplinas
-     * @apiError 404 Não encontrado
+     * @apiGroup Disciplina
      *
-     *
-     * @apiSuccess {Number} numDisciplina Codigo único de cada Disciplina.
-     * @apiSuccess {String} nome Nome da Disciplina.
-     * @apiSuccess {Number} ch Carga Horária da Disciplina.
-     * @apiSuccess {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
-     * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
+     * @apiSuccess {Number} numDisciplina Identificador único da disciplina.
+     * @apiSuccess {String} nome Nome da disciplina.
+     * @apiSuccess {Number} ch Carga horária da disciplina.
+     * @apiSuccess {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
+     * @apiSuccess {String} nomeDepto Nome do departamento cujo qual a disciplina está vinculada.
+     * 
+     * @apiError {String[]} 404 Nenhuma disciplina foi encontrada.
      */
     public function findAll()
     {
@@ -32,27 +32,28 @@ class DisciplinaController extends API_Controller
             $this->api_return(array(
                 'status' => true,
                 'result' => $result
-            ), 200);
+            ), self::HTTP_OK);
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => array('Não Encontrado')
-            ), 404);
+                'message' => array("Disciplinas não encontradas.")
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
     /**
-     * @api {get} disciplinas/:codDepto/:numDisciplina Listar todas as Disciplinas dos Departamentos
+     * @api {get} disciplinas/:codDepto/:numDisciplina Solicitar dados de uma disciplina
      * @apiName findById
-     * @apiGroup Disciplinas
-     * @apiError 404 Não encontrado
+     * @apiGroup Disciplina
      *
-     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
-     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     * @apiParam {Number} numDisciplina Identificador único da disciplina.
+     * @apiParam {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
      *
-     * @apiSuccess {String} nome Nome da Disciplina.
-     * @apiSuccess {Number} ch Carga Horária da Disciplina.
-     * @apiSuccess {String} nomeDepto Nome do Departamento cujo qual a Disciplina pertence.
+     * @apiSuccess {String} nome Nome da disciplina.
+     * @apiSuccess {Number} ch Carga horária da disciplina.
+     * @apiSuccess {String} nomeDepto Nome do departamento cujo qual a disciplina está vinculada.
+     * 
+     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
      */
     public function findById($codDepto, $numDisciplina)
     {
@@ -68,57 +69,59 @@ class DisciplinaController extends API_Controller
             $this->api_return(array(
                 'status' => true,
                 'result' => $result
-            ), 200);
+            ), self::HTTP_OK);
         } else {
             $this->api_return(array(
                 'status' => false,
-                'message' => array('Não Encontrado')
-            ), 404);
+                'message' => array("Disciplina não encontrada.")
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
     /**
-     * @api {post} disciplinas Cadastrar nova Disciplina no sistema
+     * @api {post} disciplinas Criar uma disciplina
      * @apiName create
-     * @apiGroup Disciplinas
-     * @apiError 400 Campo Obrigatório Não Encontrado
-     * @apiError 400 Departamento Não Encontrado
+     * @apiGroup Disciplina
      *
-     * @apiSuccess {Number} numDisciplina Primeiro identificador da disciplina.
-     * @apiSuccess {String} nome Nome da Disciplina.
-     * @apiSuccess {Number} ch Carga Horária da Disciplina.
-     * @apiSuccess {Number} codDepto Segundo identificador da disciplina e código do Departamento que ela pertence.
+     * @apiParam (Request Body/JSON) {Number} numDisciplina Identificador primário da disciplina.
+     * @apiParam (Request Body/JSON) {String} nome Nome da disciplina.
+     * @apiParam (Request Body/JSON) {Number} ch Carga horária da disciplina.
+     * @apiParam (Request Body/JSON) {Number} codDepto Identificador secundário da disciplina (identificador primário do departamento que ela está vinculada).
+     * 
+     * @apiSuccess {String} message Disciplina criada com sucesso.
+     * 
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function create()
     {
+        header("Access-Controll-Allow-Origin: *");
+
         $this->_apiconfig(array(
             'methods' => array('POST')
         ));
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        // Cria novo objeto Disciplina
         $disciplina = new \Entities\Disciplina;
 
         if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
         if ( array_key_exists('ch', $payload) )             $disciplina->setCh($payload['ch']);
         if ( array_key_exists('nome', $payload) )           $disciplina->setNome($payload['nome']);
 
-        // Insere o Departamento do código de Departamento dado.
-        // Será analisado pelo validator posteriormente em caso de existência ou não.
         if ( array_key_exists('codDepto', $payload) ){
             $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
             $disciplina->setDepartamento($depto);
             $disciplina->setCodDepto($payload['codDepto']);
         }
 
-        $validador = $this->validator->validate($disciplina);
-        if ( $validador->count() ){
-            $message = $validador->messageArray();
+        $constraints = $this->validator->validate($disciplina);
+
+        if ( $constraints->count() ){
+            $msgViolacoes = $constraints->messageArray();
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => $message
-            ), 400);
+                'message' => $msgViolacoes
+            ), self::HTTP_BAD_REQUEST);
     
         } else {
             try {
@@ -127,34 +130,38 @@ class DisciplinaController extends API_Controller
             
                 $this->api_return(array(
                     'status' => TRUE,
-                    'message' => array('Disciplina Criada Com Sucesso'),
-                ), 200);
+                    'message' => array("Disciplina criada com sucesso."),
+                ), self::HTTP_OK);
                 
             } catch (\Exception $e){
-                $msg =  array($e->getMessage());
+                $msgExcecao =  array($e->getMessage());
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $msg,
-                ), 400);
+                    'message' => $msgExcecao,
+                ), self::HTTP_BAD_REQUEST);
             }
         }
     }
 
     /**
-     * @api {put} disciplinas/:codDepto/:numDisciplina Atualizar uma Disciplina específica
+     * @api {put} disciplinas/:codDepto/:numDisciplina Atualizar dados de uma disciplina
      * @apiName update
-     * @apiGroup Disciplinas
-     * @apiError 404 Não encontrado
-     * @apiError 400 Requisição nula
+     * @apiGroup Disciplina
      *
-     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
-     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
-     *
-     * @apiSuccess {String} nome Nome da Disciplina.
-     * @apiSuccess {Number} ch Carga Horária da Disciplina.
+     * @apiParam {Number} numDisciplina Identificador único de uma disciplina.
+     * @apiParam {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
+     * @apiParam (Request Body/JSON) {String} nome Nome da disciplina.
+     * @apiParam (Request Body/JSON) {Number} ch Carga horária da disciplina.
+     * 
+     * @apiSuccess {String} message Disciplina atualizada com sucesso.
+     * 
+     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function update($codDepto, $numDisciplina)
     {
+        header("Access-Controll-Allow-Origin: *");
+
         $this->_apiconfig(array(
             'methods' => array('PUT')
         ));
@@ -163,17 +170,18 @@ class DisciplinaController extends API_Controller
             array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        if ( !empty($payload) ){
+        if ( !is_null($disciplina) ){
             if ( array_key_exists('nome', $payload) )   $disciplina->setNome($payload['nome']);
             if ( array_key_exists('ch', $payload) )     $disciplina->setCh($payload['ch']);
                 
-            $validador = $this->validator->validate($disciplina);
-            if ( $validador->count() ){
-                $message = $validador->messageArray();
+            $constraints = $this->validator->validate($disciplina);
+
+            if ( $constraints->count() ){
+                $msgViolacoes = $constraints->messageArray();
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $message
-                ), 400);
+                    'message' => $msgViolacoes
+                ), self::HTTP_BAD_REQUEST);
 
             }else{
                 try {
@@ -182,44 +190,42 @@ class DisciplinaController extends API_Controller
         
                     $this->api_return(array(
                         'status' => TRUE,
-                        'message' => array('Disciplina Atualizada Com Sucesso'),
-                    ), 200);
+                        'message' => array("Disciplina atualizada com sucesso."),
+                    ), self::HTTP_OK);
                 } catch (\Exception $e){
-                    $msg =  array($e->getMessage());
+                    $msgExcecao =  array($e->getMessage());
                     $this->api_return(array(
                         'status' => FALSE,
-                        'message' => $msg,
-                    ), 400);
+                        'message' => $msgExcecao,
+                    ), self::HTTP_BAD_REQUEST);
                 }
             }
         
         } else {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => array('Requisição Vazia'),
-            ), 400);
+                'message' => array("Disciplina não encontrada."),
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
     /**
-     * @api {delete} disciplinas/:codDepto/:numDisciplina Remover uma Disciplina específica
+     * @api {delete} disciplinas/:codDepto/:numDisciplina Excluir uma disciplina
      * @apiName delete
-     * @apiGroup Disciplinas
-     * @apiError 404 Não encontrado
-     * @apiError 400 Requisição nula
+     * @apiGroup Disciplina
      *
-     * @apiParam {Number} numDisciplina Codigo único de uma Disciplina.
-     * @apiParam {Number} codDepto Código do Departamento cujo qual a Disciplina pertence.
+     * @apiParam {Number} numDisciplina Identificador único da disciplina.
+     * @apiParam {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
      *
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Disciplina Removida com Sucesso"
-     *     }
+     * @apiSuccess {String} message Disciplina deletada com sucesso.
+     * 
+     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
+     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
     public function delete($codDepto, $numDisciplina)
     {
+        header("Access-Controll-Allow-Origin: *");
+
         $this->_apiconfig(array(
             'methods' => array('DELETE')
         ));
@@ -233,22 +239,22 @@ class DisciplinaController extends API_Controller
                 $this->entity_manager->flush();
                 $this->api_return(array(
                     'status' => TRUE,
-                    'message' => array('Disciplina Removida com Sucesso')
-                ), 200);
+                    'message' => array("Disciplina deletada com sucesso.")
+                ), self::HTTP_OK);
             
             } catch ( \Exception $e ){
-                $e_msg = array($e->getMessage());
+                $msgExcecao = array($e->getMessage());
                 $this->api_return(array(
                     'status' => FALSE,
-                    'message' => $e_msg
-                ), 400);
+                    'message' => $msgExcecao
+                ), self::HTTP_BAD_REQUEST);
             }
 
         } else {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => array('Disciplina não Encontrada')
-            ), 404);
+                'message' => array("Disciplina não encontrada.")
+            ), self::HTTP_NOT_FOUND);
         }
     }
 }
