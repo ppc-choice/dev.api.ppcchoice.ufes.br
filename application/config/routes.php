@@ -11,25 +11,25 @@ $route['translate_uri_dashes'] = FALSE;
 // Instituicao de Ensino Superior : Wellerson
 $route['instituicoes-ensino-superior/(:num)']['GET'] = 'InstituicaoEnsinoSuperiorController/getById/$1';
 $route['instituicoes-ensino-superior']['GET'] = 'InstituicaoEnsinoSuperiorController/getAll';
-$route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/add';
+$route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/create';
 $route['instituicoes-ensino-superior/(:num)']['PUT'] = 'InstituicaoEnsinoSuperiorController/update/$1';
-
+$route['instituicoes-ensino-superior/(:num)']['DELETE'] = 'InstituicaoEnsinoSuperiorController/delete/$1';
 
 
 // Departamento : Wellerson
 $route['departamentos/(:num)']['GET'] = 'DepartamentoController/findById/$1';
 $route['departamentos']['GET'] = 'DepartamentoController/findAll';
-$route['departamentos']['POST'] = 'DepartamentoController/add';
+$route['departamentos']['POST'] = 'DepartamentoController/create';
 $route['departamentos/(:num)']['PUT'] = 'DepartamentoController/update/$1';
-
+$route['departamentos/(:num)']['DELETE'] = 'DepartamentoController/delete/$1';
 
 
 // Curso : Wellerson
 $route['cursos/(:num)']['GET'] = 'CursoController/findById/$1';
 $route['cursos']['GET'] = 'CursoController/findAll';
-$route['cursos']['POST'] = 'CursoController/add';
+$route['cursos']['POST'] = 'CursoController/create';
 $route['cursos/(:num)']['PUT'] = 'CursoController/update/$1';
-
+$route['cursos/(:num)']['DELETE'] = 'CursoController/delete/$1';
 
 
 // Disciplinas : Gabriel

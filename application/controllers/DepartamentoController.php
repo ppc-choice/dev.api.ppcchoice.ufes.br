@@ -6,35 +6,20 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class DepartamentoController extends API_Controller {
 
 	/**
-	 * @api {get} departamentos/:codDepto Requisitar dados de um Departamento específico.
+	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
 	 * @apiName findById
 	 * @apiGroup Departamentos
-	 *
+	 * @apiPermission ADMINISTRATOR
+	 * 
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
 	 *
 	 * @apiSuccess {String} nome   Nome do Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/1
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": {
-	 *	"codDepto": 1,
-	 *	"nome": "Departamento de Computação e Eletrônica",
-	 *	"abreviatura": "DCE",
-	 *	"nomeUnidadeEnsino": "Campus São Mateus"
-	 * }
-	 * @apiError DepartamentoNotFound O <code>codDepto</code> não corresponde a nenhum Departamento cadastrado.
-	 * @apiSampleRequest departamentos/:codDepto
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Departamento não encontrado!"
-	 * }
+	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * 
 	 */
     public function findById($codDepto)
 	{
@@ -52,77 +37,23 @@ class DepartamentoController extends API_Controller {
 			$this->api_return(array(
 				'status' => TRUE,
 				'result' => $result,
-			), 200);
+			), self::HTTP_OK);
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
-				'message' => 'Departamento não encontrado!',
-			), 404);
+				'message' => array('Departamento não encontrado!'),
+			), self::HTTP_NOT_FOUND);
 		}
     }
     
 
 	/**
-	 * @api {get} departamentos/ Requisitar todos Departamentos registrados.
-	 * @apiName findAll
+	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
+	 * @apiName getAll
 	 * @apiGroup Departamentos
-	 * @apiSuccess {String} nome   Nome da Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": [
-	* 	{
-	* 		"codDepto": 1,
-	* 		"nome": "Departamento de Computação e Eletrônica",
-	* 		"abreviatura": "DCE",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 2,
-	* 		"nome": "Departamento de Matemática Aplicada",
-	* 		"abreviatura": "DMA",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	*	},
-	* 	{
-	* 		"codDepto": 3,
-	* 		"nome": "Departamento de Ciências Naturais",
-	* 		"abreviatura": "DCN",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 4,
-	* 		"nome": "Departamento de Engenharias  e Tecnologias",
-	* 		"abreviatura": "DET",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 5,
-	* 		"nome": "Departamento de Educação e Ciências Humanas",
-	* 		"abreviatura": "ECH",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	},
-	* 	{
-	* 		"codDepto": 6,
-	* 		"nome": "Departamento Não Especificado",
-	* 		"abreviatura": "DNE",
-	*		"nomeUnidadeEnsino": "Campus São Mateus"
-	* 	}
-	* 	]
-	* }
-
-	 * @apiError DepartamentoNotFound Nenhum Departamento cadastrado.
-	 * @apiSampleRequest departamentos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Nenhum Departamento cadastrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
 	 */
     public function findAll()
 	{
@@ -136,160 +67,202 @@ class DepartamentoController extends API_Controller {
 		$depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
 		$result = $this->doctrine_to_array($depto,TRUE);	
 
-
 		$this->api_return(array(
 			'status' => TRUE,
 			'result' => $result,
-		), 200);
+		), self::HTTP_OK);
 	}
 	
 	/**
-	 * @api {post} departamentos/ Registrar um novo departamento.
-	 * @apiName add
+	 * @api {post} departamentos/ Criar um Departamento.
+	 * @apiName create
 	 * @apiGroup Departamentos
-	 * @apiSuccess {Number} codDepto   Identificador único auto incrementável do Departamento.
-	 * @apiSuccess {String} nome   Nome da Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla da Departamento.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/departamentos/
-	 * @apiParamExample {json} Request-Example:
-     * {
-     *   "nome": "Novo Departamento",
-     *	 "unidadeEnsino": 1,
-     *	 "abreviatura": "DNOVO"
-     * }
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": "Departamento criado com Sucesso!"
-	* {
-	
-	 * @apiError DepartamentoNotFound Não foi possível realizar um novo cadastro de departamento.
-	 * @apiSampleRequest departamentos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Campo Obrigatorio Não Encontrado!"
-	 * }
-	 */
-	public function add()
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {Number} codDepto   Identificador único do Departamento.
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 * 
+	 * @apiSuccess {String} message  Departamento criado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 */	
+	public function create()
     {
-        $this->_apiConfig(array(
-            'methods' => array('POST'),
-            )
-        );
- 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
- 
-        if ( isset($payload['nome']) && isset($payload['unidadeEnsino']) && isset($payload['abreviatura'])){
-           
-			$depto = new \Entities\Departamento;
-            $depto->setNome($payload['nome']);
-			$depto->setAbreviatura($payload['abreviatura']);
-			
-			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['unidadeEnsino']);
+        header("Access-Controll-Allow-Origin: *");
 
-			if (!is_null($ues)){
-				$depto->setUnidadeEnsino($ues);
+		$this->_apiConfig(array(
+				'methods' => array('POST'),
+			)
+		);
+ 
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		
+		$depto = new \Entities\Departamento;
+
+		if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
+		if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
+
+        if (isset($payload['codUnidadeEnsino'])){
+			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$depto->setUnidadeEnsino($ues);
+		}
+
+			$validacao = $this->validator->validate($depto);
+
+			if ( $validacao->count() ){		
+				$msg = $validacao->messageArray();
+	
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg,
+				), self::HTTP_BAD_REQUEST);	
+			} else {
 				try {
 					$this->entity_manager->persist($depto);
 					$this->entity_manager->flush();
-	 
+		
 					$this->api_return(array(
 						'status' => TRUE,
-						'message' => 'Departamento criado com Sucesso!',
-					), 200);
+						'message' => array('Departamento criado com Sucesso!'),
+					), self::HTTP_OK);
 				} catch (\Exception $e) {
-					$mensagem = $e->getMessage();
+					$mensagem = array($e->getMessage());
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $mensagem,
-					), 400);
+					), self::HTTP_BAD_REQUEST);
 				}
-
-			}else{
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => 'Unidade de Ensino não identificada!',
-				), 400);				
 			}
- 
-        } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => 'Campo Obrigatorio Não Encontrado!',
-            ), 400);
-        }
+
 	}
 	
 
-
+	/**
+     * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
+     * @apiName update
+     * @apiGroup Departamentos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 *  
+	 * @apiSuccess {String} message  Departamento atualizado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 */	
 	public function update($codDepto)
     {
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('PUT'),
+			)
+		);
+
         $depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-		$msg = '';
 		
-        if(!is_null($depto) && !empty($payload))
+        if(!is_null($depto))
         {            
-
-			if(isset($payload['unidadeEnsino']))
+			if(isset($payload['codUnidadeEnsino']))
             {
-                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['unidadeEnsino']);
-				if(is_null($ues))
-				{
-					 $msg = $msg . 'Unidade de Ensino Superior não encontrada. ';
-				}
-
-			}
-			
-            if(empty($msg))
-            {
+                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$depto->setUnidadeEnsino($ues);
-                if(isset($payload['nome']))
-                {
-                    $depto->setNome($payload['nome']);
-                }
-                if(isset($payload['abreviatura']))
-                {
-                    $depto->setAbreviatura($payload['abreviatura']);
+			}
+				if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
+				if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
+
+				$valida = $this->validator->validate($depto);
+
+				if ( $valida->count() ){
+					$msg = $valida->messageArray();
+		
+					$this->api_return(array(
+						'status' => FALSE,
+						'message' => $msg,
+					), self::HTTP_BAD_REQUEST);	
+				} else {
+					try {
+						$this->entity_manager->merge($depto);
+						$this->entity_manager->flush();
+						$this->api_return(array(
+							'status' => TRUE,
+							'message' => array('Departamento atualizado com sucesso!')
+						), self::HTTP_OK);
+					} catch (\Exception $e) {
+						$e_msg = array($e->getMessage());
+
+						$this->api_return(array(
+							'status' => FALSE,
+							'message' => $e_msg
+						), self::HTTP_BAD_REQUEST);
+					}	
 				}
-				
-                try {
-                    $this->entity_manager->merge($depto);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => 'Departamento atualizado com sucesso!'
-                    ), 200);
-                } catch (\Exception $e) {
-                    $e_msg = $e->getMessage();
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $e_msg
-                    ), 400);
-                }
-            }else{
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg
-                ), 404);
-            } 
+
         }elseif(empty($payload))
         {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
-            ), 400);
+                'message' => array('Corpo da Requisição vazio'),
+            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Departamento não encontrado!',
-            ), 404);
+                'message' => array('Departamento não encontrado!'),
+            ), self::HTTP_NOT_FOUND);
         }
-    }
-    
+	}
+	
+	/**
+     * @api {delete} departamentos/:codDepto Excluir um Departamento.
+     * @apiName delete
+     * @apiGroup Departamentos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam {Number} codDepto Identificador único do Departamento.
+   	 * 
+	 * @apiSuccess {String} message  Departamento deletado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
+     */
+	public function delete($codDepto)
+	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('DELETE'),
+			)
+		);
+
+		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
+		
+		if(!is_null($depto))
+		{
+			try {
+				$this->entity_manager->remove($depto);
+				$this->entity_manager->flush();
+				$this->api_return(array(
+					'status' => TRUE,
+					'message' => array('Departamento removido com sucesso!')
+				), self::HTTP_OK);
+				
+			} catch (\Exception $e) {
+				$msg = array($e->getMessage());
+				$this->api_return(array(
+					'status' => FALSE,
+					'message' => $msg
+				), self::HTTP_BAD_REQUEST);
+			}
+		}else{
+			$this->api_return(array(
+                'status' => FALSE,
+                'message' => array('Departamento não encontrado!'),
+            ), self::HTTP_NOT_FOUND);
+		}
+	}
 }

@@ -49,6 +49,86 @@ Entities\Usuario:
         - Callback:
             methods: 
                 -    [Entities\Validators\UsuarioValidator, contemCaracterNumerico]
+Entities\InstituicaoEnsinoSuperior:
+    properties:
+        nome:
+            - NotNull:
+                message: Nome não pode ser null.
+            - NotBlank: 
+                message: Nome é inválido.
+            - Type: 
+                type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.
+        abreviatura:
+            - NotNull:
+                message: Abreviatura não pode ser null.
+            - NotBlank: 
+                message: Abreviatura é inválida.
+            - Type: 
+                type: string
+                message: Abreviatura deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Abreviatura não deve conter números.                
+Entities\Departamento:
+    properties:
+        nome:
+            - NotNull:
+                message: Nome não pode ser null.
+            - NotBlank: 
+                message: Nome é inválido.
+            - Type: 
+                type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.                  
+        abreviatura:
+            - NotNull:
+                message: Abreviatura não pode ser null.
+            - NotBlank: 
+                message: Abreviatura é inválida.
+            - Type: 
+                type: string
+                message: Abreviatura deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Abreviatura não deve conter números.                
+        unidadeEnsino:
+            - NotNull:
+                message: o Unidade de Ensino é inválida.
+Entities\Curso:
+    properties:
+        nome:
+            - NotNull:
+                message: Nome não pode ser null.
+            - NotBlank: 
+                message: Nome é inválido.
+            - Type: 
+                type: string
+                message: Nome deve ser do tipo {{ type }}
+            - Regex: 
+                pattern: "/\d/"
+                match: false
+                message: Nome não deve conter números.     
+        anoCriacao:
+            - NotNull:
+                message: o ano de criacao não pode ser nulo.
+            - NotBlank: 
+                message: o ano de criacao é inválido.
+            - Type:
+                type: integer
+                message: o ano de criacao nao é do tipo inteiro.
+        unidadeEnsino:
+            - NotNull:
+                message: o Unidade de Ensino é inválida.
 Entities\Dependencia:
     properties:
         componenteCurricular:
@@ -308,4 +388,3 @@ Entities\Transicao:
         - Callback:
             methods: 
                 -    [Entities\Validators\TransicaoValidator, ppcIgual]
-
