@@ -113,7 +113,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
-				'message' => 'Instituicao de Ensino Superior não encontrada!',
+				'message' => array('Instituicao de Ensino Superior não encontrada!'),
 			), self::HTTP_NOT_FOUND);
 		}
 
@@ -182,10 +182,10 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 	
 				$this->api_return(array(
 					'status' => TRUE,
-					'result' => 'Instituicao de Ensino Superior Criada com Sucesso!',
+					'result' => array('Instituicao de Ensino Superior Criada com Sucesso!'),
 				), self::HTTP_OK);
 			} catch (\Exception $e) {
-				$msg = $e->getMessage();
+				$msg = array($e->getMessage());
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg,
@@ -246,11 +246,11 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 					$this->entity_manager->flush();
 					$this->api_return(array(
 						'status' => TRUE,
-						'message' => 'Instituição de Ensino Superior atualizada com sucesso!'
+						'message' => array('Instituição de Ensino Superior atualizada com sucesso!')
 					), self::HTTP_OK);
 					
 				} catch (\Exception $e) {
-					$msg = $e->getMessage();
+					$msg = array($e->getMessage());
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $msg
@@ -262,12 +262,12 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
         {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
+                'message' => array('Corpo da Requisição vazio'),
             ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Instituição de Ensino Superior não encontrada!',
+                'message' => array('Instituição de Ensino Superior não encontrada!'),
             ), self::HTTP_NOT_FOUND);
         }
 	}
@@ -303,11 +303,11 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				$this->entity_manager->flush();
 				$this->api_return(array(
 					'status' => TRUE,
-					'message' => 'Instituição de Ensino Superior removida com sucesso!'
+					'message' => array('Instituição de Ensino Superior removida com sucesso!')
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
-				$msg = $e->getMessage();
+				$msg = array($e->getMessage());
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg
@@ -316,7 +316,7 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Instituição de Ensino Superior não encontrada!',
+                'message' => array('Instituição de Ensino Superior não encontrada!'),
             ), self::HTTP_NOT_FOUND);
 		}
 	}
