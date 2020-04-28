@@ -56,7 +56,7 @@ class DepartamentoController extends API_Controller {
 		} else {
 			$this->api_return(array(
 				'status' => FALSE,
-				'message' => 'Departamento não encontrado!',
+				'message' => array('Departamento não encontrado!'),
 			), self::HTTP_NOT_FOUND);
 		}
     }
@@ -188,10 +188,10 @@ class DepartamentoController extends API_Controller {
 		
 					$this->api_return(array(
 						'status' => TRUE,
-						'message' => 'Departamento criado com Sucesso!',
+						'message' => array('Departamento criado com Sucesso!'),
 					), self::HTTP_OK);
 				} catch (\Exception $e) {
-					$mensagem = $e->getMessage();
+					$mensagem = array($e->getMessage());
 					$this->api_return(array(
 						'status' => FALSE,
 						'message' => $mensagem,
@@ -260,10 +260,11 @@ class DepartamentoController extends API_Controller {
 						$this->entity_manager->flush();
 						$this->api_return(array(
 							'status' => TRUE,
-							'message' => 'Departamento atualizado com sucesso!'
+							'message' => array('Departamento atualizado com sucesso!')
 						), self::HTTP_OK);
 					} catch (\Exception $e) {
-						$e_msg = $e->getMessage();
+						$e_msg = array($e->getMessage());
+
 						$this->api_return(array(
 							'status' => FALSE,
 							'message' => $e_msg
@@ -275,12 +276,12 @@ class DepartamentoController extends API_Controller {
         {
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Corpo da Requisição vazio',
+                'message' => array('Corpo da Requisição vazio'),
             ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Departamento não encontrado!',
+                'message' => array('Departamento não encontrado!'),
             ), self::HTTP_NOT_FOUND);
         }
 	}
@@ -316,11 +317,11 @@ class DepartamentoController extends API_Controller {
 				$this->entity_manager->flush();
 				$this->api_return(array(
 					'status' => TRUE,
-					'message' => 'Departamento removido com sucesso!'
+					'message' => array('Departamento removido com sucesso!')
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
-				$msg = $e->getMessage();
+				$msg = array($e->getMessage());
 				$this->api_return(array(
 					'status' => FALSE,
 					'message' => $msg
@@ -329,7 +330,7 @@ class DepartamentoController extends API_Controller {
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
-                'message' => 'Departamento não encontrado!',
+                'message' => array('Departamento não encontrado!'),
             ), self::HTTP_NOT_FOUND);
 		}
 	}
