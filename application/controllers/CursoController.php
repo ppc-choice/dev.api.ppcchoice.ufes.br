@@ -6,7 +6,7 @@ require_once APPPATH . 'libraries/API_Controller.php';
 class CursoController extends API_Controller {
 
 	/**
-	 * @api {get} cursos/:codCurso Requisitar dados de um Curso específico.
+	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
 	 * @apiGroup Cursos
 	 *
@@ -14,27 +14,10 @@ class CursoController extends API_Controller {
 	 *
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/1
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": {
-	 *	"codCurso": 1,
-     *	"nome": "Ciência da Computação",
-     *	"anoCriacao": 2011,
-     *	"codUnEnsino": 1
-	 * }
-	 * @apiError UserNotFound O <code>codCurso</code> não corresponde a nenhum Curso cadastrado.
-	 * @apiSampleRequest cursos/:codCurso
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Curso não encontrado!"
-	 * }
+	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
     public function findById($codCurso)
 	{   
@@ -66,43 +49,9 @@ class CursoController extends API_Controller {
 	 * @api {get} cursos/ Requisitar todos Cursos registrados.
 	 * @apiName findAll
 	 * @apiGroup Cursos
-	 * @apiSuccess {Number} codCurso   Identificador único do curso.
-	 * @apiSuccess {String} nome   Nome do curso.
-	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* 
-*  "status": true,
-*  "result": [
-*    {
-*      "codCurso": 1,
-*      "nomeCurso": "Ciência da Computação",
-*      "anoCriacao": 2011,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    },
-*   ...,
-*    {
-*      "codCurso": 3,
-*      "nomeCurso": "Matemática Industrial",
-*      "anoCriacao": 2013,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    }
-*  ]
-*}
-
-	 * @apiError UserNotFound Nenhum Curso cadastrado.
-	 * @apiSampleRequest cursos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Nenhum Curso cadastrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
 	 */
     public function findAll()
 	{   
@@ -126,32 +75,14 @@ class CursoController extends API_Controller {
 	 * @api {post} cursos/ Criar um Curso.
 	 * @apiName create
 	 * @apiGroup Cursos
-	 * @apiSuccess {String} nome   Nome do Curso.
-	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
-	 * @apiParamExample {json} Request-Example:
-     * {
-     *   "nome": "Novo Curso",
-     *	 "anoCriacao": 2020,
-     *	 "unidadeEnsino": 1
-     * }
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* {
-	* 	"status": true,
-	* 	"result": "Curso criado com Sucesso!"
-	* {
-	
-	 * @apiError CursoNotFound Não foi possível criar um novo Curso.
-	 * @apiSampleRequest cursos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Campo Obrigatorio Não Encontrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
 	public function create()
     {
@@ -203,24 +134,19 @@ class CursoController extends API_Controller {
 	}
 	
 	/**
-     * @api {put} cursos/:codCurso Atualizar Curso
+     * @api {put} cursos/:codCurso Atualizar dados de um Curso.
      * @apiName update
      * @apiGroup Cursos
-     * @apiParam {Number} codCurso Código do Curso.
-     * @apiError  (Campo obrigatorio não encontrado 400) BadRequest Algum campo obrigatório não foi inserido.
-     * @apiError  (Curso não encontrado 404) Curso não encontrada
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "nome" : "Ciência dos Dados",
-	 *         "anoCriacao" : 2020 ,
-	 *         "unidadeEnsino" : 1
-     *     }
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Curso atualizado com sucesso"
-     *     }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiSuccess {String} message Curso atualizado com sucesso.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
 	public function update($codCurso)
     {
@@ -285,17 +211,16 @@ class CursoController extends API_Controller {
 	}
 
 	/**
-     * @api {delete} cursos/:codCurso Deletar Curso.
+     * @api {delete} cursos/:codCurso Excluir um Curso.
      * @apiName delete
      * @apiGroup Cursos
-     * @apiParam {Number} codCurso Código do Curso.
-     * @apiError  (Campo não encontrado 400) NotFound Curso não encontrado.
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "status": true,
-     *       "message": "Curso removido com sucesso"
-     *     }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam {Number} codCurso Identificador único do Curso.
+   	 * 
+	 * @apiSuccess {String} message  Curso deletado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a uma Curso cadastrado.
      */
 	public function delete($codCurso)
 	{
