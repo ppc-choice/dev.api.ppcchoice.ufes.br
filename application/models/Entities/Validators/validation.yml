@@ -58,6 +58,7 @@ Entities\InstituicaoEnsinoSuperior:
             - Range:
                 min: 1,
                 minMessage: O código deve ser não negativo e diferente de zero.
+                invalidMessage: O valor deve ser um número válido.
         nome:
             - NotNull:
                 message: Nome não pode ser null.
@@ -141,6 +142,7 @@ Entities\Curso:
             - Range:
                 min: 1950
                 minMessage: Ano de criação deve ser não negativo e maior que 1950.
+                invalidMessage: O valor deve ser um número válido.
         unidadeEnsino:
             - NotNull:
                 message: a Unidade de Ensino é null ou inválida.
@@ -241,6 +243,7 @@ Entities\ProjetoPedagogicoCurso:
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         qtdPeriodos:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -250,6 +253,7 @@ Entities\ProjetoPedagogicoCurso:
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         anoAprovacao:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -259,6 +263,7 @@ Entities\ProjetoPedagogicoCurso:
             - Range:
                 min: 1950
                 minMessage: O valor mínimo aceitável é 1950.
+                invalidMessage: O valor deve ser um número válido.
         situacao:
             - OneOf:
                 choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
@@ -306,6 +311,7 @@ Entities\Disciplina:
             - Range:
                 min: 0,
                 minMessage: Este valor deve ser não negativo.
+                invalidMessage: O valor deve ser um número válido.
         departamento:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -364,7 +370,8 @@ Entities\ComponenteCurricular:
                 message: O crédito informado ({{ value }}) não é do tipo {{ type }}.
             - Range:
                 min:  0 
-                minMessage: Crédito deve ter valor positivo. 
+                minMessage: Crédito deve ter valor positivo.
+                invalidMessage: O valor deve ser um número válido.
         tipo:
             - NotNull: 
                 message: Tipo não pode ser null.
@@ -400,6 +407,7 @@ Entities\Correspondencia:
                 max: 1
                 minMessage: Correspondência deve ser maior que 0%.
                 maxMessage: Correspondência não pode ser maior que 100%.
+                invalidMessage: O valor deve ser um número válido.
     constraints:    
         - Callback:
             methods: 
