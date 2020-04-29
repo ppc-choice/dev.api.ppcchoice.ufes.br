@@ -79,14 +79,12 @@ class DepartamentoController extends API_Controller {
 	 * @apiGroup Departamentos
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {Number} codDepto   Identificador único do Departamento.
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
 	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
 	 * @apiSuccess {String} message  Departamento criado com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
@@ -204,12 +202,6 @@ class DepartamentoController extends API_Controller {
 					}	
 				}
 
-        }elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Corpo da Requisição vazio'),
-            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,

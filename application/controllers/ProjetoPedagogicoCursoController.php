@@ -112,12 +112,12 @@ class ProjetoPedagogicoCursoController extends API_Controller
     *
     * @apiParam (Request Body/JSON) {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiParam (Request Body/JSON) {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso (Obrigatório para projeto pedagógicos de cursos INATIVOS).
-    * @apiParam (Request Body/JSON) {Number} chTotalDisciplinaOpt  Carga horária total de disciplinas optativas que o curso deve possuir.
-    * @apiParam (Request Body/JSON) {Number} chTotalDisciplinaOb  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
-    * @apiParam (Request Body/JSON) {Number} chTotalAtividadeExt  Carga horária total de atividades extensão que o curso deve possuir.
-    * @apiParam (Request Body/JSON) {Number} chTotalAtividadeCmplt  Carga horária total de atividades complementares que o curso deve possuir.
-    * @apiParam (Request Body/JSON) {Number} chTotalProjetoConclusao  Carga horária total de projeto de conclusão de curso deve possuir.
-    * @apiParam (Request Body/JSON) {Number} chTotalEstagio  Carga horária total de estágio que o curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalDisciplinaOpt = 0]  Carga horária total de disciplinas optativas que o curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalDisciplinaOb = 0]  Carga horária total de disciplinas obrigatórias que o curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalAtividadeExt = 0] Carga horária total de atividades extensão que o curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalAtividadeCmplt = 0]  Carga horária total de atividades complementares que o curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalProjetoConclusao = 0]  Carga horária total de projeto de conclusão de curso deve possuir.
+    * @apiParam (Request Body/JSON) {Number} [chTotalEstagio = 0]  Carga horária total de estágio que o curso deve possuir.
     * @apiParam (Request Body/JSON) {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
     * @apiParam (Request Body/JSON) {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiParam (Request Body/JSON) {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
@@ -149,20 +149,45 @@ class ProjetoPedagogicoCursoController extends API_Controller
             
         if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
         
-        if(array_key_exists('dtTerminoVigencia', $payload)) $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+        if(array_key_exists('dtTerminoVigencia', $payload)) 
+        {
+            if(is_null($payload['dtTerminoVigencia']))
+                $ppc->setDtTerminoVigencia(null);
+            else
+                $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+        }
+
         
-        if(array_key_exists('chTotalDisciplinaOpt', $payload)) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+        if(array_key_exists('chTotalDisciplinaOpt', $payload)) 
+            $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+        else
+            $ppc->setChTotalDisciplinaOpt(0);
+
+        if(array_key_exists('chTotalDisciplinaOb', $payload)) 
+            $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+        else
+            $ppc->setChTotalDisciplinaOb(0);
+
+        if(array_key_exists('chTotalAtividadeExt',$payload))
+            $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+        else
+            $ppc->setChTotalAtividadeExt(0);
+
+        if(array_key_exists('chTotalAtividadeCmplt', $payload)) 
+            $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+        else
+            $ppc->setChTotalAtividadeCmplt(0);
+
+        if(array_key_exists('chTotalProjetoConclusao', $payload)) 
+            $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+        else
+            $ppc->setChTotalProjetoConclusao(0);  
         
-        if(array_key_exists('chTotalDisciplinaOb', $payload)) $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
-        
-        if(array_key_exists('chTotalAtividadeExt',$payload)) $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
-        
-        if(array_key_exists('chTotalAtividadeCmplt', $payload)) $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
-        
-        if(array_key_exists('chTotalProjetoConclusao', $payload)) $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
-        
-        if(array_key_exists('chTotalEstagio',$payload)) $ppc->setChTotalEstagio($payload['chTotalEstagio']);
-        
+        if(array_key_exists('chTotalEstagio',$payload)) 
+            $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+        else
+            $ppc->setChTotalEstagio(0);
+                
         if(array_key_exists('dtInicioVigencia', $payload)) $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
         
         if(array_key_exists('qtdPeriodos', $payload)) $ppc->setQtdPeriodos($payload['qtdPeriodos']);
@@ -171,30 +196,28 @@ class ProjetoPedagogicoCursoController extends API_Controller
         
         if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
         
-        $chtotal = $payload['chTotalDisciplinaOpt']+$payload['chTotalDisciplinaOb']+$payload['chTotalAtividadeExt']+$payload['chTotalAtividadeCmplt']+$payload['chTotalProjetoConclusao']+$payload['chTotalEstagio'];                                
-        $ppc->setChTotal($chtotal);
+        $ppc->setChTotal(0);
         
         $validador = $this->validator->validate($ppc);
-
-        if ( $validador->count() ){
+        
+        if ( $validador->success() ){
+            
+            $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
+                        $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
+                        $ppc->getChTotalProjetoConclusao()+ $ppc->getChTotalEstagio();
+            
+            $ppc->setChTotal($chtotal);
     
-            $msg = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msg,
-            ), self::HTTP_BAD_REQUEST);
-        }
-        else{
             try{
-
+    
                 $this->entity_manager->persist($ppc);
                 $this->entity_manager->flush();
-
+    
                 $this->api_return(array(
                     'status' => TRUE,
                     'mesage' => array("Projeto Pedagógico de Curso criado com sucesso"),
                 ), self::HTTP_OK );
-
+    
             } catch (\Exception $e){
                 $msgExcecao = array($e->getMessage());
                 $this->api_return(array(
@@ -202,6 +225,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     'message' => $msgExcecao,
                 ), self::HTTP_BAD_REQUEST );
             }
+        }
+        else{
+            
+            $msg = $validador->messageArray();
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => $msg,
+            ), self::HTTP_BAD_REQUEST);
         }
     }   
 
@@ -244,7 +275,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
         
         if(!is_null($ppc))
         {
-            if(isset($payload['codCurso'])) 
+            if(array_key_exists('codCurso', $payload)) 
             {
                 $curso = $this->entity_manager->find('Entities\Curso',$payload['codCurso']);
                 $ppc->setCurso($curso);
@@ -252,7 +283,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
             if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
 
-            if(array_key_exists('dtTerminoVigencia', $payload)) $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            if(array_key_exists('dtTerminoVigencia', $payload)) 
+            {
+                if(is_null($payload['dtTerminoVigencia']))
+                    $ppc->setDtTerminoVigencia(null);
+                else
+                    $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            }
             
             if(array_key_exists('chTotalDisciplinaOpt', $payload)) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
             
@@ -276,24 +313,17 @@ class ProjetoPedagogicoCursoController extends API_Controller
     
             $validador = $this->validator->validate($ppc);
 
-            if ( $validador->count() )
+            if ( $validador->success() )
             {
-                $msg = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), self::HTTP_BAD_REQUEST);
-
-            }else{
                 try {
                     $this->entity_manager->merge($ppc);
                     $this->entity_manager->flush();
-    
+                    
                     $this->api_return(array(
                         'status' => TRUE,
                         'mesage' => array("Projeto Pedagógico de Curso alterado com sucesso"),
                     ), self::HTTP_OK );
-
+                    
                 } catch (\Exception $e){
                     $msgExcecao = array($e->getMessage());
                     $this->api_return(array(
@@ -301,6 +331,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         'message' => $msgExcecao,
                     ), self::HTTP_BAD_REQUEST);
                 }
+                
+            }else{
+                $msg = $validador->messageArray();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), self::HTTP_BAD_REQUEST);
             } 
         }else{
             

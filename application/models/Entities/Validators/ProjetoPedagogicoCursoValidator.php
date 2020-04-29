@@ -48,7 +48,7 @@ class ProjetoPedagogicoCursoValidator
             {
                 $context->addViolationAt(
                     'dtTerminoVigencia',
-                    'Projeto pedagógico de curso com situação corrente e ativo-anterior a data de termino de vigência deve ser vazia.',
+                    'Projeto pedagógico de curso com situação corrente e ativo-anterior a data de termino de vigência deve ser nulo.',
                     array(),
                     null
                 );
