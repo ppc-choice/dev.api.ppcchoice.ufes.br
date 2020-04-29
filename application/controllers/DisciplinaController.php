@@ -108,7 +108,7 @@ class DisciplinaController extends API_Controller
         if ( array_key_exists('ch', $payload) )             $disciplina->setCh($payload['ch']);
         if ( array_key_exists('nome', $payload) )           $disciplina->setNome($payload['nome']);
 
-        if ( array_key_exists('codDepto', $payload) ){
+        if ( isset($payload['codDepto']) ){
             $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
             $disciplina->setDepartamento($depto);
             $disciplina->setCodDepto($payload['codDepto']);
