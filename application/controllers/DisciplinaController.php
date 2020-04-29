@@ -110,8 +110,10 @@ class DisciplinaController extends API_Controller
 
         if ( isset($payload['codDepto']) ){
             $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
-            $disciplina->setDepartamento($depto);
-            $disciplina->setCodDepto($payload['codDepto']);
+            if ( !is_null($depto) ){
+                $disciplina->setDepartamento($depto);
+                $disciplina->setCodDepto($payload['codDepto']);
+            }   
         }
 
         $constraints = $this->validator->validate($disciplina);
