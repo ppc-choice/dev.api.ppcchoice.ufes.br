@@ -233,7 +233,7 @@ Entities\ProjetoPedagogicoCurso:
         curso:
             - NotNull:
                 message: Este valor deve ser nulo.
-            - valid:
+            - Valid: ~ 
             - Type:
                 type: object
                 message: Este valor deve ser do tipo {{ type }}.    
