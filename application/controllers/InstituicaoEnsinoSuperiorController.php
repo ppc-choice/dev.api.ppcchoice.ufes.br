@@ -198,12 +198,6 @@ class InstituicaoEnsinoSuperiorController extends API_Controller
 				}	
 			}
 
-        }elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Corpo da Requisição vazio'),
-            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
