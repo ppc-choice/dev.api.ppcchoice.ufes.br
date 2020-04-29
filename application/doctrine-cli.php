@@ -18,8 +18,8 @@ require APPPATH.'libraries/Doctrine.php';
 $doctrine = new Doctrine();
  
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($doctrine->em->getConnection()),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($doctrine->em)
+    'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($doctrine->getEntityManager()->getConnection()),
+    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($doctrine->getEntityManager())
 ));
 
 $cli = new \Symfony\Component\Console\Application('Doctrine Command Line Interface (CodeIgniter integration by Joel Verhagen)', Doctrine\ORM\Version::VERSION);
