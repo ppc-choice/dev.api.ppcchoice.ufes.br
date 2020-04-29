@@ -188,14 +188,7 @@ class DependenciaController extends API_Controller
 
         $validador = $this->validator->validate($dependencia);
 
-        if ( $validador->count() ){
-            $msg = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msg,
-            ), self::HTTP_BAD_REQUEST
-            );
-        }else{
+        if ( $validador->success() ){
             try{
                
                 $this->entity_manager->persist($dependencia);
@@ -212,6 +205,12 @@ class DependenciaController extends API_Controller
                     'message' => $msgExcecao,
                 ), self::HTTP_BAD_REQUEST );
             }
+        }else{
+            $msg = $validador->messageArray();
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => $msg,
+            ), self::HTTP_BAD_REQUEST );
         }
     }   		
     /**
@@ -270,15 +269,8 @@ class DependenciaController extends API_Controller
             
             $validador = $this->validator->validate($dependencia);
             
-            if ($validador->count()){
+            if ($validador->success()){
 
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ), self::HTTP_BAD_REQUEST );
-
-            }else{
                 try{
                     $this->entity_manager->merge($dependencia);
                     $this->entity_manager->flush();
@@ -295,6 +287,13 @@ class DependenciaController extends API_Controller
                         'message' => $msgExcecao,
                     ), self::HTTP_BAD_REQUEST );
                 }
+                
+            }else{
+                $message = $validador->messageArray();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $message
+                ), self::HTTP_BAD_REQUEST );
             }
         
         }else{

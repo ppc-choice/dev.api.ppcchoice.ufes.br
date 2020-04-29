@@ -195,33 +195,28 @@ class ProjetoPedagogicoCursoController extends API_Controller
         
         if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
         
-        $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
-                    $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
-                    $ppc->getChTotalProjetoConclusao()+ $ppc->getChTotalEstagio();
-        
-        $ppc->setChtotal($chtotal);
+        $ppc->setChTotal(0);
         
         $validador = $this->validator->validate($ppc);
-
-        if ( $validador->count() ){
+        
+        if ( $validador->success() ){
+            
+            $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
+                        $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
+                        $ppc->getChTotalProjetoConclusao()+ $ppc->getChTotalEstagio();
+            
+            $ppc->setChTotal($chtotal);
     
-            $msg = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msg,
-            ), self::HTTP_BAD_REQUEST);
-        }
-        else{
             try{
-
+    
                 $this->entity_manager->persist($ppc);
                 $this->entity_manager->flush();
-
+    
                 $this->api_return(array(
                     'status' => TRUE,
                     'mesage' => array("Projeto Pedagógico de Curso criado com sucesso"),
                 ), self::HTTP_OK );
-
+    
             } catch (\Exception $e){
                 $msgExcecao = array($e->getMessage());
                 $this->api_return(array(
@@ -229,6 +224,14 @@ class ProjetoPedagogicoCursoController extends API_Controller
                     'message' => $msgExcecao,
                 ), self::HTTP_BAD_REQUEST );
             }
+        }
+        else{
+            
+            $msg = $validador->messageArray();
+            $this->api_return(array(
+                'status' => FALSE,
+                'message' => $msg,
+            ), self::HTTP_BAD_REQUEST);
         }
     }   
 
@@ -303,24 +306,17 @@ class ProjetoPedagogicoCursoController extends API_Controller
     
             $validador = $this->validator->validate($ppc);
 
-            if ( $validador->count() )
+            if ( $validador->success() )
             {
-                $msg = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), self::HTTP_BAD_REQUEST);
-
-            }else{
                 try {
                     $this->entity_manager->merge($ppc);
                     $this->entity_manager->flush();
-    
+                    
                     $this->api_return(array(
                         'status' => TRUE,
                         'mesage' => array("Projeto Pedagógico de Curso alterado com sucesso"),
                     ), self::HTTP_OK );
-
+                    
                 } catch (\Exception $e){
                     $msgExcecao = array($e->getMessage());
                     $this->api_return(array(
@@ -328,6 +324,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
                         'message' => $msgExcecao,
                     ), self::HTTP_BAD_REQUEST);
                 }
+                
+            }else{
+                $msg = $validador->messageArray();
+                $this->api_return(array(
+                    'status' => FALSE,
+                    'message' => $msg,
+                ), self::HTTP_BAD_REQUEST);
             } 
         }else{
             
