@@ -26,11 +26,11 @@ class DependenciaValidator
         
         if(!is_null($dependencia->getPreRequisito() ) && !is_null($dependencia->getComponenteCurricular()))
         {
-            if($dependencia->getComponenteCurricular()->getPeriodo() ==  $dependencia->getPreRequisito()->getPeriodo())
+            if($dependencia->getComponenteCurricular()->getPeriodo() <= $dependencia->getPreRequisito()->getPeriodo())
             {
                 $context->addViolationAt(
                     'componenteCurricular',
-                    'As componentes curriculares devem ter periodos distintos',
+                    'A componente curricular deve ter periodo maior que o seu pré-requisito.',
                     array(),
                     null
                 );
