@@ -196,12 +196,6 @@ class CursoController extends API_Controller {
 					}	
 				}
 
-        }elseif(empty($payload))
-        {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Corpo da Requisição vazio'),
-            ), self::HTTP_BAD_REQUEST);
         }else{
             $this->api_return(array(
                 'status' => FALSE,
@@ -240,7 +234,7 @@ class CursoController extends API_Controller {
 				$this->entity_manager->flush();
 				$this->api_return(array(
 					'status' => TRUE,
-					'message' => array('Curso removida com sucesso!')
+					'message' => array('Curso removido com sucesso!')
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
@@ -253,7 +247,7 @@ class CursoController extends API_Controller {
 		}else{
 			$this->api_return(array(
                 'status' => FALSE,
-                'message' => array('Curso não encontrada!'),
+                'message' => array('Curso não encontrado!'),
             ), self::HTTP_NOT_FOUND);
 		}
 	}
