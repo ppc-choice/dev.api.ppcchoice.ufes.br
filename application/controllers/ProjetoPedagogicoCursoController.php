@@ -156,6 +156,7 @@ class ProjetoPedagogicoCursoController extends API_Controller
             else
                 $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
         }
+
         
         if(array_key_exists('chTotalDisciplinaOpt', $payload)) 
             $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
@@ -282,7 +283,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
 
             if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
 
-            if(array_key_exists('dtTerminoVigencia', $payload)) $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            if(array_key_exists('dtTerminoVigencia', $payload)) 
+            {
+                if(is_null($payload['dtTerminoVigencia']))
+                    $ppc->setDtTerminoVigencia(null);
+                else
+                    $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            }
             
             if(array_key_exists('chTotalDisciplinaOpt', $payload)) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
             
