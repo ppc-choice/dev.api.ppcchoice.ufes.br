@@ -10,7 +10,7 @@ Entities\Usuario:
             - NotBlank: 
                 message: Este valor não deve ser vazio.
             - Regex:
-                pattern: '/\d/'
+                pattern: /\d/
                 match:   false
                 message: Este valor não deve conter caracteres numéricos
         email:
@@ -56,7 +56,7 @@ Entities\InstituicaoEnsinoSuperior:
                 type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
-                pattern: "/\d/"
+                pattern: /\d/
                 match: false
                 message: Nome não deve conter números.
         abreviatura:
@@ -68,7 +68,7 @@ Entities\InstituicaoEnsinoSuperior:
                 type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
-                pattern: "/\d/"
+                pattern: /\d/
                 match: false
                 message: Abreviatura não deve conter números.                
 Entities\Departamento:
@@ -82,7 +82,7 @@ Entities\Departamento:
                 type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
-                pattern: "/\d/"
+                pattern: /\d/
                 match: false
                 message: Nome não deve conter números.                  
         abreviatura:
@@ -94,7 +94,7 @@ Entities\Departamento:
                 type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
-                pattern: "/\d/"
+                pattern: /\d/
                 match: false
                 message: Abreviatura não deve conter números.                
         unidadeEnsino:
@@ -111,7 +111,7 @@ Entities\Curso:
                 type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
-                pattern: "/\d/"
+                pattern: /\d/
                 match: false
                 message: Nome não deve conter números.     
         anoCriacao:
@@ -129,10 +129,10 @@ Entities\Dependencia:
     properties:
         componenteCurricular:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
         preRequisito:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
     constraints:    
         - Callback:
             methods: 
@@ -142,7 +142,7 @@ Entities\ProjetoPedagogicoCurso:
     properties:
         dtInicioVigencia:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - DateTime:
                 message: Este valor não é uma data e hora válida.
         dtTerminoVigencia:
@@ -150,61 +150,67 @@ Entities\ProjetoPedagogicoCurso:
                 message: Este valor não é uma data e hora válida.
         chTotalDisciplinaOpt:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         chTotalDisciplinaOb: 
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         chTotalAtividadeExt:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         chTotalAtividadeCmplt:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         chTotalProjetoConclusao:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         chTotalEstagio:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
             - Range:
                 min: 0
                 minMessage: O valor mínimo aceitável é 0.
+                invalidMessage: O valor deve ser um número válido.
         duracao:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: float
                 message: Este valor deve ser do tipo {{ type }}.
@@ -213,7 +219,7 @@ Entities\ProjetoPedagogicoCurso:
                 minMessage: O valor mínimo aceitável é 0.
         qtdPeriodos:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
@@ -222,18 +228,20 @@ Entities\ProjetoPedagogicoCurso:
                 minMessage: O valor mínimo aceitável é 0.
         anoAprovacao:
             - NotNull:
-                message: Este valor deve ser nulo.
+                message: Este valor não deve ser nulo.
             - Type:
                 type: int
                 message: Este valor deve ser do tipo {{ type }}.
+            - Range:
+                min: 1950
+                minMessage: O valor mínimo aceitável é 1950.
         situacao:
             - OneOf:
                 choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
                 message: O valor selecionado não é uma opção válida.
         curso:
             - NotNull:
-                message: Este valor deve ser nulo.
-            - valid:
+                message: Este valor não deve ser nulo.
             - Type:
                 type: object
                 message: Este valor deve ser do tipo {{ type }}.    
@@ -303,7 +311,7 @@ Entities\UnidadeEnsino:
                 type: string
                 message: Este valor deve ser do tipo {{ type }}.
             - Regex:
-                pattern: '/^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/'
+                pattern: /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/
                 match: true
                 message: O valor não possui o padrão de CNPJ.
         ies:
