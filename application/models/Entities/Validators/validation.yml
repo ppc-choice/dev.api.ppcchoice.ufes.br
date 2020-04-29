@@ -12,7 +12,7 @@ Entities\Usuario:
             - Regex:
                 pattern: /\d/
                 match:   false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
         email:
             - Type: 
                 type: string
@@ -47,84 +47,108 @@ Entities\Usuario:
                 message: Este valor não deve ser nulo.
 Entities\InstituicaoEnsinoSuperior:
     properties:
+        codIes:
+            - NotNull:
+                message: O código não pode ser null.
+            - NotBlank: 
+                message: O código não pode ser vazio.
+            - Type: 
+                type: integer
+                message: O código deve ser do tipo {{ type }}
+            - Range:
+                min: 1,
+                minMessage: O código deve ser não negativo e diferente de zero.
         nome:
             - NotNull:
                 message: Nome não pode ser null.
             - NotBlank: 
-                message: Nome é inválido.
+                message: Nome não pode ser vazio.
             - Type: 
                 type: string
-                message: Nome deve ser do tipo {{ type }}
+                message: Nome deve ser do tipo {{ type }}                    
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Nome não deve conter números.
+                message: Nome não deve conter caracteres numéricos.
         abreviatura:
             - NotNull:
                 message: Abreviatura não pode ser null.
             - NotBlank: 
-                message: Abreviatura é inválida.
+                message: Abreviatura não pode ser vazia.
             - Type: 
                 type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Abreviatura não deve conter números.                
+                message: Abreviatura não deve conter caracteres numéricos.            
 Entities\Departamento:
     properties:
         nome:
             - NotNull:
                 message: Nome não pode ser null.
             - NotBlank: 
-                message: Nome é inválido.
+                message: Nome não pode ser vazio.
             - Type: 
                 type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Nome não deve conter números.                  
+                message: Nome não deve conter caracteres numéricos.                
         abreviatura:
             - NotNull:
                 message: Abreviatura não pode ser null.
             - NotBlank: 
-                message: Abreviatura é inválida.
+                message: Abreviatura não pode ser vazia.
             - Type: 
                 type: string
                 message: Abreviatura deve ser do tipo {{ type }}
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Abreviatura não deve conter números.                
+                message: Abreviatura não deve conter caracteres numéricos.             
         unidadeEnsino:
             - NotNull:
-                message: o Unidade de Ensino é inválida.
+                message: a Unidade de Ensino é null ou inválida.
+            - NotBlank: 
+                message: a Unidade de Ensino não pode ser vazia.               
+            - Type: 
+                type: object
+                message: Unidade de Ensino deve ser do tipo {{ type }}.
 Entities\Curso:
     properties:
         nome:
             - NotNull:
                 message: Nome não pode ser null.
             - NotBlank: 
-                message: Nome é inválido.
+                message: Nome não pode ser vazio.
             - Type: 
                 type: string
                 message: Nome deve ser do tipo {{ type }}
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Nome não deve conter números.     
+                message: Nome não deve conter caracteres numéricos.     
         anoCriacao:
             - NotNull:
                 message: o ano de criacao não pode ser nulo.
             - NotBlank: 
-                message: o ano de criacao é inválido.
+                message: o ano de criacao não pode ser vazio.
             - Type:
                 type: integer
-                message: o ano de criacao nao é do tipo inteiro.
+                message: o ano de criacao não é do tipo inteiro.
+            - Range:
+                min: 1950
+                minMessage: Ano de criação deve ser não negativo e maior que 1950.
         unidadeEnsino:
             - NotNull:
-                message: o Unidade de Ensino é inválida.
+                message: a Unidade de Ensino é null ou inválida.
+            - NotBlank: 
+                message: a Unidade de Ensino não pode ser vazia.  
+            - Type: 
+                type: object
+                message: Unidade de Ensino deve ser do tipo {{ type }}.
 Entities\Dependencia:
     properties:
         componenteCurricular:
