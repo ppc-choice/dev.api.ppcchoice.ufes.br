@@ -103,9 +103,9 @@ class UnidadeEnsinoController extends API_Controller
         if ( array_key_exists('nome', $payload) )   $ues->setNome($payload['nome']);
         if ( array_key_exists('cnpj', $payload) )   $ues->setCnpj($payload['cnpj']);
 
-        if ( array_key_exists('codIes', $payload) ){
+        if ( isset($payload['codIes']) ){
             $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
-            $ues->setIes($ies);
+            if ( !is_null($ies) ) $ues->setIes($ies);
         }
 
         $constraints = $this->validator->validate($ues);
