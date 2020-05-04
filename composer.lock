@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ab76c220a4e500122d26e9add4b9a4b",
+    "content-hash": "de207bb16f06bc17014e07c6c8f5ecc3",
     "packages": [
         {
             "name": "php-kit/ext-pdo",
@@ -1693,7 +1693,15 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.7"
+        "php": ">=5.3.7",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-mysqli": "*",
+        "ext-xml": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "ext-gd": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": []
 }
