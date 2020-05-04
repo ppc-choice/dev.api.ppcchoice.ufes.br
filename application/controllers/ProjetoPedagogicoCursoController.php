@@ -1,14 +1,9 @@
-
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/APIController.php';
 
-
-require_once APPPATH . 'libraries/API_Controller.php';
-
-
-class ProjetoPedagogicoCursoController extends API_Controller
+class ProjetoPedagogicoCursoController extends APIController
 {
-    
     public function __construct() {
         parent::__construct();
     }
@@ -21,32 +16,27 @@ class ProjetoPedagogicoCursoController extends API_Controller
     *
     * @apiSuccess {String[]} Projeto Pedagógico Curso Array de objetos do tipo Projeto Pesagógico Curso.
     */
-
     public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-           
             'methods' => array('GET'), 
-
         ));
        
-        $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findAll();
-        $result = $this->doctrine_to_array($ppc,TRUE);
-
-        if(!empty($result)){
+        $colecaoPpc = $this->entityManager->getRepository('Entities\ProjetoPedagogicoCurso')->findAll();
+        
+        if(!empty($colecaoPpc)){
+            $colecaoPpc = $this->doctrineToArray($colecaoPpc,TRUE);
             
-            $this->api_return(array(
-                    'status' => true,
-                    'result' => $result,
-                ), self::HTTP_OK ); 
+            $this->apiReturn($colecaoPpc,
+                self::HTTP_OK 
+            ); 
         }else{
-            
-            $this->api_return(array(
-                    'status' => false,
-                    'message' => array("Projeto Pedagógico de Curso não encontrado!"),
-                ), self::HTTP_NOT_FOUND );
+            $this->apiReturn(array(
+                'error' => array("Projeto Pedagógico de Curso não encontrado!"),
+                ),self::HTTP_NOT_FOUND 
+            );
         }
     }
         
@@ -81,26 +71,22 @@ class ProjetoPedagogicoCursoController extends API_Controller
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-           
             'methods' => array('GET'), 
-
         ));
 
-        $ppc = $this->entity_manager->getRepository('Entities\ProjetoPedagogicoCurso')->findById($codPpc);
-        $result = $this->doctrine_to_array($ppc, TRUE);
+        $ppc = $this->entityManager->getRepository('Entities\ProjetoPedagogicoCurso')->findById($codPpc);
+        
+        if(!empty($ppc)){
+            $ppc = $this->doctrineToArray($ppc, TRUE);
 
-        if(!empty($result)){
-            
-            $this->api_return(array(
-                    'status' => true,
-                    'result' => $result,
-                ), self::HTTP_OK ); 
+            $this->apiReturn($ppc,
+                self::HTTP_OK 
+            ); 
         }else{
-            
-            $this->api_return(array(
-                    'status' => false,
-                    'message' => array("Projeto Pedagógico de Curso não encontrado!"),
-                ), self::HTTP_NOT_FOUND );
+            $this->apiReturn(array(
+                'error' => array("Projeto Pedagógico de Curso não encontrado!"),
+                ),self::HTTP_NOT_FOUND 
+            );
         }
     }  
 
@@ -139,11 +125,11 @@ class ProjetoPedagogicoCursoController extends API_Controller
 		);
 
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-        $ppc = new Entities\ProjetoPedagogicoCurso;
+        $ppc = new Entities\ProjetoPedagogicoCurso();
         
         if(isset($payload['codCurso'])) 
         {
-            $curso = $this->entity_manager->find('Entities\Curso',$payload['codCurso']);
+            $curso = $this->entityManager->find('Entities\Curso',$payload['codCurso']);
             $ppc->setCurso($curso);
         } 
             
@@ -198,9 +184,9 @@ class ProjetoPedagogicoCursoController extends API_Controller
         
         $ppc->setChTotal(0);
         
-        $validador = $this->validator->validate($ppc);
+        $constraints = $this->validator->validate($ppc);
         
-        if ( $validador->success() ){
+        if ( $constraints->success() ){
             
             $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
                         $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
@@ -209,30 +195,31 @@ class ProjetoPedagogicoCursoController extends API_Controller
             $ppc->setChTotal($chtotal);
     
             try{
+                $this->entityManager->persist($ppc);
+                $this->entityManager->flush();
     
-                $this->entity_manager->persist($ppc);
-                $this->entity_manager->flush();
-    
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->apiReturn(array(
                     'mesage' => array("Projeto Pedagógico de Curso criado com sucesso"),
-                ), self::HTTP_OK );
+                    ),self::HTTP_OK
+                );
     
             } catch (\Exception $e){
                 $msgExcecao = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => false,
-                    'message' => $msgExcecao,
-                ), self::HTTP_BAD_REQUEST );
+                
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
         }
         else{
             
-            $msg = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msg,
-            ), self::HTTP_BAD_REQUEST);
+            $msgViolacoes = $constraints->messageArray();
+            
+            $this->apiReturn(array(
+                'error' => $msgViolacoes,
+                ),self::HTTP_BAD_REQUEST
+            );
         }
     }   
 
@@ -271,13 +258,13 @@ class ProjetoPedagogicoCursoController extends API_Controller
 		);
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
+        $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
         
         if(!is_null($ppc))
         {
             if(array_key_exists('codCurso', $payload)) 
             {
-                $curso = $this->entity_manager->find('Entities\Curso',$payload['codCurso']);
+                $curso = $this->entityManager->find('Entities\Curso',$payload['codCurso']);
                 $ppc->setCurso($curso);
             }   
 
@@ -311,40 +298,42 @@ class ProjetoPedagogicoCursoController extends API_Controller
             
             if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
     
-            $validador = $this->validator->validate($ppc);
+            $constraints = $this->validator->validate($ppc);
 
-            if ( $validador->success() )
+            if ( $constraints->success() )
             {
                 try {
-                    $this->entity_manager->merge($ppc);
-                    $this->entity_manager->flush();
+                    $this->entityManager->merge($ppc);
+                    $this->entityManager->flush();
                     
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->apiReturn(array(
                         'mesage' => array("Projeto Pedagógico de Curso alterado com sucesso"),
-                    ), self::HTTP_OK );
+                        ), self::HTTP_OK
+                     );
                     
                 } catch (\Exception $e){
                     $msgExcecao = array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => false,
-                        'message' => $msgExcecao,
-                    ), self::HTTP_BAD_REQUEST);
+
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao,
+                        ), self::HTTP_BAD_REQUEST
+                    );
                 }
                 
             }else{
-                $msg = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msg,
-                ), self::HTTP_BAD_REQUEST);
+                $msgViolacoes = $constraints->messageArray();
+                
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes,
+                    ), self::HTTP_BAD_REQUEST
+                );
             } 
         }else{
             
-            $this->api_return(array(
-                'status' => false,
-                'message' => array("Projeto Pedagógico de Curso não encontrado."),
-            ), self::HTTP_NOT_FOUND );
+            $this->apiReturn(array(
+                'error' => array("Projeto Pedagógico de Curso não encontrado."),
+                ), self::HTTP_NOT_FOUND 
+            );
         }        
     }
 
@@ -368,33 +357,34 @@ class ProjetoPedagogicoCursoController extends API_Controller
 			)
 		);
 
-        $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
+        $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
             
         if(!is_null($ppc))
         {
             try
             {
-                $this->entity_manager->remove($ppc);
-                $this->entity_manager->flush();
+                $this->entityManager->remove($ppc);
+                $this->entityManager->flush();
                 
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->apiReturn(array(
                     'message' => array("Projeto Pedagógico de Curso deletado com sucesso"),
-                ), self::HTTP_OK );
+                    ), self::HTTP_OK
+                );
 
             }catch (\Exception $e){
                 $msgExcecao = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => false,
-                    'message' => $msgExcecao,
-                ), self::HTTP_BAD_REQUEST );
+                
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ), self::HTTP_BAD_REQUEST 
+                );
             }
         }
         else{   
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Projeto Pedagógico de Curso não encontrado"),
-            ), self::HTTP_NOT_FOUND );
+            $this->apiReturn(array(
+                'error' => array("Projeto Pedagógico de Curso não encontrado"),
+                ), self::HTTP_NOT_FOUND
+            );
         }		
     }
 }

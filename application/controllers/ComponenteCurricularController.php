@@ -1,10 +1,12 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class ComponenteCurricularController extends API_Controller {
-
+class ComponenteCurricularController extends APIController 
+{
+    public function __construct() {
+        parent::__construct();
+    }
     
     /**
      * @api {get} componentes-curriculares Listar todas as componentes curriculares
@@ -22,25 +24,11 @@ class ComponenteCurricularController extends API_Controller {
                 'methods' => array('GET'), 
             ));
     
-        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findAll();
+        $colecaoCompCurric = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findAll();
         
-        if(!empty($compCurric))
-        {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $compCurric
-                ),self::HTTP_OK
-            );
-            
-        }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma componente curricular encontrada!')
-                ),self::HTTP_NOT_FOUND
-            );
-        }
+        $this->apiReturn($colecaoCompCurric,
+            self::HTTP_OK
+        );
         
     }
     /**
@@ -66,22 +54,17 @@ class ComponenteCurricularController extends API_Controller {
                 'methods' => array('GET'), 
             ));
                 
-        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findByCodPpc($codPpc);   
+        $colecaoCompCurric = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findByCodPpc($codPpc);   
         
-        if(!empty($compCurric))
+        if(!empty($colecaoCompCurric))
         {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $compCurric
-                ),self::HTTP_OK
+            $this->apiReturn($colecaoCompCurric,
+                self::HTTP_OK
             );
             
         }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Não foram encontradas componentes curriculares para o ppc solicitado.')
+            $this->apiReturn(array(
+                    'error' => array('Não foram encontradas componentes curriculares para o ppc solicitado.')
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -108,27 +91,23 @@ class ComponenteCurricularController extends API_Controller {
 	public function findByCodCompCurric($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
 
                 
-        $compCurric = $this->entity_manager->getRepository('Entities\ComponenteCurricular')->findByCodCompCurric($codCompCurric);  
+        $componenteCurricular = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findByCodCompCurric($codCompCurric);  
                 
-        if(!empty($compCurric))
+        if(!empty($componenteCurricular))
         {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $compCurric
-                ),self::HTTP_OK
+            $this->apiReturn($componenteCurricular,
+                self::HTTP_OK
             );
             
         }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Componente curricular não encontrada.')
+            $this->apiReturn(array(
+                    'error' =>  array('Componente curricular não encontrada.')
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -158,55 +137,62 @@ class ComponenteCurricularController extends API_Controller {
     public function create()
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $compCurric = new Entities\ComponenteCurricular;
+        $componenteCurricular = new Entities\ComponenteCurricular();
 
-        if(isset($payload['periodo'])) $compCurric->setPeriodo($payload['periodo']);
-        if(isset($payload['credito'])) $compCurric->setCredito($payload['credito']);
-        if(isset($payload['tipo'])) $compCurric->setTipo($payload['tipo']);
+        if(isset($payload['periodo'])) $componenteCurricular->setPeriodo($payload['periodo']);
+
+        if(isset($payload['credito'])) $componenteCurricular->setCredito($payload['credito']);
+
+        if(isset($payload['tipo'])) $componenteCurricular->setTipo($payload['tipo']);
+
         if(isset($payload['numDisciplina'], $payload['codDepto'])) 
         {
-            $disciplina = $this->entity_manager->find('Entities\Disciplina',
+            $disciplina = $this->entityManager->find('Entities\Disciplina',
             array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
-            $compCurric->setDisciplina($disciplina );
+            $componenteCurricular->setDisciplina($disciplina );
         }
+
         if(isset($payload['codPpc']))
         {
-            $ppc =  $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
-            $compCurric->setPpc($ppc);
+            $ppc =  $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
+            $componenteCurricular->setPpc($ppc);
         }
 
-        $validador = $this->validator->validate($compCurric);
-        if($validador->count())
-        {
-            $message = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $message
-            ), self::HTTP_BAD_REQUEST);
-        }else{
-            try{
-                $this->entity_manager->persist($compCurric);
-                $this->entity_manager->flush();
+        $constraints = $this->validator->validate($componenteCurricular);
 
-                $this->api_return(array(
-                    'status' => TRUE,
+        if($constraints->success())
+        {
+            try{
+                $this->entityManager->persist($componenteCurricular);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array('Componente curricular criada com sucesso.'),
                 ), self::HTTP_OK);
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
+
+            
+        }else{
+            $msgViolacoes = $constraints->messageArray();
+
+            $this->apiReturn(array(
+                'error' => $msgViolacoes
+                ), self::HTTP_BAD_REQUEST
+            );
         }
     }
  
@@ -235,71 +221,75 @@ class ComponenteCurricularController extends API_Controller {
     public function update($codCompCurric)
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('PUT'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
 
-        $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$codCompCurric);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$codCompCurric);
 
-        if(!is_null($compCurric))
+        if(!is_null($componenteCurricular))
         {
             if(isset($payload['codPpc']))
             {
-                $ppc = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
-                $compCurric->setPpc($ppc);
+                $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
+                $componenteCurricular->setPpc($ppc);
             }
+
             if(isset($payload['numDisciplina'],$payload['codDepto']))
             {
-                $disciplina = $this->entity_manager->find('Entities\Disciplina',
+                $disciplina = $this->entityManager->find('Entities\Disciplina',
                     array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
-                $compCurric->setDisciplina($disciplina);
+                $componenteCurricular->setDisciplina($disciplina);
             }
-            if(isset($payload['periodo']))
-            {
-                $compCurric->setPeriodo($payload['periodo']);
+
+            if(isset($payload['periodo'])){
+                $componenteCurricular->setPeriodo($payload['periodo']);
             }
-            if(isset($payload['credito']))
-            {
-                $compCurric->setCredito($payload['credito']);
-            }
-            if(isset($payload['tipo']))
-            {
-                $compCurric->setTipo($payload['tipo']);
+
+            if(isset($payload['credito'])){
+                $componenteCurricular->setCredito($payload['credito']);
             }
             
-            $validador = $this->validator->validate($compCurric);
-            if($validador->count())
+            if(isset($payload['tipo'])){
+                $componenteCurricular->setTipo($payload['tipo']);
+            }
+            
+            $constraints = $this->validator->validate($componenteCurricular);
+
+            if($constraints->success())
             {
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ), self::HTTP_BAD_REQUEST);
-            }else{
                 try {
-                    $this->entity_manager->merge($compCurric);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->entityManager->merge($componenteCurricular);
+                    $this->entityManager->flush();
+
+                    $this->apiReturn(array(
                         'message' => array('Componente Curricular atualizada com sucesso')
                     ),self::HTTP_OK);
                 } catch (\Exception $e) {
-                    $eMsg = array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $eMsg
-                    ), self::HTTP_BAD_REQUEST);
+                    $msgExcecao = array($e->getMessage());
+
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao
+                        ), self::HTTP_BAD_REQUEST
+                    );
                 }
+            }else{
+                $msgViolacoes = $constraints->messageArray();
+
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
         }else{ 
-            $this->api_return(array(
+            $this->apiReturn(array(
                 'status' => FALSE,
-                'message' => array('Componente Curricular não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+                'error' => array('Componente Curricular não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -322,33 +312,37 @@ class ComponenteCurricularController extends API_Controller {
     public function delete($codCompCurric)
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
             )
         );
 
-        $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$codCompCurric);
-        if(!is_null($compCurric))
+        $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$codCompCurric);
+
+        if(!is_null($componenteCurricular))
         {
             try {
-                $this->entity_manager->remove($compCurric);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->entityManager->remove($componenteCurricular);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array('Componente Curricular removida com sucesso')
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+                
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
         }else{ 
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Componente Curricular não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Componente Curricular não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 

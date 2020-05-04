@@ -1,14 +1,9 @@
-
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/APIController.php';
 
-
-require_once APPPATH . 'libraries/API_Controller.php';
-
-
-class DependenciaController extends API_Controller
+class DependenciaController extends APIController
 {
-    
     public function __construct() {
         parent::__construct();
     }
@@ -21,34 +16,25 @@ class DependenciaController extends API_Controller
     *
     * @apiSuccess {String[]} Dependência Array de objetos do tipo depenência.
     */
-
     public function findAll()
     {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-           
             'methods' => array('GET'), 
-
         ));
         
-        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findAll();        
+        $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findAll();        
         
-        if(!empty($dependencia)){
-            
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' => $dependencia,
-                ), self::HTTP_OK
+        if(!empty($colecaoDependencia)){
+            $this->apiReturn($colecaoDependencia,
+                self::HTTP_OK
             );
-        
         }else
         {
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' => 'Depêndencia não encontrada!',
+                    'error' => array('Depêndencia não encontrada!'),
                 ), self::HTTP_NOT_FOUND
             );
         }   
@@ -70,34 +56,26 @@ class DependenciaController extends API_Controller
     *     
     * @apiError {String[]} 404 Os códigos <code>:codCompCurric</code> e <code>:codPreRequisito</code> não corresponde a uma dependência cadastrada.
     */
-
     public function findById($codCompCurric, $codPreRequisito)
     {
         
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-           
             'methods' => array('GET'), 
-
         ));
         
-        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findById($codCompCurric, $codPreRequisito);
+        $dependencia = $this->entityManager->getRepository('Entities\Dependencia')->findById($codCompCurric, $codPreRequisito);
 
         if(!empty($dependencia)){
-            
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' => $dependencia,
-                ), self::HTTP_OK
+            $this->apiReturn($dependencia,
+                self::HTTP_OK
             ); 
         }else{
             
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' => 'Dependencia não encontrada!',
+                    'error' => 'Dependencia não encontrada!',
                 ), self::HTTP_NOT_FOUND
             );
         }
@@ -116,34 +94,29 @@ class DependenciaController extends API_Controller
     *
     * @apiError {String[]} 404 O  <code>:codPpc</code> não corresponde a uma Projeto Peedagógico de Curso cadastrada.
     */
-    
     public function findByIdPpc($codPpc)
     {
         
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-           
             'methods' => array('GET'), 
-
         ));
     
-        $dependencia = $this->entity_manager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
-        $result = $this->doctrine_to_array($dependencia);
-
-        if(!empty($dependencia)){
+        $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        
+        if(!empty($colecaoDependencia)){
+            $result = $this->doctrineToArray($colecaoDependencia);
             
-            $this->api_return(
-                array(
-                    'status' => true,
-                    "result" => $dependencia,
-                ), self::HTTP_OK ); 
+            $this->apiReturn($colecaoDependencia,
+                self::HTTP_OK 
+            ); 
         }else{    
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' => array("Não foram encontradas dependências para este projeto pedagógico de curso."),
-                ), self::HTTP_NOT_FOUND );
+                    'error' => array("Não foram encontradas dependências para este projeto pedagógico de curso."),
+                ), self::HTTP_NOT_FOUND 
+            );
         }
     } 
 
@@ -161,8 +134,6 @@ class DependenciaController extends API_Controller
     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
     *
 	*/
-    
-
     public function create()
 	{
         header("Access-Control-Allow-Origin: *");
@@ -173,46 +144,50 @@ class DependenciaController extends API_Controller
 		);
 
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-        $dependencia = new Entities\Dependencia;
+        $dependencia = new Entities\Dependencia();
         
         if ( isset($payload['codCompCurric'])){
 
-            $componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
+            $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
             $dependencia->setComponenteCurricular($componenteCurricular);
         }
+
         if( isset($payload['codPreRequisito'])){
 
-            $preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito']);
+            $preRequisito = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codPreRequisito']);
             $dependencia->setPreRequisito($preRequisito);
         }
 
-        $validador = $this->validator->validate($dependencia);
+        $constraints = $this->validator->validate($dependencia);
 
-        if ( $validador->success() ){
+        if ( $constraints->success() ){
             try{
-               
-                $this->entity_manager->persist($dependencia);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->entityManager->persist($dependencia);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => "Dependencia criada com sucesso"
-                ), self::HTTP_OK );
+                    ), self::HTTP_OK 
+                );
 
             }catch ( \Exception $e ){
                 $msgExcecao = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgExcecao,
-                ), self::HTTP_BAD_REQUEST );
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ), self::HTTP_BAD_REQUEST 
+                );
             }
         }else{
-            $msg = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msg,
-            ), self::HTTP_BAD_REQUEST );
+            $msgViolacoes = $constraints->messageArray();
+
+            $this->apiReturn(array(
+                'error' => $msgViolacoes,
+                ), self::HTTP_BAD_REQUEST 
+            );
         }
-    }   		
+    }
+
     /**
     * @api {PUT} dependencias Criar nova depêndencia entre componentes curriculares.
     *
@@ -230,7 +205,6 @@ class DependenciaController extends API_Controller
     * @apiError {String[]} 404 Os códigos <code>:codCompCurric</code> e <code>:codpreRequisito</code> não correspondem a uma dependência cadastrada.
     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
     */
-    
     public function update($codCompCurric, $codPreRequisito)
 	{
         header("Access-Control-Allow-Origin: *");
@@ -241,7 +215,7 @@ class DependenciaController extends API_Controller
         );
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $dependencia = $this->entity_manager->find('Entities\Dependencia',
+        $dependencia = $this->entityManager->find('Entities\Dependencia',
         	array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
         
         //Verifica se  existe dependencia entre as componentes curriculares 
@@ -249,58 +223,58 @@ class DependenciaController extends API_Controller
 
             if(array_key_exists('codCompCurric', $payload)){
                 if(isset($payload['codCompCurric'])){
-                  
-                    $componenteCurricular = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
-
+                    $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
                 }else{
                     $componenteCurricular = null;    
                 }
                 $dependencia->setComponenteCurricular($componenteCurricular);
             }
+            
             if(array_key_exists('codPreRequisito', $payload)){       
                 if(isset($payload['codPreRequisito'])){
-
-                    $preRequisito = $this->entity_manager->find('Entities\ComponenteCurricular', $payload['codPreRequisito']);
+                    $preRequisito = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codPreRequisito']);
                 }else{
                     $preRequisito = null;    
                 }
                 $dependencia->setPreRequisito($preRequisito);
             }
             
-            $validador = $this->validator->validate($dependencia);
+            $constraints = $this->validator->validate($dependencia);
             
-            if ($validador->success()){
+            if ($constraints->success()){
 
                 try{
-                    $this->entity_manager->merge($dependencia);
-                    $this->entity_manager->flush();
+                    $this->entityManager->merge($dependencia);
+                    $this->entityManager->flush();
                                 
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->apiReturn(array(
                         'message' => "Dependencia atualizada com sucesso",
-                    ), self::HTTP_OK );
+                        ), self::HTTP_OK 
+                    );
 
                 } catch (\Exception $e){
                     $msgExcecao = array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => false,
-                        'message' => $msgExcecao,
-                    ), self::HTTP_BAD_REQUEST );
+                    
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao,
+                        ), self::HTTP_BAD_REQUEST 
+                    );
                 }
                 
             }else{
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ), self::HTTP_BAD_REQUEST );
+                $msgViolacoes = $constraints->messageArray();
+                
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
         
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Dependência não encontrada"),
-            ), self::HTTP_NOT_FOUND );
+            $this->apiReturn(array(
+                'error' => array("Dependência não encontrada"),
+                ), self::HTTP_NOT_FOUND 
+            );
         }
     }
 
@@ -326,31 +300,31 @@ class DependenciaController extends API_Controller
 			)
 		);
 	
-        $dependencia = $this->entity_manager->find('Entities\Dependencia',array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
+        $dependencia = $this->entityManager->find('Entities\Dependencia',array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
             
         if(!is_null($dependencia)){
             try{
-                $this->entity_manager->remove($dependencia);
-                $this->entity_manager->flush();
+                $this->entityManager->remove($dependencia);
+                $this->entityManager->flush();
                 
-                $this->api_return(array(
-                    'status' => TRUE,
-                    'message' => "Dependencia deletada com sucesso",
-                ), self::HTTP_OK );
+                $this->apiReturn(array(
+                    'message' => array("Dependencia deletada com sucesso"),
+                    ), self::HTTP_OK 
+                );
 
             }catch (\Exception $e){
                 $msgExcecao = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => false,
-                    'message' => $msgExcecao,
-                ), self::HTTP_BAD_REQUEST );
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ), self::HTTP_BAD_REQUEST 
+                );
             }
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Dependência não encontrada"),
-            ), self::HTTP_NOT_FOUND );
-
+            $this->apiReturn(array(
+                'error' => array("Dependência não encontrada"),
+                ), self::HTTP_NOT_FOUND 
+            );
         }	
     }
 } 

@@ -100,7 +100,7 @@ class ConstraintViolation implements ConstraintViolationInterface
             $code = ' (code ' . $code . ')';
         }
 
-        return $class . $propertyPath . ":\n    " . $this->getMessage() . $code;
+        return $class . $propertyPath . ":    " . $this->getMessage() . $code;
     }
 
     /**

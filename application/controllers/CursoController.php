@@ -1,10 +1,38 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class CursoController extends API_Controller {
+class CursoController extends APIController 
+{
+	public function __construct() {
+        parent::__construct();
+	}
+	
+	/**
+	 * @api {get} cursos/ Requisitar todos Cursos registrados.
+	 * @apiName findAll
+	 * @apiGroup Cursos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
+	 */
+	public function findAll()
+	{   
+		header("Access-Controll-Allow-Origin: *");
 
+		$this->_apiConfig(array(
+				'methods' => array('GET'),
+			)
+		);
+
+		$colecaoCurso = $this->entityManager->getRepository('Entities\Curso')->findAll();
+		$colecaoCurso = $this->doctrineToArray($colecaoCurso,TRUE);
+
+		$this->apiReturn(array($colecaoCurso,
+			), self::HTTP_OK
+		);
+	}
+	
 	/**
 	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
@@ -28,48 +56,22 @@ class CursoController extends API_Controller {
 			)
 		);
 		
-		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
-        $result = $this->doctrine_to_array($curso,TRUE);	
+		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
         
 		if ( !is_null($curso) ) {
+			$curso = $this->doctrineToArray($curso,TRUE);	
 			
-			$this->api_return(array(
-				'status' => TRUE,
-				'result' => $result,
-			), self::HTTP_OK);
+			$this->apiReturn($curso,
+				self::HTTP_OK
+			);
 		} else {
-			$this->api_return(array(
-				'status' => FALSE,
-				'message' => array('Curso não encontrado!'),
-			), self::HTTP_NOT_FOUND);
+			$this->apiReturn(array(
+				'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
 		}
     }
     
-	/**
-	 * @api {get} cursos/ Requisitar todos Cursos registrados.
-	 * @apiName findAll
-	 * @apiGroup Cursos
-	 * @apiPermission ADMINISTRATOR
-	 * 
-	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
-	 */
-    public function findAll()
-	{   
-		header("Access-Controll-Allow-Origin: *");
-
-		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-
-        $curso = $this->entity_manager->getRepository('Entities\Curso')->findAll();
-        $result = $this->doctrine_to_array($curso,TRUE);
-
-		$this->api_return(array(
-			'status' => TRUE,
-			'result' => $result,
-		), self::HTTP_OK);
-    }
 	
 	/**
 	 * @api {post} cursos/ Criar um Curso.
@@ -94,42 +96,43 @@ class CursoController extends API_Controller {
 		);
  
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-		
-		$curso = new \Entities\Curso;
+		$curso = new Entities\Curso();
 
 		if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+
 		if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
  
         if (isset($payload['codUnidadeEnsino'])){
-			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
 			$curso->setUnidadeEnsino($ues);
 		}
 
-			$validacao = $this->validator->validate($curso);
+			$constraints = $this->validator->validate($curso);
 
-			if ( $validacao->count() ){
-				$msg = $validacao->messageArray();
-	
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => $msg,
-				), self::HTTP_BAD_REQUEST);	
-			} else {
+			if ( $constraints->success() ){
 				try {
-					$this->entity_manager->persist($curso);
-					$this->entity_manager->flush();
+					$this->entityManager->persist($curso);
+					$this->entityManager->flush();
 		
-					$this->api_return(array(
-						'status' => TRUE,
+					$this->apiReturn(array(
 						'message' => array('Curso criado com Sucesso!'),
-					), self::HTTP_OK);
+						), self::HTTP_OK
+					);
 				} catch (\Exception $e) {
-					$msg = array($e->getMessage());
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $msg,
-					), self::HTTP_BAD_REQUEST);
+					$msgExcecao = array($e->getMessage());
+
+					$this->apiReturn(array(
+						'error' => $msgExcecao,
+						), self::HTTP_BAD_REQUEST
+					);
 				}
+			} else {
+				$msgViolacoes = $constraints->messageArray();
+	
+				$this->apiReturn(array(
+					'error' => $msgViolacoes,
+					), self::HTTP_BAD_REQUEST
+				);	
 			}
 	}
 	
@@ -157,50 +160,54 @@ class CursoController extends API_Controller {
 			)
 		);
 
-        $curso = $this->entity_manager->find('Entities\Curso',$codCurso);
+        $curso = $this->entityManager->find('Entities\Curso',$codCurso);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
 		
         if(!is_null($curso))
         {            
 			if(isset($payload['codUnidadeEnsino']))
             {
-                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$curso->setUnidadeEnsino($ues);
 			}
-				if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
-                if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
+			
+			if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+			
+			if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
 
-				$validacao = $this->validator->validate($curso);
+			$constraints = $this->validator->validate($curso);
 
-				if ( $validacao->count() ){
-					$msg = $validacao->messageArray();
-		
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $msg,
-					), self::HTTP_BAD_REQUEST);	
-				} else {
-					try {
-						$this->entity_manager->merge($curso);
-						$this->entity_manager->flush();
-						$this->api_return(array(
-							'status' => TRUE,
-							'message' => array('Curso atualizado com sucesso!')
-						), self::HTTP_OK);
-					} catch (\Exception $e) {
-						$e_msg = array($e->getMessage());
-						$this->api_return(array(
-							'status' => FALSE,
-							'message' => $e_msg
-						), self::HTTP_BAD_REQUEST);
-					}	
-				}
+			if ( $constraints->success() ){
+				try {
+					$this->entityManager->merge($curso);
+					$this->entityManager->flush();
+
+					$this->apiReturn(array(
+						'message' => array('Curso atualizado com sucesso!')
+						), self::HTTP_OK
+					);
+				} catch (\Exception $e) {
+					$msgExcecao = array($e->getMessage());
+					
+					$this->apiReturn(array(
+						'error' => $msgExcecao
+						), self::HTTP_BAD_REQUEST
+					);
+				}	
+			} else {
+				$msg = $constraints->messageArray();
+
+				$this->apiReturn(array(
+					'error' => $msg,
+					), self::HTTP_BAD_REQUEST
+				);	
+			}
 
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Curso não encontrado!'),
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
         }
 	}
 
@@ -225,30 +232,31 @@ class CursoController extends API_Controller {
 			)
 		);
 
-		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
+		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
 		
 		if(!is_null($curso))
 		{
 			try {
-				$this->entity_manager->remove($curso);
-				$this->entity_manager->flush();
-				$this->api_return(array(
-					'status' => TRUE,
+				$this->entityManager->remove($curso);
+				$this->entityManager->flush();
+
+				$this->apiReturn(array(
 					'message' => array('Curso removido com sucesso!')
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
-				$msg = array($e->getMessage());
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => $msg
-				), self::HTTP_BAD_REQUEST);
+				$msgExcecao = array($e->getMessage());
+
+				$this->apiReturn(array(
+					'error' => $msgExcecao
+					), self::HTTP_BAD_REQUEST
+				);
 			}
 		}else{
-			$this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Curso não encontrado!'),
-            ), self::HTTP_NOT_FOUND);
+			$this->apiReturn(array(
+                'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
 		}
 	}
 }

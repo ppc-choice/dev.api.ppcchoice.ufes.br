@@ -1,10 +1,13 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class DisciplinaController extends API_Controller
+class DisciplinaController extends APIController
 {
-
+    public function __construct() {
+        parent::__construct();
+    }
+    
     /**
      * @api {get} disciplinas Solicitar dados de todas as disciplinas
      * @apiName findAll
@@ -26,18 +29,17 @@ class DisciplinaController extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findAll();
+        $colecaoDisciplina = $this->entityManager->getRepository('Entities\Disciplina')->findAll();
 
-        if ( !is_null($result) ){
-            $this->api_return(array(
-                'status' => true,
-                'result' => $result
-            ), self::HTTP_OK);
+        if ( !is_null($colecaoDisciplina) ){
+            $this->apiReturn($colecaoDisciplina,
+                self::HTTP_OK
+            );
         } else {
-            $this->api_return(array(
-                'status' => false,
-                'message' => array("Disciplinas não encontradas.")
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Disciplinas não encontradas.")
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -63,18 +65,17 @@ class DisciplinaController extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $result = $this->entity_manager->getRepository('Entities\Disciplina')->findById($numDisciplina, $codDepto);
+        $disciplina = $this->entityManager->getRepository('Entities\Disciplina')->findById($numDisciplina, $codDepto);
 
-        if ( !is_null($result) ){
-            $this->api_return(array(
-                'status' => true,
-                'result' => $result
-            ), self::HTTP_OK);
+        if ( !is_null($disciplina) ){
+            $this->apiReturn($disciplina,
+                self::HTTP_OK
+            );
         } else {
-            $this->api_return(array(
-                'status' => false,
+            $this->apiReturn(array(
                 'message' => array("Disciplina não encontrada.")
-            ), self::HTTP_NOT_FOUND);
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -102,14 +103,14 @@ class DisciplinaController extends API_Controller
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
-        $disciplina = new \Entities\Disciplina;
+        $disciplina = new Entities\Disciplina();
 
         if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
         if ( array_key_exists('ch', $payload) )             $disciplina->setCh($payload['ch']);
         if ( array_key_exists('nome', $payload) )           $disciplina->setNome($payload['nome']);
 
         if ( isset($payload['codDepto']) ){
-            $depto = $this->entity_manager->find('Entities\Departamento', $payload['codDepto']);
+            $depto = $this->entityManager->find('Entities\Departamento', $payload['codDepto']);
             if ( !is_null($depto) ){
                 $disciplina->setDepartamento($depto);
                 $disciplina->setCodDepto($payload['codDepto']);
@@ -118,31 +119,31 @@ class DisciplinaController extends API_Controller
 
         $constraints = $this->validator->validate($disciplina);
 
-        if ( $constraints->count() ){
-            $msgViolacoes = $constraints->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msgViolacoes
-            ), self::HTTP_BAD_REQUEST);
-    
-        } else {
+        if ( $constraints->success() ){
             try {
-                $this->entity_manager->persist($disciplina);
-                $this->entity_manager->flush();
+                $this->entityManager->persist($disciplina);
+                $this->entityManager->flush();
             
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->apiReturn(array(
                     'message' => array("Disciplina criada com sucesso."),
-                ), self::HTTP_OK);
+                    ),self::HTTP_OK
+                );
                 
             } catch (\Exception $e){
                 $msgExcecao =  array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgExcecao,
-                ), self::HTTP_BAD_REQUEST);
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
-        }
+        }else{
+                $msgViolacoes = $constraints->messageArray();
+
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ),self::HTTP_BAD_REQUEST
+                );
+            }
     }
 
     /**
@@ -168,7 +169,7 @@ class DisciplinaController extends API_Controller
             'methods' => array('PUT')
         ));
 
-        $disciplina = $this->entity_manager->find('Entities\Disciplina', 
+        $disciplina = $this->entityManager->find('Entities\Disciplina', 
             array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
         $payload = json_decode(file_get_contents('php://input'), TRUE);
 
@@ -178,36 +179,38 @@ class DisciplinaController extends API_Controller
                 
             $constraints = $this->validator->validate($disciplina);
 
-            if ( $constraints->count() ){
-                $msgViolacoes = $constraints->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgViolacoes
-                ), self::HTTP_BAD_REQUEST);
-
-            }else{
+            if ( $constraints->success() ){
                 try {
-                    $this->entity_manager->merge($disciplina);
-                    $this->entity_manager->flush();
+                    $this->entityManager->merge($disciplina);
+                    $this->entityManager->flush();
         
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->apiReturn(array(
                         'message' => array("Disciplina atualizada com sucesso."),
-                    ), self::HTTP_OK);
+                        ),self::HTTP_OK
+                    );
                 } catch (\Exception $e){
                     $msgExcecao =  array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $msgExcecao,
-                    ), self::HTTP_BAD_REQUEST);
+                    
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao,
+                        ),self::HTTP_BAD_REQUEST
+                    );
                 }
+                
+            } else {
+                $msgViolacoes = $constraints->messageArray();
+
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
         
         } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Disciplina não encontrada."),
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Disciplina não encontrada."),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -232,31 +235,32 @@ class DisciplinaController extends API_Controller
             'methods' => array('DELETE')
         ));
 
-        $disciplina = $this->entity_manager->find('Entities\Disciplina', 
+        $disciplina = $this->entityManager->find('Entities\Disciplina', 
         array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
 
         if ( !is_null($disciplina) ){
             try {
-                $this->entity_manager->remove($disciplina);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->entityManager->remove($disciplina);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array("Disciplina deletada com sucesso.")
                 ), self::HTTP_OK);
             
             } catch ( \Exception $e ){
                 $msgExcecao = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgExcecao
-                ), self::HTTP_BAD_REQUEST);
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
 
         } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Disciplina não encontrada.")
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Disciplina não encontrada.")
+                ), self::HTTP_NOT_FOUND
+            );
         }
     }
 }

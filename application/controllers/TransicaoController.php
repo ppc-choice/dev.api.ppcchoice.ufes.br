@@ -1,54 +1,11 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class TransicaoController extends API_Controller {
-
-    /**
-     * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Listar os cursos atuais da unidade de ensino especificada para os quais há transição.
-     * @apiName findByCodUnidadeEnsino
-     * @apiGroup Transição
-     * 
-     * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
-     * 
-     * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
-     * @apiSuccess {Number} codPpc Código do ppc atual da transição.
-     * 
-     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
-     * 
-     */
-
-    public function findByCodUnidadeEnsino($codUnidadeEnsino)
-	{
-        header("Access-Control-Allow-Origin: *");
-        $this->_apiConfig(array(
-            'methods' => array('get'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
-            )
-        );
-
-        $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
-
-
-        if(!empty($transicao)){
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $transicao
-                ),
-                self::HTTP_OK
-            );
-        }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma transição foi encontrada para a unidade de ensino solicitada.')
-                ),
-                self::HTTP_NOT_FOUND
-            );
-        }
+class TransicaoController extends APIController 
+{
+    public function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -63,6 +20,7 @@ class TransicaoController extends API_Controller {
     public function findAll()
 	{
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('GET'),
             // 'limit' => array(2,'ip','everyday'),
@@ -70,23 +28,56 @@ class TransicaoController extends API_Controller {
             )
         );
 
-        $transicao = $this->entity_manager->getRepository('Entities\Transicao')->findAll();
-        $retorno = $this->doctrine_to_array($transicao);
-        if(!empty($transicao)){
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $retorno
-                ),
+        $colecaoTransicao = $this->entityManager->getRepository('Entities\Transicao')->findAll();
+        if(!empty($colecaoTransicao)){
+            $colecaoTransicao = $this->doctrineToArray($colecaoTransicao);
+            
+            $this->apiReturn($colecaoTransicao,
                 self::HTTP_OK
             );
         }else{
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma transição encontrada')
-                ),
-                self::HTTP_NOT_FOUND
+                    'error' =>  array('Nenhuma transição encontrada')
+                ),self::HTTP_NOT_FOUND
+            );
+        }
+    }
+
+
+    /**
+     * @api {get} unidades-ensino/:codUnidadeEnsino/transicoes Listar os cursos atuais da unidade de ensino especificada para os quais há transição.
+     * @apiName findByCodUnidadeEnsino
+     * @apiGroup Transição
+     * 
+     * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
+     * 
+     * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
+     * @apiSuccess {Number} codPpc Código do ppc atual da transição.
+     * 
+     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
+     * 
+     */
+    public function findByCodUnidadeEnsino($codUnidadeEnsino)
+	{
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiConfig(array(
+            'methods' => array('GET'),
+            )
+        );
+
+        $colecaoTransicao =  $this->entityManager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
+
+        if(!empty($colecaoTransicao)){
+            $this->apiReturn( $colecaoTransicao,
+                self::HTTP_OK
+            );
+        }else{
+            $this->apiReturn(
+                array(
+                    'error' =>  array('Nenhuma transição foi encontrada para a unidade de ensino solicitada.')
+                ),self::HTTP_NOT_FOUND
             );
         }
     }
@@ -108,31 +99,23 @@ class TransicaoController extends API_Controller {
     public function findByCodPpc($codPpcAtual)
 	{
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
-            'methods' => array('get'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
+            'methods' => array('GET'),
             )
         );
 
-        $transicao =  $this->entity_manager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
+        $colecaoTransicao =  $this->entityManager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
 
-
-        if(!empty($transicao)){
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $transicao
-                ),
+        if(!empty($colecaoTransicao)){
+            $this->apiReturn($colecaoTransicao,
                 self::HTTP_OK
             );
         }else{
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' =>  array('Não foi encontrada transição para o ppc solicitado')
-                ),
-                self::HTTP_NOT_FOUND
+                    'error' =>  array('Não foi encontrada transição para o ppc solicitado')
+                ),self::HTTP_NOT_FOUND
             );
         }
     }
@@ -157,57 +140,53 @@ class TransicaoController extends API_Controller {
     public function create()
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
 
-        $transicao = new Entities\Transicao;
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $transicao = new Entities\Transicao();
 
         if( isset($payload['codPpcAtual']))
         {
-            $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-            // aceita null, e a execução da erro antes de chegar no validador
-            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
             if(!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
         }
         if( isset($payload['codPpcAlvo']))
         {
-            $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
-            // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-            // aceita null, e a execução da erro antes de chegar no validador
-            //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
+            $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
             if(!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
         }
 
-        $validador = $this->validator->validate($transicao);
-        if($validador->count())
-        {
-            $message = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $message
-            ), self::HTTP_BAD_REQUEST);
-        }else{
-            try{
-                $this->entity_manager->persist($transicao);
-                $this->entity_manager->flush();
+        $constraints = $this->validator->validate($transicao);
 
-                $this->api_return(array(
-                    'status' => TRUE,
+        if($constraints->success())
+        {
+            try{
+                $this->entityManager->persist($transicao);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array('Transição criada com sucesso.'),
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
+        }else{
+            $msgViolacoes = $constraints->messageArray();
+
+            $this->apiReturn(array(
+                'error' => $msgViolacoes
+                ), self::HTTP_BAD_REQUEST
+            );
         }
     }
 
@@ -233,67 +212,71 @@ class TransicaoController extends API_Controller {
     public function update($codPpcAtual,$codPpcAlvo)
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('PUT'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
-        $transicao = $this->entity_manager->find('Entities\Transicao',
-                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $transicao = $this->entityManager->find('Entities\Transicao',
+                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+
         if(!is_null($transicao))
         {
-            //usar array_key_exists para tratar o caso de setar null e ser pego pelo validador
-            //para gerar mensagem de erro, mas eh necessário colocar "= null" no argumento do setter
-            //da chave no arquivo da entidade
             if(array_key_exists('codPpcAtual',$payload)){
-                if( isset($payload['codPpcAtual']))
-                    $ppcAtual = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-                else{
+                if( isset($payload['codPpcAtual'])){
+                    $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
+                }else{
                     $ppcAtual = null;
                 } 
+                
                 $transicao->setPpcAtual($ppcAtual);
             }
-            if( array_key_exists('codPpcAlvo',$payload))
+
+            if(array_key_exists('codPpcAlvo',$payload))
             {
                 if(isset($payload['codPpcAlvo']))
-                    $ppcAlvo = $this->entity_manager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
+                    $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
                 else{
                     $ppcAlvo = null;
                 }
                 $transicao->setPpcAlvo($ppcAlvo);
             }
             
-            $validador = $this->validator->validate($transicao);
-            if($validador->count())
+            $constraints = $this->validator->validate($transicao);
+
+            if($constraints->success())
             {
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ), self::HTTP_BAD_REQUEST);
-            }else{
                 try {
-                    $this->entity_manager->merge($transicao);
-                    $this->entity_manager->flush();
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->entityManager->merge($transicao);
+                    $this->entityManager->flush();
+
+                    $this->apiReturn(array(
                         'message' => array('Transição atualizada com sucesso')
-                    ), self::HTTP_OK);
+                        ), self::HTTP_OK
+                    );
                 } catch (\Exception $e) {
-                    $eMsg = array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $eMsg
-                    ), self::HTTP_BAD_REQUEST);
+                    $msgExcecao = array($e->getMessage());
+
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao
+                        ), self::HTTP_BAD_REQUEST
+                    );
                 } 
+            }else{
+                $msgViolacoes = $constraints->messageArray();
+             
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Transição não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Transição não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -319,33 +302,36 @@ class TransicaoController extends API_Controller {
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
-        $transicao = $this->entity_manager->find('Entities\Transicao',
+
+        $transicao = $this->entityManager->find('Entities\Transicao',
                 array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+
         if(!is_null($transicao))
         {
             try {
-                $this->entity_manager->remove($transicao);
-                $this->entity_manager->flush();
-                $this->api_return(array(
+                $this->entityManager->remove($transicao);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'status' => TRUE,
                     'message' => array('Transição removida com sucesso')
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
         }else{ 
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Transição não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Transição não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 }

@@ -35,8 +35,8 @@ class CorrespondenciaRepository extends EntityRepository
             ->innerJoin('cc1.ppc','ppcAtual')
             ->innerJoin('cor.componenteCurricularCorresp','cc2')
             ->innerJoin('cc2.ppc','ppcAlvo')
-            ->where('ppcAtual.codPpc = ?1 AND ppcAlvo.codPpc = ?2')
-            ->setParameters(array(1 => $codPpcAtual, 2 => $codPpcAlvo))
+            ->where('ppcAtual.codPpc = :codPpcAtual AND ppcAlvo.codPpc = :codPpcAlvo')
+            ->setParameters(array('codPpcAtual' => $codPpcAtual, 'codPpcAlvo' => $codPpcAlvo))
             ->orderBy('cc1.codCompCurric, cc2.codCompCurric','ASC')
             ->getQuery()
             ->getResult(); 

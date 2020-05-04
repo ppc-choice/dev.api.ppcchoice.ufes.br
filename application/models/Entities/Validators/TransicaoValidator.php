@@ -3,6 +3,7 @@ namespace Entities\Validators;
 
 use Symfony\Component\Validator\ExecutionContext;
 use Entities\Transicao;
+
 class TransicaoValidator
 {
     public static function ppcIgual(Transicao $transicao, ExecutionContext $context)

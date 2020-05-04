@@ -1,9 +1,37 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class DepartamentoController extends API_Controller {
+class DepartamentoController extends APIController 
+{
+	public function __construct() {
+        parent::__construct();
+	}
+	
+	/**
+	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
+	 * @apiName getAll
+	 * @apiGroup Departamentos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
+	 */
+    public function findAll()
+	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('GET'),
+			)
+		);
+
+		$colecaoDepto = $this->entityManager->getRepository('Entities\Departamento')->findAll();
+		$colecaoDepto = $this->doctrineToArray($colecaoDepto,TRUE);	
+
+		$this->apiReturn($colecaoDepto,
+			self::HTTP_OK
+		);
+	}
 
 	/**
 	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
@@ -30,49 +58,22 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 		
-		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
+		$depto = $this->entityManager->find('Entities\Departamento',$codDepto);
 		
 		if ( !is_null($depto) ) {
-			$result = $this->doctrine_to_array($depto,TRUE);	
-			$this->api_return(array(
-				'status' => TRUE,
-				'result' => $result,
-			), self::HTTP_OK);
+			$depto = $this->doctrineToArray($depto,TRUE);	
+
+			$this->apiReturn($depto,
+				self::HTTP_OK
+			);
 		} else {
-			$this->api_return(array(
-				'status' => FALSE,
-				'message' => array('Departamento não encontrado!'),
-			), self::HTTP_NOT_FOUND);
+			$this->apiReturn(array(
+				'error' => array('Departamento não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
 		}
     }
-    
-
-	/**
-	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
-	 * @apiName getAll
-	 * @apiGroup Departamentos
-	 * @apiPermission ADMINISTRATOR
-	 * 
-	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
-	 */
-    public function findAll()
-	{
-		header("Access-Controll-Allow-Origin: *");
-
-		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-
-		$depto = $this->entity_manager->getRepository('Entities\Departamento')->findAll();
-		$result = $this->doctrine_to_array($depto,TRUE);	
-
-		$this->api_return(array(
-			'status' => TRUE,
-			'result' => $result,
-		), self::HTTP_OK);
-	}
-	
+    	
 	/**
 	 * @api {post} departamentos/ Criar um Departamento.
 	 * @apiName create
@@ -97,44 +98,45 @@ class DepartamentoController extends API_Controller {
 		);
  
 		$payload = json_decode(file_get_contents('php://input'),TRUE);
-		
-		$depto = new \Entities\Departamento;
+		$depto = new Entities\Departamento();
 
 		if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
 		if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
         if (isset($payload['codUnidadeEnsino'])){
-			$ues = $this->entity_manager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
 			$depto->setUnidadeEnsino($ues);
 		}
 
-			$validacao = $this->validator->validate($depto);
+		$constraints = $this->validator->validate($depto);
 
-			if ( $validacao->count() ){		
-				$msg = $validacao->messageArray();
+		if ( $constraints->success() ){		
+			try {
+				$this->entityManager->persist($depto);
+				$this->entityManager->flush();
 	
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => $msg,
-				), self::HTTP_BAD_REQUEST);	
-			} else {
-				try {
-					$this->entity_manager->persist($depto);
-					$this->entity_manager->flush();
-		
-					$this->api_return(array(
-						'status' => TRUE,
-						'message' => array('Departamento criado com Sucesso!'),
-					), self::HTTP_OK);
-				} catch (\Exception $e) {
-					$mensagem = array($e->getMessage());
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $mensagem,
-					), self::HTTP_BAD_REQUEST);
-				}
-			}
+				$this->apiReturn(array(
+					'message' => array('Departamento criado com Sucesso!'),
+					), self::HTTP_OK
+				);
 
+			} catch (\Exception $e) {
+				$msgExcecao = array($e->getMessage());
+
+				$this->apiReturn(array(
+					'error' => $msgExcecao,
+					), self::HTTP_BAD_REQUEST
+				);
+
+			}
+		} else {
+			$msgViolacoes = $constraints->messageArray();
+			
+			$this->apiReturn(array(
+				'error' => $msgViolacoes,
+				), self::HTTP_BAD_REQUEST
+			);	
+		}
 	}
 	
 
@@ -162,51 +164,53 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 
-        $depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $depto = $this->entityManager->find('Entities\Departamento',$codDepto);
 		
         if(!is_null($depto))
         {            
 			if(isset($payload['codUnidadeEnsino']))
             {
-                $ues = $this->entity_manager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
 				$depto->setUnidadeEnsino($ues);
 			}
-				if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
-				if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
+			
+			if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
+			if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
-				$valida = $this->validator->validate($depto);
+			$constraints = $this->validator->validate($depto, null, array('Departamento'));
 
-				if ( $valida->count() ){
-					$msg = $valida->messageArray();
-		
-					$this->api_return(array(
-						'status' => FALSE,
-						'message' => $msg,
-					), self::HTTP_BAD_REQUEST);	
-				} else {
-					try {
-						$this->entity_manager->merge($depto);
-						$this->entity_manager->flush();
-						$this->api_return(array(
-							'status' => TRUE,
-							'message' => array('Departamento atualizado com sucesso!')
-						), self::HTTP_OK);
-					} catch (\Exception $e) {
-						$e_msg = array($e->getMessage());
+			if ( $constraints->success() ){
+				try {
+					$this->entityManager->merge($depto);
+					$this->entityManager->flush();
 
-						$this->api_return(array(
-							'status' => FALSE,
-							'message' => $e_msg
-						), self::HTTP_BAD_REQUEST);
-					}	
-				}
+					$this->apiReturn(array(
+						'message' => array('Departamento atualizado com sucesso!')
+						), self::HTTP_OK
+					);
+				} catch (\Exception $e) {
+					$msgExcecao = array($e->getMessage());
+					
+					$this->apiReturn(array(
+						'error' => $msgExcecao
+						), self::HTTP_BAD_REQUEST
+					);
+				}	
+			} else {
+				$msgViolacoes = $constraints->messageArray();
+	
+				$this->apiReturn(array(
+					'error' => $msgViolacoes,
+					), self::HTTP_BAD_REQUEST
+				);	
+			}
 
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Departamento não encontrado!'),
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Departamento não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
         }
 	}
 	
@@ -231,30 +235,32 @@ class DepartamentoController extends API_Controller {
 			)
 		);
 
-		$depto = $this->entity_manager->find('Entities\Departamento',$codDepto);
+		$depto = $this->entityManager->find('Entities\Departamento',$codDepto);
 		
 		if(!is_null($depto))
 		{
 			try {
-				$this->entity_manager->remove($depto);
-				$this->entity_manager->flush();
-				$this->api_return(array(
-					'status' => TRUE,
+				$this->entityManager->remove($depto);
+				$this->entityManager->flush();
+				
+				$this->apiReturn(array(
 					'message' => array('Departamento removido com sucesso!')
-				), self::HTTP_OK);
+					), self::HTTP_OK
+				);
 				
 			} catch (\Exception $e) {
-				$msg = array($e->getMessage());
-				$this->api_return(array(
-					'status' => FALSE,
-					'message' => $msg
-				), self::HTTP_BAD_REQUEST);
+				$msgExcecao = array($e->getMessage());
+				
+				$this->apiReturn(array(
+					'error' => $msgExcecao
+					), self::HTTP_BAD_REQUEST
+				);
 			}
 		}else{
-			$this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Departamento não encontrado!'),
-            ), self::HTTP_NOT_FOUND);
+			$this->apiReturn(array(
+                'error' => array('Departamento não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
 		}
 	}
 }

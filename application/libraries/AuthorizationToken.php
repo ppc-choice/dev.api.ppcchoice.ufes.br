@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Authorization_token
+ * AuthorizationToken
  * ----------------------------------------------------------
  * API Token Generate/Validation
  * 
@@ -16,7 +16,7 @@ require_once APPPATH . 'third_party/php-jwt/SignatureInvalidException.php';
 
 use \Firebase\JWT\JWT;
 
-class Authorization_Token 
+class AuthorizationToken 
 {
     /**
      * Token Key

@@ -4,10 +4,9 @@ namespace Entities\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-
 class ProjetoPedagogicoCursoRepository extends EntityRepository
 {  
-    public function findAll()
+    public function findAlla()
     {
         return $this->_em->createQueryBuilder()
             ->select('ppc.codPpc, ppc.dtInicioVigencia, ppc.dtTerminoVigencia, ppc.chTotalDisciplinaOpt', 
@@ -29,8 +28,8 @@ class ProjetoPedagogicoCursoRepository extends EntityRepository
                 'ppc.chTotal, ppc.anoAprovacao, ppc.situacao, curso.codCurso')
             ->from('Entities\ProjetoPedagogicoCurso', 'ppc')
             ->innerJoin('ppc.curso', 'curso')
-            ->where('ppc = ?1')
-            ->setParameter(1,$codPpc)
+            ->where('ppc = :codPpc')
+            ->setParameter('codPpc',$codPpc)
             ->getQuery()
             ->getOneOrNullResult();
     } 

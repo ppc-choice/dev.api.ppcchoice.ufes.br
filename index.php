@@ -315,8 +315,11 @@ switch (ENVIRONMENT)
 */
 require_once BASEPATH . 'dotenv/autoloader.php';
 
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
+if ( file_exists(__DIR__ . '/.env.' . ENVIRONMENT)){
+	$dotenv = new Dotenv\Dotenv(__DIR__);
+	$dotenv->load();
+}
+
 
 /*
  * --------------------------------------------------------------------

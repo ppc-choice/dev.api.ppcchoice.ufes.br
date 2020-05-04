@@ -1,9 +1,13 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class UnidadeEnsinoController extends API_Controller
+class UnidadeEnsinoController extends APIController
 {
+    public function __construct() {
+        parent::__construct();
+    }
+
     /**
      * @api {get} unidades-ensino Solicitar dados de todas as unidades de ensino
      * @apiName findAll
@@ -22,18 +26,17 @@ class UnidadeEnsinoController extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findAll();
+        $colecaoUnidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findAll();
         
-        if ( !is_null($result) ){
-            $this->api_return(array(
-                'status' => true,
-                'result' => $result
-            ), self::HTTP_OK);
+        if ( !is_null($colecaoUnidadeEnsino) ){
+            $this->apiReturn($colecaoUnidadeEnsino,
+                self::HTTP_OK
+            );
         } else {
-            $this->api_return(array(
-                'status' => false,
-                'message' => array("Unidades de Ensino não encontradas.")
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Unidades de Ensino não encontradas."),
+                ), self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -60,18 +63,17 @@ class UnidadeEnsinoController extends API_Controller
             'methods' => array('GET'),
         ));
 
-        $result = $this->entity_manager->getRepository('Entities\UnidadeEnsino')->findById($codUnidadeEnsino);
+        $unidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findById($codUnidadeEnsino);
 
-        if ( !is_null($result) ){
-            $this->api_return(array(
-                'status' => true,
-                'result' => $result
-            ), self::HTTP_OK);
+        if ( !is_null($unidadeEnsino) ){
+            $this->apiReturn($unidadeEnsino,
+                self::HTTP_OK
+            );
         } else {
-            $this->api_return(array(
-                'status' => false,
-                'message' => array("Disciplina não encontrada.")
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Disciplina não encontrada.")
+                ), self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -97,42 +99,43 @@ class UnidadeEnsinoController extends API_Controller
         ));
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
-
-        $ues = new \Entities\UnidadeEnsino;
+        $ues = new Entities\UnidadeEnsino();
         
         if ( array_key_exists('nome', $payload) )   $ues->setNome($payload['nome']);
         if ( array_key_exists('cnpj', $payload) )   $ues->setCnpj($payload['cnpj']);
 
         if ( isset($payload['codIes']) ){
-            $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
+            $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
             if ( !is_null($ies) ) $ues->setIes($ies);
         }
 
         $constraints = $this->validator->validate($ues);
-        if ( $constraints->count() ){
-            $msgViolacoes = $constraints->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $msgViolacoes
-            ), self::HTTP_BAD_REQUEST);
 
-        } else {
+        if ( $constraints->success() ){
             try {
-                $this->entity_manager->persist($ues);
-                $this->entity_manager->flush();
+                $this->entityManager->persist($ues);
+                $this->entityManager->flush();
             
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->apiReturn(array(
                     'message' => array("Unidade de Ensino criada com sucesso."),
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
                 
             } catch (\Exception $e){
-                $msgExcecoes =  array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgExcecoes,
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao =  array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao,
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
+        } else {
+            $msgViolacoes = $constraints->messageArray();
+
+            $this->apiReturn(array(
+                'error' => $msgViolacoes
+                ), self::HTTP_BAD_REQUEST
+            );
         }
     }
     
@@ -159,12 +162,12 @@ class UnidadeEnsinoController extends API_Controller
             'methods' => array('PUT')
         ));
 
-        $ues = $this->entity_manager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
         $payload = json_decode(file_get_contents('php://input'), TRUE);
+        $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         if ( !is_null($ues) ){
             if ( array_key_exists('codIes', $payload) ){
-                $ies = $this->entity_manager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
+                $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
                 $ues->setIes($ies);
             }
 
@@ -172,39 +175,40 @@ class UnidadeEnsinoController extends API_Controller
             if ( array_key_exists('cnpj', $payload) ) $ues->setCnpj($payload['cnpj']);
 
             $constraints = $this->validator->validate($ues);
-            if($constraints->count())
+
+            if($constraints->success())
             {
-                $msgViolacoes = $constraints->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgViolacoes
-                ), self::HTTP_BAD_REQUEST);
-
-            }else{
-
                 try {
-                    $this->entity_manager->merge($ues);
-                    $this->entity_manager->flush();
+                    $this->entityManager->merge($ues);
+                    $this->entityManager->flush();
             
-                    $this->api_return(array(
-                        'status' => TRUE,
+                    $this->apiReturn(array(
                         'message' => array("Unidade de Ensino atualizada com sucesso."),
-                    ), self::HTTP_OK);
-
+                        ), self::HTTP_OK
+                    );
+    
                 } catch (\Exception $e){
-                    $msgExcecoes =  array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $msgExcecoes,
-                    ), self::HTTP_BAD_REQUEST);
+                    $msgExcecao =  array($e->getMessage());
+
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao,
+                        ), self::HTTP_BAD_REQUEST
+                    );
                 }
+            }else{
+                $msgViolacoes = $constraints->messageArray();
+
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ), self::HTTP_BAD_REQUEST
+                );
             }
             
         } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array("Unidade de Ensino não encontrada."),
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array("Unidade de Ensino não encontrada."),
+                ), self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -228,30 +232,32 @@ class UnidadeEnsinoController extends API_Controller
             'methods' => array('DELETE')
         ));
 
-        $ues = $this->entity_manager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
+        $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         if ( !is_null($ues) ){
             try {
-                $this->entity_manager->remove($ues);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->entityManager->remove($ues);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array("Unidade de Ensino deletada com sucesso.")
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             
             } catch ( \Exception $e ){
-                $msgExcecoes = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $msgExcecoes
-                ), self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ), self::HTTP_BAD_REQUEST
+                );
             } 
 
         } else {
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => "Unidade de Ensino não encontrada."
-            ), self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => "Unidade de Ensino não encontrada."
+                ), self::HTTP_NOT_FOUND
+            );
         }
     }
 }

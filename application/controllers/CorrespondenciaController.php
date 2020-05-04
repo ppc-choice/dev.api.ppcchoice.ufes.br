@@ -1,9 +1,36 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class CorrespondenciaController extends API_Controller {
+class CorrespondenciaController extends APIController
+{
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    /**
+     * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
+     * @apiName findAll
+     * @apiGroup Correspondência
+     * @apiError  404 NotFound Nenhuma Correspondência encontrada.
+     *
+     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
+     * 
+     * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
+     */
+    public function findAll()
+    {
+        header("Access-Control-Allow-Origin: *");
+        $this->_apiConfig(array(
+                'methods' => array('GET'), 
+            ));
+                
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAll();
+     
+        $this->apiReturn( $colecaoCorrespondencia,
+            self::HTTP_OK
+        );
+    }
 
     /**
      * @api {get} projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo Listar todas as relações de correspondência entre os cursos referidos
@@ -23,71 +50,27 @@ class CorrespondenciaController extends API_Controller {
     public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
 	{
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
    
-        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findAllByCodPpc($codPpcAtual,$codPpcAlvo);
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAllByCodPpc($codPpcAtual,$codPpcAlvo);
         
-        if(!empty($correspondencia))
+        if(!empty($colecaoCorrespondencia))
         {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $correspondencia
-                ),self::HTTP_OK
+            $this->apiReturn($colecaoCorrespondencia,
+                self::HTTP_OK
             );
             
         }else{
-            $this->api_return(
+            $this->apiReturn(
                 array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.')
+                    'error' =>  array('Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.')
                 ),self::HTTP_NOT_FOUND
             );
         }
     }
-
-    /**
-     * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
-     * @apiName findAll
-     * @apiGroup Correspondência
-     * @apiError  404 NotFound Nenhuma Correspondência encontrada.
-     *
-     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
-     * 
-     * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
-     */
-    public function findAll()
-	{
-        header("Access-Control-Allow-Origin: *");
-        $this->_apiConfig(array(
-                'methods' => array('GET'), 
-            ));
-
-                
-        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findAll();
-     
-        
-        if(!empty($correspondencia))
-        {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $correspondencia
-                ),self::HTTP_OK
-            );
-            
-        }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma Correspondência encontrada.')
-                ),self::HTTP_NOT_FOUND
-            );
-        }
-    }
-
 
     /**
      * @api {get} componentes-curriculares/:codCompCurric/correspondencias Listar as correspondências de uma componente curricular
@@ -110,28 +93,22 @@ class CorrespondenciaController extends API_Controller {
     public function findByCodCompCurric($codCompCurric)
 	{
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
         ));
-
               
-        $correspondencia = $this->entity_manager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric);
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric);
 
-
-        if(!empty($correspondencia))
+        if(!empty($colecaoCorrespondencia))
         {
-            $this->api_return(
-                array(
-                    'status' => true,
-                    'result' =>  $correspondencia
-                ),self::HTTP_OK
+            $this->apiReturn($colecaoCorrespondencia,
+                self::HTTP_OK
             );
             
         }else{
-            $this->api_return(
-                array(
-                    'status' => false,
-                    'message' =>  array('Nenhuma correspondência encontrada para esta componente.')
+            $this->apiReturn(array(
+                    'error' =>  array('Nenhuma correspondência encontrada para esta componente.')
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -156,56 +133,56 @@ class CorrespondenciaController extends API_Controller {
     public function create()
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('POST'),
             )
         );
 
         $payload = json_decode(file_get_contents('php://input'),TRUE);
-        $corresp = new \Entities\Correspondencia;
+        $correspondencia = new Entities\Correspondencia();
 
         if (isset( $payload['codCompCurric']))
         {
-            $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
-            // // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-            // // aceita null, e a execução da erro antes de chegar no validador
-            // // se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
-            if(!is_null($compCurric)) $corresp->setComponenteCurricular($compCurric);
+            $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+            if(!is_null($componenteCurricular)) $correspondencia->setComponenteCurricular($componenteCurricular);
         }
+        
         if (isset($payload['codCompCurricCorresp']))
         {
-            $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
-            // // nao tem como dar set se for null pois o metodo da entidade construida automaticamente nao
-            // // aceita null, e a execução da erro antes de chegar no validador
-            // //se nao for setado vai continuar como null e chegar no validador e continuar fluxo normal
-            if(!is_null($compCorresp)) $corresp->setComponenteCurricularCorresp($compCorresp);
+            $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
+            if(!is_null($componenteCurricularCorresp)) $correspondencia->setComponenteCurricularCorresp($componenteCurricularCorresp);
         } 
-        if (isset($payload['percentual'])) $corresp->setPercentual($payload['percentual']);
-        
-        $validador = $this->validator->validate($corresp);
-        if($validador->count())
-        {
-            $message = $validador->messageArray();
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => $message
-            ),self::HTTP_BAD_REQUEST);
-        }else{
-            try {
-                $this->entity_manager->persist($corresp);
-                $this->entity_manager->flush();
 
-                $this->api_return(array(
-                    'status' => TRUE,
+        if (isset($payload['percentual'])) $correspondencia->setPercentual($payload['percentual']);
+        
+        $constraints = $this->validator->validate($correspondencia);
+
+        if($constraints->success())
+        {
+            try {
+                $this->entityManager->persist($correspondencia);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array('Correspondência criada com sucesso.'),
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ),self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
+        }else{
+            $msgViolacoes = $constraints->messageArray();
+            
+            $this->apiReturn(array(
+                'error' => $msgViolacoes
+                ),self::HTTP_BAD_REQUEST
+            );
         }         
     }
 
@@ -231,71 +208,73 @@ class CorrespondenciaController extends API_Controller {
     public function update($codCompCurric,$codCompCorresp)
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('PUT'),
             )
         );
 
-        $corresp = $this->entity_manager->find('Entities\Correspondencia',
-                array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
         $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $correspondencia = $this->entityManager->find('Entities\Correspondencia',
+                array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
 
-        if(!is_null($corresp))
+        if(!is_null($correspondencia))
         {
-            //usar array_key_exists para tratar o caso de setar null e ser pego pelo validador
-            //para gerar mensagem de erro, mas eh necessário colocar "= null" no argumento do setter
-            //da chave no arquivo da entidade
             if (array_key_exists('codCompCurric', $payload))
             {
-                if(isset($payload['codCompCurric']))
-                    $compCurric = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
-                else{
-                    $compCurric = null;
+                if(isset($payload['codCompCurric'])){
+                    $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+                } else {
+                    $componenteCurricular = null;
                 }
-                $corresp->setComponenteCurricular($compCurric);
+                $correspondencia->setComponenteCurricular($componenteCurricular);
             }
+
             if (array_key_exists('codCompCurricCorresp',$payload))
             {
-                if(isset($payload['codCompCurricCorresp']))
-                    $compCorresp = $this->entity_manager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);           
-                else{
-                    $compCorresp = null;
+                if(isset($payload['codCompCurricCorresp'])){
+                    $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
+                } else {
+                    $componenteCurricularCorresp = null;
                 } 
-                $corresp->setComponenteCurricularCorresp($compCorresp);
+                $correspondencia->setComponenteCurricularCorresp($componenteCurricularCorresp);
             } 
             
-            if(array_key_exists('percentual',$payload)) $corresp->setPercentual($payload['percentual']);
+            if(array_key_exists('percentual',$payload)) $correspondencia->setPercentual($payload['percentual']);
             
-            $validador = $this->validator->validate($corresp);
-            if($validador->count())
-            {
-                $message = $validador->messageArray();
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $message
-                ),self::HTTP_BAD_REQUEST);
-            }else{
-                try {
-                    $this->entity_manager->merge($corresp);
-                    $this->entity_manager->flush();
+            $constraints = $this->validator->validate($correspondencia);
 
-                    $this->api_return(array(
-                        'status' => TRUE,
-                        'message' => array('Correspondência atualizada com sucesso.'),
-                    ), self::HTTP_OK);
+            if($constraints->success())
+            {
+                try {
+                    $this->entityManager->merge($correspondencia);
+                    $this->entityManager->flush();
+
+                    $this->apiReturn(array(
+                        'error' => array('Correspondência atualizada com sucesso.'),
+                        ), self::HTTP_OK
+                    );
                 } catch (\Exception $e) {
-                    $eMsg = array($e->getMessage());
-                    $this->api_return(array(
-                        'status' => FALSE,
-                        'message' => $eMsg
-                    ),self::HTTP_BAD_REQUEST);
+                    $msgExcecao = array($e->getMessage());
+
+                    $this->apiReturn(array(
+                        'error' => $msgExcecao
+                        ),self::HTTP_BAD_REQUEST
+                    );
                 }
+            }else{
+                $msgViolacoes = $constraints->messageArray();
+                
+                $this->apiReturn(array(
+                    'error' => $msgViolacoes
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
         }else{
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Correspondência não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Correspondência não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 
@@ -319,33 +298,37 @@ class CorrespondenciaController extends API_Controller {
     public function delete($codCompCurric,$codCompCorresp)
     {
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
             )
         );
-        $correspondencia = $this->entity_manager->find('Entities\Correspondencia',
+        $correspondencia = $this->entityManager->find('Entities\Correspondencia',
                 array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
+
         if(!is_null($correspondencia))
         {
             try {
-                $this->entity_manager->remove($correspondencia);
-                $this->entity_manager->flush();
-                $this->api_return(array(
-                    'status' => TRUE,
+                $this->entityManager->remove($correspondencia);
+                $this->entityManager->flush();
+
+                $this->apiReturn(array(
                     'message' => array('Correspondência removida com sucesso')
-                ), self::HTTP_OK);
+                    ), self::HTTP_OK
+                );
             } catch (\Exception $e) {
-                $eMsg = array($e->getMessage());
-                $this->api_return(array(
-                    'status' => FALSE,
-                    'message' => $eMsg
-                ),self::HTTP_BAD_REQUEST);
+                $msgExcecao = array($e->getMessage());
+                
+                $this->apiReturn(array(
+                    'error' => $msgExcecao
+                    ),self::HTTP_BAD_REQUEST
+                );
             }
         }else{ 
-            $this->api_return(array(
-                'status' => FALSE,
-                'message' => array('Correspondência não encontrada'),
-            ),self::HTTP_NOT_FOUND);
+            $this->apiReturn(array(
+                'error' => array('Correspondência não encontrada'),
+                ),self::HTTP_NOT_FOUND
+            );
         }
     }
 }
