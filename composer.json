@@ -8,7 +8,8 @@
 		"source": "https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br"
 	},
 	"require": {
-		"php": ">=5.3.7"
+		"php": ">=5.3.7",
+		"ext-mysqli": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^4",
