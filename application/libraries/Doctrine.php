@@ -61,7 +61,7 @@ class Doctrine
             'driver' => getenv('DOCTRINE_DRIVER'),
             'user' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
-            'host' => getenv('DB_HOST'),
+            'host' => getenv('DB_HOSTNAME'),
             'dbname' => getenv('DB_DATABASE')
         );
         
