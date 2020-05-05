@@ -10,13 +10,13 @@ class InstituicaoEnsinoSuperiorController extends APIController
   
 	/**
 	 * @api {get} instituicoes-ensino-superior/ Solicitar dados de todas Instituições de Ensino Superior.
-	 * @apiName getAll
+	 * @apiName findAll
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
 	 */
-    public function getAll()
+    public function findAll()
     {
 		header("Access-Controll-Allow-Origin: *");
 
@@ -26,16 +26,16 @@ class InstituicaoEnsinoSuperiorController extends APIController
 		);
 		
         $colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
-        $colecaoIes = $this->doctrineToArray($colecaoIes,TRUE);
+        $x = $this->doctrineToArray($colecaoIes,TRUE);
 
-		$this->apiReturn($colecaoIes,
+		$this->apiReturn($x,
 			self::HTTP_OK
 		);
 	}
 
 	/**
 	 * @api {get} instituicoes-ensino-superior/:codIes Solicitar dados de uma Instituição de Ensino Superior.
-	 * @apiName getById
+	 * @apiName findById
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 *
@@ -47,7 +47,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
-    public function getById($codIes)
+    public function findById($codIes)
     {   
         header("Access-Controll-Allow-Origin: *");
 

@@ -9,8 +9,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 
 // Instituicao de Ensino Superior : Wellerson
-$route['instituicoes-ensino-superior/(:num)']['GET'] = 'InstituicaoEnsinoSuperiorController/getById/$1';
-$route['instituicoes-ensino-superior']['GET'] = 'InstituicaoEnsinoSuperiorController/getAll';
+$route['instituicoes-ensino-superior/(:num)']['GET'] = 'InstituicaoEnsinoSuperiorController/findById/$1';
+$route['instituicoes-ensino-superior']['GET'] = 'InstituicaoEnsinoSuperiorController/findAll';
 $route['instituicoes-ensino-superior']['POST'] = 'InstituicaoEnsinoSuperiorController/create';
 $route['instituicoes-ensino-superior/(:num)']['PUT'] = 'InstituicaoEnsinoSuperiorController/update/$1';
 $route['instituicoes-ensino-superior/(:num)']['DELETE'] = 'InstituicaoEnsinoSuperiorController/delete/$1';
