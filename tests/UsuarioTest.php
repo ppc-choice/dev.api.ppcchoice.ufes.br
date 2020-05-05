@@ -10,13 +10,26 @@ class UsuarioTest extends TestCase
     // Entity name 
     private $entity;
     
+    // Mensagens de sucesso
+    const CREATED = 'CREATED';
+    
+    const UPDATED = 'UPDATED';
+
+    const DELETED = 'DELETED';
+
+
+    // Error
+    const NOT_FOUND = 'NOT_FOUND';
+
+    const EXCEPTION = 'EXCEPTION';
+
     // Mensagens padrão de retorno
     const STD_MSGS = [
-        'CREATED' => 'Instância criada com sucesso.', 
-        'DELETED' => 'Instância removida com sucesso.', 
-        'UPDATED' => 'Instância atualizada com sucesso.', 
-        'NOT_FOUND' => 'Instância não encontrada.', 
-        'EXCEPTION' => 'Ocorreu uma exceção ao persistir a instância.', 
+        self::CREATED => 'Instância criada com sucesso.', 
+        self::DELETED => 'Instância removida com sucesso.', 
+        self::UPDATED => 'Instância atualizada com sucesso.', 
+        self::NOT_FOUND => 'Instância não encontrada.', 
+        self::EXCEPTION => 'Ocorreu uma exceção ao persistir a instância.', 
     ];
 
     public function setUp(){
@@ -26,6 +39,7 @@ class UsuarioTest extends TestCase
 
     public function tearDown() {
         $this->http = null;
+        $this->entity = null;
     }
 
     /* 
@@ -34,13 +48,13 @@ class UsuarioTest extends TestCase
     public function getStdMessage($category)
     {
         switch ($category) {
-            case 'CREATED':
-            case 'DELETED':
-            case 'UPDATED':
+            case self::CREATED:
+            case self::DELETED:
+            case self::UPDATED:
                 $key = 'message';
                 break;
-            case 'NOT_FOUND':
-            case 'EXCEPTION':
+            case self::NOT_FOUND:
+            case self::EXCEPTION:
                 $key = 'error';
                 break;
             default:
@@ -53,6 +67,9 @@ class UsuarioTest extends TestCase
         ]];
     }
 
+    
+    // Testes
+
     public function testGetUsuarioNaoExistente()
     {
         $response = $this->http->request('GET', 'usuarios/100', ['http_errors' => FALSE] );
@@ -61,7 +78,5 @@ class UsuarioTest extends TestCase
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
-        echo json_encode($this->getStdMessage('CREATED'));
     }
 }
