@@ -103,7 +103,7 @@ class UsuarioController extends APIController
 	 * @apiParam (Request Body/JSON) {Number} conjuntoSelecao[ppcAlvo] Identificador único do PPC alvo.
 	 * @apiParam (Request Body/JSON) {Number[]} conjuntoSelecao[componentesCurriculares] Conjunto de identificadores únicos das componentes curriculares selecionadas.
 	 * 
-	 * @apiSuccess {String[]} message  Usuário criado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Usuario: Instância criada com sucesso.
 	 *
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
@@ -184,7 +184,7 @@ class UsuarioController extends APIController
 	 * @apiParam (Request Body/JSON) {Number} conjuntoSelecao[ppcAlvo] Identificador único do PPC alvo.
 	 * @apiParam (Request Body/JSON) {Number[]} conjuntoSelecao[componentesCurriculares] Conjunto de identificadores únicos das componentes curriculares selecionadas.
 	 * 
-	 * @apiSuccess {String[]} message Usuário atualizado com sucesso.
+	 * @apiSuccess {String[]} message Entities\\Usuario: Instância atualizada com sucesso.
 	 * 
 	 * @apiError {String[]} 404 O <code>codUsuario</code> não corresponde a um usuário cadastrado.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -261,7 +261,7 @@ class UsuarioController extends APIController
 	 * 
 	 * @apiParam {Number} codUsuario Identificador único do usuário. 
 	 * 
-	 * @apiSuccess {String[]} message  Usuário deletado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Usuario: Instância deletada com sucesso.
 	 * 
 	 * @apiError {String[]} 404 O <code>codUsuario</code> não corresponde a um usuário cadastrado.
 	 */
