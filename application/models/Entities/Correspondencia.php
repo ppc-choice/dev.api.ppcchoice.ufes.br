@@ -10,16 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Correspondencia
 {
     /**
-     * @var integer
-     */
-    private $codCompCurric;
-
-    /**
-     * @var integer
-     */
-    private $codCompCurricCorresp;
-
-    /**
      * @var float
      */
     private $percentual;
@@ -34,52 +24,6 @@ class Correspondencia
      */
     private $componenteCurricularCorresp;
 
-
-    /**
-     * Set codCompCurric
-     *
-     * @param integer $codCompCurric
-     * @return Correspondencia
-     */
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->codCompCurric = $codCompCurric;
-    
-        return $this;
-    }
-
-    /**
-     * Get codCompCurric
-     *
-     * @return integer 
-     */
-    public function getCodCompCurric()
-    {
-        return $this->codCompCurric;
-    }
-
-    /**
-     * Set codCompCurricCorresp
-     *
-     * @param integer $codCompCurricCorresp
-     * @return Correspondencia
-     */
-    public function setCodCompCurricCorresp($codCompCurricCorresp)
-    {
-        $this->codCompCurricCorresp = $codCompCurricCorresp;
-    
-        return $this;
-    }
-
-    /**
-     * Get codCompCurricCorresp
-     *
-     * @return integer 
-     */
-    public function getCodCompCurricCorresp()
-    {
-        return $this->codCompCurricCorresp;
-    }
 
     /**
      * Set percentual

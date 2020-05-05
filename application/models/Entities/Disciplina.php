@@ -12,6 +12,11 @@ class Disciplina
     /**
      * @var integer
      */
+    private $codDepto;
+
+    /**
+     * @var integer
+     */
     private $numDisciplina;
 
     /**
@@ -25,15 +30,33 @@ class Disciplina
     private $nome;
 
     /**
-     * @var integer
-     */
-    private $codDepto;
-
-    /**
      * @var \Entities\Departamento
      */
     private $departamento;
 
+
+    /**
+     * Set codDepto
+     *
+     * @param integer $codDepto
+     * @return Disciplina
+     */
+    public function setCodDepto($codDepto)
+    {
+        $this->codDepto = $codDepto;
+    
+        return $this;
+    }
+
+    /**
+     * Get codDepto
+     *
+     * @return integer 
+     */
+    public function getCodDepto()
+    {
+        return $this->codDepto;
+    }
 
     /**
      * Set numDisciplina
@@ -102,29 +125,6 @@ class Disciplina
     public function getNome()
     {
         return $this->nome;
-    }
-
-    /**
-     * Set codDepto
-     *
-     * @param integer $codDepto
-     * @return Disciplina
-     */
-    public function setCodDepto($codDepto)
-    {
-        $this->codDepto = $codDepto;
-    
-        return $this;
-    }
-
-    /**
-     * Get codDepto
-     *
-     * @return integer 
-     */
-    public function getCodDepto()
-    {
-        return $this->codDepto;
     }
 
     /**

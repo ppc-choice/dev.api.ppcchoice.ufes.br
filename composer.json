@@ -1,6 +1,6 @@
 {
 	"description": "Api consumo interno PPC-Choice",
-	"name": "PPC-Choice/API",
+	"name": "ppcchoiceapi",
 	"type": "project",
 	"homepage": "http://ppcchoice.ufes.br",
 	"license": "MIT",
@@ -11,7 +11,10 @@
 		"php": ">=5.3.7"
 	},
 	"require-dev": {
-		"mikey179/vfsStream": "1.1.*",
-		"phpunit/phpunit": "4.* || 5.*"
+		"phpunit/phpunit": "^4",
+		"guzzlehttp/guzzle": "^6.5"
+	},
+	"scripts": {
+		"test": "./vendor/bin/phpunit tests"
 	}
 }

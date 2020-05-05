@@ -10,16 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Transicao
 {
     /**
-     * @var integer
-     */
-    private $codPpcAtual;
-
-    /**
-     * @var integer
-     */
-    private $codPpcAlvo;
-
-    /**
      * @var \Entities\ProjetoPedagogicoCurso
      */
     private $ppcAtual;
@@ -29,52 +19,6 @@ class Transicao
      */
     private $ppcAlvo;
 
-
-    /**
-     * Set codPpcAtual
-     *
-     * @param integer $codPpcAtual
-     * @return Transicao
-     */
-    public function setCodPpcAtual($codPpcAtual)
-    {
-        $this->codPpcAtual = $codPpcAtual;
-    
-        return $this;
-    }
-
-    /**
-     * Get codPpcAtual
-     *
-     * @return integer 
-     */
-    public function getCodPpcAtual()
-    {
-        return $this->codPpcAtual;
-    }
-
-    /**
-     * Set codPpcAlvo
-     *
-     * @param integer $codPpcAlvo
-     * @return Transicao
-     */
-    public function setCodPpcAlvo($codPpcAlvo)
-    {
-        $this->codPpcAlvo = $codPpcAlvo;
-    
-        return $this;
-    }
-
-    /**
-     * Get codPpcAlvo
-     *
-     * @return integer 
-     */
-    public function getCodPpcAlvo()
-    {
-        return $this->codPpcAlvo;
-    }
 
     /**
      * Set ppcAtual

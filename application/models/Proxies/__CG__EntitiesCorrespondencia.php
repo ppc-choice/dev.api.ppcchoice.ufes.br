@@ -42,36 +42,6 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
     }
 
     
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->__load();
-        return parent::setCodCompCurric($codCompCurric);
-    }
-
-    public function getCodCompCurric()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codCompCurric"];
-        }
-        $this->__load();
-        return parent::getCodCompCurric();
-    }
-
-    public function setCodCompCurricCorresp($codCompCurricCorresp)
-    {
-        $this->__load();
-        return parent::setCodCompCurricCorresp($codCompCurricCorresp);
-    }
-
-    public function getCodCompCurricCorresp()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codCompCurricCorresp"];
-        }
-        $this->__load();
-        return parent::getCodCompCurricCorresp();
-    }
-
     public function setPercentual($percentual)
     {
         $this->__load();
@@ -84,7 +54,7 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
         return parent::getPercentual();
     }
 
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = NULL)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
     {
         $this->__load();
         return parent::setComponenteCurricular($componenteCurricular);
@@ -96,7 +66,7 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
         return parent::getComponenteCurricular();
     }
 
-    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp = NULL)
+    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp)
     {
         $this->__load();
         return parent::setComponenteCurricularCorresp($componenteCurricularCorresp);
@@ -111,7 +81,7 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'codCompCurricCorresp', 'percentual', 'componenteCurricular', 'componenteCurricularCorresp');
+        return array('__isInitialized__', 'percentual', 'componenteCurricular', 'componenteCurricularCorresp');
     }
 
     public function __clone()

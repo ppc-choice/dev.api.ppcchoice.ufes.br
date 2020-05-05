@@ -10,13 +10,14 @@ class TransicaoRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select("CONCAT(CONCAT(cAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, t.codPpcAtual,
-                    CONCAT(CONCAT(cAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, t.codPpcAlvo")
+            ->select("CONCAT(CONCAT(cursoAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, pAtual.codPpc as codPpcAtual,
+                    CONCAT(CONCAT(cursoAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, pAlvo.codPpc as codPpcAlvo")
             ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','pAtual')
-            ->innerJoin('t.ppc_alvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
+            ->innerJoin('t.ppcAtual','pAtual')
+            ->innerJoin('t.ppcAlvo','pAlvo')
+            ->innerJoin('pAtual.curso','cursoAtual')
+            ->innerJoin('pAlvo.curso','cursoAlvo')
+            ->orderBy('pAtual.codPpc, pAlvo.codPpc','ASC')
             ->getQuery()
             ->getResult();
     }
@@ -26,11 +27,12 @@ class TransicaoRepository extends EntityRepository
         return $this->_em->createQueryBuilder()
             ->select("CONCAT(CONCAT(c.nome,' ('), CONCAT(p.anoAprovacao,')')) as nomeCurso, p.codPpc")
             ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','p')
+            ->innerJoin('t.ppcAtual','p')
             ->innerJoin('p.curso','c')
             ->innerJoin('c.unidadeEnsino','ues1')
             ->where('ues1.codUnidadeEnsino = :codUe'  )
             ->setParameter('codUe',$codUnidadeEnsino )
+            ->orderBy('ues1.codUnidadeEnsino,p.codPpc','ASC')
             ->getQuery()
             ->getResult();
     }
@@ -38,15 +40,16 @@ class TransicaoRepository extends EntityRepository
     public function findByCodPpc($codPpcAtual)
     {
         return $this->_em->createQueryBuilder()
-            ->select("CONCAT(CONCAT(cAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, t.codPpcAtual,
-            CONCAT(CONCAT(cAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, t.codPpcAlvo")
+            ->select("CONCAT(CONCAT(cursoAtual.nome,' ('), CONCAT(pAtual.anoAprovacao,')')) as ppcAtual, pAtual.codPpc as codPpcAtual,
+                    CONCAT(CONCAT(cursoAlvo.nome,' ('), CONCAT(pAlvo.anoAprovacao,')')) as ppcAlvo, pAlvo.codPpc as codPpcAlvo")
             ->from('Entities\Transicao','t')
-            ->innerJoin('t.ppc_atual','pAtual')
-            ->innerJoin('t.ppc_alvo','pAlvo')
-            ->innerJoin('pAtual.curso','cAtual')
-            ->innerJoin('pAlvo.curso','cAlvo')
-            ->where('t.codPpcAtual = :codPpcAtual')
+            ->innerJoin('t.ppcAtual','pAtual')
+            ->innerJoin('t.ppcAlvo','pAlvo')
+            ->innerJoin('pAtual.curso','cursoAtual')
+            ->innerJoin('pAlvo.curso','cursoAlvo')
+            ->where('pAtual.codPpc = :codPpcAtual')
             ->setParameter('codPpcAtual',$codPpcAtual )
+            ->orderBy('pAtual.codPpc, pAlvo.codPpc','ASC')
             ->getQuery()
             ->getResult();
 

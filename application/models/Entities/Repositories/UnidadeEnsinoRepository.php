@@ -8,29 +8,23 @@ class UnidadeEnsinoRepository extends EntityRepository
 {
     public function findAll()
     {
-        $qb = $this->_em->createQueryBuilder()
-        ->select("u.codUnidadeEnsino, CONCAT(CONCAT(CONCAT(ies.nome, ' ('), CONCAT(ies.abreviatura, ')')), CONCAT('-', u.nome)) AS nome")
-        ->from('Entities\UnidadeEnsino', 'u')
-        ->innerJoin('u.ies', 'ies')
-        ->getQuery();
-
-        $result = $qb->getResult();
-
-        return $result;
+        return $this->_em->createQueryBuilder()
+            ->select("u.codUnidadeEnsino, CONCAT(CONCAT(CONCAT(ies.nome, ' ('), CONCAT(ies.abreviatura, ')')), CONCAT('-', u.nome)) AS nome")
+            ->from('Entities\UnidadeEnsino', 'u')
+            ->innerJoin('u.ies', 'ies')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findbyId($codUnidadeEnsino)
     {
-        $qb = $this->_em->createQueryBuilder()
-        ->select('ies.nome AS nomeInstituicao, ies.abreviatura, ies.codIes, u.nome, u.cnpj')
-        ->from('Entities\UnidadeEnsino', 'u')
-        ->innerJoin('u.ies', 'ies')
-        ->where('u.codUnidadeEnsino = ?1')
-        ->setParameters(array(1 => $codUnidadeEnsino))
-        ->getQuery();
-
-        $result = $qb->getResult();
-
-        return $result[0];
+        return $this->_em->createQueryBuilder()
+            ->select('ies.nome AS nomeInstituicao, ies.abreviatura, ies.codIes, u.nome, u.cnpj')
+            ->from('Entities\UnidadeEnsino', 'u')
+            ->innerJoin('u.ies', 'ies')
+            ->where('u.codUnidadeEnsino = :codUnidadeEnsino')
+            ->setParameter('codUnidadeEnsino',$codUnidadeEnsino)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

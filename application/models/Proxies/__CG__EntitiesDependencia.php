@@ -42,37 +42,7 @@ class Dependencia extends \Entities\Dependencia implements \Doctrine\ORM\Proxy\P
     }
 
     
-    public function setCodCompCurric($codCompCurric)
-    {
-        $this->__load();
-        return parent::setCodCompCurric($codCompCurric);
-    }
-
-    public function getCodCompCurric()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codCompCurric"];
-        }
-        $this->__load();
-        return parent::getCodCompCurric();
-    }
-
-    public function setCodPreRequisito($codPreRequisito)
-    {
-        $this->__load();
-        return parent::setCodPreRequisito($codPreRequisito);
-    }
-
-    public function getCodPreRequisito()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codPreRequisito"];
-        }
-        $this->__load();
-        return parent::getCodPreRequisito();
-    }
-
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = NULL)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
     {
         $this->__load();
         return parent::setComponenteCurricular($componenteCurricular);
@@ -84,7 +54,7 @@ class Dependencia extends \Entities\Dependencia implements \Doctrine\ORM\Proxy\P
         return parent::getComponenteCurricular();
     }
 
-    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito = NULL)
+    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito)
     {
         $this->__load();
         return parent::setPreRequisito($preRequisito);
@@ -99,7 +69,7 @@ class Dependencia extends \Entities\Dependencia implements \Doctrine\ORM\Proxy\P
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'codPreRequisito', 'componenteCurricular', 'preRequisito');
+        return array('__isInitialized__', 'componenteCurricular', 'preRequisito');
     }
 
     public function __clone()

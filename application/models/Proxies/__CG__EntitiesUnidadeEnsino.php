@@ -42,12 +42,6 @@ class UnidadeEnsino extends \Entities\UnidadeEnsino implements \Doctrine\ORM\Pro
     }
 
     
-    public function setCodUnidadeEnsino($codUnidadeEnsino)
-    {
-        $this->__load();
-        return parent::setCodUnidadeEnsino($codUnidadeEnsino);
-    }
-
     public function getCodUnidadeEnsino()
     {
         if ($this->__isInitialized__ === false) {
@@ -81,18 +75,6 @@ class UnidadeEnsino extends \Entities\UnidadeEnsino implements \Doctrine\ORM\Pro
         return parent::getCnpj();
     }
 
-    public function setCodIes($codIes)
-    {
-        $this->__load();
-        return parent::setCodIes($codIes);
-    }
-
-    public function getCodIes()
-    {
-        $this->__load();
-        return parent::getCodIes();
-    }
-
     public function setIes(\Entities\InstituicaoEnsinoSuperior $ies = NULL)
     {
         $this->__load();
@@ -108,7 +90,7 @@ class UnidadeEnsino extends \Entities\UnidadeEnsino implements \Doctrine\ORM\Pro
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codUnidadeEnsino', 'nome', 'cnpj', 'codIes', 'ies');
+        return array('__isInitialized__', 'codUnidadeEnsino', 'nome', 'cnpj', 'ies');
     }
 
     public function __clone()

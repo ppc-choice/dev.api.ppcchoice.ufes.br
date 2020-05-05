@@ -1,12 +1,40 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/API_Controller.php';
+require_once APPPATH . 'libraries/APIController.php';
 
-class CursoController extends API_Controller {
-
+class CursoController extends APIController 
+{
+	public function __construct() {
+        parent::__construct();
+	}
+	
 	/**
-	 * @api {get} cursos/:codCurso Apresenta dados de um Curso específico.
+	 * @api {get} cursos/ Requisitar todos Cursos registrados.
+	 * @apiName findAll
+	 * @apiGroup Cursos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
+	 */
+	public function findAll()
+	{   
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('GET'),
+			)
+		);
+
+		$colecaoCurso = $this->entityManager->getRepository('Entities\Curso')->findAll();
+		$colecaoCurso = $this->doctrineToArray($colecaoCurso,TRUE);
+
+		$this->apiReturn(array($colecaoCurso,
+			), self::HTTP_OK
+		);
+	}
+	
+	/**
+	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
 	 * @apiGroup Cursos
 	 *
@@ -14,27 +42,10 @@ class CursoController extends API_Controller {
 	 *
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/1
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	 * {
-	 *	"status": true,
-	 *	"result": {
-	 *	"codCurso": 1,
-     *	"nome": "Ciência da Computação",
-     *	"anoCriacao": 2011,
-     *	"codUnEnsino": 1
-	 * }
-	 * @apiError UserNotFound O <code>codCurso</code> não corresponde a nenhum Curso cadastrado.
-	 * @apiSampleRequest cursos/:codCurso
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Curso não encontrado!"
-	 * }
+	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
     public function findById($codCurso)
 	{   
@@ -45,87 +56,207 @@ class CursoController extends API_Controller {
 			)
 		);
 		
-		$curso = $this->entity_manager->find('Entities\Curso',$codCurso);
-        $result = $this->doctrine_to_array($curso,TRUE);	
+		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
         
 		if ( !is_null($curso) ) {
+			$curso = $this->doctrineToArray($curso,TRUE);	
 			
-			$this->api_return(array(
-				'status' => TRUE,
-				'result' => $result,
-			), 200);
+			$this->apiReturn($curso,
+				self::HTTP_OK
+			);
 		} else {
-			$this->api_return(array(
-				'status' => FALSE,
-				'message' => 'Curso não encontrado!',
-			), 404);
+			$this->apiReturn(array(
+				'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
 		}
     }
     
+	
 	/**
-	 * @api {get} cursos/ Apresentar todos Cursos registrados.
-	 * @apiName findAll
+	 * @api {post} cursos/ Criar um Curso.
+	 * @apiName create
 	 * @apiGroup Cursos
-	 * @apiSuccess {Number} codCurso   Identificador único do curso.
-	 * @apiSuccess {String} nome   Nome do curso.
-	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiSuccess {Number} unidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiExample {curl} Exemplo:
-	 *     curl -i http://dev.api.ppcchoice.ufes.br/cursos/
-	 * @apiSuccessExample {JSON} Success-Response:
-	 * HTTP/1.1 200 OK
-	* 
-*  "status": true,
-*  "result": [
-*    {
-*      "codCurso": 1,
-*      "nomeCurso": "Ciência da Computação",
-*      "anoCriacao": 2011,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    },
-*    {
-*      "codCurso": 2,
-*      "nomeCurso": "Engenharia de Produção",
-*      "anoCriacao": 2006,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    },
-*    {
-*      "codCurso": 3,
-*      "nomeCurso": "Matemática Industrial",
-*      "anoCriacao": 2013,
-*      "nomeUnidadeEnsino": "Campus São Mateus",
-*      "nomeIes": "Universidade Federal do Espírito Santo"
-*    }
-*  ]
-*}
-
-	 * @apiError UserNotFound Nenhum Curso cadastrado.
-	 * @apiSampleRequest cursos/
-	 * @apiErrorExample {JSON} Error-Response:
-	 * HTTP/1.1 404 OK
-	 * {
-	 *	"status": false,
-	 *	"message": "Nenhum Curso cadastrado!"
-	 * }
+	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
-    public function findAll()
-	{   
+	public function create()
+    {
+        header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('POST'),
+			)
+		);
+ 
+		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		$curso = new Entities\Curso();
+
+		if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+
+		if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
+ 
+        if (isset($payload['codUnidadeEnsino'])){
+			$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
+			$curso->setUnidadeEnsino($ues);
+		}
+
+			$constraints = $this->validator->validate($curso);
+
+			if ( $constraints->success() ){
+				try {
+					$this->entityManager->persist($curso);
+					$this->entityManager->flush();
+		
+					$this->apiReturn(array(
+						'message' => array('Curso criado com Sucesso!'),
+						), self::HTTP_OK
+					);
+				} catch (\Exception $e) {
+					$msgExcecao = array($e->getMessage());
+
+					$this->apiReturn(array(
+						'error' => $msgExcecao,
+						), self::HTTP_BAD_REQUEST
+					);
+				}
+			} else {
+				$msgViolacoes = $constraints->messageArray();
+	
+				$this->apiReturn(array(
+					'error' => $msgViolacoes,
+					), self::HTTP_BAD_REQUEST
+				);	
+			}
+	}
+	
+	/**
+     * @api {put} cursos/:codCurso Atualizar dados de um Curso.
+     * @apiName update
+     * @apiGroup Cursos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * 
+	 * @apiSuccess {String} message Curso atualizado com sucesso.
+	 * 
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     */
+	public function update($codCurso)
+    {
 		header("Access-Controll-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
+				'methods' => array('PUT'),
 			)
 		);
 
-        $curso = $this->entity_manager->getRepository('Entities\Curso')->findAll();
-        $result = $this->doctrine_to_array($curso,TRUE);
+        $curso = $this->entityManager->find('Entities\Curso',$codCurso);
+        $payload = json_decode(file_get_contents('php://input'),TRUE);
+		
+        if(!is_null($curso))
+        {            
+			if(isset($payload['codUnidadeEnsino']))
+            {
+                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+				$curso->setUnidadeEnsino($ues);
+			}
+			
+			if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+			
+			if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
 
-		$this->api_return(array(
-			'status' => TRUE,
-			'result' => $result,
-		), 200);
-    }
-    
+			$constraints = $this->validator->validate($curso);
+
+			if ( $constraints->success() ){
+				try {
+					$this->entityManager->merge($curso);
+					$this->entityManager->flush();
+
+					$this->apiReturn(array(
+						'message' => array('Curso atualizado com sucesso!')
+						), self::HTTP_OK
+					);
+				} catch (\Exception $e) {
+					$msgExcecao = array($e->getMessage());
+					
+					$this->apiReturn(array(
+						'error' => $msgExcecao
+						), self::HTTP_BAD_REQUEST
+					);
+				}	
+			} else {
+				$msg = $constraints->messageArray();
+
+				$this->apiReturn(array(
+					'error' => $msg,
+					), self::HTTP_BAD_REQUEST
+				);	
+			}
+
+        }else{
+            $this->apiReturn(array(
+                'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
+        }
+	}
+
+	/**
+     * @api {delete} cursos/:codCurso Excluir um Curso.
+     * @apiName delete
+     * @apiGroup Cursos
+	 * @apiPermission ADMINISTRATOR
+	 * 
+     * @apiParam {Number} codCurso Identificador único do Curso.
+   	 * 
+	 * @apiSuccess {String} message  Curso deletado com sucesso.
+	 *  
+	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a uma Curso cadastrado.
+     */
+	public function delete($codCurso)
+	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('DELETE'),
+			)
+		);
+
+		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
+		
+		if(!is_null($curso))
+		{
+			try {
+				$this->entityManager->remove($curso);
+				$this->entityManager->flush();
+
+				$this->apiReturn(array(
+					'message' => array('Curso removido com sucesso!')
+				), self::HTTP_OK);
+				
+			} catch (\Exception $e) {
+				$msgExcecao = array($e->getMessage());
+
+				$this->apiReturn(array(
+					'error' => $msgExcecao
+					), self::HTTP_BAD_REQUEST
+				);
+			}
+		}else{
+			$this->apiReturn(array(
+                'error' => array('Curso não encontrado!'),
+				), self::HTTP_NOT_FOUND
+			);
+		}
+	}
 }

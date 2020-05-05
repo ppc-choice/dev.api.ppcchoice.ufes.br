@@ -3,7 +3,10 @@
 class Doctrine
 {
     // the Doctrine entity manager
-    public $em = null;
+    private $em = null;
+
+    // The Validator
+    private $validator = null;
 
     public function __construct()
     {
@@ -58,8 +61,9 @@ class Doctrine
             'driver' => getenv('DOCTRINE_DRIVER'),
             'user' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
-            'host' => getenv('DB_HOST'),
-            'dbname' => getenv('DB_DATABASE')
+            'host' => getenv('DB_HOSTNAME'),
+            'dbname' => getenv('DB_DATABASE'),
+            'charset' => getenv('DB_CHAR_SET')
         );
         
         // create the EntityManager
@@ -67,5 +71,28 @@ class Doctrine
         
         // store it as a member, for use in our CodeIgniter controllers.
         $this->em = $em;
+    }
+
+    /**
+    * @return Symfony\Component\Validator\Validation
+    */
+    public function getValidator() 
+    {
+        if ( is_null($this->validator) ) 
+        {
+            $this->validator = Symfony\Component\Validator\Validation::createValidatorBuilder()
+                ->addYamlMapping( APPPATH. 'models/Entities/Validators/validation.yml')
+                ->getValidator();        
+        }
+
+        return $this->validator;
+    } 
+    
+    /**
+    * @return Doctrine\ORM\EntityManager
+    */
+    public function getEntityManager()
+    {
+        return $this->em;
     }
 }
