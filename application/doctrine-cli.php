@@ -9,8 +9,10 @@ define('ENVIRONMENT', 'development');
 define('PATHSYS', str_replace('application','', dirname(__FILE__)));
 require PATHSYS . 'system/dotenv/autoloader.php';
 
-$dotenv = new Dotenv\Dotenv(PATHSYS);
-$dotenv->load();
+if ( file_exists(__DIR__ . '/.env.' . ENVIRONMENT)){
+    $dotenv = new Dotenv\Dotenv(PATHSYS);
+    $dotenv->load();
+}
 
 
 require APPPATH.'libraries/Doctrine.php';
