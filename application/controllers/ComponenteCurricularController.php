@@ -286,7 +286,6 @@ class ComponenteCurricularController extends APIController
             }
         }else{ 
             $this->apiReturn(array(
-                'status' => FALSE,
                 'error' => array('Componente Curricular não encontrada'),
                 ),self::HTTP_NOT_FOUND
             );

@@ -63,7 +63,7 @@ class Doctrine
             'password' => getenv('DB_PASSWORD'),
             'host' => getenv('DB_HOSTNAME'),
             'dbname' => getenv('DB_DATABASE'),
-            'charset' => 'utf8'
+            'charset' => getenv('DB_CHAR_SET')
         );
         
         // create the EntityManager

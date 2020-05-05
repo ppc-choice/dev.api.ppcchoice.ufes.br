@@ -73,7 +73,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'message' => array("Disciplina não encontrada.")
+                'error' => array("Disciplina não encontrada.")
                 ),self::HTTP_NOT_FOUND
             );
         }

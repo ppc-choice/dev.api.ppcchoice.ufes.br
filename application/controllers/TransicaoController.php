@@ -315,7 +315,6 @@ class TransicaoController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'status' => TRUE,
                     'message' => array('Transição removida com sucesso')
                     ), self::HTTP_OK
                 );
