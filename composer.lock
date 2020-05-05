@@ -4,51 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de207bb16f06bc17014e07c6c8f5ecc3",
-    "packages": [
-        {
-            "name": "php-kit/ext-pdo",
-            "version": "1.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-kit/ext-pdo.git",
-                "reference": "b94bf1805b75ba114e4a216dbca441ca7dc893be"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-kit/ext-pdo/zipball/b94bf1805b75ba114e4a216dbca441ca7dc893be",
-                "reference": "b94bf1805b75ba114e4a216dbca441ca7dc893be",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpKit\\ExtPDO\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cláudio Silva",
-                    "email": "claudio.silva@impactwave.com"
-                },
-                {
-                    "name": "Impactwave",
-                    "email": "impactwave@impactwave.com",
-                    "homepage": "http://impactwave.com"
-                }
-            ],
-            "description": "An extension to the standard PHP PDO API",
-            "homepage": "https://github.com/php-kit/ext-pdo",
-            "time": "2018-04-06T12:17:27+00:00"
-        }
-    ],
+    "content-hash": "0f99fc0a6de28499ac663b31d4902417",
+    "packages": [],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -1694,14 +1651,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.7",
-        "ext-pdo": "*",
-        "ext-pdo_mysql": "*",
-        "ext-mysqli": "*",
-        "ext-xml": "*",
-        "ext-json": "*",
-        "ext-openssl": "*",
-        "ext-gd": "*",
-        "ext-mbstring": "*"
+        "ext-mysqli": "*"
     },
     "platform-dev": []
 }

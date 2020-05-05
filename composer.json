@@ -9,15 +9,7 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"php-kit/ext-pdo": "*",
-		"ext-PDO": "*",
-        "ext-pdo_mysql": "*",
-        "ext-mysqli": "*",
-        "ext-xml": "*",
-        "ext-json": "*",
-        "ext-openssl": "*",
-        "ext-gd": "*",
-        "ext-mbstring": "*"
+		"ext-mysqli": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^4",
