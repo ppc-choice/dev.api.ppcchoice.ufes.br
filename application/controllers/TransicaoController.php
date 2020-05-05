@@ -38,7 +38,7 @@ class TransicaoController extends APIController
         }else{
             $this->apiReturn(
                 array(
-                    'error' =>  array('Nenhuma transição encontrada')
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -76,7 +76,7 @@ class TransicaoController extends APIController
         }else{
             $this->apiReturn(
                 array(
-                    'error' =>  array('Nenhuma transição foi encontrada para a unidade de ensino solicitada.')
+                    'error' =>  $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -114,7 +114,7 @@ class TransicaoController extends APIController
         }else{
             $this->apiReturn(
                 array(
-                    'error' =>  array('Não foi encontrada transição para o ppc solicitado')
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -169,22 +169,18 @@ class TransicaoController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Transição criada com sucesso.'),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{
-            $msgViolacoes = $constraints->messageArray();
-
             $this->apiReturn(array(
-                'error' => $msgViolacoes
+                'error' => $constraints->messageArray(),
                 ), self::HTTP_BAD_REQUEST
             );
         }
@@ -253,28 +249,24 @@ class TransicaoController extends APIController
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
-                        'message' => array('Transição atualizada com sucesso')
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK
                     );
                 } catch (\Exception $e) {
-                    $msgExcecao = array($e->getMessage());
-
                     $this->apiReturn(array(
-                        'error' => $msgExcecao
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ), self::HTTP_BAD_REQUEST
                     );
                 } 
             }else{
-                $msgViolacoes = $constraints->messageArray();
-             
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{
             $this->apiReturn(array(
-                'error' => array('Transição não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -315,20 +307,18 @@ class TransicaoController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Transição removida com sucesso')
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Transição não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }

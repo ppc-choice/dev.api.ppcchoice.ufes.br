@@ -34,7 +34,7 @@ class UnidadeEnsinoController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Unidades de Ensino não encontradas."),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }
@@ -71,7 +71,7 @@ class UnidadeEnsinoController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada.")
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }
@@ -117,23 +117,19 @@ class UnidadeEnsinoController extends APIController
                 $this->entityManager->flush();
             
                 $this->apiReturn(array(
-                    'message' => array("Unidade de Ensino criada com sucesso."),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ), self::HTTP_OK
                 );
                 
             } catch (\Exception $e){
-                $msgExcecao =  array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao,
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         } else {
-            $msgViolacoes = $constraints->messageArray();
-
             $this->apiReturn(array(
-                'error' => $msgViolacoes
+                'error' => $constraints->messageArray(),
                 ), self::HTTP_BAD_REQUEST
             );
         }
@@ -183,30 +179,26 @@ class UnidadeEnsinoController extends APIController
                     $this->entityManager->flush();
             
                     $this->apiReturn(array(
-                        'message' => array("Unidade de Ensino atualizada com sucesso."),
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK
                     );
     
                 } catch (\Exception $e){
-                    $msgExcecao =  array($e->getMessage());
-
                     $this->apiReturn(array(
-                        'error' => $msgExcecao,
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ), self::HTTP_BAD_REQUEST
                     );
                 }
             }else{
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
             
         } else {
             $this->apiReturn(array(
-                'error' => array("Unidade de Ensino não encontrada."),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }
@@ -240,22 +232,20 @@ class UnidadeEnsinoController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array("Unidade de Ensino deletada com sucesso.")
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK
                 );
             
             } catch ( \Exception $e ){
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_NOT_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             } 
 
         } else {
             $this->apiReturn(array(
-                'error' => "Unidade de Ensino não encontrada."
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }

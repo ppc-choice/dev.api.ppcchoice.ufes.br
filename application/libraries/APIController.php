@@ -604,4 +604,43 @@ class APIController extends CI_Controller
       }
       return $data; 
   }
+
+  /** 
+   * Retorna mensagens padrão 
+   * @author Elyabe Alves (https://github.com/elyabe) 
+   * @param $category Categoria da mensagem (NOT_FOUND, CREATED, DELETED, UPDATED, EXCEPTION)
+   * @return array
+  */
+  public function stdMessage($category = 'NOT_FOUND')
+  {
+    $category = strtoupper($category);
+    $message = '';
+    
+    switch ($category) 
+    {
+        case 'CREATED':
+            $message = 'Instância criada com sucesso.'; 
+            break;
+        case 'DELETED':
+            $message = 'Instância removida com sucesso.'; 
+            break;
+        case 'UPDATED':
+            $message = 'Instância atualizada com sucesso.'; 
+            break;
+        case 'NOT_FOUND':
+            $message = 'Instância não encontrada.'; 
+            break;
+        case 'EXCEPTION':
+            $message = 'Ocorreu uma exceção ao persistir a instância.'; 
+            break;
+        default:
+            $message = 'Undefined Message.'; 
+            break;
+    }  
+    
+    $entity = preg_replace('/Controller$/', "", get_class($this));
+    
+    return array( 'Entities\\' . $entity . ': ' . $message );
+  }
+
 }

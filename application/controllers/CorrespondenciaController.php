@@ -27,9 +27,19 @@ class CorrespondenciaController extends APIController
                 
         $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAll();
      
-        $this->apiReturn( $colecaoCorrespondencia,
-            self::HTTP_OK
-        );
+        if(!empty($colecaoCorrespondencia))
+        {
+            $this->apiReturn($colecaoCorrespondencia,
+                self::HTTP_OK
+            );
+        }else{
+            $this->apiReturn(array(
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                ),self::HTTP_NOT_FOUND
+            );
+        }
+
+        
     }
 
     /**
@@ -66,7 +76,7 @@ class CorrespondenciaController extends APIController
         }else{
             $this->apiReturn(
                 array(
-                    'error' =>  array('Nenhuma relação de correspondência encontrada entre componentes dos ppcs solicitados.')
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -108,7 +118,7 @@ class CorrespondenciaController extends APIController
             
         }else{
             $this->apiReturn(array(
-                    'error' =>  array('Nenhuma correspondência encontrada para esta componente.')
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -165,22 +175,18 @@ class CorrespondenciaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Correspondência criada com sucesso.'),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         }else{
-            $msgViolacoes = $constraints->messageArray();
-            
             $this->apiReturn(array(
-                'error' => $msgViolacoes
+                'error' => $constraints->messageArray(),
                 ),self::HTTP_BAD_REQUEST
             );
         }         
@@ -251,28 +257,24 @@ class CorrespondenciaController extends APIController
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
-                        'error' => array('Correspondência atualizada com sucesso.'),
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK
                     );
                 } catch (\Exception $e) {
-                    $msgExcecao = array($e->getMessage());
-
                     $this->apiReturn(array(
-                        'error' => $msgExcecao
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ),self::HTTP_BAD_REQUEST
                     );
                 }
             }else{
-                $msgViolacoes = $constraints->messageArray();
-                
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         }else{
             $this->apiReturn(array(
-                'error' => array('Correspondência não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -313,20 +315,18 @@ class CorrespondenciaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Correspondência removida com sucesso')
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-                
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Correspondência não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }

@@ -26,11 +26,19 @@ class UsuarioController extends APIController
 		);
 		
 		$colecaoUsuario = $this->entityManager->getRepository('Entities\Usuario')->findAll();
-		$colecaoUsuario = $this->doctrineToArray($colecaoUsuario);
+		
+		if ( !empty($colecaoUsuario) ){
+			$colecaoUsuario = $this->doctrineToArray($colecaoUsuario);
+			$this->apiReturn($colecaoUsuario,
+				self::HTTP_OK
+			);
+		} else {
+			$this->apiReturn(array(
+				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				),self::HTTP_NOT_FOUND
+			);
+		}
 
-		$this->apiReturn($colecaoUsuario,
-			self::HTTP_OK
-		);
 	}
 
 	/**
@@ -74,7 +82,7 @@ class UsuarioController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => array('Usuário não encontrado')
+				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -141,24 +149,20 @@ class UsuarioController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => array("Usuário criado com sucesso."),
+					'message' => $this->stdMessage(STD_MSG_CREATED),
 					),self::HTTP_OK
 				);	
 				
 			} catch (Exception $e) {
-				$msgExcecao = array($e->getMessage());
-
 				$this->apiReturn(array(
-					'error' => $msgExcecao,
+					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
 					),self::HTTP_BAD_REQUEST
 				);	
 			}
 			
 		} else {
-			$msgViolacoes = $constraints->messageArray();
-
 			$this->apiReturn(array(
-				'error' => $msgViolacoes,
+				'error' => $constraints->messageArray(),
 				),self::HTTP_BAD_REQUEST
 			);	
 		}
@@ -224,30 +228,26 @@ class UsuarioController extends APIController
 					$this->entityManager->flush();
 	
 					$this->apiReturn(array(
-						'message' => array("Atualização realizada com sucesso."),
+						'message' => $this->stdMessage(STD_MSG_UPDATED),
 						),self::HTTP_OK
 					);	
 					
 				} catch (Exception $e) {
-					$msgExcecao = array($e->getMessage());
-					
 					$this->apiReturn(array(
-						'error' => $msgExcecao,
+						'error' => $this->stdMessage(STD_MSG_EXCEPTION),
 						),self::HTTP_BAD_REQUEST
 					);	
 				}
 				
 			} else {
-				$msgViolacoes = $constraints->messageArray();
-
 				$this->apiReturn(array(
-					'error' => $msgViolacoes,
+					'error' => $constraints->messageArray(),
 					),self::HTTP_BAD_REQUEST
 				);	
 			}
 		} else {
 			$this->apiReturn(array(
-				'error' => array("Usuário não encontrado."),
+				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -282,21 +282,19 @@ class UsuarioController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => array("Usuário deletado com sucesso."),
+					'message' => $this->stdMessage(STD_MSG_DELETED),
 					),self::HTTP_OK
 				);	
 				
 			} catch (Exception $e) {
-				$msgExcecao = array($e->getMessage());
-
 				$this->apiReturn(array(
-					'error' => $msgExcecao,
+					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
 					),self::HTTP_BAD_REQUEST
 				);	
 			}
 		} else {
 			$this->apiReturn(array(
-				'error' => array("Usuário não encontrado."),
+				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
