@@ -410,6 +410,7 @@ Entities\Correspondencia:
         - Callback:
             methods: 
                 -    [Entities\Validators\CorrespondenciaValidator, ppcIgual]
+                -    [Entities\Validators\CorrespondenciaValidator, transicaoInexistente]      
 Entities\Transicao:
     properties:
         ppcAtual:
