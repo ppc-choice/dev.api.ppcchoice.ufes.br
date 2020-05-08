@@ -26,9 +26,17 @@ class ComponenteCurricularController extends APIController
     
         $colecaoCompCurric = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findAll();
         
-        $this->apiReturn($colecaoCompCurric,
-            self::HTTP_OK
+        if(!empty($colecaoCompCurric))
+        {
+            $this->apiReturn($colecaoCompCurric,
+                self::HTTP_OK
+            );
+        } else {
+            $this->apiReturn(array(
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+            ),self::HTTP_NOT_FOUND
         );
+        }
         
     }
     /**
@@ -48,8 +56,8 @@ class ComponenteCurricularController extends APIController
      */
 	public function findByCodPpc($codPpc)
 	{
-        
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
@@ -64,7 +72,7 @@ class ComponenteCurricularController extends APIController
             
         }else{
             $this->apiReturn(array(
-                    'error' => array('Não foram encontradas componentes curriculares para o ppc solicitado.')
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -107,7 +115,7 @@ class ComponenteCurricularController extends APIController
             
         }else{
             $this->apiReturn(array(
-                    'error' =>  array('Componente curricular não encontrada.')
+                    'error' =>  $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -172,25 +180,21 @@ class ComponenteCurricularController extends APIController
             try{
                 $this->entityManager->persist($componenteCurricular);
                 $this->entityManager->flush();
-
+                
                 $this->apiReturn(array(
-                    'message' => array('Componente curricular criada com sucesso.'),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                 ), self::HTTP_OK);
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION)
                     ),self::HTTP_BAD_REQUEST
                 );
             }
 
             
         }else{
-            $msgViolacoes = $constraints->messageArray();
-
             $this->apiReturn(array(
-                'error' => $msgViolacoes
+                'error' => $constraints->messageArray(),
                 ), self::HTTP_BAD_REQUEST
             );
         }
@@ -266,27 +270,23 @@ class ComponenteCurricularController extends APIController
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
-                        'message' => array('Componente Curricular atualizada com sucesso')
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                     ),self::HTTP_OK);
                 } catch (\Exception $e) {
-                    $msgExcecao = array($e->getMessage());
-
                     $this->apiReturn(array(
-                        'error' => $msgExcecao
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ), self::HTTP_BAD_REQUEST
                     );
                 }
             }else{
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Componente Curricular não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),         
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -326,20 +326,18 @@ class ComponenteCurricularController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Componente Curricular removida com sucesso')
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-                
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Componente Curricular não encontrada'),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }

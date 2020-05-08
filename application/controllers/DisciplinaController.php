@@ -37,7 +37,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplinas não encontradas.")
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -73,7 +73,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada.")
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -102,7 +102,6 @@ class DisciplinaController extends APIController
         ));
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
-
         $disciplina = new Entities\Disciplina();
 
         if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
@@ -125,22 +124,19 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
             
                 $this->apiReturn(array(
-                    'message' => array("Disciplina criada com sucesso."),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ),self::HTTP_OK
                 );
                 
             } catch (\Exception $e){
-                $msgExcecao =  array($e->getMessage());
                 $this->apiReturn(array(
-                    'error' => $msgExcecao,
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         }else{
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
@@ -185,30 +181,26 @@ class DisciplinaController extends APIController
                     $this->entityManager->flush();
         
                     $this->apiReturn(array(
-                        'message' => array("Disciplina atualizada com sucesso."),
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ),self::HTTP_OK
                     );
                 } catch (\Exception $e){
-                    $msgExcecao =  array($e->getMessage());
-                    
                     $this->apiReturn(array(
-                        'error' => $msgExcecao,
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ),self::HTTP_BAD_REQUEST
                     );
                 }
                 
             } else {
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada."),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -244,21 +236,19 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array("Disciplina deletada com sucesso.")
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                 ), self::HTTP_OK);
             
             } catch ( \Exception $e ){
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
 
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada.")
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }

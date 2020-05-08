@@ -34,7 +34,7 @@ class DependenciaController extends APIController
         {
             $this->apiReturn(
                 array(
-                    'error' => array('Depêndencia não encontrada!'),
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }   
@@ -75,7 +75,7 @@ class DependenciaController extends APIController
             
             $this->apiReturn(
                 array(
-                    'error' => 'Dependencia não encontrada!',
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }
@@ -106,7 +106,7 @@ class DependenciaController extends APIController
         $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
         
         if(!empty($colecaoDependencia)){
-            $result = $this->doctrineToArray($colecaoDependencia);
+            $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
             
             $this->apiReturn($colecaoDependencia,
                 self::HTTP_OK 
@@ -114,7 +114,7 @@ class DependenciaController extends APIController
         }else{    
             $this->apiReturn(
                 array(
-                    'error' => array("Não foram encontradas dependências para este projeto pedagógico de curso."),
+                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND 
             );
         }
@@ -166,23 +166,19 @@ class DependenciaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => "Dependencia criada com sucesso"
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ), self::HTTP_OK 
                 );
 
             }catch ( \Exception $e ){
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao,
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST 
                 );
             }
         }else{
-            $msgViolacoes = $constraints->messageArray();
-
             $this->apiReturn(array(
-                'error' => $msgViolacoes,
+                'error' => $constraints->messageArray(),
                 ), self::HTTP_BAD_REQUEST 
             );
         }
@@ -248,31 +244,27 @@ class DependenciaController extends APIController
                     $this->entityManager->flush();
                                 
                     $this->apiReturn(array(
-                        'message' => "Dependencia atualizada com sucesso",
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK 
                     );
 
                 } catch (\Exception $e){
-                    $msgExcecao = array($e->getMessage());
-                    
                     $this->apiReturn(array(
-                        'error' => $msgExcecao,
+                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                         ), self::HTTP_BAD_REQUEST 
                     );
                 }
                 
             }else{
-                $msgViolacoes = $constraints->messageArray();
-                
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         
         }else{
             $this->apiReturn(array(
-                'error' => array("Dependência não encontrada"),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND 
             );
         }
@@ -308,21 +300,19 @@ class DependenciaController extends APIController
                 $this->entityManager->flush();
                 
                 $this->apiReturn(array(
-                    'message' => array("Dependencia deletada com sucesso"),
+                    'message' => $this->stdMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK 
                 );
 
             }catch (\Exception $e){
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao,
+                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST 
                 );
             }
         }else{
             $this->apiReturn(array(
-                'error' => array("Dependência não encontrada"),
+                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND 
             );
         }	
