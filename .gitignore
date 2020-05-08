@@ -40,4 +40,4 @@ apidoc.json
 /database/
 *.sql
 
-
+composer.lock
