@@ -13,7 +13,7 @@ class TransicaoController extends APIController
      * @apiName findAll
      * @apiGroup Transição
      *
-     * @apiSuccess {Transicao[]} Transicoes Array de objetos do tipo transição.
+     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
      *
      * @apiError {String[]} 404 Nenhuma transição encontrada.
      */
@@ -23,8 +23,6 @@ class TransicaoController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('GET'),
-            // 'limit' => array(2,'ip','everyday'),
-            // 'requireAuthorization' => TRUE
             )
         );
 
@@ -50,9 +48,10 @@ class TransicaoController extends APIController
      * @apiName findByCodUnidadeEnsino
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codUnidadeEnsino código do ppc atual da transição desejada.
+     * @apiParam {Number} codUnidadeEnsino Identificador único de unidade de ensino.
      * 
-     * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição, no padrão: " Ciência da Computação (2011) ".
+     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
+     * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição.
      * @apiSuccess {Number} codPpc Código do ppc atual da transição.
      * 
      * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
@@ -87,8 +86,9 @@ class TransicaoController extends APIController
      * @apiName findByCodPpc
      * @apiGroup Transição
      *
-     * @apiParam {Number} codPpcAtual código do ppc atual da transição desejada.
+     * @apiParam {Number} codPpcAtual Identificador único de ppc.
      *
+     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
      * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
      * @apiSuccess {String} ppcAlvo Nome do curso e Ano de aprovação do ppc alvo da transição.
      * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
@@ -126,14 +126,10 @@ class TransicaoController extends APIController
      * @apiName create
      * @apiGroup Transição
      * 
-     * @apiParam (Request Body/JSON) {String} codPpcAtual  Código do ppc atual.
-     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Código do ppc alvo.
+     * @apiParam (Request Body/JSON) {String} codPpcAtual  Identificador único do ppc atual.
+     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Identificador único do ppc alvo.
      * 
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Transição criada com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Transicao: Instância criada com sucesso.
      * 
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
@@ -191,16 +187,12 @@ class TransicaoController extends APIController
      * @apiName update
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codPpcAtual Código de ppc.
-     * @apiParam {Number} codPpcAlvo Código de ppc.
-     * @apiParam (Request Body/JSON) {String} codPpcAtual  Código do ppc atual.
-     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Código do ppc alvo.
+     * @apiParam {Number} codPpcAtual Identificador único de ppc.
+     * @apiParam {Number} codPpcAlvo Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {String} [codPpcAtual]  Identificador único de ppc atual.
+     * @apiParam (Request Body/JSON) {String} [codPpcAlvo]  Identificador único de ppc alvo.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Transição atualizada com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Transicao: Instância atualizada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -277,14 +269,10 @@ class TransicaoController extends APIController
      * @apiName delete
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codPpcAtual Código de ppc.
-     * @apiParam {Number} codPpcAlvo Código de ppc.
+     * @apiParam {Number} codPpcAtual Identificador único de ppc.
+     * @apiParam {Number} codPpcAlvo Identificador único de ppc.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Transição removida com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Transicao: Instância deletada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.

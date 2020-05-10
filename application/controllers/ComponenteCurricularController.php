@@ -13,7 +13,7 @@ class ComponenteCurricularController extends APIController
      * @apiName findAll
      * @apiGroup Componente Curricular
      *
-     * @apiSuccess {ComponenteCurricular[]} ComponentesCurriculares Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {ComponenteCurricular[]} componentesCurriculares Array de objetos do tipo ComponenteCurricular.
      * 
      * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
      */
@@ -46,7 +46,7 @@ class ComponenteCurricularController extends APIController
      * 
      * @apiParam {Number} codPpc Código de projeto pedagógico de curso (PPC).
      * 
-     * @apiSuccess {ComponenteCurricular[]} ComponentesCurriculares Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {ComponenteCurricular[]} componentesCurriculares Array de objetos do tipo ComponenteCurricular.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} ch Carga horária da disciplina da componente curricular.
@@ -79,11 +79,11 @@ class ComponenteCurricularController extends APIController
     }
     
     /**
-     * @api {get} componentes-curriculares/:codCompCurric Requisitar uma componente curricular
+     * @api {get} componentes-curriculares/:codCompCurric Solicitar uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCurric Identificador único da componente curricular solicitada.
      *
      * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
@@ -134,11 +134,7 @@ class ComponenteCurricularController extends APIController
      * @apiParam (Request Body/JSON) {String} numDisciplina  Número da disicplina.
      * @apiParam (Request Body/JSON) {String} codPpc  Código do ppc.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular criada com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\ComponenteCurricular: Instância criada com sucesso.
      * 
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
@@ -205,19 +201,15 @@ class ComponenteCurricularController extends APIController
      * @apiName update
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
-     * @apiParam (Request Body/JSON) {String} periodo  Período da componente.
-     * @apiParam (Request Body/JSON) {String} credito  Crédito da componente.
-     * @apiParam (Request Body/JSON) {String} tipo  Tipo da componente.
-     * @apiParam (Request Body/JSON) {String} codDepto  Código do departamento.
-     * @apiParam (Request Body/JSON) {String} numDisciplina  Número da disicplina.
-     * @apiParam (Request Body/JSON) {String} codPpc  Código do ppc.
+     * @apiParam {Number} codCompCurric Identificador único da componente curricular solicitada.
+     * @apiParam (Request Body/JSON) {String} [periodo]  Período da componente.
+     * @apiParam (Request Body/JSON) {String} [credito]  Crédito da componente.
+     * @apiParam (Request Body/JSON) {String} [tipo]  Tipo da componente.
+     * @apiParam (Request Body/JSON) {String} [codDepto]  Código do departamento.
+     * @apiParam (Request Body/JSON) {String} [numDisciplina]  Número da disicplina.
+     * @apiParam (Request Body/JSON) {String} [codPpc]  Código do ppc.
      * 
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular atualizada com sucesso."
-     *     }
+     * @apiSuccess {String[]} message  Entities\\ComponenteCurricular: Instância atualizada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a uma componente curricular cadastrada.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -297,13 +289,9 @@ class ComponenteCurricularController extends APIController
      * @apiName delete
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCurric Identificador único da componente curricular solicitada.
      * 
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular removida com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\ComponenteCurricular: Instância deletada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a uma componente curricular cadastrada.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.

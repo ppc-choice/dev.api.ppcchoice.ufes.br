@@ -14,7 +14,7 @@ class CorrespondenciaController extends APIController
      * @apiGroup Correspondência
      * @apiError  404 NotFound Nenhuma Correspondência encontrada.
      *
-     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
+     * @apiSuccess {Correspondencia[]} correspondencias Array de objetos do tipo Correspondencia.
      * 
      * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
      */
@@ -47,10 +47,10 @@ class CorrespondenciaController extends APIController
      * @apiName findAllByCodPpc
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codPpcAtual Código do PPC atual .
-     * @apiParam {Number} codPpcAlvo Código do PPC alvo.
+     * @apiParam {Number} codPpcAtual Identificador único do ppc atual.
+     * @apiParam {Number} codPpcAlvo Identificador único do ppc alvo.
      *
-     * @apiSuccess {Correspondencia[]} Correspondencias Array de objetos do tipo Correspondencia.
+     * @apiSuccess {Correspondencia[]} correspondencias Array de objetos do tipo Correspondencia.
      * @apiSuccess {Number} codCompCurric Código da componente curricular correspondente.
      * @apiSuccess {Number} codCompCorresp Código da disciplina correspondente.
      * @apiSuccess {Number} percentual Percentual de correspondencia entre a componente e sua componente correspondente.
@@ -86,10 +86,10 @@ class CorrespondenciaController extends APIController
      * @api {get} componentes-curriculares/:codCompCurric/correspondencias Listar as correspondências de uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Correspondência
-     * @apiError  404 NotFound Nenhuma correspondência encontrada para esta componente.
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCurric Identificador único da componente curricular da qual as correpondências foram solicitadas.
      *
+     * @apiSuccess {Correspondencia[]} correspondencias Array de objetos do tipo Correspondencia.
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
      * @apiSuccess {String} codDisc Código da disciplina.
@@ -132,11 +132,7 @@ class CorrespondenciaController extends APIController
      * @apiParam (Request Body/JSON) {String} codCompCurric  Código da componente curricular.
      * @apiParam (Request Body/JSON) {String} codCompCurricCorresp  Código da componente curricular correspondente.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Correspondência criada com sucesso."
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância criada com sucesso.
      * 
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
      */
@@ -197,16 +193,12 @@ class CorrespondenciaController extends APIController
      * @apiName update
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
-     * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
-     * @apiParam (Request Body/JSON) {String} codCompCurric  Código da componente curricular.
-     * @apiParam (Request Body/JSON) {String} codCompCurricCorresp  Código da componente curricular correspondente.
+     * @apiParam {Number} codCompCurric Identificador único de componente curricular.
+     * @apiParam {Number} codCompCorresp Identificador único de componente curricular correspondente.
+     * @apiParam (Request Body/JSON) {String} [codCompCurric]  Código da componente curricular.
+     * @apiParam (Request Body/JSON) {String} [codCompCurricCorresp]  Código da componente curricular correspondente.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Correspondência atualizada com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância atualizada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codCompCurric</code> ou <code>codCompCorresp</code> não correspondem a componentes cadastradas.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -285,14 +277,10 @@ class CorrespondenciaController extends APIController
      * @apiName delete
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
-     * @apiParam {Number} codCompCorresp Código de componente curricular correspondente.
+     * @apiParam {Number} codCompCurric Identificador único de componente curricular.
+     * @apiParam {Number} codCompCorresp Identificador único de componente curricular correspondente.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Correspondência removida com sucesso"
-     *     }
+     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância deletada com sucesso.
      * 
      * @apiError {String[]} 404 O <code>codCompCurric</code> ou <code>codCompCorresp</code> não correspondem a componentes cadastradas.
      * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
