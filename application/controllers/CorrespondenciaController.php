@@ -12,7 +12,6 @@ class CorrespondenciaController extends APIController
      * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
      * @apiName findAll
      * @apiGroup Correspondência
-     * @apiError  404 NotFound Nenhuma Correspondência encontrada.
      *
      * @apiSuccess {Correspondencia[]} correspondencias Array de objetos do tipo Correspondencia.
      * 
