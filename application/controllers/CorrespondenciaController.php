@@ -82,13 +82,13 @@ class CorrespondenciaController extends APIController
     }
 
     /**
-     * @api {get} componentes-curriculares/:codCompCurric/correspondencias Listar as correspondências de uma componente curricular
+     * @api {get} componentes-curriculares/:codCompCurric/correspondencias/:codCompCorresp Listar as correspondências de uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Correspondência
      * 
      * @apiParam {Number} codCompCurric Identificador único da componente curricular da qual as correpondências foram solicitadas.
+     * @apiParam {Number} codCompCorresp Identificador único da componente curricular correspondente da qual as correpondências foram solicitadas.
      *
-     * @apiSuccess {Correspondencia[]} correspondencias Array de objetos do tipo Correspondencia.
      * @apiSuccess {String} nomeDisc Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
      * @apiSuccess {Number} codCompCurric Código da componente curricular.
      * @apiSuccess {String} codDisc Código da disciplina.
@@ -99,7 +99,7 @@ class CorrespondenciaController extends APIController
      * 
      * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a ppc cadastrado.
      */
-    public function findByCodCompCurric($codCompCurric)
+    public function findByCodCompCurric($codCompCurric,$codCompCorresp)
 	{
         header("Access-Control-Allow-Origin: *");
 
@@ -107,7 +107,7 @@ class CorrespondenciaController extends APIController
                 'methods' => array('GET'), 
         ));
               
-        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric);
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric,$codCompCorresp);
 
         if(!empty($colecaoCorrespondencia))
         {
