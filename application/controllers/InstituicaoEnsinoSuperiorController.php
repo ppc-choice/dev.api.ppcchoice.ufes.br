@@ -9,7 +9,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
     }
   
 	/**
-	 * @api {get} instituicoes-ensino-superior/ Solicitar dados de todas Instituições de Ensino Superior.
+	 * @api {get} instituicoes-ensino-superior Solicitar dados de todas Instituições de Ensino Superior.
 	 * @apiName findAll
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
@@ -52,7 +52,6 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
 	 * 
 	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */
     public function findById($codIes)
     {   
@@ -78,10 +77,9 @@ class InstituicaoEnsinoSuperiorController extends APIController
 		}
 
 	}
-	
 
 	/**
-	 * @api {post} instituicoes-ensino-superior/ Criar uma Instituição de Ensino Superior.
+	 * @api {post} instituicoes-ensino-superior Criar uma Instituição de Ensino Superior.
 	 * @apiName create
 	 * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
@@ -90,9 +88,8 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
 	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
 	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior criada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
@@ -136,7 +133,6 @@ class InstituicaoEnsinoSuperiorController extends APIController
 		} 
  
     }
-   
 
 	/**
      * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
@@ -144,10 +140,10 @@ class InstituicaoEnsinoSuperiorController extends APIController
      * @apiGroup Instituições de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla da Instituição de Ensino Superior.
 	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior atualizada com sucesso.
+	 * @apiSuccess {String[]} message Entities\\InstituicaoEnsinoSuperior: Instância atualizada com sucesso.
 	 *  
 	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -202,7 +198,6 @@ class InstituicaoEnsinoSuperiorController extends APIController
         }
 	}
 	
-
 	/**
      * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
      * @apiName delete
@@ -211,7 +206,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
      * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
    	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior deletada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância deletada com sucesso.
 	 *  
 	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
      */

@@ -9,8 +9,8 @@ class DepartamentoController extends APIController
 	}
 	
 	/**
-	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
-	 * @apiName getAll
+	 * @api {get} departamentos Solicitar dados de todos Departamentos.
+	 * @apiName findAll
 	 * @apiGroup Departamentos
 	 * @apiPermission ADMINISTRATOR
 	 * 
@@ -54,8 +54,6 @@ class DepartamentoController extends APIController
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * 
 	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
-	 * 
 	 */
     public function findById($codDepto)
 	{
@@ -83,7 +81,7 @@ class DepartamentoController extends APIController
     }
     	
 	/**
-	 * @api {post} departamentos/ Criar um Departamento.
+	 * @api {post} departamentos Criar um Departamento.
 	 * @apiName create
 	 * @apiGroup Departamentos
 	 * @apiPermission ADMINISTRATOR
@@ -92,7 +90,7 @@ class DepartamentoController extends APIController
 	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
-	 * @apiSuccess {String} message  Departamento criado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância criada com sucesso.
 	 *  
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
 	 */	
@@ -143,18 +141,17 @@ class DepartamentoController extends APIController
 		}
 	}
 	
-
 	/**
      * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
      * @apiName update
      * @apiGroup Departamentos
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
-	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]  Identificador único da Unidade de Ensino.
 	 *  
-	 * @apiSuccess {String} message  Departamento atualizado com sucesso.
+	 * @apiSuccess {String[]} message Entities\\Departamento: Instância atualizada com sucesso.
 	 *  
 	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -222,7 +219,7 @@ class DepartamentoController extends APIController
 	 * 
      * @apiParam {Number} codDepto Identificador único do Departamento.
    	 * 
-	 * @apiSuccess {String} message  Departamento deletado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância deletada com sucesso.
 	 *  
 	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
      */
