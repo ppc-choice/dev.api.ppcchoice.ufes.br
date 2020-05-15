@@ -9,12 +9,14 @@ class CursoController extends APIController
 	}
 	
 	/**
-	 * @api {get} cursos Requisitar todos Cursos registrados.
+	 * @api {get} cursos Solicitar todos Cursos registrados.
 	 * @apiName findAll
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
+	 * @apiSuccess {Cursos[]} Curso Array de objetos do tipo Curso.
+	 * 
+	 * @apiError {Cursos[]} Error Curso Array de objetos do tipo Curso.
 	 */
 	public function findAll()
 	{   
@@ -45,7 +47,7 @@ class CursoController extends APIController
 	/**
 	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 *
 	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 *
@@ -83,7 +85,7 @@ class CursoController extends APIController
 	/**
 	 * @api {post} cursos Criar um Curso.
 	 * @apiName create
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
@@ -143,14 +145,16 @@ class CursoController extends APIController
 	/**
      * @api {put} cursos/:codCurso Atualizar dados de um Curso.
      * @apiName update
-     * @apiGroup Cursos
+     * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 * 
      * @apiParam (Request Body/JSON) {String} [nome]   Nome do Curso.
 	 * @apiParam (Request Body/JSON) {Number} [anoCriacao]  Ano em que o curso foi criado.
 	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
-	* @apiSuccess {String[]} message Entities\\Curso: Instância atualizada com sucesso.
+	 * @apiSuccess {String[]} message Entities\\Curso: Instância atualizada com sucesso.
 	 * 
 	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
 	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
@@ -214,7 +218,7 @@ class CursoController extends APIController
 	/**
      * @api {delete} cursos/:codCurso Excluir um Curso.
      * @apiName delete
-     * @apiGroup Cursos
+     * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codCurso Identificador único do Curso.

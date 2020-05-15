@@ -11,10 +11,12 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	/**
 	 * @api {get} instituicoes-ensino-superior Solicitar dados de todas Instituições de Ensino Superior.
 	 * @apiName findAll
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
+	 * 
+	 * @apiError {InstituicaoEnsinoSuperior[]} Error InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
 	 */
     public function findAll()
     {
@@ -43,7 +45,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	/**
 	 * @api {get} instituicoes-ensino-superior/:codIes Solicitar dados de uma Instituição de Ensino Superior.
 	 * @apiName findById
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 *
 	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior requerida.
@@ -81,7 +83,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	/**
 	 * @api {post} instituicoes-ensino-superior Criar uma Instituição de Ensino Superior.
 	 * @apiName create
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {Number} codIes   Identificador único da Instituição de Ensino Superior.
@@ -137,8 +139,10 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	/**
      * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
      * @apiName update
-     * @apiGroup Instituições de Ensino Superior
+     * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
+	 * 
+	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
 	 * 
 	 * @apiParam (Request Body/JSON) {String} [nome]   Nome da Instituição de Ensino Superior.
 	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla da Instituição de Ensino Superior.
@@ -201,7 +205,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	/**
      * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
      * @apiName delete
-     * @apiGroup Instituições de Ensino Superior
+     * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.

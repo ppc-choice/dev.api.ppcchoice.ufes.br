@@ -11,10 +11,12 @@ class DepartamentoController extends APIController
 	/**
 	 * @api {get} departamentos Solicitar dados de todos Departamentos.
 	 * @apiName findAll
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
+	 * @apiSuccess {Departamentos[]} Departamento Array de objetos do tipo Departamento.
+	 * 
+	 * @apiError {Departamentos[]} Error Departamento Array de objetos do tipo Departamento.
 	 */
     public function findAll()
 	{
@@ -44,13 +46,13 @@ class DepartamentoController extends APIController
 	/**
 	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
 	 * @apiName findById
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
 	 *
 	 * @apiSuccess {String} nome   Nome do Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
+	 * @apiSuccess {String} abreviatura  Sigla do Departamento de tamanho 5.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * 
 	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
@@ -83,11 +85,11 @@ class DepartamentoController extends APIController
 	/**
 	 * @api {post} departamentos Criar um Departamento.
 	 * @apiName create
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento de tamanho 5.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
 	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância criada com sucesso.
@@ -144,11 +146,13 @@ class DepartamentoController extends APIController
 	/**
      * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
      * @apiName update
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
+	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
+	 * 
 	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla do Departamento de tamanho 5.
 	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]  Identificador único da Unidade de Ensino.
 	 *  
 	 * @apiSuccess {String[]} message Entities\\Departamento: Instância atualizada com sucesso.
@@ -214,7 +218,7 @@ class DepartamentoController extends APIController
 	/**
      * @api {delete} departamentos/:codDepto Excluir um Departamento.
      * @apiName delete
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codDepto Identificador único do Departamento.
