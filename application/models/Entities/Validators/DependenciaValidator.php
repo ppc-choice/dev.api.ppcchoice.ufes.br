@@ -13,7 +13,7 @@ class DependenciaValidator
             if($dependencia->getComponenteCurricular()->getPpc()->getCodPpc() !=  $dependencia->getPreRequisito()->getPpc()->getCodPpc()){
                 $context->addViolationAt(
                     'componenteCurricular',
-                    'As componentes curriculares devem pertencer ao mesmo ppc',
+                    'As componentes curriculares devem pertencer ao mesmo ppc.',
                     array(),
                     null
                 );
