@@ -23,6 +23,10 @@ class TransicaoTest extends TestCase
 
     const EXCEPTION = 'EXCEPTION';
 
+    const CONSTRAINT_PPC_IGUAL = 'CONSTRAINT_PPC_IGUAL';
+    
+    const CONSTRAINT_NOT_NULL = 'CONSTRAINT_NOT_NULL';
+
     // Mensagens padrão de retorno
     const STD_MSGS = [
         self::CREATED => 'Instância criada com sucesso.', 
@@ -30,6 +34,8 @@ class TransicaoTest extends TestCase
         self::UPDATED => 'Instância atualizada com sucesso.', 
         self::NOT_FOUND => 'Instância não encontrada.', 
         self::EXCEPTION => 'Ocorreu uma exceção ao persistir a instância.', 
+        self::CONSTRAINT_PPC_IGUAL => 'Auto-transição não é permitida.',
+        self::CONSTRAINT_NOT_NULL => 'Este valor não deve ser nulo.'
     ];
 
     public function setUp(){
@@ -42,10 +48,14 @@ class TransicaoTest extends TestCase
         $this->entity = null;
     }
 
-    /* 
-    * Retorna msg padrão 
+
+    /** 
+    * Gera chave para o array de mensagens padrões de retorno da API.
+    * @author Hádamo Egito (http://github.com/hadamo)  
+    * @param $category {string} Tipo da mensagem de retorno da API.
+    * @return string
     */
-    public function getStdMessage($category)
+    public function generateKey($category)
     {
         switch ($category) {
             case self::CREATED:
@@ -55,16 +65,59 @@ class TransicaoTest extends TestCase
                 break;
             case self::NOT_FOUND:
             case self::EXCEPTION:
+            case self::CONSTRAINT_PPC_IGUAL:
+            case self::CONSTRAINT_NOT_NULL:
                 $key = 'error';
                 break;
             default:
                 $key = 'key';
                 break;
         }
+        return $key;   
+    }
 
-        return [ $key => [
-            'Entities\\' . $this->entity . ': ' . self::STD_MSGS[$category]
-        ]];
+    /** 
+    * Gera mensagem para o array de mensagens padrões de retorno da API.
+    * @author Hádamo Egito (http://github.com/hadamo)  
+    * @param $subpath {string} Identifica o atributo da classe na qual o erro ocorre.
+    * @param $category {string} Tipo da mensagem de retorno da API.
+    * @return string
+    */
+    public function generateMessage($category, $subpath = '')
+    {
+        return 'Entities\\' . $this->entity . ( !empty($subpath) ? '.' . $subpath  :  $subpath  ) . ':    '  . self::STD_MSGS[$category];
+    }
+
+    /** 
+    * Gera objeto json com chave da categoria e mensagens padrões de retorno da API.
+    * @author Hádamo Egito (http://github.com/hadamo)  
+    * @param $subpath {string} Identifica o atributo da classe na qual o erro ocorre.
+    * @param $category {string} Tipo da mensagem de retorno da API.
+    * @return json
+    */
+    public function getStdMessage($category = 'NOT_FOUND', $subpath = '')
+    {
+        $key = $this->generateKey($category);
+        return json_encode( [ $key => [$this->generateMessage($category, $subpath)]]);
+    }
+
+    /** 
+    * Gera objeto json com todas as mensagens de erro.
+    * @author Hádamo Egito (http://github.com/hadamo)  
+    * @param $violation {Array} Array com categorias como chave e array de strings com todos os subpathes como valor.
+    * @return json
+    */
+    public function getMultipleErrorMessages($violations = [])
+    {
+        $messages = [];
+        foreach ($violations as $category => $subpathes) {
+            foreach ($subpathes as $subpath ) {
+                $message = $this->generateMessage($category,$subpath);
+                array_push($messages,$message);
+            }
+        }
+        $errorArray = ['error' => $messages];        
+        return json_encode($errorArray);
     }
 
     // Testes
@@ -80,6 +133,7 @@ class TransicaoTest extends TestCase
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        
     }
 
     public function testGetTransicaoPpc()
@@ -109,10 +163,13 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('POST', 'transicoes', ['json' => ['codPpcAtual' => 1,
         'codPpcAlvo' => 3],'http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::CREATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
 
@@ -122,10 +179,13 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('PUT', 'transicoes/1/3', ['json' => ['codPpcAtual' => 1,
         'codPpcAlvo' => 4],'http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::UPDATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
 
@@ -134,10 +194,13 @@ class TransicaoTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'transicoes/1/4', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::DELETED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
 
@@ -148,18 +211,13 @@ class TransicaoTest extends TestCase
     {
         $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1234/transicoes', ['http_errors' => FALSE] );
 
-        // $this->assertEquals(404, $response->getStatusCode());
-        
-        // $contentType = $response->getHeaders()["Content-Type"][0];
-        // $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
-        $message = json_encode($this->getStdMessage(self::NOT_FOUND));
+        $message = $this->getStdMessage(self::NOT_FOUND);
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertJsonStringEqualsJsonString($contentBody,$message);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     // Testes de erro por componente não existente ou não encontrado
@@ -167,10 +225,13 @@ class TransicaoTest extends TestCase
     {
         $response = $this->http->request('GET', 'unidades-ensino/1234/transicoes', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::NOT_FOUND);
+
+        $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPostTransicaoPpcNaoExistente()
@@ -218,26 +279,33 @@ class TransicaoTest extends TestCase
     
 
     //testes de erro por Auto-transição
-    public function testPostTransicaoMesmoPpc()
+    public function testPostTransicaoPpcIgual()
     {
         $response = $this->http->request('POST','transicoes', [ 'json' => ['codPpcAtual' => 1,
         'codPpcAlvo' => 1], 'http_errors' => FALSE] );
         
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::CONSTRAINT_PPC_IGUAL, 'ppcAtual');
+
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
+        
     }
 
-    public function testPutTransicaoMesmoPpc()
+    public function testPutTransicaoPpcIgual()
     {
         $response = $this->http->request('PUT','transicoes/1/2', [ 'json' => ['codPpcAtual' => 1,
         'codPpcAlvo' => 1], 'http_errors' => FALSE] );
         
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::CONSTRAINT_PPC_IGUAL, 'ppcAtual');
+
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
 
@@ -248,10 +316,14 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('POST','transicoes', [ 'json' => ['codPpcAtual' => null,
         'codPpcAlvo' => null], 'http_errors' => FALSE] );
         
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
     
     public function testPutTransicaoValoresNullBody()
@@ -259,10 +331,14 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('PUT','transicoes/1/2', [ 'json' =>  ['codPpcAtual' => null,
         'codPpcAlvo' => null], 'http_errors' => FALSE] );
         
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
     
