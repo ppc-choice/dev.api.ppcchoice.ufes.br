@@ -14,9 +14,9 @@ class CursoController extends APIController
 	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {Cursos[]} Curso Array de objetos do tipo Curso.
+	 * @apiSuccess {Curso[]} curso Array de objetos do tipo Curso.
 	 * 
-	 * @apiError {Cursos[]} Error Curso Array de objetos do tipo Curso.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
 	public function findAll()
 	{   
@@ -55,7 +55,7 @@ class CursoController extends APIController
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
     public function findById($codCurso)
 	{   
@@ -89,12 +89,12 @@ class CursoController extends APIController
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
-	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number{1950-2020}} anoCriacao  Ano em que o curso foi criado.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
 	 * @apiSuccess {String[]} message  Entities\\Curso: Instância criada com sucesso.
 	 * 
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */
 	public function create()
     {
@@ -151,13 +151,13 @@ class CursoController extends APIController
 	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 * 
      * @apiParam (Request Body/JSON) {String} [nome]   Nome do Curso.
-	 * @apiParam (Request Body/JSON) {Number} [anoCriacao]  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number{1950-2020}} [anoCriacao]  Ano em que o curso foi criado.
 	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
 	 * @apiSuccess {String[]} message Entities\\Curso: Instância atualizada com sucesso.
 	 * 
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
 	public function update($codCurso)
     {
@@ -223,9 +223,9 @@ class CursoController extends APIController
 	 * 
      * @apiParam {Number} codCurso Identificador único do Curso.
    	 * 
-	 * @apiSuccess {String[]} message  Entities\\Curso: Instância deletada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Curso: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a uma Curso cadastrado.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
      */
 	public function delete($codCurso)
 	{

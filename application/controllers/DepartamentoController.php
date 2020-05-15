@@ -14,9 +14,9 @@ class DepartamentoController extends APIController
 	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {Departamentos[]} Departamento Array de objetos do tipo Departamento.
+	 * @apiSuccess {Departamento[]} departamento Array de objetos do tipo Departamento.
 	 * 
-	 * @apiError {Departamentos[]} Error Departamento Array de objetos do tipo Departamento.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findAll()
 	{
@@ -52,10 +52,10 @@ class DepartamentoController extends APIController
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
 	 *
 	 * @apiSuccess {String} nome   Nome do Departamento.
-	 * @apiSuccess {String} abreviatura  Sigla do Departamento de tamanho 5.
+	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findById($codDepto)
 	{
@@ -89,12 +89,12 @@ class DepartamentoController extends APIController
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento de tamanho 5.
+	 * @apiParam (Request Body/JSON) {String{3..5}} abreviatura  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
 	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
@@ -152,13 +152,13 @@ class DepartamentoController extends APIController
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
 	 * 
 	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla do Departamento de tamanho 5.
+	 * @apiParam (Request Body/JSON) {String{3..5}} [abreviatura]  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]  Identificador único da Unidade de Ensino.
 	 *  
 	 * @apiSuccess {String[]} message Entities\\Departamento: Instância atualizada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function update($codDepto)
     {
@@ -183,7 +183,7 @@ class DepartamentoController extends APIController
 			if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
 			if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
-			$constraints = $this->validator->validate($depto, null, array('Departamento'));
+			$constraints = $this->validator->validate($depto);
 
 			if ( $constraints->success() ){
 				try {
@@ -223,9 +223,9 @@ class DepartamentoController extends APIController
 	 * 
      * @apiParam {Number} codDepto Identificador único do Departamento.
    	 * 
-	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância deletada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
      */
 	public function delete($codDepto)
 	{

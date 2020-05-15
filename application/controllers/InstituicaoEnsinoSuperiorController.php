@@ -14,9 +14,9 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
+	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicaoEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
 	 * 
-	 * @apiError {InstituicaoEnsinoSuperior[]} Error InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
     public function findAll()
     {
@@ -53,7 +53,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
 	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
 	 * 
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
     public function findById($codIes)
     {   
@@ -92,7 +92,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
 	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
@@ -149,8 +149,8 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
 	 * @apiSuccess {String[]} message Entities\\InstituicaoEnsinoSuperior: Instância atualizada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function update($codIes)
     {
@@ -210,9 +210,9 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
      * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
    	 * 
-	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância deletada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
      */
 	public function delete($codIes)
 	{
