@@ -9,8 +9,8 @@ class DependenciaRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select('curso.nome AS Curso, cc.codCompCurric, dp.nome AS nomeCompCurric', 
-                'pr.codCompCurric AS codPreRequisito,  disc.nome AS nomePreRequisito')
+            ->select('curso.nome AS Curso, cc.codCompCurric, disc.nome AS nomeCompCurric', 
+                'pr.codCompCurric AS codPreRequisito,  dp.nome AS nomePreRequisito')
             ->from('Entities\Dependencia', 'd')
             ->innerJoin('d.componenteCurricular', 'cc')
             ->innerJoin('cc.disciplina', 'disc')
@@ -25,8 +25,8 @@ class DependenciaRepository extends EntityRepository
     public function findById($codCompCurric, $codPreRequisito)
     {        
         return $this->_em->createQueryBuilder()
-            ->select('curso.nome AS Curso, cc.codCompCurric, dp.nome AS nomeCompCurric', 
-                'pr.codCompCurric AS codPreRequisito,  disc.nome AS nomePreRequisito')
+            ->select('curso.nome AS Curso, cc.codCompCurric, disc.nome AS nomeCompCurric', 
+                'pr.codCompCurric AS codPreRequisito,  dp.nome AS nomePreRequisito')
             ->from('Entities\Dependencia', 'd')
             ->innerJoin('d.componenteCurricular', 'cc')
             ->innerJoin('cc.disciplina', 'disc')
