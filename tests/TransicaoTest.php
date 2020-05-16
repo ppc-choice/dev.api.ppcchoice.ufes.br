@@ -221,7 +221,7 @@ class TransicaoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    // Testes de erro por componente não existente ou não encontrado
+    // Testes de erro por unidade de ensino não existente ou não encontrado
     public function testGetTransicaoUnidadeEnsinoNaoExistente()
     {
         $response = $this->http->request('GET', 'unidades-ensino/1234/transicoes', ['http_errors' => FALSE] );
@@ -235,15 +235,20 @@ class TransicaoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
+    // Testes de erro por ppc não existente ou não encontrado
     public function testPostTransicaoPpcNaoExistente()
     {
         $response = $this->http->request('POST', 'transicoes', ['json' => ['codPpcAtual' => 1234,
         'codPpcAlvo' => 1235],'http_errors' => FALSE] );
 
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
     public function testPutTransicaoPpcNaoExistenteUrl()
@@ -251,10 +256,13 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('PUT', 'transicoes/1234/1235', ['json' => ['codPpcAtual' => 1,
         'codPpcAlvo' => 2],'http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::NOT_FOUND);
+
+        $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPutTransicaoPpcNaoExistenteBody()
@@ -262,20 +270,28 @@ class TransicaoTest extends TestCase
         $response = $this->http->request('PUT', 'transicoes/1/2', ['json' => ['codPpcAtual' => 1234,
         'codPpcAlvo' => 1235],'http_errors' => FALSE] );
 
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testDeleteTransicaoComponenteNaoExistente()
+    public function testDeleteTransicaoPpcNaoExistente()
     {
         $response = $this->http->request('DELETE', 'transicoes/1234/1235', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::NOT_FOUND);
+
+        $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
+
     }
     
 
