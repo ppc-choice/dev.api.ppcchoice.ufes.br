@@ -13,10 +13,11 @@ class UnidadeEnsinoController extends APIController
      * @apiName findAll
      * @apiGroup Unidade de Ensino
      * 
-     * @apiSuccess {Number} codUnidadeEnsino Identificador único da unidade de ensino.
-     * @apiSuccess {String} nome Nome da instituição de ensino cuja qual a unidade de ensino está vinculada.
+     * @apiSuccess {UnidadeEnsino[]} unidadeEnsino Array de objetos do tipo Unidade de Ensino.
+     * @apiSuccess {Number} unidadeEnsino[codUnidadeEnsino] Identificador único da unidade de ensino.
+     * @apiSuccess {String} unidadeEnsino[nome] Nome da instituição de ensino cuja qual a unidade de ensino está vinculada.
      * 
-     * @apiError {String[]} 404 Nenhuma unidade de ensino foi encontrada.
+     * @apiError {String[]} error Entities\\UnidadeEnsino: Instância não encontrada.
      */
     public function findAll()
     {
@@ -53,7 +54,7 @@ class UnidadeEnsinoController extends APIController
      * @apiSuccess {String} cnpj CNPJ da unidade de ensino.
      * @apiSuccess {Number} codIes Identificador único da instutuição de ensino que a unidade de ensino está vinculada.
      * 
-     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
+     * @apiError {String[]} error Entities\\UnidadeEnsino: Instância não encontrada.
      */
     public function findById($codUnidadeEnsino)
     {
@@ -86,9 +87,9 @@ class UnidadeEnsinoController extends APIController
      * @apiParam (Request Body/JSON) {String} cnpj CNPJ da unidade de ensino.
      * @apiParam (Request Body/JSON) {Number} codIes Identificador único da instutuição de ensino que a unidade de ensino está vinculada.
      *
-     * @apiSuccess {String} message Unidade de Ensino criada com sucesso.
+     * @apiSuccess {String[]} message Entities\\UnidadeEnsino: Instância criada com sucesso.
      * 
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
     public function create()
     {
@@ -141,14 +142,14 @@ class UnidadeEnsinoController extends APIController
      * @apiGroup Unidade de Ensino
      *
      * @apiParam {Number} codUnidadeEnsino Codigo único de uma unidade de ensino.
-     * @apiParam (Request Body/JSON) {String} nome Nome da unidade de ensino.
-     * @apiParam (Request Body/JSON) {String} cnpj CNPJ da unidade de esnino.
-     * @apiParam (Request Body/JSON) {String} codIes Identificador único da instituição de ensino que a unidade de ensino está vinculada.
+     * @apiParam (Request Body/JSON) {String} [nome] Nome da unidade de ensino.
+     * @apiParam (Request Body/JSON) {String} [cnpj] CNPJ da unidade de esnino.
+     * @apiParam (Request Body/JSON) {String} [codIes] Identificador único da instituição de ensino que a unidade de ensino está vinculada.
      * 
-     * @apiSuccess {String} message Unidade de Ensino criada com sucesso.
+     * @apiSuccess {String[]} message Entities\\UnidadeEnsino: Instância atualizada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\UnidadeEnsino: Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
     public function update($codUnidadeEnsino)
     {
@@ -211,10 +212,10 @@ class UnidadeEnsinoController extends APIController
      *
      * @apiParam {Number} codUnidadeEnsino Identificador único de uma unidade de ensino.
      *
-     * @apiSuccess {String} message Unidade de Ensino deletada com sucesso.
+     * @apiSuccess {String[]} message Entities\\UnidadeEnsino: Instância removida com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\UnidadeEnsino: Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
     public function delete($codUnidadeEnsino)
     {
