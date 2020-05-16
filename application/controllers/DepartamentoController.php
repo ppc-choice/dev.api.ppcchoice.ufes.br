@@ -174,10 +174,14 @@ class DepartamentoController extends APIController
 		
         if(!is_null($depto))
         {            
-			if(isset($payload['codUnidadeEnsino']))
+			if(array_key_exists('codUnidadeEnsino', $payload))
             {
-                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
-				$depto->setUnidadeEnsino($ues);
+				if (is_numeric($payload['codUnidadeEnsino'])){
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+					$depto->setUnidadeEnsino($ues);
+				}else{
+					$depto->setUnidadeEnsino(null);
+				}
 			}
 			
 			if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);

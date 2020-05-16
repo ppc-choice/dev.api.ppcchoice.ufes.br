@@ -173,10 +173,14 @@ class CursoController extends APIController
 		
         if(!is_null($curso))
         {            
-			if(isset($payload['codUnidadeEnsino']))
+			if(array_key_exists('codUnidadeEnsino', $payload))
             {
-                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
-				$curso->setUnidadeEnsino($ues);
+				if (is_numeric($payload['codUnidadeEnsino'])){
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+					$curso->setUnidadeEnsino($ues);
+				}else{
+					$curso->setUnidadeEnsino(null);
+				}
 			}
 			
 			if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
