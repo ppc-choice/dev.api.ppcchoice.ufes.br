@@ -18,23 +18,21 @@ class ProjetoPedagogicoCursoValidator
             
             if($ppc->getSituacao()!=STTS_PPC_INATIVO)
             {
-                //Quando o codPpc é vazio é um solcitação de create e quando não é vazio é uma solicitação de update
-                if(is_null($ppc->getCodPpc()))
+                foreach ($ppcs as $auxppc) 
                 {
-                    foreach ($ppcs as $auxppc) 
+                    if($ppc->getCodPpc()!=$auxppc->getCodPpc())
                     {
                         if(strtoupper($ppc->getSituacao())== $auxppc->getSituacao())
                         {
                             $context->addViolationAt(
                                 'situacao',
-                                'Não é permitido mais de um projeto pedagogico de curso com a situação ' .strtoupper($ppc->getSituacao()),
+                                'Não é permitido mais de um Projeto Pedagogico de Curso com a situação CORRENTE OU ATIVO ANTERIOR.',
                                 array(),
                                 null
                             );
                             break;
-                        }                    
-                
-                    }
+                        }
+                    }                    
                 }
             }
         }
