@@ -105,18 +105,18 @@ class TransicaoTest extends TestCase
     /** 
     * Gera objeto json com todas as mensagens de erro.
     * @author Hádamo Egito (http://github.com/hadamo)  
-    * @param $violation {Array} Array com categorias como chave e array de strings com todos os subpathes como valor.
+    * @param $violation {Array} Array de arrays, os quais contém categoria e mensagem de erros
     * @return json
     */
     public function getMultipleErrorMessages($violations = [])
     {
         $messages = [];
-        foreach ($violations as $category => $subpathes) {
-            foreach ($subpathes as $subpath ) {
-                $message = $this->generateMessage($category,$subpath);
-                array_push($messages,$message);
-            }
+        foreach ($violations as $content)
+        {
+            $message = $this->generateMessage($content[0],$content[1]);
+            array_push($messages,$message);
         }
+
         $errorArray = ['error' => $messages];        
         return json_encode($errorArray);
     }
@@ -244,7 +244,8 @@ class TransicaoTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'ppcAtual'],
+                    [self::CONSTRAINT_NOT_NULL,'ppcAlvo'] ]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -273,7 +274,8 @@ class TransicaoTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'ppcAtual'],
+                    [self::CONSTRAINT_NOT_NULL,'ppcAlvo'] ]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -336,7 +338,8 @@ class TransicaoTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'ppcAtual'],
+                    [self::CONSTRAINT_NOT_NULL,'ppcAlvo'] ]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -351,7 +354,8 @@ class TransicaoTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['ppcAtual','ppcAlvo'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'ppcAtual'],
+                    [self::CONSTRAINT_NOT_NULL,'ppcAlvo'] ]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);

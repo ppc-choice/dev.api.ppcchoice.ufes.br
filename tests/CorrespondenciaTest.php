@@ -121,18 +121,18 @@ class CorrespondenciaTest extends TestCase
     /** 
     * Gera objeto json com todas as mensagens de erro.
     * @author Hádamo Egito (http://github.com/hadamo)  
-    * @param $violation {Array} Array com categorias como chave e array de strings com todos os subpathes como valor.
+    * @param $violation {Array} Array de arrays, os quais contém categoria e mensagem de erros
     * @return json
     */
     public function getMultipleErrorMessages($violations = [])
     {
         $messages = [];
-        foreach ($violations as $category => $subpathes) {
-            foreach ($subpathes as $subpath ) {
-                $message = $this->generateMessage($category,$subpath);
-                array_push($messages,$message);
-            }
+        foreach ($violations as $content)
+        {
+            $message = $this->generateMessage($content[0],$content[1]);
+            array_push($messages,$message);
         }
+
         $errorArray = ['error' => $messages];        
         return json_encode($errorArray);
     }
@@ -266,7 +266,8 @@ class CorrespondenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['componenteCurricular','componenteCurricularCorresp'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL ,'componenteCurricular'],
+                    [self::CONSTRAINT_NOT_NULL ,'componenteCurricularCorresp'] ]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -295,7 +296,8 @@ class CorrespondenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['componenteCurricular','componenteCurricularCorresp'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL ,'componenteCurricular'],
+                    [self::CONSTRAINT_NOT_NULL ,'componenteCurricularCorresp'] ];  
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -443,7 +445,9 @@ class CorrespondenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['componenteCurricular','componenteCurricularCorresp','percentual'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL ,'componenteCurricular'],
+                    [self::CONSTRAINT_NOT_NULL ,'componenteCurricularCorresp'],   
+                    [self::CONSTRAINT_NOT_NULL ,'percentual'] ];   
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -458,7 +462,9 @@ class CorrespondenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['componenteCurricular','componenteCurricularCorresp','percentual'] ]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL ,'componenteCurricular'],
+                    [self::CONSTRAINT_NOT_NULL ,'componenteCurricularCorresp'],   
+                    [self::CONSTRAINT_NOT_NULL ,'percentual'] ];  
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);

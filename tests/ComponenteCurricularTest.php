@@ -116,18 +116,18 @@ class ComponenteCurricularTest extends TestCase
     /** 
     * Gera objeto json com todas as mensagens de erro.
     * @author Hádamo Egito (http://github.com/hadamo)  
-    * @param $violation {Array} Array com categorias como chave e array de strings com todos os subpathes como valor.
+    * @param $violation {Array} Array de arrays, os quais contém categoria e mensagem de erros
     * @return json
     */
     public function getMultipleErrorMessages($violations = [])
     {
         $messages = [];
-        foreach ($violations as $category => $subpathes) {
-            foreach ($subpathes as $subpath ) {
-                $message = $this->generateMessage($category,$subpath);
-                array_push($messages,$message);
-            }
+        foreach ($violations as $content)
+        {
+            $message = $this->generateMessage($content[0],$content[1]);
+            array_push($messages,$message);
         }
+
         $errorArray = ['error' => $messages];        
         return json_encode($errorArray);
     }
@@ -513,14 +513,19 @@ class ComponenteCurricularTest extends TestCase
             'periodo'=> null,
             'codPpc'=> null,
             'credito'=>  null,
-            'tipo'=>  'OPTATIVA'
+            'tipo'=>  null
         ],'http_errors' => FALSE] );
 
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['periodo', 'credito', 'disciplina', 'ppc']]; 
+        $violations = [[self::CONSTRAINT_NOT_NULL,'periodo'],
+                    [self::CONSTRAINT_NOT_NULL,  'credito'],
+                    [self::CONSTRAINT_NOT_NULL,'tipo'],
+                    [self::CONSTRAINT_NOT_BLANK,'tipo'],
+                    [self::CONSTRAINT_NOT_NULL,'disciplina'],
+                    [self::CONSTRAINT_NOT_NULL,'ppc']]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -537,56 +542,18 @@ class ComponenteCurricularTest extends TestCase
             'periodo'=> null,
             'codPpc'=> null,
             'credito'=>  null,
-        ],'http_errors' => FALSE] );
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();        
-        
-        $violations = [self::CONSTRAINT_NOT_NULL => ['periodo', 'credito', 'disciplina', 'ppc'] ]; 
-        $errorArray = $this->getMultipleErrorMessages($violations);       
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertContains($errorArray,$contentBody);
-    }
-
-    // Testes com valor null para tipo
-    public function testPostComponenteTipoNull()
-    {
-        $response = $this->http->request('POST', 'componentes-curriculares', 
-        ['json' => [
-            'codDepto'=>  1,
-            'numDisciplina'=> 6,
-            'periodo'=> 5,
-            'codPpc'=> 3,
-            'credito'=>  2,
             'tipo'=>  null
         ],'http_errors' => FALSE] );
 
-        
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['tipo'], 
-                    self::CONSTRAINT_NOT_BLANK => ['tipo']]; 
-        $errorArray = $this->getMultipleErrorMessages($violations);       
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertContains($errorArray,$contentBody);
-
-    }  
-
-    public function testPutComponenteTipoNull()
-    {
-        $response = $this->http->request('PUT', 'componentes-curriculares/1', 
-        ['json' => [
-            'tipo' => null
-        ],'http_errors' => FALSE] );
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();        
-        
-        $violations = [self::CONSTRAINT_NOT_NULL => ['tipo'], 
-                    self::CONSTRAINT_NOT_BLANK => ['tipo']];
+        $violations = [[self::CONSTRAINT_NOT_NULL,'periodo'],
+                    [self::CONSTRAINT_NOT_NULL,  'credito'],
+                    [self::CONSTRAINT_NOT_NULL,'tipo'],
+                    [self::CONSTRAINT_NOT_BLANK,'tipo'],
+                    [self::CONSTRAINT_NOT_NULL,'disciplina'],
+                    [self::CONSTRAINT_NOT_NULL,'ppc']]; 
         $errorArray = $this->getMultipleErrorMessages($violations);       
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
