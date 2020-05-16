@@ -14,7 +14,9 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiName findAll
     * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiSuccess {String[]} Projeto Pedagógico Curso Array de objetos do tipo Projeto Pesagógico Curso.
+    * @apiSuccess {ProjetoPedagogicoCurso[]} projetoPedagógicoCurso Array de objetos do tipo Projeto Pesagógico Curso.
+    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.    *
     */
     public function findAll()
     {
@@ -62,8 +64,7 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
     * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.      
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto Pedagógico de Curso cadastrado.
-    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.    *
     */
     public function findById($codPpc)
     {
@@ -91,7 +92,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }  
 
     /**
-    * @api {post} projetos-pedagogicos-curso Criar novo Projeto Pedagógico de Curso.
+    * @api {post} projetos-pedagogicos-curso Criar um novo Projeto Pedagógico de Curso.
     *
     * @apiName create
     * @apiGroup Projeto Pedagógico Curso
@@ -109,10 +110,10 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiParam (Request Body/JSON) {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
     * @apiParam (Request Body/JSON) {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     *
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso criado com sucesso.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância criada com sucesso.
     *
-    * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
-    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
+    * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
     */
     
     public function create()
@@ -199,7 +200,7 @@ class ProjetoPedagogicoCursoController extends APIController
                 $this->entityManager->flush();
     
                 $this->apiReturn(array(
-                    'mesage' => $this->stdMessage(STD_MSG_CREATED),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ),self::HTTP_OK
                 );
     
@@ -219,7 +220,8 @@ class ProjetoPedagogicoCursoController extends APIController
     }   
 
     /**
-    * @api {PUT} projetos-pedagogicos-curso/:codPpc Atualizar Projeto Pedagógico de Curso.
+    * @api {PUT} projetos-pedagogicos-curso/:codPpc Atualizar um Projeto Pedagógico de Curso.
+    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiName update
     * @apiGroup Projeto Pedagógico Curso
@@ -237,11 +239,10 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiParam (Request Body/JSON) {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} [situacao]  Situação em que se encontra o projeto pedagógico de curso.
     * @apiParam (Request Body/JSON) {String} [codCurso]  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     * 
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso atualizado com sucesso.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância atualizada com sucesso.
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto pedagógico de Curso cadastrado.
-    * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
-    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
+    * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
     */
     public function update($codPpc)
     {
@@ -297,12 +298,18 @@ class ProjetoPedagogicoCursoController extends APIController
 
             if ( $constraints->success() )
             {
+                $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
+                        $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
+                        $ppc->getChTotalProjetoConclusao()+ $ppc->getChTotalEstagio();
+            
+                $ppc->setChTotal($chtotal);
+                
                 try {
                     $this->entityManager->merge($ppc);
                     $this->entityManager->flush();
                     
                     $this->apiReturn(array(
-                        'mesage' => $this->stdMessage(STD_MSG_UPDATED),
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK
                      );
                     
@@ -335,9 +342,9 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiName delete
     * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso deletado com sucesso.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância removida com sucesso.
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto Pedagógico de Curso cadastrado.
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     */
     public function delete($codPpc)
 	{
