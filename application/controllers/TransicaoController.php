@@ -13,9 +13,13 @@ class TransicaoController extends APIController
      * @apiName findAll
      * @apiGroup Transição
      *
-     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
+     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[ppcAtual] Nome do curso e ano de aprovação do ppc atual.
+     * @apiSuccess {Number} transicao[codPpcAtual] Identificador único de ppc.
+     * @apiSuccess {String} transicao[ppcAlvo] Nome do curso e ano de aprovação do ppc alvo.
+     * @apiSuccess {Number} transicao[codPpcAlvo] Identificador único de ppc.
      *
-     * @apiError {String[]} 404 Nenhuma transição encontrada.
+     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
      */
     public function findAll()
 	{
@@ -50,11 +54,11 @@ class TransicaoController extends APIController
      * 
      * @apiParam {Number} codUnidadeEnsino Identificador único de unidade de ensino.
      * 
-     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
-     * @apiSuccess {String} nomeCurso Nome do curso e Ano de aprovação do ppc atual da transição.
-     * @apiSuccess {Number} codPpc Código do ppc atual da transição.
+     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[nomeCurso] Nome do curso e Ano de aprovação do ppc atual da transição.
+     * @apiSuccess {Number} transicao[codPpc] Identificador único de ppc
      * 
-     * @apiError {String[]} 404 O <code>codUnidadeEnsino</code> não corresponde a uma unidade de ensino cadastrada.
+     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
      * 
      */
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
@@ -88,13 +92,13 @@ class TransicaoController extends APIController
      *
      * @apiParam {Number} codPpcAtual Identificador único de ppc.
      *
-     * @apiSuccess {Transicao[]} transicoes Array de objetos do tipo transição.
-     * @apiSuccess {String} ppcAtual Nome do curso e Ano de aprovação do ppc atual da transição.
-     * @apiSuccess {String} ppcAlvo Nome do curso e Ano de aprovação do ppc alvo da transição.
-     * @apiSuccess {Number} codPpcAtual Código do ppc atual da transição.
-     * @apiSuccess {Number} codPpcAlvo Código do ppc alvo da transição.
+     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[ppcAtual] Nome do curso e Ano de aprovação do ppc atual da transição.
+     * @apiSuccess {String} transicao[ppcAlvo] Nome do curso e Ano de aprovação do ppc alvo da transição.
+     * @apiSuccess {Number} transicao[codPpcAtual] Identificador único de ppc.
+     * @apiSuccess {Number} transicao[codPpcAlvo] Identificador único de ppc.
      * 
-     * @apiError {String[]} 404 O <code>codPpcAtual</code> não corresponde a um ppc cadastrado.
+     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
      */
     public function findByCodPpc($codPpcAtual)
 	{
@@ -126,12 +130,13 @@ class TransicaoController extends APIController
      * @apiName create
      * @apiGroup Transição
      * 
-     * @apiParam (Request Body/JSON) {String} codPpcAtual  Identificador único do ppc atual.
-     * @apiParam (Request Body/JSON) {String} codPpcAlvo  Identificador único do ppc alvo.
+     * @apiParam (Request Body/JSON) {Number} codPpcAtual  Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number} codPpcAlvo  Identificador único de ppc.
      * 
      * @apiSuccess {String[]} message  Entities\\Transicao: Instância criada com sucesso.
      * 
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
      */
     public function create()
     {
@@ -189,13 +194,14 @@ class TransicaoController extends APIController
      * 
      * @apiParam {Number} codPpcAtual Identificador único de ppc.
      * @apiParam {Number} codPpcAlvo Identificador único de ppc.
-     * @apiParam (Request Body/JSON) {String} [codPpcAtual]  Identificador único de ppc atual.
-     * @apiParam (Request Body/JSON) {String} [codPpcAlvo]  Identificador único de ppc alvo.
+     * @apiParam (Request Body/JSON) {Number} [codPpcAtual]  Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number} [codPpcAlvo]  Identificador único de ppc.
      * 
      * @apiSuccess {String[]} message  Entities\\Transicao: Instância atualizada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
      */
     public function update($codPpcAtual,$codPpcAlvo)
     {
@@ -274,8 +280,9 @@ class TransicaoController extends APIController
      * 
      * @apiSuccess {String[]} message  Entities\\Transicao: Instância deletada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codPpcAtual</code> ou <code>codPpcAlvo</code> não correspondem a ppc cadastrados.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
      */
     public function delete($codPpcAtual,$codPpcAlvo )
     {
