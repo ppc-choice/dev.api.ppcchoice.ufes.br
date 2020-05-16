@@ -69,7 +69,8 @@ class CursoTest extends TestCase
     }
     
     // Testes
-    // Rota desconhecida
+    // ROTAS
+    //GET
     public function testGetCurso()
     {
         $response = $this->http->request('GET', 'cursos', ['http_errors' => FALSE] );
@@ -116,6 +117,7 @@ class CursoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
+    //PUT
     public function testPutCursoNaoExistente()
     {
         $response = $this->http->request('PUT', 'cursos/111', ['http_errors' => FALSE] );
@@ -139,6 +141,7 @@ class CursoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
+    //DELETE
     public function testDeleteCursoNaoExistente()
     {
         $response = $this->http->request('DELETE', 'cursos/157', ['http_errors' => FALSE] );

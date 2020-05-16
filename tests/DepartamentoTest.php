@@ -70,7 +70,8 @@ class DepartamentoTest extends TestCase
     
     // Testes
     //ROTAS
-    /*public function testGetDepartamento()
+    //GET
+    public function testGetDepartamento()
     {
         $response = $this->http->request('GET', 'departamentos', ['http_errors' => FALSE] );
 
@@ -91,7 +92,7 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
-    }*/
+    }
     
     public function testGetDepartamentoNaoExistente()
     {
@@ -116,6 +117,7 @@ class DepartamentoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
+    //PUT
     public function testPutDepartamentoNaoExistente()
     {
         $response = $this->http->request('PUT', 'departamentos/111', ['http_errors' => FALSE] );
@@ -139,6 +141,7 @@ class DepartamentoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
+    //DELETE
     public function testDeleteDepartamentoNaoExistente()
     {
         $response = $this->http->request('DELETE', 'departamentos/157', ['http_errors' => FALSE] );

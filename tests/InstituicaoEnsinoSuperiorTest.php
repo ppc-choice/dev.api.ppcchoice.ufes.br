@@ -71,7 +71,7 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     // Testes
     //ROTAS
     //GET
-    /*public function testGetIes()
+    public function testGetIes()
     {
         $response = $this->http->request('GET', 'instituicoes-ensino-superior', ['http_errors' => FALSE] );
 
@@ -92,7 +92,7 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
-    }*/
+    }
 
     public function testGetIesNaoExistente()
     {
