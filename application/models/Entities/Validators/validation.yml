@@ -112,6 +112,8 @@ Entities\Departamento:
         unidadeEnsino:
             - NotNull:
                 message: Este valor não deve ser nulo.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
             - Type: 
                 type: object
                 message: Este valor deve ser do tipo {{ type }}.
