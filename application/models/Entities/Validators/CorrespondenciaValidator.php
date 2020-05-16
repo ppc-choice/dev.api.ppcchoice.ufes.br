@@ -34,22 +34,25 @@ class CorrespondenciaValidator
         {
             $ppc1 = $compCurric->getPpc();
             $ppc2 = $compCorresp->getPpc();
-            if(!is_null($ppc1) && !is_null($ppc2))
+            if($ppc1->getCodPpc() != $ppc2->getCodPpc())
             {
-                $doctrine = new \Doctrine;
-                $em = $doctrine->getEntitymanager();
-                $transicao = $em->find('Entities\Transicao',
-                array('ppcAtual' => $ppc1->getCodPpc(), 'ppcAlvo' => $ppc2->getCodPpc()));
-                if(is_null($transicao))
+                if(!is_null($ppc1) && !is_null($ppc2))
                 {
-                    $context->addViolationAt(
-                        'transicao',
-                        'Os Componentes curriculares devem ser de ppcs com transição mapeada entre si.',
-                        array(),
-                        null
-                    );
+                    $doctrine = new \Doctrine;
+                    $em = $doctrine->getEntitymanager();
+                    $transicao = $em->find('Entities\Transicao',
+                    array('ppcAtual' => $ppc1->getCodPpc(), 'ppcAlvo' => $ppc2->getCodPpc()));
+                    if(is_null($transicao))
+                    {
+                        $context->addViolationAt(
+                            'componenteCurricular',
+                            'Os Componentes curriculares devem ser de ppcs com transição mapeada entre si.',
+                            array(),
+                            null
+                        );
+                    }
                 }
-            }
+            }   
         }
     }
 }
