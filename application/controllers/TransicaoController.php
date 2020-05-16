@@ -13,11 +13,11 @@ class TransicaoController extends APIController
      * @apiName findAll
      * @apiGroup Transição
      *
-     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
-     * @apiSuccess {String} transicao[ppcAtual] Nome do curso e ano de aprovação do ppc atual.
-     * @apiSuccess {Number} transicao[codPpcAtual] Identificador único de ppc.
-     * @apiSuccess {String} transicao[ppcAlvo] Nome do curso e ano de aprovação do ppc alvo.
-     * @apiSuccess {Number} transicao[codPpcAlvo] Identificador único de ppc.
+     * @apiSuccess {Transicao[]} transicao          Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[ppcAtual]     Nome do curso e ano de aprovação do ppc atual.
+     * @apiSuccess {Number} transicao[codPpcAtual]  Identificador único de ppc.
+     * @apiSuccess {String} transicao[ppcAlvo]      Nome do curso e ano de aprovação do ppc alvo.
+     * @apiSuccess {Number} transicao[codPpcAlvo]   Identificador único de ppc.
      *
      * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
      */
@@ -52,13 +52,13 @@ class TransicaoController extends APIController
      * @apiName findByCodUnidadeEnsino
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codUnidadeEnsino Identificador único de unidade de ensino.
+     * @apiParam {Number} codUnidadeEnsino          Identificador único de unidade de ensino.
      * 
-     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
-     * @apiSuccess {String} transicao[nomeCurso] Nome do curso e Ano de aprovação do ppc atual da transição.
-     * @apiSuccess {Number} transicao[codPpc] Identificador único de ppc
+     * @apiSuccess {Transicao[]} transicao          Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[nomeCurso]    Nome do curso e Ano de aprovação do ppc atual da transição.
+     * @apiSuccess {Number} transicao[codPpc]       Identificador único de ppc
      * 
-     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error   Entities\\Transicao:    Instância não encontrada.
      * 
      */
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
@@ -92,13 +92,13 @@ class TransicaoController extends APIController
      *
      * @apiParam {Number} codPpcAtual Identificador único de ppc.
      *
-     * @apiSuccess {Transicao[]} transicao Array de objetos do tipo transição.
-     * @apiSuccess {String} transicao[ppcAtual] Nome do curso e Ano de aprovação do ppc atual da transição.
-     * @apiSuccess {String} transicao[ppcAlvo] Nome do curso e Ano de aprovação do ppc alvo da transição.
-     * @apiSuccess {Number} transicao[codPpcAtual] Identificador único de ppc.
-     * @apiSuccess {Number} transicao[codPpcAlvo] Identificador único de ppc.
+     * @apiSuccess {Transicao[]} transicao          Array de objetos do tipo transição.
+     * @apiSuccess {String} transicao[ppcAtual]     Nome do curso e Ano de aprovação do ppc atual da transição.
+     * @apiSuccess {String} transicao[ppcAlvo]      Nome do curso e Ano de aprovação do ppc alvo da transição.
+     * @apiSuccess {Number} transicao[codPpcAtual]  Identificador único de ppc.
+     * @apiSuccess {Number} transicao[codPpcAlvo]   Identificador único de ppc.
      * 
-     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error   Entities\\Transicao:    Instância não encontrada.
      */
     public function findByCodPpc($codPpcAtual)
 	{
@@ -130,13 +130,13 @@ class TransicaoController extends APIController
      * @apiName create
      * @apiGroup Transição
      * 
-     * @apiParam (Request Body/JSON) {Number} codPpcAtual  Identificador único de ppc.
-     * @apiParam (Request Body/JSON) {Number} codPpcAlvo  Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number} codPpcAtual   Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number} codPpcAlvo    Identificador único de ppc.
      * 
-     * @apiSuccess {String[]} message  Entities\\Transicao: Instância criada com sucesso.
+     * @apiSuccess {String[]} message   Entities\\Transicao: Instância criada com sucesso.
      * 
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
      */
     public function create()
     {
@@ -192,16 +192,17 @@ class TransicaoController extends APIController
      * @apiName update
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codPpcAtual Identificador único de ppc.
-     * @apiParam {Number} codPpcAlvo Identificador único de ppc.
+     * @apiParam {Number} codPpcAtual   Identificador único de ppc.
+     * @apiParam {Number} codPpcAlvo    Identificador único de ppc.
+     * 
      * @apiParam (Request Body/JSON) {Number} [codPpcAtual]  Identificador único de ppc.
      * @apiParam (Request Body/JSON) {Number} [codPpcAlvo]  Identificador único de ppc.
      * 
      * @apiSuccess {String[]} message  Entities\\Transicao: Instância atualizada com sucesso.
      * 
-     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * @apiError {String[]} error       Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
      */
     public function update($codPpcAtual,$codPpcAlvo)
     {
@@ -275,14 +276,14 @@ class TransicaoController extends APIController
      * @apiName delete
      * @apiGroup Transição
      * 
-     * @apiParam {Number} codPpcAtual Identificador único de ppc.
-     * @apiParam {Number} codPpcAlvo Identificador único de ppc.
+     * @apiParam {Number} codPpcAtual   Identificador único de ppc.
+     * @apiParam {Number} codPpcAlvo    Identificador único de ppc.
      * 
-     * @apiSuccess {String[]} message  Entities\\Transicao: Instância deletada com sucesso.
+     * @apiSuccess {String[]} message   Entities\\Transicao: Instância deletada com sucesso.
      * 
-     * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * @apiError {String[]} error   Entities\\Transicao:    Instância não encontrada.
+     * @apiError {String[]} error   Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error   Ocorreu uma exceção ao persistir a instância.
      */
     public function delete($codPpcAtual,$codPpcAlvo )
     {

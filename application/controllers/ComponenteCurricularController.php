@@ -138,7 +138,7 @@ class ComponenteCurricularController extends APIController
      * 
      * @apiParam (Request Body/JSON) {Number} periodo  Período da componente.
      * @apiParam (Request Body/JSON) {Number} credito  Crédito da componente.
-     * @apiParam (Request Body/JSON) {String} tipo  Tipo da componente.
+     * @apiParam (Request Body/JSON) {String = "OBRIGATORIA", "OPTATIVA", "ESTAGIO", "ATIVIDADE COMPLEMENTAR", "ATIVIDADE EXTENSAO", "PROJETO CONCLUSAO"} tipo  Tipo da componente.
      * @apiParam (Request Body/JSON) {Number} codDepto  Identificador único de departamento e parte do identificador único de disciplina.
      * @apiParam (Request Body/JSON) {Number} numDisciplina  Número da disicplina, parte do identificador único de disciplina.
      * @apiParam (Request Body/JSON) {Number} codPpc  Identificador único de ppc.
@@ -214,7 +214,7 @@ class ComponenteCurricularController extends APIController
      * @apiParam {Number} codCompCurric Identificador único de componente curricular.
      * @apiParam (Request Body/JSON) {Number} [periodo]  Período da componente.
      * @apiParam (Request Body/JSON) {Number} [credito]  Crédito da componente.
-     * @apiParam (Request Body/JSON) {String} [tipo]  Tipo da componente.
+     * @apiParam (Request Body/JSON) {String = "OBRIGATORIA", "OPTATIVA", "ESTAGIO", "ATIVIDADE COMPLEMENTAR", "ATIVIDADE EXTENSAO", "PROJETO CONCLUSAO"} [tipo]  Tipo da componente.
      * @apiParam (Request Body/JSON) {Number} [codDepto]  Identificador único de departamento.
      * @apiParam (Request Body/JSON) {Number} [numDisciplina]  Número da disciplina, parte do idenficador único de disciplina.
      * @apiParam (Request Body/JSON) {Number} [codPpc]  Identificador único de ppc.

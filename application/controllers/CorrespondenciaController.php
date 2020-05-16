@@ -101,10 +101,10 @@ class CorrespondenciaController extends APIController
      *
      * @apiSuccess {String} nomeDisciplina Nome de disciplina.
      * @apiSuccess {Number} codCompCurric Identificador único de componente curricular.
-     * @apiSuccess {String} numDisciplina Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number} numDisciplina Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {String} nomeDisciplinaCorresp Nome de disciplina.
      * @apiSuccess {Number} codCompCorresp Identificador único de componente curricular.
-     * @apiSuccess {String} numDisciplinaCorresp Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number} numDisciplinaCorresp Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number} percentual Percentual de correspondência entre componentes.
      * 
      * @apiError {String[]} error Entities\\Correspondencia:    Instância não encontrada.
@@ -138,13 +138,15 @@ class CorrespondenciaController extends APIController
      * @apiName create
      * @apiGroup Correspondência
      * 
-     * @apiParam (Request Body/JSON) {Number} codCompCurric  Identificador único de componente curricular.
-     * @apiParam (Request Body/JSON) {Number} codCompCurricCorresp  Identificador único de componente curricular.
-     * @apiParam (Request Body/JSON) {Number} percentual  Percentual de correspondência entre componentes.
-     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância criada com sucesso.
+     * @apiParam (Request Body/JSON) {Number}       codCompCurric           Identificador único de componente curricular.
+     * @apiParam (Request Body/JSON) {Number}       codCompCurricCorresp    Identificador único de componente curricular.
+     * @apiParam (Request Body/JSON) {Number}       percentual              Percentual de correspondência entre componentes.
      * 
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * 
+     * @apiSuccess {String[]} message       Entities\\Correspondencia: Instância criada com sucesso.
+     * 
+     * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
      */
     public function create()
     {
