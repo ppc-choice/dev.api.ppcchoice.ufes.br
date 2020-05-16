@@ -13,12 +13,12 @@ class CorrespondenciaController extends APIController
      * @apiName findAll
      * @apiGroup Correspondência
      *
-     * @apiSuccess {Correspondencia[]}   correspondencia Array de objetos do tipo Correspondência.
-     * @apiSuccess {Number}   correspondencia[codCompCurric] Identificador único de componente curricular.
-     * @apiSuccess {String}   correspondencia[depto] Abreviatura de departamento.
-     * @apiSuccess {Number}   correspondencia[numDisciplina] Número de disciplina, parte do identificador único de disciplina.
-     * @apiSuccess {String}   correspondencia[NomeDisciplina] Nome de disciplina
-     * @apiSuccess {Number}   correspondencia[codCompCorresp] Identificador único de componente curricular.
+     * @apiSuccess {Correspondencia[]}   correspondencia        Array de objetos do tipo Correspondência.
+     * @apiSuccess {Number}   correspondencia[codCompCurric]    Identificador único de componente curricular.
+     * @apiSuccess {String}   correspondencia[depto]            Abreviatura de departamento.
+     * @apiSuccess {Number}   correspondencia[numDisciplina]    Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {String}   correspondencia[NomeDisciplina]   Nome de disciplina
+     * @apiSuccess {Number}   correspondencia[codCompCorresp]   Identificador único de componente curricular.
      * @apiSuccess {String}   correspondencia[deptoDisciplinaCorresp] Abreviatura de departamento.
      * @apiSuccess {Number}   correspondencia[numDisciplinaCorresp] Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {String}   correspondencia[NomeDisciplinaCorresp] Nome de disciplina
@@ -56,15 +56,15 @@ class CorrespondenciaController extends APIController
      * @apiName findAllByCodPpc
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codPpcAtual Identificador único do ppc atual.
-     * @apiParam {Number} codPpcAlvo Identificador único do ppc alvo.
+     * @apiParam {Number} codPpcAtual   Identificador único do ppc atual.
+     * @apiParam {Number} codPpcAlvo    Identificador único do ppc alvo.
      *
-     * @apiSuccess {Correspondencia[]} correspondencia Array de objetos do tipo Correspondência.
-     * @apiSuccess {Number} correspondencia[codCompCurric] Identificador único de componente curricular.
-     * @apiSuccess {Number} correspondencia[codCompCorresp] Identificador único de componente curricular.
-     * @apiSuccess {Number} correspondencia[percentual] Percentual de correspondência entre componentes.
+     * @apiSuccess {Correspondencia[]}  correspondencia                     Array de objetos do tipo Correspondência.
+     * @apiSuccess {Number}             correspondencia[codCompCurric]      Identificador único de componente curricular.
+     * @apiSuccess {Number}             correspondencia[codCompCorresp]     Identificador único de componente curricular.
+     * @apiSuccess {Number}             correspondencia[percentual]         Percentual de correspondência entre componentes.
      * 
-     * @apiError {String[]} error Entities\\Correspondencia:    Instância não encontrada.
+     * @apiError {String[]} error       Entities\\Correspondencia:    Instância não encontrada.
      */
     public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
 	{
@@ -96,18 +96,18 @@ class CorrespondenciaController extends APIController
      * @apiName findByCodCompCurric
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codCompCurric Identificador único de componente curricular.
-     * @apiParam {Number} codCompCorresp Identificador único de componente curricular.
+     * @apiParam {Number}   codCompCurric     Identificador único de componente curricular.
+     * @apiParam {Number}   codCompCorresp    Identificador único de componente curricular.
      *
-     * @apiSuccess {String} nomeDisciplina Nome de disciplina.
-     * @apiSuccess {Number} codCompCurric Identificador único de componente curricular.
-     * @apiSuccess {Number} numDisciplina Número de disciplina, parte do identificador único de disciplina.
-     * @apiSuccess {String} nomeDisciplinaCorresp Nome de disciplina.
-     * @apiSuccess {Number} codCompCorresp Identificador único de componente curricular.
-     * @apiSuccess {Number} numDisciplinaCorresp Número de disciplina, parte do identificador único de disciplina.
-     * @apiSuccess {Number} percentual Percentual de correspondência entre componentes.
+     * @apiSuccess {String} nomeDisciplina          Nome de disciplina.
+     * @apiSuccess {Number} codCompCurric           Identificador único de componente curricular.
+     * @apiSuccess {Number} numDisciplina           Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {String} nomeDisciplinaCorresp   Nome de disciplina.
+     * @apiSuccess {Number} codCompCorresp          Identificador único de componente curricular.
+     * @apiSuccess {Number} numDisciplinaCorresp    Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number} percentual              Percentual de correspondência entre componentes.
      * 
-     * @apiError {String[]} error Entities\\Correspondencia:    Instância não encontrada.
+     * @apiError {String[]} error   Entities\\Correspondencia:    Instância não encontrada.
      */
     public function findByCodCompCurric($codCompCurric,$codCompCorresp)
 	{
@@ -143,10 +143,10 @@ class CorrespondenciaController extends APIController
      * @apiParam (Request Body/JSON) {Number}       percentual              Percentual de correspondência entre componentes.
      * 
      * 
-     * @apiSuccess {String[]} message       Entities\\Correspondencia: Instância criada com sucesso.
+     * @apiSuccess {String[]}   message     Entities\\Correspondencia: Instância criada com sucesso.
      * 
-     * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
+     * @apiError {String[]}     error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]}     error       Ocorreu uma exceção ao persistir a instância.
      */
     public function create()
     {
@@ -205,17 +205,18 @@ class CorrespondenciaController extends APIController
      * @apiName update
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codCompCurric Identificador único de componente curricular.
-     * @apiParam {Number} codCompCorresp Identificador único de componente curricular.
-     * @apiParam (Request Body/JSON) {Number} [codCompCurric]  Identificador único de componente curricular.
-     * @apiParam (Request Body/JSON) {Number} [codCompCurricCorresp]  Identificador único de componente curricular.
-     * @apiParam (Request Body/JSON) {Number} [percentual]  Percentual de correspondência entre componentes.
+     * @apiParam {Number} codCompCurric         Identificador único de componente curricular.
+     * @apiParam {Number} codCompCorresp        Identificador único de componente curricular.
      * 
-     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância atualizada com sucesso.
+     * @apiParam (Request Body/JSON) {Number} [codCompCurric]           Identificador único de componente curricular.
+     * @apiParam (Request Body/JSON) {Number} [codCompCurricCorresp]    Identificador único de componente curricular.
+     * @apiParam (Request Body/JSON) {Number} [percentual]              Percentual de correspondência entre componentes.
      * 
-     * @apiError {String[]} error Entities\\Correspondencia:    Instância não encontrada.
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * @apiSuccess {String[]}   message     Entities\\Correspondencia: Instância atualizada com sucesso.
+     * 
+     * @apiError {String[]}     error       Entities\\Correspondencia:    Instância não encontrada.
+     * @apiError {String[]}     error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]}     error       Ocorreu uma exceção ao persistir a instância.
      */
     public function update($codCompCurric,$codCompCorresp)
     {
@@ -291,14 +292,14 @@ class CorrespondenciaController extends APIController
      * @apiName delete
      * @apiGroup Correspondência
      * 
-     * @apiParam {Number} codCompCurric Identificador único de componente curricular.
-     * @apiParam {Number} codCompCorresp Identificador único de componente curricular.
+     * @apiParam {Number}       codCompCurric   Identificador único de componente curricular.
+     * @apiParam {Number}       codCompCorresp  Identificador único de componente curricular.
      * 
-     * @apiSuccess {String[]} message  Entities\\Correspondencia: Instância deletada com sucesso.
+     * @apiSuccess {String[]}   message         Entities\\Correspondencia: Instância deletada com sucesso.
      * 
-     * @apiError {String[]} error Entities\\Correspondencia:    Instância não encontrada.
-     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
+     * @apiError {String[]}     error           Entities\\Correspondencia:    Instância não encontrada.
+     * @apiError {String[]}     error           Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]}     error           Ocorreu uma exceção ao persistir a instância.
      */
     public function delete($codCompCurric,$codCompCorresp)
     {
