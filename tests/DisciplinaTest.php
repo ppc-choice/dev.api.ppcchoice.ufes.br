@@ -99,7 +99,7 @@ class DisciplinaTest extends TestCase
     public function generateMessage($category, $subpath = '')
     {
         return 'Entities\\' . $this->entity . ( !empty($subpath) ? '.'  :  ''  ) 
-            . $subpath . ': '  . self::STD_MSGS[$category];
+            . $subpath . ':    '  . self::STD_MSGS[$category];
     }
 
     /** 
