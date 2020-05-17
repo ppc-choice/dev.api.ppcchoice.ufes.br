@@ -183,6 +183,16 @@ class DepartamentoTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
+    public function testGetDepartamentoSucesso2()
+    {
+        $response = $this->http->request('GET', 'departamentos', ['http_errors' => FALSE] );
+        
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+    }
+
     //POST
     public function testPostDepartamentoSucesso()
     {
