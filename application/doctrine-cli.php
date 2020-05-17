@@ -9,7 +9,7 @@
     define('PATHSYS', str_replace('application','', dirname(__FILE__)));
     require PATHSYS . 'system/dotenv/autoloader.php';
 
-    if ( file_exists(__DIR__ . '/.env.' . ENVIRONMENT)){
+    if ( file_exists(PATHSYS . '/.env.' . ENVIRONMENT)){
         $dotenv = new Dotenv\Dotenv(PATHSYS);
         $dotenv->load();
     }

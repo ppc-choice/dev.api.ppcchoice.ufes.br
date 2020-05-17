@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 class ProjetoPedagogicoCursoRepository extends EntityRepository
 {  
-    public function findAlla()
+    public function findAll()
     {
         return $this->_em->createQueryBuilder()
             ->select('ppc.codPpc, ppc.dtInicioVigencia, ppc.dtTerminoVigencia, ppc.chTotalDisciplinaOpt', 

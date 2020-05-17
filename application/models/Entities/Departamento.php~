@@ -5,14 +5,14 @@ namespace Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * InstituicaoEnsinoSuperior
+ * Departamento
  */
-class InstituicaoEnsinoSuperior
+class Departamento
 {
     /**
      * @var integer
      */
-    private $codIes;
+    private $codDepto;
 
     /**
      * @var string
@@ -24,35 +24,27 @@ class InstituicaoEnsinoSuperior
      */
     private $abreviatura;
 
-
     /**
-     * Set codIes
-     *
-     * @param integer $codIes
-     * @return InstituicaoEnsinoSuperior
+     * @var \Entities\UnidadeEnsino
      */
-    public function setCodIes($codIes)
-    {
-        $this->codIes = $codIes;
-    
-        return $this;
-    }
+    private $unidadeEnsino;
+
 
     /**
-     * Get codIes
+     * Get codDepto
      *
      * @return integer 
      */
-    public function getCodIes()
+    public function getCodDepto()
     {
-        return $this->codIes;
+        return $this->codDepto;
     }
 
     /**
      * Set nome
      *
      * @param string $nome
-     * @return InstituicaoEnsinoSuperior
+     * @return Departamento
      */
     public function setNome($nome)
     {
@@ -75,7 +67,7 @@ class InstituicaoEnsinoSuperior
      * Set abreviatura
      *
      * @param string $abreviatura
-     * @return InstituicaoEnsinoSuperior
+     * @return Departamento
      */
     public function setAbreviatura($abreviatura)
     {
@@ -92,5 +84,28 @@ class InstituicaoEnsinoSuperior
     public function getAbreviatura()
     {
         return $this->abreviatura;
+    }
+
+    /**
+     * Set unidadeEnsino
+     *
+     * @param \Entities\UnidadeEnsino $unidadeEnsino
+     * @return Departamento
+     */
+    public function setUnidadeEnsino(\Entities\UnidadeEnsino $unidadeEnsino = null)
+    {
+        $this->unidadeEnsino = $unidadeEnsino;
+    
+        return $this;
+    }
+
+    /**
+     * Get unidadeEnsino
+     *
+     * @return \Entities\UnidadeEnsino 
+     */
+    public function getUnidadeEnsino()
+    {
+        return $this->unidadeEnsino;
     }
 }

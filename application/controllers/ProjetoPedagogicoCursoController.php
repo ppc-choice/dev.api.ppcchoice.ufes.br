@@ -9,12 +9,14 @@ class ProjetoPedagogicoCursoController extends APIController
     }
 
     /**
-    * @api {get} projetos-pedagogicos-curso Requisitar todos Projetos Pedagógicos de Curso.
+    * @api {GET} projetos-pedagogicos-curso Solicitar todos Projetos Pedagógicos de Curso.
     *
     * @apiName findAll
     * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiSuccess {String[]} Projeto Pedagógico Curso Array de objetos do tipo Projeto Pesagógico Curso.
+    * @apiSuccess {ProjetoPedagogicoCurso[]} projetoPedagógicoCurso Array de objetos do tipo Projeto Pesagógico Curso.
+    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     */
     public function findAll()
     {
@@ -41,8 +43,8 @@ class ProjetoPedagogicoCursoController extends APIController
     }
         
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc Requisitar Projeto Pedagógico de Curso.
-    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
+    * @api {GET} projetos-pedagogicos-curso/:codPpc Solicitar Projeto Pedagógico de Curso.
+    * @apiParam (URL) {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiName findById
     * @apiGroup Projeto Pedagógico Curso
@@ -58,12 +60,11 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiSuccess {Number} duracao  Tempo de duração do curso descrito por anos.
     * @apiSuccess {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
     * @apiSuccess {Number} chTotal  Carga horária total que as componentes curriculares do curso deve possuir.
-    * @apiSuccess {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
+    * @apiSuccess {Number} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiSuccess {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiSuccess {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.      
+    * @apiSuccess {Number} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.      
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto Pedagógico de Curso cadastrado.
-    *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     */
     public function findById($codPpc)
     {
@@ -91,11 +92,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }  
 
     /**
-    * @api {post} projetos-pedagogicos-curso Criar novo Projeto Pedagógico de Curso.
-    *
-    * @apiName create
-    * @apiGroup Projeto Pedagógico Curso
-    *
+    * @api {post} projetos-pedagogicos-curso Criar um novo Projeto Pedagógico de Curso.
     * @apiParam (Request Body/JSON) {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiParam (Request Body/JSON) {DateTime} dtTerminoVigencia  Data correspondente ao término de vigência do projeto pedagógico do curso (Obrigatório para projeto pedagógicos de cursos INATIVOS).
     * @apiParam (Request Body/JSON) {Number} [chTotalDisciplinaOpt = 0]  Carga horária total de disciplinas optativas que o curso deve possuir.
@@ -105,14 +102,17 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiParam (Request Body/JSON) {Number} [chTotalProjetoConclusao = 0]  Carga horária total de projeto de conclusão de curso deve possuir.
     * @apiParam (Request Body/JSON) {Number} [chTotalEstagio = 0]  Carga horária total de estágio que o curso deve possuir.
     * @apiParam (Request Body/JSON) {Number} qtdPeriodos  Quantidade de períodos necessário para a conclusão do curso em situação normal.
-    * @apiParam (Request Body/JSON) {String} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
+    * @apiParam (Request Body/JSON) {Number} anoAprovacao  Ano de aprovação do projeto pedagógico de curso.
     * @apiParam (Request Body/JSON) {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} situacao  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiParam (Request Body/JSON) {String} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
+    * @apiParam (Request Body/JSON) {Number} codCurso  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     *
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso criado com sucesso.
+    * @apiName create
+    * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância criada com sucesso.
     *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
+    * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
     */
     
     public function create()
@@ -133,56 +133,69 @@ class ProjetoPedagogicoCursoController extends APIController
             $ppc->setCurso($curso);
         } 
             
-        if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
         
         if(array_key_exists('dtTerminoVigencia', $payload)) 
         {
             if(is_null($payload['dtTerminoVigencia']))
-                $ppc->setDtTerminoVigencia(null);
+            $ppc->setDtTerminoVigencia(null);
             else
-                $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
+            $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
         }
-
+        
+        if(array_key_exists('dtInicioVigencia', $payload)) 
+        {
+            if(is_null($payload['dtInicioVigencia'])||empty(($payload['dtInicioVigencia'])))
+            $ppc->setDtInicioVigencia($payload['dtInicioVigencia']);
+            else
+            $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
+        }  
+        
+        if(array_key_exists('duracao', $payload))
+        {
+            if(is_numeric($payload['duracao']))
+            $ppc->setDuracao(floatval($payload['duracao']));
+            else
+            $ppc->setDuracao($payload['duracao']);
+            
+        } 
         
         if(array_key_exists('chTotalDisciplinaOpt', $payload)) 
-            $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
+        $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
         else
-            $ppc->setChTotalDisciplinaOpt(0);
-
+        $ppc->setChTotalDisciplinaOpt(0);
+        
         if(array_key_exists('chTotalDisciplinaOb', $payload)) 
-            $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
+        $ppc->setChTotalDisciplinaOb($payload['chTotalDisciplinaOb']);
         else
-            $ppc->setChTotalDisciplinaOb(0);
-
+        $ppc->setChTotalDisciplinaOb(0);
+        
         if(array_key_exists('chTotalAtividadeExt',$payload))
-            $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
+        $ppc->setChTotalAtividadeExt($payload['chTotalAtividadeExt']);
         else
-            $ppc->setChTotalAtividadeExt(0);
-
+        $ppc->setChTotalAtividadeExt(0);
+        
         if(array_key_exists('chTotalAtividadeCmplt', $payload)) 
-            $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
+        $ppc->setChTotalAtividadeCmplt($payload['chTotalAtividadeCmplt']);
         else
-            $ppc->setChTotalAtividadeCmplt(0);
-
+        $ppc->setChTotalAtividadeCmplt(0);
+        
         if(array_key_exists('chTotalProjetoConclusao', $payload)) 
-            $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
+        $ppc->setChTotalProjetoConclusao($payload['chTotalProjetoConclusao']);
         else
-            $ppc->setChTotalProjetoConclusao(0);  
+        $ppc->setChTotalProjetoConclusao(0);  
         
         if(array_key_exists('chTotalEstagio',$payload)) 
-            $ppc->setChTotalEstagio($payload['chTotalEstagio']);
+        $ppc->setChTotalEstagio($payload['chTotalEstagio']);
         else
-            $ppc->setChTotalEstagio(0);
-                
-        if(array_key_exists('dtInicioVigencia', $payload)) $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
+        $ppc->setChTotalEstagio(0);
+        
+        $ppc->setChTotal(0);
         
         if(array_key_exists('qtdPeriodos', $payload)) $ppc->setQtdPeriodos($payload['qtdPeriodos']);
         
         if(array_key_exists('anoAprovacao', $payload)) $ppc->setAnoAprovacao($payload['anoAprovacao']);
         
-        if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
-        
-        $ppc->setChTotal(0);
+        if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
         
         $constraints = $this->validator->validate($ppc);
         
@@ -199,7 +212,7 @@ class ProjetoPedagogicoCursoController extends APIController
                 $this->entityManager->flush();
     
                 $this->apiReturn(array(
-                    'mesage' => $this->stdMessage(STD_MSG_CREATED),
+                    'message' => $this->stdMessage(STD_MSG_CREATED),
                     ),self::HTTP_OK
                 );
     
@@ -219,11 +232,8 @@ class ProjetoPedagogicoCursoController extends APIController
     }   
 
     /**
-    * @api {PUT} projetos-pedagogicos-curso/:codPpc Atualizar Projeto Pedagógico de Curso.
-    *
-    * @apiName update
-    * @apiGroup Projeto Pedagógico Curso
-    *
+    * @api {PUT} projetos-pedagogicos-curso/:codPpc Atualizar um Projeto Pedagógico de Curso.
+    * @apiParam (URL) {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     * @apiParam (Request Body/JSON) {DateTime} [dtInicioVigencia] Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
     * @apiParam (Request Body/JSON) {DateTime} [dtTerminoVigencia]  Data correspondente ao término de vigência do projeto pedagógico do curso (Obrigatório para projeto pedagógicos de cursos INATIVOS).
     * @apiParam (Request Body/JSON) {Number} [chTotalDisciplinaOpt]  Carga horária total de disciplinas optativas que o curso deve possuir.
@@ -233,15 +243,17 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiParam (Request Body/JSON) {Number} [chTotalProjetoConclusao]  Carga horária total de projeto de conclusão de curso deve possuir.
     * @apiParam (Request Body/JSON) {Number} [chTotalEstagio]  Carga horária total de estágio que o curso deve possuir.
     * @apiParam (Request Body/JSON) {Number} [qtdPeriodos]  Quantidade de períodos necessário para a conclusão do curso em situação normal.
-    * @apiParam (Request Body/JSON) {String} [anoAprovacao]  Ano de aprovação do projeto pedagógico de curso.
+    * @apiParam (Request Body/JSON) {Number} [anoAprovacao]  Ano de aprovação do projeto pedagógico de curso.
     * @apiParam (Request Body/JSON) {String = "CORRENTE", "ATIVO ANTERIOR", "INATIVO"} [situacao]  Situação em que se encontra o projeto pedagógico de curso.
-    * @apiParam (Request Body/JSON) {String} [codCurso]  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
+    * @apiParam (Request Body/JSON) {Number} [codCurso]  Código de indentificação do curso que o projeto pedagógico de curso integraliza.  
     * 
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso atualizado com sucesso.
+    * @apiName update
+    * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto pedagógico de Curso cadastrado.
-    * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância atualizada com sucesso.
     *
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
+    * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
     */
     public function update($codPpc)
     {
@@ -259,11 +271,14 @@ class ProjetoPedagogicoCursoController extends APIController
         {
             if(array_key_exists('codCurso', $payload)) 
             {
-                $curso = $this->entityManager->find('Entities\Curso',$payload['codCurso']);
-                $ppc->setCurso($curso);
+                if(is_numeric($payload['codCurso']))
+                {
+                    $curso = $this->entityManager->find('Entities\Curso',$payload['codCurso']);
+                    $ppc->setCurso($curso);
+                }
+                else
+                    $ppc->setCurso(null);
             }   
-
-            if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
 
             if(array_key_exists('dtTerminoVigencia', $payload)) 
             {
@@ -272,6 +287,25 @@ class ProjetoPedagogicoCursoController extends APIController
                 else
                     $ppc->setDtTerminoVigencia(new DateTime($payload['dtTerminoVigencia']));
             }
+           
+            if(array_key_exists('dtInicioVigencia', $payload)) 
+            {
+                if(is_null($payload['dtInicioVigencia'])|| empty($payload['dtInicioVigencia']))
+                    $ppc->setDtInicioVigencia($payload['dtInicioVigencia']);
+                else
+                    $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
+            }             
+            
+            if(array_key_exists('duracao', $payload))
+            {
+                if(is_numeric($payload['duracao']))
+                    $ppc->setDuracao(floatval($payload['duracao']));
+                else
+                    $ppc->setDuracao($payload['duracao']);
+            
+            } 
+
+            if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
             
             if(array_key_exists('chTotalDisciplinaOpt', $payload)) $ppc->setChTotalDisciplinaOpt($payload['chTotalDisciplinaOpt']);
             
@@ -285,24 +319,26 @@ class ProjetoPedagogicoCursoController extends APIController
             
             if(array_key_exists('chTotalEstagio',$payload)) $ppc->setChTotalEstagio($payload['chTotalEstagio']);
             
-            if(array_key_exists('dtInicioVigencia', $payload)) $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
-            
             if(array_key_exists('qtdPeriodos', $payload)) $ppc->setQtdPeriodos($payload['qtdPeriodos']);
             
-            if(array_key_exists('anoAprovacao', $payload)) $ppc->setAnoAprovacao($payload['anoAprovacao']);
-            
-            if(array_key_exists('duracao', $payload)) $ppc->setDuracao(floatval($payload['duracao']));
+            if(array_key_exists('anoAprovacao', $payload)) $ppc->setAnoAprovacao($payload['anoAprovacao']);                
     
             $constraints = $this->validator->validate($ppc);
 
             if ( $constraints->success() )
             {
+                $chtotal = $ppc->getChTotalDisciplinaOpt()+ $ppc->getChTotalDisciplinaOb()+
+                        $ppc->getChTotalAtividadeExt()+ $ppc->getChTotalAtividadeCmplt()+
+                        $ppc->getChTotalProjetoConclusao()+ $ppc->getChTotalEstagio();
+            
+                $ppc->setChTotal($chtotal);
+                
                 try {
                     $this->entityManager->merge($ppc);
                     $this->entityManager->flush();
                     
                     $this->apiReturn(array(
-                        'mesage' => $this->stdMessage(STD_MSG_UPDATED),
+                        'message' => $this->stdMessage(STD_MSG_UPDATED),
                         ), self::HTTP_OK
                      );
                     
@@ -330,14 +366,14 @@ class ProjetoPedagogicoCursoController extends APIController
 
     /**
     * @api {DELETE} projetos-pedagogicos-curso/:codPpc Deletar Projeto Pedagógico de Curso.
-    * @apiParam {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
+    * @apiParam (URL) {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
     *
     * @apiName delete
     * @apiGroup Projeto Pedagógico Curso
     *
-    * @apiSuccess {String} message  Projeto Pedagógico de Curso deletado com sucesso.
+    * @apiSuccess {String[]} message Entities\\ProjetoPedagogicoCurso: Instância removida com sucesso.
     *
-    * @apiError {String[]} 404 O <code>:codPpc</code> não corresponde a um Projeto Pedagógico de Curso cadastrado.
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     */
     public function delete($codPpc)
 	{
