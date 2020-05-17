@@ -163,13 +163,13 @@ class UnidadeEnsinoController extends APIController
         $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         if ( !is_null($ues) ){
-            if ( array_key_exists('codIes', $payload) ){
-                $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
-                $ues->setIes($ies);
-            }
-
             if ( array_key_exists('nome', $payload) ) $ues->setNome($payload['nome']);
             if ( array_key_exists('cnpj', $payload) ) $ues->setCnpj($payload['cnpj']);
+
+            if ( isset($payload['codIes']) ){
+                $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
+                if ( !is_null($ies) ) $ues->setIes($ies);
+            }
 
             $constraints = $this->validator->validate($ues);
 
