@@ -9,12 +9,14 @@ class DepartamentoController extends APIController
 	}
 	
 	/**
-	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
-	 * @apiName getAll
-	 * @apiGroup Departamentos
+	 * @api {get} departamentos Solicitar dados de todos Departamentos.
+	 * @apiName findAll
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
+	 * @apiSuccess {Departamento[]} departamento Array de objetos do tipo Departamento.
+	 * 
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findAll()
 	{
@@ -44,7 +46,7 @@ class DepartamentoController extends APIController
 	/**
 	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
 	 * @apiName findById
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
@@ -53,9 +55,7 @@ class DepartamentoController extends APIController
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
-	 * 
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findById($codDepto)
 	{
@@ -83,18 +83,18 @@ class DepartamentoController extends APIController
     }
     	
 	/**
-	 * @api {post} departamentos/ Criar um Departamento.
+	 * @api {post} departamentos Criar um Departamento.
 	 * @apiName create
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {String{3..5}} abreviatura  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
-	 * @apiSuccess {String} message  Departamento criado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
@@ -143,21 +143,22 @@ class DepartamentoController extends APIController
 		}
 	}
 	
-
 	/**
      * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
      * @apiName update
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
-	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
+	 * 
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String{3..5}} [abreviatura]  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]  Identificador único da Unidade de Ensino.
 	 *  
-	 * @apiSuccess {String} message  Departamento atualizado com sucesso.
+	 * @apiSuccess {String[]} message Entities\\Departamento: Instância atualizada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function update($codDepto)
     {
@@ -173,16 +174,20 @@ class DepartamentoController extends APIController
 		
         if(!is_null($depto))
         {            
-			if(isset($payload['codUnidadeEnsino']))
+			if(array_key_exists('codUnidadeEnsino', $payload))
             {
-                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
-				$depto->setUnidadeEnsino($ues);
+				if (is_numeric($payload['codUnidadeEnsino'])){
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+					$depto->setUnidadeEnsino($ues);
+				}else{
+					$depto->setUnidadeEnsino(null);
+				}
 			}
 			
 			if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
 			if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
-			$constraints = $this->validator->validate($depto, null, array('Departamento'));
+			$constraints = $this->validator->validate($depto);
 
 			if ( $constraints->success() ){
 				try {
@@ -217,14 +222,14 @@ class DepartamentoController extends APIController
 	/**
      * @api {delete} departamentos/:codDepto Excluir um Departamento.
      * @apiName delete
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codDepto Identificador único do Departamento.
    	 * 
-	 * @apiSuccess {String} message  Departamento deletado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
      */
 	public function delete($codDepto)
 	{
