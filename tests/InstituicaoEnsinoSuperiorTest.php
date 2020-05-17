@@ -29,7 +29,7 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     const CONSTRAINT_TYPE_STRING = 'CONSTRAINT_TYPE_INTEGER';
     const CONSTRAINT_NUM_VALID = 'CONSTRAINT_NUM_VALID';
     const CONSTRAINT_TYPE_INTEGER = 'CONSTRAINT_TYPE_INTEGER';
-    const CONSTRAINT_MIN_0 = 'CONSTRAINT_MIN_0'; //Ainda nao foi finalizada
+    const CONSTRAINT_MIN_0 = 'CONSTRAINT_MIN_0';
 
     // Mensagens padrão de retorno
     const STD_MSGS = [
