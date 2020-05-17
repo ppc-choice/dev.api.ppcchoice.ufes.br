@@ -7,10 +7,10 @@ class UsuarioTest extends TestCase
     // Cliente HTTP para testes de requisição
     private $http;
 
-    // Entity name 
+    // Nome da entidade 
     private $entity;
     
-    // Mensagens de sucesso
+    // Categoria 'message'
     const CREATED = 'CREATED';
     
     const UPDATED = 'UPDATED';
@@ -18,7 +18,7 @@ class UsuarioTest extends TestCase
     const DELETED = 'DELETED';
 
 
-    // Error
+    // Categoria  'error'
     const NOT_FOUND = 'NOT_FOUND';
 
     const EXCEPTION = 'EXCEPTION';
@@ -62,12 +62,84 @@ class UsuarioTest extends TestCase
                 break;
         }
 
-        return [ $key => [
+        return json_encode([ $key => [
             'Entities\\' . $this->entity . ': ' . self::STD_MSGS[$category]
-        ]];
+        ]]);
     }
 
+    public function testGetTodosUsuarios()
+    {
+        $response = $this->http->request('GET', 'usuarios', ['http_errors' => FALSE]);
+        
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+
+        $body = json_decode($response->getBody()->getContents());
+        
+        $this->assertInternalType('array', $body);
+
+        $usuarioEsperado = [
+            "codUsuario" =>  2,
+            "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
+            "nome" => "Hadamo",
+            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+            "email" => "hadamo.egito@ppcchoice",
+            "papel" => "ADMIN",
+            "conjuntoSelecao" => null
+        ];
+
+        $this->assertContains($usuarioEsperado,$body);
+
+    }
     
+    public function testGetUsuarioById()
+    {
+        $response = $this->http->request('GET', 'usuarios/2', ['http_errors' => FALSE]);
+        
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+
+        $usuario = [
+            "codUsuario" =>  2,
+            "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
+            "nome" => "Hadamo",
+            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+            "email" => "hadamo.egito@ppcchoice",
+            "papel" => "ADMIN",
+            "conjuntoSelecao" => null
+        ];
+
+        $this->assertJsonStringEqualsJsonString( json_encode($usuario), $response->getBody()->getContents());
+    }
+
+    public function testCriarUsuarioTodosCamposValidos()
+    {
+        $usuario = [
+            "senha" => "senhaTeste",
+            "nome" => "Teste",
+            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+            "email" => "meuemail@gmail.com",
+            "papel" => "VISITOR",
+            "conjuntoSelecao" => null
+        ];
+
+        $response = $this->http->request('POST', 'usuarios', [ 
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ],
+        'json' => $usuario,
+        'http_errors' => FALSE]);
+        
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+
+        $this->assertJsonStringEqualsJsonString( $this->getStdMessage(self::CREATED), $response->getBody()->getContents());
+        
+    }   
+
     // Testes
 
     public function testGetUsuarioNaoExistente()
@@ -76,7 +148,28 @@ class UsuarioTest extends TestCase
 
         $this->assertEquals(404, $response->getStatusCode());
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        // $this->assertEquals("application/json; charset=UTF-8", $response->getContentType());
+
+
+    }
+
+    // Exemplo
+    public function testPostUsuarioDadoInvalido()
+    {
+        $response = $this->http->request('POST', 'usuarios', [
+            'http_errors' => FALSE,
+            'headers' => [
+                // 'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-cache'        
+            ],
+            'json' => [
+                    'nome' => 'x',
+            ],
+        ]);
+        // echo $response->getBody()->getContents();
+        // $this->assertEquals(200, $response->getStatusCode());
+
+        // $contentType = $response->getHeaders()["Content-Type"][0];
+        // $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 }

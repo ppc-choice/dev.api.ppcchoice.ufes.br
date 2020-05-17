@@ -606,32 +606,35 @@ class APIController extends CI_Controller
   }
 
   /** 
-   * Retorna mensagens padrão 
+   * Get Standard Messages to responses
    * @author Elyabe Alves (https://github.com/elyabe) 
    * @param $category Categoria da mensagem (NOT_FOUND, CREATED, DELETED, UPDATED, EXCEPTION)
+   * @param $subpath nome do atributo ao qual a mensagem se refe, caso exista
    * @return array
   */
-  public function stdMessage($category = 'NOT_FOUND')
+  public function stdMessage($category = 'NOT_FOUND', $subpath = '')
   {
     $category = strtoupper($category);
-    $message = '';
     
     switch ($category) 
     {
-        case 'CREATED':
+        case STD_MSG_CREATED:
             $message = 'Instância criada com sucesso.'; 
             break;
-        case 'DELETED':
+        case STD_MSG_DELETED:
             $message = 'Instância removida com sucesso.'; 
             break;
-        case 'UPDATED':
+        case STD_MSG_UPDATED:
             $message = 'Instância atualizada com sucesso.'; 
             break;
-        case 'NOT_FOUND':
+        case STD_MSG_NOT_FOUND:
             $message = 'Instância não encontrada.'; 
             break;
-        case 'EXCEPTION':
+        case STD_MSG_EXCEPTION:
             $message = 'Ocorreu uma exceção ao persistir a instância.'; 
+            break;
+        case STD_MSG_INVALID_CREDENTIAL:
+            $message = 'Credencial inválida.'; 
             break;
         default:
             $message = 'Undefined Message.'; 
@@ -640,7 +643,20 @@ class APIController extends CI_Controller
     
     $entity = preg_replace('/Controller$/', "", get_class($this));
     
-    return array( 'Entities\\' . $entity . ': ' . $message );
+    return array( 'Entities\\' . $entity . ( !empty($subpath) ? '.' . $subpath : '' ) . ': ' . $message );
   }
 
+  /** 
+   * Get Body  JSON from request and decode
+   * @author Elyabe Alves (https://github.com/elyabe) 
+   * @param $associativeArray Decodificação do Body como array associativo
+   * @return array
+  */
+  protected function getBodyRequest( $associativeArray = TRUE )
+  {
+    $rawPayload = file_get_contents('php://input');
+    $payload = empty($rawPayload) ? '{}' : $rawPayload;
+    
+    return json_decode($payload, $associativeArray);
+  }
 }

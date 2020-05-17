@@ -15,6 +15,8 @@ class UsuarioController extends APIController
 	 * @apiPermission ADMINISTRATOR
 	 *
 	 * @apiSuccess {Usuario[]} usuarios Array de objetos do tipo usuário.
+	 * 
+	 * @apiError {String[]} error Entities\\Usuario: Instância não encontrada. Não existem usuários cadastrados 
 	 */
 	public function findAll()
 	{
@@ -116,7 +118,7 @@ class UsuarioController extends APIController
 			)
 		);
 
-		$payload = json_decode(file_get_contents('php://input'), TRUE);
+		$payload = $this->getBodyRequest();
 		$usuario = new Entities\Usuario();
 		
 		if ( array_key_exists('nome', $payload) ) $usuario->setNome($payload['nome']);
@@ -143,7 +145,9 @@ class UsuarioController extends APIController
 	
 		if ( $constraints->success() )
 		{
-			
+			$this->load->library('Bcrypt');
+			$usuario->setSenha($this->bcrypt->hash($payload['senha']));
+
 			try {
 				$this->entityManager->persist($usuario);
 				$this->entityManager->flush();
@@ -198,7 +202,7 @@ class UsuarioController extends APIController
 			)
 		);
 
-		$payload = json_decode(file_get_contents('php://input'), TRUE);
+		$payload = $this->getBodyRequest();
 		$usuario = $this->entityManager->find('Entities\Usuario',$codUsuario);
 
 		if ( !is_null($usuario) ) 
@@ -207,6 +211,7 @@ class UsuarioController extends APIController
 			if ( array_key_exists('papel', $payload) ) $usuario->setPapel($payload['papel']);
 			if ( array_key_exists('email', $payload) ) $usuario->setEmail($payload['email']);
 			if ( array_key_exists('senha', $payload) ) $usuario->setSenha($payload['senha']);
+
 			if ( array_key_exists('conjuntoSelecao', $payload) ) {
 				$conjuntoSelecaoJSON = json_encode($payload['conjuntoSelecao']);
 				
@@ -222,7 +227,9 @@ class UsuarioController extends APIController
 		
 			if ( $constraints->success() )
 			{
-				
+				$this->load->library('Bcrypt');
+				$usuario->setSenha($this->bcrypt->hash($payload['senha']));
+
 				try {
 					$this->entityManager->merge($usuario);
 					$this->entityManager->flush();
@@ -298,5 +305,101 @@ class UsuarioController extends APIController
 				),self::HTTP_NOT_FOUND
 			);
 		}
+	}
+
+    /**
+	 * @api {post} usuarios/login Entrar na conta de usuário
+	 * @apiName login
+	 * @apiGroup Usuário
+	 * 
+	 * @apiParam (Request Body/JSON ) {String} [email] Endereço de e-mail do usuário. 
+	 * @apiParam (Request Body/JSON ) {String} [senha] Senha de acesso.
+	 * 
+	 * @apiSuccess {JSON} usuario  Perfil do usuário logado
+	 * @apiSuccess {String} usuario[email]  Endereço de email do usuário
+	 * @apiSuccess {DateTime} usuario[dtUltimoAcesso]  Data e hora do último login realizado com sucesso
+	 * @apiSuccess {String} usuario[papel]  Categoria que define o nível de acesso
+	 * @apiSuccess {JSON} usuario[nome]  Nome do usuário
+	 * @apiSuccess {String} token  Token de acesso JWT
+	 * 
+	 * @apiError {String[]} 401 Entities\\Usuario.(email|senha): Credencial inválida. O <code>email</code> ou <code>senha</code> informado(s) não são válidos
+	 */
+	public function login()
+	{
+		header("Access-Controll-Allow-Origin: *");
+
+		$this->_apiConfig(array(
+				'methods' => array('POST'),
+			)
+		);
+
+		$payload = $this->getBodyRequest();
+		$usuarioRequisicao = new Entities\Usuario();
+
+		if ( array_key_exists('email', $payload) ) $usuarioRequisicao->setEmail($payload['email']);
+		if ( array_key_exists('senha', $payload) ) $usuarioRequisicao->setSenha($payload['senha']);
+
+		$constraints = $this->validator->validate($usuarioRequisicao,'Login');
+
+		if ( $constraints->success() )
+		{
+			$usuario = $this->entityManager->getRepository('Entities\Usuario')
+				->findOneByEmail($usuarioRequisicao->getEmail());
+
+			if ( !is_null($usuario))
+			{
+				$this->load->library('Bcrypt');
+
+				if ( $this->bcrypt->check($usuarioRequisicao->getSenha(), $usuario->getSenha()) )
+				{
+					$usuario->setDtUltimoAcesso(new DateTime('NOW'));
+
+					$this->load->library('AuthorizationToken');
+					$token = $this->authorizationtoken->generateToken($payload);
+
+					try {
+						$this->entityManager->merge($usuario);
+						$this->entityManager->flush();
+					} catch (\Throwable $th) {
+						$this->apiReturn(array(
+							'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+							),self::HTTP_UNAUTHORIZED
+						);
+					}	
+					
+					$perfilUsuario = array(
+						'email' => $usuario->getEmail(),
+						'dtUltimoAcesso' => $usuario->getDtUltimoAcesso()->format('c'),
+						'nome' => $usuario->getNome(),
+						'papel' => $usuario->getPapel(),
+					);
+
+					$this->apiReturn(array(
+						'usuario' => $perfilUsuario,
+						'token' => $token
+						),self::HTTP_OK
+					);
+				} else {
+					$this->apiReturn(array(
+						'error' => $this->stdMessage(STD_MSG_INVALID_CREDENTIAL, 'senha'),
+						),self::HTTP_UNAUTHORIZED
+					);
+				}
+
+			} else {
+				$this->apiReturn(array(
+					'error' => $this->stdMessage(STD_MSG_INVALID_CREDENTIAL, 'email'),
+					),self::HTTP_UNAUTHORIZED
+				);
+			}
+
+		} else {
+			$this->apiReturn(array(
+				'error' => $constraints->messageArray(),
+				),self::HTTP_BAD_REQUEST
+			);
+		}
+
+
 	}
 }
