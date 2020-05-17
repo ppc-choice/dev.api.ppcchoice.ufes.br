@@ -17,11 +17,14 @@ Entities\Usuario:
             - Type: 
                 type: string
                 message: Este valor deve ser do tipo {{ type }}.
+                groups: [Login, Default]
             - NotNull: 
                 message: Este valor não deve ser nulo.
+                groups: [Login, Default]
             - Email: 
                 message: Este valor não é um endereço de e-mail válido.
                 checkMX: true
+                groups: [Login, Default]
         papel:
             - Type: 
                 type: string
@@ -37,8 +40,12 @@ Entities\Usuario:
                 message: Este valor deve ser do tipo {{ type }}.
             - NotNull: 
                 message: Este valor não deve ser nulo.
+                groups: [Login, Default]
             - NotBlank: 
                 message: Este valor não deve ser vazio.
+            - Length: 
+                min: 6
+                minMessage: Este valor é curto demais. Ele deve ter 6 caracteres ou mais.
         dtUltimoAcesso:
             - Type: 
                 type: DateTime
@@ -383,11 +390,9 @@ Entities\ComponenteCurricular:
         disciplina:
             - NotNull: 
                 message: Este valor não deve ser nulo.
-            - Valid: ~
         ppc:
             - NotNull: 
                 message: Este valor não deve ser nulo.
-            - Valid: ~
 Entities\Correspondencia:
     properties:
         componenteCurricular:
@@ -412,6 +417,7 @@ Entities\Correspondencia:
         - Callback:
             methods: 
                 -    [Entities\Validators\CorrespondenciaValidator, ppcIgual]
+                -    [Entities\Validators\CorrespondenciaValidator, transicaoInexistente]      
 Entities\Transicao:
     properties:
         ppcAtual:
