@@ -38,13 +38,13 @@ class DisciplinaTest extends TestCase
         self::UPDATED => 'Instância atualizada com sucesso.', 
         self::NOT_FOUND => 'Instância não encontrada.', 
         self::EXCEPTION => 'Ocorreu uma exceção ao persistir a instância.', 
-        self::CONSTRAINT_NOT_NULL => '   Este valor não deve ser nulo.',
-        self::CONSTRAINT_NOT_BLANK => '   Este valor não deve ser vazio.',
-        self::CONSTRAINT_NOT_NEGATIVE => '   Este valor deve ser não negativo.',
-        self::CONSTRAINT_INTEGER => '   Este valor deve ser do tipo integer.',
-        self::CONSTRAINT_STRING => '   Este valor deve ser do tipo string.',
-        self::CONSTRAINT_OBJECT => '   Este valor deve ser do tipo object.',
-        self::CONSTRAINT_VALID => '   O valor deve ser um número válido.',
+        self::CONSTRAINT_NOT_NULL => 'Este valor não deve ser nulo.',
+        self::CONSTRAINT_NOT_BLANK => 'Este valor não deve ser vazio.',
+        self::CONSTRAINT_NOT_NEGATIVE => 'Este valor deve ser não negativo.',
+        self::CONSTRAINT_INTEGER => 'Este valor deve ser do tipo integer.',
+        self::CONSTRAINT_STRING => 'Este valor deve ser do tipo string.',
+        self::CONSTRAINT_OBJECT => 'Este valor deve ser do tipo object.',
+        self::CONSTRAINT_VALID => 'O valor deve ser um número válido.',
     ];
 
     public function setUp(){
