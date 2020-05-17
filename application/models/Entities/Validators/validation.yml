@@ -388,11 +388,9 @@ Entities\ComponenteCurricular:
         disciplina:
             - NotNull: 
                 message: Este valor não deve ser nulo.
-            - Valid: ~
         ppc:
             - NotNull: 
                 message: Este valor não deve ser nulo.
-            - Valid: ~
 Entities\Correspondencia:
     properties:
         componenteCurricular:
@@ -417,6 +415,7 @@ Entities\Correspondencia:
         - Callback:
             methods: 
                 -    [Entities\Validators\CorrespondenciaValidator, ppcIgual]
+                -    [Entities\Validators\CorrespondenciaValidator, transicaoInexistente]      
 Entities\Transicao:
     properties:
         ppcAtual:

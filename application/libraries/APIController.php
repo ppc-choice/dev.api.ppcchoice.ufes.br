@@ -643,7 +643,8 @@ class APIController extends CI_Controller
     
     $entity = preg_replace('/Controller$/', "", get_class($this));
     
-    return array( 'Entities\\' . $entity . ( !empty($subpath) ? '.' . $subpath : '' ) . ': ' . $message );
+    return array( 'Entities\\' . $entity . ':    ' . $message );
+
   }
 
   /** 

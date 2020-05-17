@@ -81,7 +81,7 @@ $route['componentes-curriculares/(:num)']['DELETE'] = 'ComponenteCurricularContr
 // Correspondencia : Hadamo
 $route['correspondencias']['GET'] = 'CorrespondenciaController/findAll';
 $route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findAllByCodPpc/$1/$2';
-$route['componentes-curriculares/(:num)/correspondencias']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1';
+$route['componentes-curriculares/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1/$2';
 $route['correspondencias']['POST'] = 'CorrespondenciaController/create';
 $route['correspondencias/(:num)/(:num)']['PUT'] = 'CorrespondenciaController/update/$1/$2';
 $route['correspondencias/(:num)/(:num)']['DELETE'] = 'CorrespondenciaController/delete/$1/$2';
