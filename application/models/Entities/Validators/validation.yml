@@ -65,12 +65,12 @@ Entities\InstituicaoEnsinoSuperior:
             - NotBlank: 
                 message: Este valor não deve ser vazio.
             - Type: 
-                type: string
+                type: string    
                 message: Este valor deve ser do tipo {{ type }}.
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
         abreviatura:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -82,7 +82,7 @@ Entities\InstituicaoEnsinoSuperior:
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
 Entities\Departamento:
     properties:
         nome:
@@ -96,7 +96,7 @@ Entities\Departamento:
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
         abreviatura:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -108,7 +108,7 @@ Entities\Departamento:
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
         unidadeEnsino:
             - NotNull:
                 message: Este valor não deve ser nulo.
@@ -130,7 +130,7 @@ Entities\Curso:
             - Regex: 
                 pattern: /\d/
                 match: false
-                message: Este valor não deve conter caracteres numéricos
+                message: Este valor não deve conter caracteres numéricos.
         anoCriacao:
             - NotNull:
                 message: Este valor não deve ser nulo.
