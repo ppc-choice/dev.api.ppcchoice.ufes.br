@@ -140,34 +140,71 @@ class CorrespondenciaTest extends TestCase
     // Testes de comportamento normal
 
     // Teste de rotas GET
-    public function testGetAllCorrespondencia()
+    public function testGetAllCorrespondencias()
     {
         $response = $this->http->request('GET', 'correspondencias', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $correspondencia = [ "codCompCurric"=> 1,
+                    "depto"=> "DMA",
+                    "numDisciplina"=> 5670,
+                    "NomeDisciplina"=> "Cálculo I",
+                    "codCompCorresp"=> 58,
+                    "deptoDisciplinaCorresp"=> "DMA",
+                    "numDisciplinaCorresp"=> 96,
+                    "NomeDisciplinaCorresp"=> "Cálculo I",
+                    "percentual"=> 1];
+
+        $correspondenciaJson = json_encode($correspondencia);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($correspondenciaJson, $contentBody);
     }
 
     public function testGetCorrespondenciasPpc()
     {
         $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1/correspondencias/2', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $correspondencia = [ "codCompCurric"=> 1,
+                "codCompCorresp"=> 58,
+                "percentual"=> 1];
+
+        $correspondenciaJson = json_encode($correspondencia);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($correspondenciaJson, $contentBody);
+
     }
 
     public function testGetCorrespondenciaComponentes()
     {
         $response = $this->http->request('GET', 'componentes-curriculares/1/correspondencias/58', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $correspondencia = [ "codCompCurric" =>1,
+                "depto" => "DMA",
+                "numDisciplina" => 5670,
+                "NomeDisciplina" => "Cálculo I",
+                "codCompCorresp" => 58,
+                "deptoDisciplinaCorresp" => "DMA",
+                "numDisciplinaCorresp" => 96,
+                "NomeDisciplinaCorresp" => "Cálculo I",
+                "percentual" => 1];
+
+        $correspondenciaJson = json_encode($correspondencia);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($correspondenciaJson, $contentBody);
     }
 
 
@@ -217,18 +254,6 @@ class CorrespondenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-
-    // Testes de erros
-    // Teste de erro por correspondência não encontrada
-    // public function testGetCorrespondenciaNaoExistente()
-    // {
-    //     $response = $this->http->request('GET', 'correspondencias', ['http_errors' => FALSE] );
-
-    //     $this->assertEquals(404, $response->getStatusCode());
-
-    //     $contentType = $response->getHeaders()["Content-Type"][0];
-    //     $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    // }
 
     // Teste de erro por Ppc não existente
     public function testGetCorrespondenciaPpcNaoExistente()
