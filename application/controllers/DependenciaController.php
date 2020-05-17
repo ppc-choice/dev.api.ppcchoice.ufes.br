@@ -9,12 +9,12 @@ class DependenciaController extends APIController
     }
 
     /**
-    * @api {get} dependencias Solicitar todas dependências existentes entre componentes curriculares.
+    * @api {GET} dependencias Solicitar todas dependências existentes entre componentes curriculares.
     *
     * @apiName findAll
     * @apiGroup Dependência
     *
-    * @apiSuccess {Dependência[]} dependência Array de objetos do tipo depenência.
+    * @apiSuccess {Dependencia[]} dependencia Array de objetos do tipo depenência.
     *
     * @apiError {String[]} error Entities\\Dependencia: Instância não encontrada.
     */
@@ -43,9 +43,9 @@ class DependenciaController extends APIController
     }
 
     /**
-    * @api {get} dependencias/:codCompCurric/:codPreReq Solicitar dependências entre componentes curriculares.
-    * @apiParam {Number} codCompCurric Código de identificação de uma componente curricular.
-    * @apiParam {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
+    * @api {GET} dependencias/:codCompCurric/:codPreReq Solicitar dependências entre componentes curriculares.
+    * @apiParam (URL) {Number} codCompCurric Código de identificação de uma componente curricular.
+    * @apiParam (URL) {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
     *
     * @apiName findById
     * @apiGroup Dependência
@@ -85,8 +85,8 @@ class DependenciaController extends APIController
 
 
     /**
-    * @api {get} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
-    * @apiParam {Number} codPpc Código identificador de um projeto pedagógico de curso.
+    * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
+    * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
     *
     * @apiName findByIdPpc
     * @apiGroup Dependência
@@ -123,15 +123,15 @@ class DependenciaController extends APIController
     } 
 
     /**
-    * @api {post} dependencias Criar uma nova dependência entre componentes curriculares.
+    * @api {POST} dependencias Criar uma nova dependência entre componentes curriculares.
+    * @apiParam (Request Body/JSON) {Number} codCompCurric Código identificador de uma componente curricular.
+    * @apiParam (Request Body/JSON) {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
     *
     * @apiName create
     * @apiGroup Dependência
     *
-    * @apiParam (Request Body/JSON) {Number} codCompCurric Código identificador de uma componente curricular.
-    * @apiParam (Request Body/JSON) {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
     * 
-    * @apiSuccess {String} message Entities\\Dependencia: Instância criada com sucesso.
+    * @apiSuccess {String[]} message Entities\\Dependencia: Instância criada com sucesso.
     *
     * @apiError {String[]} error Entities\\Dependencia: Instância não encontrada.
 	*/
@@ -187,14 +187,14 @@ class DependenciaController extends APIController
 
     /**
     * @api {PUT} dependencias/:codCompCurric/:codPreReq Atualizar depêndencia entre componentes curriculares.
-    * @apiParam {Number} codCompCurric Código de identificação de uma componente curricular.
-    * @apiParam {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
+    * @apiParam (URL) {Number} codCompCurric Código de identificação de uma componente curricular.
+    * @apiParam (URL) {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
+    * @apiParam (Request Body/JSON ) {Number} [codCompCurric] Código identificador de uma componente curricular.
+    * @apiParam (Request Body/JSON ) {Number} [codPreRequisito] Código identificador de uma componente curricular que é pré-requisito.
     *
     * @apiName update
     * @apiGroup Dependência
     *
-    * @apiParam (Request Body/JSON ) {Number} [codCompCurric] Código identificador de uma componente curricular.
-    * @apiParam (Request Body/JSON ) {Number} [codPreRequisito] Código identificador de uma componente curricular que é pré-requisito.
     *
     * @apiSuccess {String[]} message Entities\\Dependencia: Instância atualizada com sucesso.
     *
@@ -272,8 +272,8 @@ class DependenciaController extends APIController
 
     /**
     * @api {DELETE} dependencias/:codCompCurric/:codPreReq Deletar dependência entre componentes curriculares.
-    * @apiParam {Number} codCompCurric Código de identificação de uma componente curricular.
-    * @apiParam {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
+    * @apiParam (URL) {Number} codCompCurric Código de identificação de uma componente curricular.
+    * @apiParam (URL) {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
     *
     * @apiName delete
     * @apiGroup Dependência
@@ -281,7 +281,7 @@ class DependenciaController extends APIController
     * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
     * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
     *
-    * @apiSuccess {String} message Entities\\Dependencia: Instância removida com sucesso.
+    * @apiSuccess {String[]} message Entities\\Dependencia: Instância removida com sucesso.
     *
     * @apiError {String[]} error  Entities\\Dependencia: Instância não encontrada.
     */

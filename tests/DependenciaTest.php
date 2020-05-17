@@ -37,8 +37,8 @@ class DependenciaTest extends TestCase
         self::UPDATED => 'Instância atualizada com sucesso.', 
         self::NOT_FOUND => 'Instância não encontrada.', 
         self::EXCEPTION => 'Ocorreu uma exceção ao persistir a instância.', 
-        self::CONSTRAINT_PERIODO_IGUAL => '   A componente curricular deve ter periodo maior que o seu pré-requisito.',
-        self::CONSTRAINT_PPC_DIFERENTE => '   As componentes curriculares devem pertencer ao mesmo Projeto Pedagógico de Curso.',
+        self::CONSTRAINT_PERIODO_IGUAL => 'A componente curricular deve ter periodo maior que o seu pré-requisito.',
+        self::CONSTRAINT_PPC_DIFERENTE => 'As componentes curriculares devem pertencer ao mesmo Projeto Pedagógico de Curso.',
         self::CONSTRAINT_NOT_NULL => 'Este valor não deve ser nulo.'
     ];
 
@@ -63,13 +63,9 @@ class DependenciaTest extends TestCase
                 break;
             case self::NOT_FOUND:
             case self::EXCEPTION:
-            case self::CONSTRAINT_PPC_IGUAL:
             case self::CONSTRAINT_NOT_NULL:
-            case self::CONSTRAINT_SITUACAO:
-            case self::CONSTRAINT_DATA_VAZIA:
-            case self::CONSTRAINT_DATA_TERMINO:
-            case self::CONSTRAINT_MENOR_DATA:
-            case self::CONSTRAINT_NOT_NULL:
+            case self::CONSTRAINT_PERIODO_IGUAL:
+            case self::CONSTRAINT_PPC_DIFERENTE:                
                 $key = 'error';
                 break;
             default:
@@ -127,9 +123,9 @@ class DependenciaTest extends TestCase
 
     public function generateArrayDependencia($curso, $codCompCurric, $nomeCompCurric, $codPreRequisito, $nomePreRequisito)
     {
-        $dependenciaArray = [ "curso"=> $curso, "codCompCurric"=> $codCompCurric, 
-                            "nomeCompCurric"=> $nomeCompCurric, "CodPreRequisito"=> $codPreRequisito, 
-                            "nomePreRequisita"=> $nomePreRequisito];
+        $dependenciaArray = [ "Curso"=> $curso, "codCompCurric"=> $codCompCurric, 
+                            "nomeCompCurric"=> $nomeCompCurric, "codPreRequisito"=> $codPreRequisito, 
+                            "nomePreRequisito"=> $nomePreRequisito];
 
        return json_encode($dependenciaArray);
     }
@@ -144,7 +140,7 @@ class DependenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
        
-        $dependenciaArray= $this->generateArrayDependencia("Matemática Industrial",
+        $dependenciaArray= $this->generateArrayDependencia("Ciência da Computação",
                                                             7, "Fundamentos de Mecânica Clássica", 
                                                             1, "Cálculo I");
 
@@ -165,7 +161,6 @@ class DependenciaTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
 
-        echo var_dump(json_decode($contentBody));
     }
 
     //Métodos POST
@@ -197,7 +192,7 @@ class DependenciaTest extends TestCase
     }
     public function testPutDependencia2()
     {
-        $response = $this->http->request('PUT', 'dependencias/7/2',[ 'json' => ['codCompCurric' => 15], 
+        $response = $this->http->request('PUT', 'dependencias/6/1',[ 'json' => ['codCompCurric' => 15], 
                                          'http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -282,7 +277,7 @@ class DependenciaTest extends TestCase
        
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::EXCEPTION);
+        $message = $this->getStdMessage(self::CONSTRAINT_PERIODO_IGUAL, "componenteCurricular");
         
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -380,7 +375,7 @@ class DependenciaTest extends TestCase
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_PPC_DIFERENTE, "componenteCurricular");
+        $message = $this->getStdMessage(self::CONSTRAINT_PPC_IGUAL, "componenteCurricular");
         
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -389,8 +384,8 @@ class DependenciaTest extends TestCase
 
     public function testPutDependenciaFalha3Periodoigual()
     {
-        $response = $this->http->request('PUT', 'dependencias/17/5',['json' =>['codPreRequisito' => 16,
-                                         'http_errors' => FALSE]]);
+        $response = $this->http->request('PUT', 'dependencias/17/5',['json' =>['codPreRequisito' => 16],
+                                         'http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();

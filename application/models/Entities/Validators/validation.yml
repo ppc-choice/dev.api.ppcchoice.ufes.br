@@ -167,6 +167,8 @@ Entities\ProjetoPedagogicoCurso:
         dtInicioVigencia:
             - NotNull:
                 message: Este valor não deve ser nulo.
+            - NotBlank: 
+                message: Este valor não deve ser vazio.
             - DateTime:
                 message: Este valor não é uma data e hora válida.
         dtTerminoVigencia:
@@ -263,10 +265,15 @@ Entities\ProjetoPedagogicoCurso:
                 minMessage: O valor mínimo aceitável é 1950.
                 invalidMessage: O valor deve ser um número válido.
         situacao:
+            - NotNull:
+                message: Este valor não deve ser nulo.
             - OneOf:
                 choices: [INATIVO, ATIVO ANTERIOR, CORRENTE]
                 message: O valor selecionado não é uma opção válida.
         curso:
+            - Type: 
+                type: object
+                message: Este valor deve ser do tipo {{ type }}
             - NotNull:
                 message: Este valor não deve ser nulo.
             - Type:

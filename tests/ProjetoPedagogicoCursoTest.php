@@ -41,7 +41,13 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     const CONSTRAINT_CHOICE = 'CONSTRAINT_CHOICE'; 
 
+    const CONSTRAINT_NOT_BLANK = 'CONSTRAINT_NOT_BLANK'; 
+
+    const CONSTRAINT_INVALID_MESSAGE = 'CONSTRAINT_INVALID_MESSAGE';
     
+    const CONSTRAINT_RANGE= 'CONSTRAINT_RANGE';
+
+    const CONSTRAINT_RANGE_YEAR= 'CONSTRAINT_RANGE_YEAR';
 
     // Mensagens padrão de retorno
     const STD_MSGS = [
@@ -50,17 +56,19 @@ class ProjetoPedagogicoCursoTest extends TestCase
         self::UPDATED => 'Instância atualizada com sucesso.', 
         self::NOT_FOUND => 'Instância não encontrada.', 
         self::EXCEPTION => 'Ocorreu uma exceção ao persistir a instância.', 
-        self::CONSTRAINT_SITUACAO => '   Não é permitido mais de um Projeto Pedagogico de Curso com a situação CORRENTE OU ATIVO ANTERIOR.',
-        self::CONSTRAINT_DATA_VAZIA => '   Projeto pedagógico de curso com situação corrente e ativo-anterior a data de termino de vigência deve ser nulo.',
-        self::CONSTRAINT_DATA_TERMINO => '   A data de termino de vigência em projeto pedagogico de curso com situacao INATIVO não pode ser vazia.',
-        self::CONSTRAINT_MENOR_DATA => '   A data de termino de vigência deve ser maior que a data de inicio de vigência.',
+        self::CONSTRAINT_SITUACAO => 'Não é permitido mais de um Projeto Pedagogico de Curso com a situação CORRENTE OU ATIVO ANTERIOR.',
+        self::CONSTRAINT_DATA_VAZIA => 'Projeto pedagógico de curso com situação corrente e ativo-anterior a data de termino de vigência deve ser nulo.',
+        self::CONSTRAINT_DATA_TERMINO => 'A data de termino de vigência em projeto pedagogico de curso com situacao INATIVO não pode ser vazia.',
+        self::CONSTRAINT_MENOR_DATA => 'A data de termino de vigência deve ser maior que a data de inicio de vigência.',
         self::CONSTRAINT_NOT_NULL => 'Este valor não deve ser nulo.',
         self::CONSTRAINT_INTEGER => 'Este valor deve ser do tipo integer.',
         self::CONSTRAINT_FLOAT => 'Este valor deve ser do tipo float.',
         self::CONSTRAINT_DATE_TIME => 'Este valor não é uma data e hora válida.',
         self::CONSTRAINT_CHOICE => 'O valor selecionado não é uma opção válida.',
-
-        
+        self::CONSTRAINT_NOT_BLANK => 'Este valor não deve ser vazio.',
+        self::CONSTRAINT_INVALID_MESSAGE => 'O valor deve ser um número válido.',
+        self::CONSTRAINT_RANGE =>'O valor mínimo aceitável é 0.',
+        self::CONSTRAINT_RANGE_YEAR => 'O valor mínimo aceitável é 1950.'
     ];
 
     public function setUp(){
@@ -89,7 +97,6 @@ class ProjetoPedagogicoCursoTest extends TestCase
                 break;
             case self::NOT_FOUND:
             case self::EXCEPTION:
-            case self::CONSTRAINT_PPC_IGUAL:
             case self::CONSTRAINT_NOT_NULL:
             case self::CONSTRAINT_SITUACAO:
             case self::CONSTRAINT_DATA_VAZIA:
@@ -99,6 +106,10 @@ class ProjetoPedagogicoCursoTest extends TestCase
             case self::CONSTRAINT_FLOAT:
             case self::CONSTRAINT_DATE_TIME:
             case self::CONSTRAINT_CHOICE:
+            case self::CONSTRAINT_NOT_BLANK:
+            case self::CONSTRAINT_INVALID_MESSAGE:
+            case self::CONSTRAINT_RANGE:
+            case self::CONSTRAINT_RANGE_YEAR:
                 $key = 'error';
                 break;
             default:
@@ -140,16 +151,16 @@ class ProjetoPedagogicoCursoTest extends TestCase
     * @param $violation {Array} Array com categorias como chave e array de strings com todos os subpathes como valor.
     * @return json
     */
-    public function getMultipleErrorMessages($violations = [])
+    public function getMultipleErrorMessages($violations)
     {
         $messages = [];
-        foreach ($violations as $category => $subpathes) {
-            foreach ($subpathes as $subpath ) {
-                $message = $this->generateMessage($category,$subpath);
+        //foreach ($violations as $category => $subpathes) {
+            foreach ($violations as $content ) {
+                $message = $this->generateMessage($content[0],$content[1]);
                 array_push($messages,$message);
             }
-        }
-        $errorArray = ['error' => $messages];        
+        
+        $errorArray = ["error" => $messages];        
         return json_encode($errorArray);
     }
 
@@ -173,9 +184,23 @@ class ProjetoPedagogicoCursoTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
 
-        $ppcArray =  [ "codPpc"=>4, 'dtInicioVigencia'=> '2021-01-01T00:00:00-03:00',                   
-                        'dtTerminoVigencia'=> null,"chTotalDisciplinaOpt"=> 0, "chTotalDisciplinaOb"=> 0, "chTotalAtividadeExt"=> 0,"chTotalAtividadeCmplt"=> 0, 
-                        "chTotalProjetoConclusao"=> 60, "chTotalEstagio"=>300,'duracao'=> 5, 'qtdPeriodos'=> 10,"chTotal"=> 0, 'anoAprovacao'=> 2020, 'situacao'=> 'CORRENTE', 'codCurso'=> 2];
+        $ppcArray = [ 
+                        'codPpc'=>4,
+                        'dtInicioVigencia'=> '2021-01-01T00:00:00-03:00',                   
+                        'dtTerminoVigencia'=> null, 
+                        'chTotalDisciplinaOpt'=> 0, 
+                        'chTotalDisciplinaOb'=> 0, 
+                        'chTotalAtividadeExt'=> 0, 
+                        'chTotalAtividadeCmplt'=> 0, 
+                        'chTotalProjetoConclusao'=> 60, 
+                        'chTotalEstagio'=>300, 
+                        'duracao'=> 5,
+                        'qtdPeriodos'=> 10,
+                        'chTotal'=> 0, 
+                        'anoAprovacao'=> 2020,
+                        'situacao'=> 'CORRENTE', 
+                        'codCurso'=> 2,
+                    ];
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
@@ -195,10 +220,17 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPostProjetoPedagogicoCurso()
     {
-        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',[ 'json' => [ 
-                                        'dtInicioVigencia'=> '1995-01-09T00:00:00-02:00', 'dtTerminoVigencia'=> '2000-01-09T00:00:00-02:00',
-                                        'duracao'=> 5, 'qtdPeriodos'=> 10, 'anoAprovacao'=> 1994,
-                                        'situacao'=> 'INATIVO', 'codCurso'=> 1], 'http_errors' => FALSE]);
+        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> '1995-01-09T00:00:00-02:00', 
+                                                                'dtTerminoVigencia'=> '2000-01-09T00:00:00-02:00',
+                                                                'duracao'=> 5, 
+                                                                'qtdPeriodos'=> 10, 
+                                                                'anoAprovacao'=> 1994,
+                                                                'situacao'=> 'INATIVO', 
+                                                                'codCurso'=> 1
+                                                            ], 
+                                                            'http_errors' => FALSE ]);
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -212,10 +244,16 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPostProjetoPedagogicoCursoSituacao()
     {
-        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',[ 'json' => [
-                                         'dtInicioVigencia'=> '1995-01-09T00:00:00-02:00', 'dtTerminoVigencia'=> null,
-                                         'duracao'=> 5, 'qtdPeriodos'=> 10, 'anoAprovacao'=> 1994,
-                                         'situacao'=> 'CORRENTE', 'codCurso'=> 1], 'http_errors' => FALSE] );
+        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',
+                                                [ 'json' => [
+                                                                'dtInicioVigencia'=> '1995-01-09T00:00:00-02:00', 
+                                                                'dtTerminoVigencia'=> null,
+                                                                'duracao'=> 5, 'qtdPeriodos'=> 10, 
+                                                                'anoAprovacao'=> 1994,
+                                                                'situacao'=> 'CORRENTE', 
+                                                                'codCurso'=> 1
+                                                            ], 
+                                                            'http_errors' => FALSE] );
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -228,29 +266,56 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPostProjetoPedagogicoCursoDtVigenciaVazia()
     {
-        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',[ 'json' => [ 
-                                         'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 'dtTerminoVigencia'=> '2000-01-09T00:00:00-02:00', 'chTotalDisciplinaOpt'=> 300, 'chTotalDisciplinaOb'=> 3030,
-                                         'chTotalAtividadeExt'=> 0, 'chTotalAtividadeCmplt'=> 180, 'chTotalProjetoConclusao'=> 120,
-                                         'chTotalEstagio'=> 300, 'duracao'=> 5, 'qtdPeriodos'=> 10, 'anoAprovacao'=> 2015,
-                                         'situacao'=> 'CorRente', 'codCurso'=> 0], 'http_errors' => FALSE] );
+        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 
+                                                                'dtTerminoVigencia'=> '2000-01-09T00:00:00-02:00', 
+                                                                'chTotalDisciplinaOpt'=> 300, 
+                                                                'chTotalDisciplinaOb'=> 3030,
+                                                                'chTotalAtividadeExt'=> 0, 
+                                                                'chTotalAtividadeCmplt'=> 180, 
+                                                                'chTotalProjetoConclusao'=> 120,
+                                                                'chTotalEstagio'=> 300, 
+                                                                'duracao'=> 5, 
+                                                                'qtdPeriodos'=> 10, 
+                                                                'anoAprovacao'=> 2015,
+                                                                'situacao'=> 'CorRente', 
+                                                                'codCurso'=> 0
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+        $violations = [
+                        [self::CONSTRAINT_DATA_VAZIA, "dtTerminoVigencia"],
+                        [self::CONSTRAINT_NOT_NULL, "curso"]
+        ];
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_DATA_VAZIA,"dtTerminoVigencia");
-        
+        $errorArray = $this->getMultipleErrorMessages($violations); 
+
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertJsonStringEqualsJsonString($message, $contentBody);    
+        $this->assertJsonStringEqualsJsonString($errorArray, $contentBody);    
     }
 
     public function testPostProjetoPedagogicoCursoDtVaziaInativo()
     {
-        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',[ 'json' => [ 
-                                        'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 'dtTerminoVigencia'=> null, 
-                                        'chTotalDisciplinaOpt'=> 300, 'chTotalDisciplinaOb'=> 3030,
-                                        'chTotalAtividadeExt'=> 0, 'chTotalAtividadeCmplt'=> 180, 'chTotalProjetoConclusao'=> 120,
-                                        'chTotalEstagio'=> 300, 'duracao'=> 5, 'qtdPeriodos'=> 10, 'anoAprovacao'=> 2015,
-                                        'situacao'=> 'INATIVO', 'codCurso'=> 3], 'http_errors' => FALSE] );
+        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 
+                                                                'dtTerminoVigencia'=> null, 
+                                                                'chTotalDisciplinaOpt'=> 300, 
+                                                                'chTotalDisciplinaOb'=> 3030,
+                                                                'chTotalAtividadeExt'=> 0, 
+                                                                'chTotalAtividadeCmplt'=> 180, 
+                                                                'chTotalProjetoConclusao'=> 120,
+                                                                'chTotalEstagio'=> 300, 
+                                                                'duracao'=> 5, 
+                                                                'qtdPeriodos'=> 10, 
+                                                                'anoAprovacao'=> 2015,
+                                                                'situacao'=> 'INATIVO',
+                                                                'codCurso'=> 3
+                                                            ], 
+                                                            'http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -264,11 +329,22 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPostProjetoPedagogicoCursoDtTerminoInativo()
     {
-        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',[ 'json' => [ 
-                                         'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 'dtTerminoVigencia'=> '2000-01-04T00:00:00-02:00', 'chTotalDisciplinaOpt'=> 300, 'chTotalDisciplinaOb'=> 3030,
-                                         'chTotalAtividadeExt'=> 0, 'chTotalAtividadeCmplt'=> 180, 'chTotalProjetoConclusao'=> 120,
-                                         'chTotalEstagio'=> 300, 'duracao'=> 5, 'qtdPeriodos'=> 10, 'anoAprovacao'=> 2015,
-                                         'situacao'=> 'INATIVO', 'codCurso'=> 3], 'http_errors' => FALSE] );
+        $response = $this->http->request('POST', 'projetos-pedagogicos-curso',
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> '2000-01-09T00:00:00-02:00', 
+                                                                'dtTerminoVigencia'=> '2000-01-04T00:00:00-02:00', 
+                                                                'chTotalDisciplinaOpt'=> 300, 
+                                                                'chTotalDisciplinaOb'=> 3030,
+                                                                'chTotalAtividadeExt'=> 0, 
+                                                                'chTotalAtividadeCmplt'=> 180, 
+                                                                'chTotalProjetoConclusao'=> 120, 
+                                                                'chTotalEstagio'=> 300, 
+                                                                'duracao'=> 5, 'qtdPeriodos'=> 10, 
+                                                                'anoAprovacao'=> 2015,
+                                                                'situacao'=> 'INATIVO', 
+                                                                'codCurso'=> 3
+                                                            ], 
+                                                            'http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -306,22 +382,34 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPutProjetoPedagogicoCursoSituacao()
     {
-        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/1', ['json'=>[
-                                         'situacao'=>'ATIVO ANTERIOR'], 'http_errors' => FALSE] );
+        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/1', 
+                                                ['json'=>[
+                                                            'situacao'=>'INATIVO'
+                                                        ], 
+                                                        'http_errors' => FALSE] );
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_SITUACAO, "situacao");
+        
+        $violations = [
+                        
+                        [self::CONSTRAINT_DATA_TERMINO, "dtTerminoVigencia"]
+                     ];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertEquals($message, $contentBody);    
+        $this->assertEquals($errorArray, $contentBody);    
     }
 
     public function testPutProjetoPedagogicoCursoDtVazia()
     {
-        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/1', ['json'=>[
-                                         'dtTerminoVigencia'=>'2011-08-01T00:00:00-03:00'],'http_errors' => FALSE] );
+        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/1', 
+                                                ['json'=>[
+                                                                'dtTerminoVigencia'=>'2011-08-01T00:00:00-03:00'
+                                                         ],
+                                                         'http_errors' => FALSE] );
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -334,8 +422,11 @@ class ProjetoPedagogicoCursoTest extends TestCase
     
     public function testPutProjetoPedagogicoCursoDtTerminoVaziaInativo()
     {
-        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/5',[ 'json' => [
-                                         'situacao'=> 'INATIVO'], 'http_errors' => FALSE] );
+        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/5',
+                                                [ 'json' => [
+                                                                'situacao'=> 'INATIVO'
+                                                            ], 
+                                                            'http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -348,9 +439,12 @@ class ProjetoPedagogicoCursoTest extends TestCase
 
     public function testPutProjetoPedagogicoCursoMenorDataInativo()
     {
-        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/4',[ 'json' => [ 
-                                         'dtTerminoVigencia'=> '2000-01-04T00:00:00-02:00',
-                                         'situacao'=> 'INATIVO'], 'http_errors' => FALSE] );
+        $response = $this->http->request('PUT', 'projetos-pedagogicos-curso/4',
+                                                [ 'json' => [ 
+                                                                'dtTerminoVigencia'=> '2000-01-04T00:00:00-02:00',
+                                                                'situacao'=> 'INATIVO'
+                                                            ], 
+                                                            'http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -386,4 +480,290 @@ class ProjetoPedagogicoCursoTest extends TestCase
         $this->assertEquals($message, $contentBody);
     }
 
+    // Teste de erro com entrada null
+
+    public function testPostProjetoPedagogicoCursoInputValuesNull()
+    {
+        $response = $this->http->request('POST','projetos-pedagogicos-curso', 
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> null,
+                                                                'dtTerminoVigencia'=> null,
+                                                                'chTotalDisciplinaOb'=> null,
+                                                                'chTotalDisciplinaOpt'=>null,
+                                                                'chTotalAtividadeExt'=> null,
+                                                                'chTotalAtividadeCmplt'=> null,
+                                                                'chTotalProjetoConclusao'=> null,
+                                                                'chTotalEstagio'=> null,
+                                                                'duracao'=> null,
+                                                                'qtdPeriodos'=> null,
+                                                                'anoAprovacao'=> null,
+                                                                'situacao'=>null,
+                                                                'codCurso'=> null
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [[self::CONSTRAINT_NOT_NULL,'dtInicioVigencia'], 
+                        [self::CONSTRAINT_NOT_BLANK,'dtInicioVigencia'], 
+                        // [self::CONSTRAINT_NOT_BLANK,'dtTerminoVigencia'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalAtividadeCmplt'],
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalProjetoConclusao'],
+                        [self::CONSTRAINT_NOT_NULL , 'chTotalEstagio'],
+                        [self::CONSTRAINT_NOT_NULL ,  'duracao'] ,
+                        [self::CONSTRAINT_NOT_NULL , 'qtdPeriodos'],
+                        [self::CONSTRAINT_NOT_NULL , 'anoAprovacao'],
+                        [self::CONSTRAINT_CHOICE ,'situacao'],
+                        [self::CONSTRAINT_NOT_NULL ,'curso']]; 
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
+    }
+
+    public function testPutProjetoPedagogicoCursoInputValuesNull()
+    {
+        $response = $this->http->request('PUT','projetos-pedagogicos-curso/1', 
+                                            [ 'json' => [ 
+                                                            'dtInicioVigencia'=> null,
+                                                            'dtTerminoVigencia'=> null,
+                                                            'chTotalDisciplinaOb'=> null,
+                                                            'chTotalDisciplinaOpt'=> null,
+                                                            'chTotalAtividadeExt'=> null,
+                                                            'chTotalAtividadeCmplt'=> null,
+                                                            'chTotalProjetoConclusao'=> null,
+                                                            'chTotalEstagio'=> null,
+                                                            'duracao'=> null,
+                                                            'qtdPeriodos'=> null,
+                                                            'anoAprovacao'=> null,
+                                                            'situacao'=>null,
+                                                            'codCurso'=> null
+                                                        ], 
+                                                        'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [[self::CONSTRAINT_NOT_NULL,'dtInicioVigencia'], 
+                        [self::CONSTRAINT_NOT_BLANK,'dtInicioVigencia'], 
+                        // [self::CONSTRAINT_NOT_BLANK,'dtTerminoVigencia'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalAtividadeCmplt'],
+                        [self::CONSTRAINT_NOT_NULL ,'chTotalProjetoConclusao'],
+                        [self::CONSTRAINT_NOT_NULL , 'chTotalEstagio'],
+                        [self::CONSTRAINT_NOT_NULL ,  'duracao'] ,
+                        [self::CONSTRAINT_NOT_NULL , 'qtdPeriodos'],
+                        [self::CONSTRAINT_NOT_NULL , 'anoAprovacao'],
+                        [self::CONSTRAINT_CHOICE ,'situacao'],
+                        [self::CONSTRAINT_NOT_NULL ,'curso']]; 
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
+    }
+
+    public function testPostProjetoPedagogicoCursoInputValuesRange()
+    {
+        $response = $this->http->request('POST','projetos-pedagogicos-curso', 
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> "", 
+                                                                'chTotalDisciplinaOpt'=>-1, 
+                                                                'chTotalDisciplinaOb'=> -1, 
+                                                                'chTotalAtividadeExt'=> -1,
+                                                                'chTotalAtividadeCmplt'=> -1, 
+                                                                'chTotalProjetoConclusao'=> -1, 
+                                                                'chTotalEstagio'=> -1, 
+                                                                'duracao'=> -1, 
+                                                                'qtdPeriodos'=> -1,
+                                                                'situacao'=>"ATIVO ANTERIOR",
+                                                                'anoAprovacao'=> 1400, 
+                                                                'codCurso'=> ""
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+                                
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [ 
+                        [self::CONSTRAINT_NOT_BLANK,'dtInicioVigencia'], 
+                        // [self::CONSTRAINT_NOT_BLANK,'dtTerminoVigencia'], 
+                        [self::CONSTRAINT_RANGE,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalDisciplinaOb'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_RANGE,'chTotalAtividadeExt'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalAtividadeCmplt'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalProjetoConclusao'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_RANGE,'chTotalEstagio'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalEstagio'], 
+                        // [self::CONSTRAINT_NOT_NULL , 'chTotalEstagio'],
+                        [self::CONSTRAINT_RANGE,'duracao'], 
+                        [self::CONSTRAINT_RANGE,'qtdPeriodos'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'qtdPeriodos'],
+                        // [self::CONSTRAINT_INTEGER ,'anoAprovacao'], 
+                        [self::CONSTRAINT_RANGE_YEAR ,'anoAprovacao'], 
+                        // [self::CONSTRAINT_INVALID_MESSAGE ,'anoAprovacao'],  
+                        // [self::CONSTRAINT_NOT_NULL ,'situacao'],
+                        [self::CONSTRAINT_NOT_NULL ,'curso']]; 
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($errorArray,$contentBody);
+    }
+
+    public function testPutProjetoPedagogicoCursoInputValuesRange()
+    {
+        $response = $this->http->request('PUT','projetos-pedagogicos-curso/1', 
+                                                [ 'json' => [  
+                                                                'chTotalDisciplinaOpt'=>-1, 
+                                                                'chTotalDisciplinaOb'=> -1, 
+                                                                'chTotalAtividadeExt'=> -1, 
+                                                                'chTotalAtividadeCmplt'=> -1, 
+                                                                'chTotalProjetoConclusao'=> -1, 
+                                                                'chTotalEstagio'=> -1, 
+                                                                'duracao'=> -1, 
+                                                                'qtdPeriodos'=> -1, 
+                                                                'anoAprovacao'=> 1400
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [  
+                        [self::CONSTRAINT_RANGE,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_RANGE,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_RANGE,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_RANGE,'chTotalEstagio'], 
+                        [self::CONSTRAINT_RANGE,'duracao'], 
+                        [self::CONSTRAINT_RANGE,'qtdPeriodos'], 
+                        [self::CONSTRAINT_RANGE_YEAR ,'anoAprovacao'] 
+                    ];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($errorArray,$contentBody);
+    }
+
+    public function testPostProjetoPedagogicoCursoInputValuesBlank()
+    {
+        $response = $this->http->request('POST','projetos-pedagogicos-curso', 
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> "",
+                                                                'dtTerminoVigencia'=> "",
+                                                                'chTotalDisciplinaOb'=>"",
+                                                                'chTotalDisciplinaOpt'=>"", 
+                                                                'chTotalAtividadeExt'=> "",
+                                                                'chTotalAtividadeCmplt'=> "",
+                                                                'chTotalProjetoConclusao'=> "",
+                                                                'chTotalEstagio'=> "",
+                                                                'duracao'=> "",
+                                                                'qtdPeriodos'=> "",
+                                                                'anoAprovacao'=> "",
+                                                                'situacao'=>"", 
+                                                                'codCurso'=> ""
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [
+                        [self::CONSTRAINT_DATA_VAZIA,'dtTerminoVigencia'], 
+                        [self::CONSTRAINT_NOT_BLANK,'dtInicioVigencia'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalEstagio'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalEstagio'], 
+                        [self::CONSTRAINT_FLOAT ,'duracao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'duracao'],  
+                        [self::CONSTRAINT_INTEGER ,'qtdPeriodos'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'qtdPeriodos'],
+                        [self::CONSTRAINT_INTEGER ,'anoAprovacao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'anoAprovacao'],  
+                        [self::CONSTRAINT_CHOICE ,'situacao'],
+                        [self::CONSTRAINT_NOT_NULL ,'curso']
+                    ];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
+    }
+
+    public function testPutProjetoPedagogicoCursoInputValuesBlank()
+    {
+        $response = $this->http->request('PUT','projetos-pedagogicos-curso/1', 
+                                                [ 'json' => [ 
+                                                                'dtInicioVigencia'=> "",
+                                                                'dtTerminoVigencia'=> "", 
+                                                                'chTotalDisciplinaOb'=>"",
+                                                                'chTotalAtividadeExt'=> "",
+                                                                'chTotalDisciplinaOpt'=>"", 
+                                                                'chTotalAtividadeCmplt'=> "", 
+                                                                'chTotalProjetoConclusao'=> "", 
+                                                                'chTotalEstagio'=> "", 
+                                                                'duracao'=> "", 
+                                                                'qtdPeriodos'=> "", 
+                                                                'anoAprovacao'=> "", 
+                                                                'situacao'=>"", 
+                                                                'codCurso'=> ""
+                                                            ], 
+                                                            'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+
+        $violations = [
+                        [self::CONSTRAINT_DATA_VAZIA,'dtTerminoVigencia'], 
+                        [self::CONSTRAINT_NOT_BLANK,'dtInicioVigencia'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalDisciplinaOpt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalDisciplinaOb'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeExt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalAtividadeCmplt'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalProjetoConclusao'], 
+                        [self::CONSTRAINT_INTEGER ,'chTotalEstagio'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'chTotalEstagio'], 
+                        [self::CONSTRAINT_FLOAT ,'duracao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'duracao'],  
+                        [self::CONSTRAINT_INTEGER ,'qtdPeriodos'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'qtdPeriodos'],
+                        [self::CONSTRAINT_INTEGER ,'anoAprovacao'], 
+                        [self::CONSTRAINT_INVALID_MESSAGE ,'anoAprovacao'],  
+                        [self::CONSTRAINT_CHOICE ,'situacao'],
+                        [self::CONSTRAINT_NOT_NULL ,'curso']
+                    ]; 
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
+    }
 }

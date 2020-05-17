@@ -5,14 +5,14 @@ namespace Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Departamento
+ * Curso
  */
-class Departamento
+class Curso
 {
     /**
      * @var integer
      */
-    private $codDepto;
+    private $codCurso;
 
     /**
      * @var string
@@ -20,9 +20,9 @@ class Departamento
     private $nome;
 
     /**
-     * @var string
+     * @var integer
      */
-    private $abreviatura;
+    private $anoCriacao;
 
     /**
      * @var \Entities\UnidadeEnsino
@@ -31,20 +31,20 @@ class Departamento
 
 
     /**
-     * Get codDepto
+     * Get codCurso
      *
      * @return integer 
      */
-    public function getCodDepto()
+    public function getCodCurso()
     {
-        return $this->codDepto;
+        return $this->codCurso;
     }
 
     /**
      * Set nome
      *
      * @param string $nome
-     * @return Departamento
+     * @return Curso
      */
     public function setNome($nome)
     {
@@ -64,33 +64,33 @@ class Departamento
     }
 
     /**
-     * Set abreviatura
+     * Set anoCriacao
      *
-     * @param string $abreviatura
-     * @return Departamento
+     * @param integer $anoCriacao
+     * @return Curso
      */
-    public function setAbreviatura($abreviatura)
+    public function setAnoCriacao($anoCriacao)
     {
-        $this->abreviatura = $abreviatura;
+        $this->anoCriacao = $anoCriacao;
     
         return $this;
     }
 
     /**
-     * Get abreviatura
+     * Get anoCriacao
      *
-     * @return string 
+     * @return integer 
      */
-    public function getAbreviatura()
+    public function getAnoCriacao()
     {
-        return $this->abreviatura;
+        return $this->anoCriacao;
     }
 
     /**
      * Set unidadeEnsino
      *
      * @param \Entities\UnidadeEnsino $unidadeEnsino
-     * @return Departamento
+     * @return Curso
      */
     public function setUnidadeEnsino(\Entities\UnidadeEnsino $unidadeEnsino = null)
     {
