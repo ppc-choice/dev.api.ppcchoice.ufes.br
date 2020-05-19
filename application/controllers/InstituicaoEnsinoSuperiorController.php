@@ -118,7 +118,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 	
 				$this->apiReturn(array(
-					'result' => $this->stdMessage(STD_MSG_CREATED),
+					'message' => $this->stdMessage(STD_MSG_CREATED),
 					), self::HTTP_OK
 				);
 			} catch (\Exception $e) {
