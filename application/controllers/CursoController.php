@@ -20,7 +20,7 @@ class CursoController extends APIController
 	 */
 	public function findAll()
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -59,7 +59,7 @@ class CursoController extends APIController
 	 */
     public function findById($codCurso)
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -98,7 +98,7 @@ class CursoController extends APIController
 	 */
 	public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -161,7 +161,7 @@ class CursoController extends APIController
      */
 	public function update($codCurso)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -233,7 +233,7 @@ class CursoController extends APIController
      */
 	public function delete($codCurso)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),

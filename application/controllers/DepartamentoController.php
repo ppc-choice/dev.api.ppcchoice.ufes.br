@@ -20,7 +20,7 @@ class DepartamentoController extends APIController
 	 */
     public function findAll()
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -59,7 +59,7 @@ class DepartamentoController extends APIController
 	 */
     public function findById($codDepto)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -98,7 +98,7 @@ class DepartamentoController extends APIController
 	 */	
 	public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -162,7 +162,7 @@ class DepartamentoController extends APIController
 	 */	
 	public function update($codDepto)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -233,7 +233,7 @@ class DepartamentoController extends APIController
      */
 	public function delete($codDepto)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
