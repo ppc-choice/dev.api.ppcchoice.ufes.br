@@ -24,8 +24,11 @@ class DepartamentoTest extends TestCase
     const EXCEPTION = 'EXCEPTION';
 
     const CONSTRAINT_NOT_NULL = 'CONSTRAINT_NOT_NULL';
+
     const CONSTRAINT_NOT_BLANK = 'CONSTRAINT_NOT_BLANK';
+
     const CONSTRAINT_NOT_NUMERIC = 'CONSTRAINT_NOT_NUMERIC';
+
     const CONSTRAINT_TYPE_STRING = 'CONSTRAINT_TYPE_INTEGER';
 
     // Mensagens padrão de retorno
@@ -131,16 +134,6 @@ class DepartamentoTest extends TestCase
     {
         $response = $this->http->request('GET', 'departamentos', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testGetDepartamento2()
-    {
-        $response = $this->http->request('GET', 'departamentos', ['http_errors' => FALSE] );
-
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
         $message = $this->getStdMessage(self::NOT_FOUND);
@@ -148,16 +141,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
-    }
-    
-    public function testGetDepartamentoNaoExistente()
-    {
-        $response = $this->http->request('GET', 'departamentos/100', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testGetDepartamentoNaoExistente2()
@@ -176,21 +159,37 @@ class DepartamentoTest extends TestCase
     public function testGetDepartamentoSucesso()
     {
         $response = $this->http->request('GET', 'departamentos/1', ['http_errors' => FALSE] );
-        
-        $this->assertEquals(200, $response->getStatusCode());
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $curso = ["codDepto"=> 1,
+                    "nome"=> "Departamento de Computação e Eletrônica",
+                    "abreviatura"=> "DCE"];
+
+        $cursoJson = json_encode($curso);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($cursoJson, $contentBody);
     }
 
-    public function testGetDepartamentoSucesso2()
+    public function testGetDepartamentoAllSucesso()
     {
         $response = $this->http->request('GET', 'departamentos', ['http_errors' => FALSE] );
-        
-        $this->assertEquals(200, $response->getStatusCode());
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $curso = ["codDepto"=> 1,
+                    "nome"=> "Departamento de Computação e Eletrônica",
+                    "abreviatura"=> "DCE"];
+
+        $cursoJson = json_encode($curso);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($cursoJson, $contentBody);
     }
 
     //POST
@@ -255,16 +254,6 @@ class DepartamentoTest extends TestCase
     }
 
     //DELETE
-    public function testDeleteDepartamentoNaoExistente()
-    {
-        $response = $this->http->request('DELETE', 'departamentos/157', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testDeleteDepartamentoNaoExistente2()
     {
         $response = $this->http->request('DELETE', 'departamentos/157', ['http_errors' => FALSE] );
@@ -292,21 +281,6 @@ class DepartamentoTest extends TestCase
     }
     
     // Tudo vazio
-    public function testPostDepartamentoAllVazio()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => '',
-        'abreviatura' => '',
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoAllVazioBody()
     {
         $response = $this->http->request('POST', 'departamentos',
@@ -328,21 +302,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoAllVazio()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => '',
-        'abreviatura' => '',
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoAllVazioBody()
@@ -369,21 +328,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Tudo null
-    public function testPostDepartamentoAllNull()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => null,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoAllNullBody()
     {
         $response = $this->http->request('POST', 'departamentos',
@@ -407,21 +351,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoAllNull()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => null,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoAllNullBody()
@@ -450,21 +379,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Nome numérico
-    public function testPostDepartamentoNomeNumerico()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => '1ab',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoNomeNumericoBody()
     {
         $response = $this->http->request('POST','departamentos', 
@@ -483,21 +397,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoNomeNumerico()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => '1abb',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoNomeNumericoBody()
@@ -521,21 +420,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Nome Vazio
-    public function testPostDepartamentoNomeVazio()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => '',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoNomeVazioBody()
     {
         $response = $this->http->request('POST','departamentos', 
@@ -554,21 +438,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoNomeVazio()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => '',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoNomeVazioBody()
@@ -592,21 +461,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Nome null
-    public function testPostDepartamentoNomeNull()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoNomeNullBody()
     {
         $response = $this->http->request('POST','departamentos', 
@@ -626,21 +480,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoNomeNull()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoNomeNullBody()
@@ -665,21 +504,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Abreviatura numérica
-    public function testPostDepartamentoAbreviaturaNumerica()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => 'Departamento Novo',
-        'abreviatura' => '1233',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoAbreviaturaNumericaBody()
     {
         $response = $this->http->request('POST','departamentos', 
@@ -698,21 +522,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoAbreviaturaNumerica()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => 'Departamento Novo',
-        'abreviatura' => '444',
-        'codUnidadeEnsino' => 1],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoAbreviaturaNumericaBody()
@@ -736,59 +545,13 @@ class DepartamentoTest extends TestCase
     }
 
     //CodUnidadeEnsino Vazia
-    public function testPostDepartamentoCodUnidadeEnsinoVazia()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => 'Departamento teste',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testPutDepartamentoCodUnidadeEnsinoVazia()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => 'Departamento teste segundo',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    // CodUnidadeEnsino Letra
-    public function testPostDepartamentoCodUnidadeEnsinoLetra()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => 'Departamento Novo',
-        'abreviatura' => 'ABC',
-        'codUnidadeEnsino' => 'abb'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testPostDepartamentoCodUnidadeEnsinoLetraBody()
+    public function testPostDepartamentoCodUnidadeEnsinoVaziaBody()
     {
         $response = $this->http->request('POST','departamentos', 
         [ 'json' => [
         'nome' => 'DEPARTAMENTO CENTRAL',
-        'abreviatura'=> 'DC',
-        'codUnidadeEnsino' => 'asd'],
+        'abreviatura'=> 'DAC',
+        'codUnidadeEnsino' => ''],
         'http_errors' => FALSE] );
         
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -803,19 +566,47 @@ class DepartamentoTest extends TestCase
         $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testPutDepartamentoCodUnidadeEnsinoLetra()
+    public function testPutDepartamentoCodUnidadeEnsinoVaziaBody()
     {
-        $response = $this->http->request('PUT', 'departamentos/25',
+        $response = $this->http->request('PUT','departamentos/22', 
         [ 'json' => [
-        'nome' => 'Departamento Novo',
-        'abreviatura' => 'BDD',
-        'codUnidadeEnsino' => 'bhj'],
+        'nome' => 'DEPARTAMENTO CENTRAL',
+        'abreviatura'=> 'DC',
+        'codUnidadeEnsino' => ''],
         'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
+        
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'unidadeEnsino'],
+                        [self::CONSTRAINT_NOT_BLANK, 'unidadeEnsino']];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
+    }
+
+    // CodUnidadeEnsino Letra
+    public function testPostDepartamentoCodUnidadeEnsinoLetraBody()
+    {
+        $response = $this->http->request('POST','departamentos', 
+        [ 'json' => [
+        'nome' => 'DEPARTAMENTO CENTRAL',
+        'abreviatura'=> 'RDC',
+        'codUnidadeEnsino' => 'asd'],
+        'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'unidadeEnsino'],
+                        [self::CONSTRAINT_NOT_BLANK, 'unidadeEnsino']];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
     public function testPutDepartamentoCodUnidadeEnsinoLetraBody()
@@ -840,21 +631,6 @@ class DepartamentoTest extends TestCase
     }
 
     //Unidade de Ensino Não Existente
-    public function testPostDepartamentoCodUnidadeEnsinoNaoExistente()
-    {
-        $response = $this->http->request('POST', 'departamentos',
-        [ 'json' => [
-        'nome' => 'Departamento teste',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 15885],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostDepartamentoCodUnidadeEnsinoNaoExistenteBody()
     {
         $response = $this->http->request('POST','departamentos', 
@@ -874,21 +650,6 @@ class DepartamentoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutDepartamentoCodUnidadeEnsinoNaoExistente()
-    {
-        $response = $this->http->request('PUT', 'departamentos/25',
-        [ 'json' => [
-        'nome' => 'Departamento teste',
-        'abreviatura' => 'ABCD',
-        'codUnidadeEnsino' => 18955],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutDepartamentoCodUnidadeEnsinoNaoExistenteBody()

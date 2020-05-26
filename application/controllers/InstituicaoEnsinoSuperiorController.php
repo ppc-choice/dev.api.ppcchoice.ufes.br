@@ -20,7 +20,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */
     public function findAll()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -57,7 +57,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */
     public function findById($codIes)
     {   
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -96,7 +96,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */	
 	public function create()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('POST'),
@@ -118,7 +118,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 	
 				$this->apiReturn(array(
-					'result' => $this->stdMessage(STD_MSG_CREATED),
+					'message' => $this->stdMessage(STD_MSG_CREATED),
 					), self::HTTP_OK
 				);
 			} catch (\Exception $e) {
@@ -154,7 +154,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */	
 	public function update($codIes)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('PUT'),
@@ -216,7 +216,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
      */
 	public function delete($codIes)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
