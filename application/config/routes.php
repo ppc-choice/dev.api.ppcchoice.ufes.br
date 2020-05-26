@@ -106,4 +106,4 @@ $route['usuarios/(:num)']['PUT'] = 'UsuarioController/update/$1';
 $route['usuarios/(:num)']['DELETE'] = 'UsuarioController/delete/$1';
 $route['usuarios/login']['POST'] = 'UsuarioController/login';
 
-$route['usuarios/test']['POST'] = 'UsuarioController/test';
+$route['usuarios/test']['GET'] = 'UsuarioController/test';

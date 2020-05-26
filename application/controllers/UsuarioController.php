@@ -20,7 +20,9 @@ class UsuarioController extends APIController
 	 */
 	public function findAll()
 	{
-		header("Access-Controll-Allow-Origin: *");
+		
+		header("Access-Control-Allow-Origin: *");
+
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -36,7 +38,7 @@ class UsuarioController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -66,7 +68,7 @@ class UsuarioController extends APIController
 	 */
 	public function findById($codUsuario)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -84,7 +86,7 @@ class UsuarioController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -111,7 +113,7 @@ class UsuarioController extends APIController
 	 */
 	public function create()
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -153,13 +155,13 @@ class UsuarioController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => $this->stdMessage(STD_MSG_CREATED),
+					'message' => $this->getApiMessage(STD_MSG_CREATED),
 					),self::HTTP_OK
 				);	
 				
 			} catch (Exception $e) {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					),self::HTTP_BAD_REQUEST
 				);	
 			}
@@ -195,7 +197,7 @@ class UsuarioController extends APIController
 	 */
 	public function update($codUsuario)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -235,13 +237,13 @@ class UsuarioController extends APIController
 					$this->entityManager->flush();
 	
 					$this->apiReturn(array(
-						'message' => $this->stdMessage(STD_MSG_UPDATED),
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						),self::HTTP_OK
 					);	
 					
 				} catch (Exception $e) {
 					$this->apiReturn(array(
-						'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						),self::HTTP_BAD_REQUEST
 					);	
 				}
@@ -254,7 +256,7 @@ class UsuarioController extends APIController
 			}
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -274,7 +276,7 @@ class UsuarioController extends APIController
 	 */
 	public function delete($codUsuario)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -289,19 +291,19 @@ class UsuarioController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => $this->stdMessage(STD_MSG_DELETED),
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 					),self::HTTP_OK
 				);	
 				
 			} catch (Exception $e) {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					),self::HTTP_BAD_REQUEST
 				);	
 			}
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				),self::HTTP_NOT_FOUND
 			);
 		}
@@ -326,7 +328,7 @@ class UsuarioController extends APIController
 	 */
 	public function login()
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -362,7 +364,7 @@ class UsuarioController extends APIController
 						$this->entityManager->flush();
 					} catch (\Throwable $th) {
 						$this->apiReturn(array(
-							'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+							'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 							),self::HTTP_UNAUTHORIZED
 						);
 					}	
@@ -381,14 +383,14 @@ class UsuarioController extends APIController
 					);
 				} else {
 					$this->apiReturn(array(
-						'error' => $this->stdMessage(STD_MSG_INVALID_CREDENTIAL, 'senha'),
+						'error' => $this->getApiMessage(STD_MSG_INVALID_CREDENTIAL, 'senha'),
 						),self::HTTP_UNAUTHORIZED
 					);
 				}
 
 			} else {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_INVALID_CREDENTIAL, 'email'),
+					'error' => $this->getApiMessage(STD_MSG_INVALID_CREDENTIAL, 'email'),
 					),self::HTTP_UNAUTHORIZED
 				);
 			}
@@ -401,5 +403,9 @@ class UsuarioController extends APIController
 		}
 
 
+	}
+
+	public function test(){
+		echo uniqid();
 	}
 }

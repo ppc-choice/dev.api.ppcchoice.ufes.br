@@ -20,7 +20,7 @@ class CursoController extends APIController
 	 */
 	public function findAll()
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -38,7 +38,7 @@ class CursoController extends APIController
 		} else {
             $this->apiReturn(
                 array(
-                    'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -59,7 +59,7 @@ class CursoController extends APIController
 	 */
     public function findById($codCurso)
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -76,7 +76,7 @@ class CursoController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}
@@ -98,7 +98,7 @@ class CursoController extends APIController
 	 */
 	public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -125,12 +125,12 @@ class CursoController extends APIController
 					$this->entityManager->flush();
 		
 					$this->apiReturn(array(
-						'message' => $this->stdMessage(STD_MSG_CREATED),
+						'message' => $this->getApiMessage(STD_MSG_CREATED),
 						), self::HTTP_OK
 					);
 				} catch (\Exception $e) {
 					$this->apiReturn(array(
-						'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}
@@ -161,7 +161,7 @@ class CursoController extends APIController
      */
 	public function update($codCurso)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -195,12 +195,12 @@ class CursoController extends APIController
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
-						'message' => $this->stdMessage(STD_MSG_UPDATED),
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						), self::HTTP_OK
 					);
 				} catch (\Exception $e) {
 					$this->apiReturn(array(
-						'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}	
@@ -213,7 +213,7 @@ class CursoController extends APIController
 
         }else{
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
         }
@@ -233,7 +233,7 @@ class CursoController extends APIController
      */
 	public function delete($codCurso)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -249,18 +249,18 @@ class CursoController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => $this->stdMessage(STD_MSG_DELETED),
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}
 		}else{
 			$this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}

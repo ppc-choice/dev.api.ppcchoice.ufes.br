@@ -144,7 +144,7 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }*/
+    }
 
     public function testGetIes2()
     {

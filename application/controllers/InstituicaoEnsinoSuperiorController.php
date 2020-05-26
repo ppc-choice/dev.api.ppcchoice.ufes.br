@@ -20,7 +20,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */
     public function findAll()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -36,7 +36,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 			), self::HTTP_NOT_FOUND);
 		}
 
@@ -57,7 +57,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */
     public function findById($codIes)
     {   
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -74,7 +74,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 			), self::HTTP_NOT_FOUND);
 		}
 
@@ -96,7 +96,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */	
 	public function create()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('POST'),
@@ -118,12 +118,12 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 	
 				$this->apiReturn(array(
-					'result' => $this->stdMessage(STD_MSG_CREATED),
+					'result' => $this->getApiMessage(STD_MSG_CREATED),
 					), self::HTTP_OK
 				);
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}	
@@ -154,7 +154,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 */	
 	public function update($codIes)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('PUT'),
@@ -177,13 +177,13 @@ class InstituicaoEnsinoSuperiorController extends APIController
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
-						'message' => $this->stdMessage(STD_MSG_UPDATED),
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						), self::HTTP_OK
 					);
 					
 				} catch (\Exception $e) {
 					$this->apiReturn(array(
-						'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}	
@@ -196,7 +196,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 
         }else{
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
         }
@@ -216,7 +216,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
      */
 	public function delete($codIes)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -232,19 +232,19 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => $this->stdMessage(STD_MSG_DELETED),
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 					), self::HTTP_OK
 				);
 				
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
-					'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}	
 		}else{
 			$this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}

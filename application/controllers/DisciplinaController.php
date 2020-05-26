@@ -38,7 +38,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -74,7 +74,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -96,7 +96,7 @@ class DisciplinaController extends APIController
      */
     public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('POST')
@@ -125,13 +125,13 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
             
                 $this->apiReturn(array(
-                    'message' => $this->stdMessage(STD_MSG_CREATED),
+                    'message' => $this->getApiMessage(STD_MSG_CREATED),
                     ),self::HTTP_OK
                 );
                 
             } catch (\Exception $e){
                 $this->apiReturn(array(
-                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
@@ -160,7 +160,7 @@ class DisciplinaController extends APIController
      */
     public function update($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('PUT')
@@ -182,12 +182,12 @@ class DisciplinaController extends APIController
                     $this->entityManager->flush();
         
                     $this->apiReturn(array(
-                        'message' => $this->stdMessage(STD_MSG_UPDATED),
+                        'message' => $this->getApiMessage(STD_MSG_UPDATED),
                         ),self::HTTP_OK
                     );
                 } catch (\Exception $e){
                     $this->apiReturn(array(
-                        'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+                        'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                         ),self::HTTP_BAD_REQUEST
                     );
                 }
@@ -201,7 +201,7 @@ class DisciplinaController extends APIController
         
         } else {
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -221,7 +221,7 @@ class DisciplinaController extends APIController
      */
     public function delete($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('DELETE')
@@ -236,19 +236,19 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => $this->stdMessage(STD_MSG_DELETED),
+                    'message' => $this->getApiMessage(STD_MSG_DELETED),
                 ), self::HTTP_OK);
             
             } catch ( \Exception $e ){
                 $this->apiReturn(array(
-                    'error' => $this->stdMessage(STD_MSG_EXCEPTION),
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
 
         } else {
             $this->apiReturn(array(
-                'error' => $this->stdMessage(STD_MSG_NOT_FOUND),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }

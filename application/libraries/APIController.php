@@ -612,7 +612,7 @@ class APIController extends CI_Controller
    * @param $subpath nome do atributo ao qual a mensagem se refe, caso exista
    * @return array
   */
-  public function stdMessage($category = 'NOT_FOUND', $subpath = '')
+  public function getApiMessage($category = 'NOT_FOUND', $subpath = '')
   {
     $category = strtoupper($category);
     
