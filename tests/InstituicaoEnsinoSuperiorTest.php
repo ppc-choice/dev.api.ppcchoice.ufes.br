@@ -17,18 +17,23 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
 
     const DELETED = 'DELETED';
 
-
     // Error
     const NOT_FOUND = 'NOT_FOUND';
 
     const EXCEPTION = 'EXCEPTION';
 
     const CONSTRAINT_NOT_NULL = 'CONSTRAINT_NOT_NULL';
+
     const CONSTRAINT_NOT_BLANK = 'CONSTRAINT_NOT_BLANK';
+
     const CONSTRAINT_NOT_NUMERIC = 'CONSTRAINT_NOT_NUMERIC';
+
     const CONSTRAINT_TYPE_STRING = 'CONSTRAINT_TYPE_INTEGER';
+
     const CONSTRAINT_NUM_VALID = 'CONSTRAINT_NUM_VALID';
+
     const CONSTRAINT_TYPE_INTEGER = 'CONSTRAINT_TYPE_INTEGER';
+    
     const CONSTRAINT_MIN_0 = 'CONSTRAINT_MIN_0';
 
     // Mensagens padrão de retorno
@@ -140,16 +145,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     {
         $response = $this->http->request('GET', 'instituicoes-ensino-superior', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testGetIes2()
-    {
-        $response = $this->http->request('GET', 'instituicoes-ensino-superior', ['http_errors' => FALSE] );
-
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
         $message = $this->getStdMessage(self::NOT_FOUND);
@@ -161,32 +156,52 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
 
     public function testGetIesNaoExistente()
     {
-        $response = $this->http->request('GET', 'instituicoes-ensino-superior/100', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
+        $response = $this->http->request('GET', 'instituicoes-ensino-superior/4752', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::NOT_FOUND);
+
+        $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
     public function testGetIesSucesso()
     {
         $response = $this->http->request('GET', 'instituicoes-ensino-superior/573', ['http_errors' => FALSE] );
-        
-        $this->assertEquals(200, $response->getStatusCode());
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $ies = ["codIes"=> 573,
+                "nome"=> "Universidade Federal do Espírito Santo",
+                "abreviatura"=> "UFES"];
+
+        $iesJson = json_encode($ies);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($iesJson, $contentBody);
     }
 
-    public function testGetIesSucesso2()
+    public function testGetIesAllSucesso()
     {
         $response = $this->http->request('GET', 'instituicoes-ensino-superior', ['http_errors' => FALSE] );
-        
-        $this->assertEquals(200, $response->getStatusCode());
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $ies = ["codIes"=> 573,
+                "nome"=> "Universidade Federal do Espírito Santo",
+                "abreviatura"=> "UFES"];
+
+        $iesJson = json_encode($ies);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($iesJson, $contentBody);
+        
     }
 
     //POST
@@ -194,15 +209,15 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     {
         $response = $this->http->request('POST','instituicoes-ensino-superior', 
         [ 'json' => [
-        'codIes' => 5963,
+        'codIes' => 1213,
         'nome' => 'Instituicao Nova',
-        'abreviatura'=> 'IAN'], 
+        'abreviatura'=> 'RTY'], 
         'http_errors' => FALSE] );
         
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
         $message = $this->getStdMessage(self::CREATED);
-      
+
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
@@ -211,17 +226,7 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     //PUT
     public function testPutIesNaoExistente()
     {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/111', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testPutIesNaoExistente2()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/2633', ['http_errors' => FALSE] );
+        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/4256', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
@@ -252,16 +257,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     //DELETE
     public function testDeleteIesNaoExistente()
     {
-        $response = $this->http->request('DELETE', 'instituicoes-ensino-superior/157', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testDeleteIesNaoExistente2()
-    {
         $response = $this->http->request('DELETE', 'instituicoes-ensino-superior/2637', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -287,67 +282,71 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //CREATE - CÓDIGO ERRADO
-    public function testPostIesCodIesVazio()
+    public function testPostIesCodIesVazioBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
         [ 'json' => [
-        'codIes'=> '',
+        'codIes' => '',
         'nome' => 'IES',
-        'abreviatura' => 'ABCD'],
+        'abreviatura' => 'FGHF'],
         'http_errors' => FALSE] );
 
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [[self::CONSTRAINT_NOT_BLANK, 'codIes'],
+                        [self::CONSTRAINT_TYPE_INTEGER, 'codIes'],
+                        [self::CONSTRAINT_NUM_VALID, 'codIes']];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testPostIesCodIesNull()
+    public function testPostIesCodIesNullBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
         [ 'json' => [
-        'codIes'=> null,
-        'nome' => 'Instituicao Teste',
-        'abreviatura' => 'ABCD'],
+        'codIes' => null,
+        'nome' => 'IES',
+        'abreviatura' => 'FGHF'],
         'http_errors' => FALSE] );
 
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [[self::CONSTRAINT_NOT_NULL, 'codIes'],
+                        [self::CONSTRAINT_NOT_BLANK, 'codIes']];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testPostIesCodIesLetra()
+    public function testPostIesCodIesLetraBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
         [ 'json' => [
-        'codIes'=> 'fff',
-        'nome' => 'Instituição Teste',
-        'abreviatura' => 'ABCD'],
+        'codIes' => 'abc',
+        'nome' => 'IES',
+        'abreviatura' => 'FGHF'],
         'http_errors' => FALSE] );
 
-        $this->assertEquals(400, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [[self::CONSTRAINT_TYPE_INTEGER, 'codIes'],
+                        [self::CONSTRAINT_NUM_VALID, 'codIes']];
+
+        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($errorArray,$contentBody);
     }
 
     //TUDO VAZIO
-    public function testPostIesAllVazio()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> '',
-        'nome' => '',
-        'abreviatura' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesAllVazioBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -372,21 +371,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testPutIesAllVazio()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'codIes'=> '',
-        'nome' => '',
-        'abreviatura' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPutIesAllVazioBody()
     {
         $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
@@ -408,21 +392,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //TUDO NULL
-    public function testPostIesAllNull()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> null,
-        'nome' => null,
-        'abreviatura' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesAllNullBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -448,20 +417,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertContains($errorArray,$contentBody);
     }
 
-    public function testPutIesAllNull()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPutIesAllNullBody()
     {
         $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
@@ -485,21 +440,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     // NOME NUMÉRICO
-    public function testPostIesNomeNumerico()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> '554',
-        'nome' => '111',
-        'abreviatura' => 'ABCD'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesNomeNumericoBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -518,20 +458,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesNomeNumerico()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => '111',
-        'abreviatura' => 'ABBB'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesNomeNumericoBody()
@@ -554,21 +480,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //Nome Null
-    public function testPostIesNomeNull()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 777,
-        'nome' => null,
-        'abreviatura' => 'ABCD'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesNomeNullBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -588,20 +499,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesNomeNull()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => null,
-        'abreviatura' => 'ABCD'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesNomeNullBody()
@@ -625,21 +522,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //Nome Vazio
-    public function testPostIesNomeVazio()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 555,
-        'nome' => '',
-        'abreviatura' => 'ABCD'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesNomeVazioBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -658,20 +540,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesNomeVazio()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => '',
-        'abreviatura' => 'ABCD'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesNomeVazioBody()
@@ -694,21 +562,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //Abreviatura VAZIA
-    public function testPostIesAbreviaturaVazio()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 555,
-        'nome' => 'Instituição Teste',
-        'abreviatura' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesAbreviaturaVazioBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -727,20 +580,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesAbreviaturaVazio()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => 'Instituição Teste',
-        'abreviatura' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesAbreviaturaVazioBody()
@@ -764,21 +603,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //Abreviatura Null
-    public function testPostIesAbreviaturaNull()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 888,
-        'nome' => 'Instituicao Teste',
-        'abreviatura' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesAbreviaturaNullBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -798,20 +622,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesAbreviaturaNull()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => 'Instituicao Teste',
-        'abreviatura' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesAbreviaturaNullBody()
@@ -836,21 +646,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //Abreviatura Numérica
-    public function testPostIesAbreviaturaNumerica()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 555,
-        'nome' => 'Instituicao Teste',
-        'abreviatura' => '333'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesAbreviaturaNumericaBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',
@@ -869,20 +664,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutIesAbreviaturaNumerica()
-    {
-        $response = $this->http->request('PUT', 'instituicoes-ensino-superior/1500',
-        [ 'json' => [
-        'nome' => 'Teste Instituicao',
-        'abreviatura' => '557'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutIesAbreviaturaNumericaBody()
@@ -905,21 +686,6 @@ class InstituicaoEnsinoSuperiorTest extends TestCase
     }
 
     //CodIes deve ser maior que zero
-    public function testPostIesCodIesZero()
-    {
-        $response = $this->http->request('POST', 'instituicoes-ensino-superior',
-        [ 'json' => [
-        'codIes'=> 0,
-        'nome' => 'Instituicao Teste',
-        'abreviatura' => 'GKJF'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostIesCodIesZeroBody()
     {
         $response = $this->http->request('POST', 'instituicoes-ensino-superior',

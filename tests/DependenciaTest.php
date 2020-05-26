@@ -110,22 +110,27 @@ class DependenciaTest extends TestCase
     public function getMultipleErrorMessages($violations = [])
     {
         $messages = [];
-        foreach ($violations as $category => $subpathes) {
-            foreach ($subpathes as $subpath ) {
-                $message = $this->generateMessage($category,$subpath);
-                array_push($messages,$message);
-            }
+        
+        foreach ($violations as $content ) 
+        {
+            $message = $this->generateMessage($content[0],$content[1]);
+            array_push($messages,$message);
         }
-        $errorArray = ['error' => $messages];        
+        
+        $errorArray = ["error" => $messages];        
         return json_encode($errorArray);
     }
 
 
     public function generateArrayDependencia($curso, $codCompCurric, $nomeCompCurric, $codPreRequisito, $nomePreRequisito)
     {
-        $dependenciaArray = [ "Curso"=> $curso, "codCompCurric"=> $codCompCurric, 
-                            "nomeCompCurric"=> $nomeCompCurric, "codPreRequisito"=> $codPreRequisito, 
-                            "nomePreRequisito"=> $nomePreRequisito];
+        $dependenciaArray = [ 
+                                "Curso"=> $curso, 
+                                "codCompCurric"=> $codCompCurric, 
+                                "nomeCompCurric"=> $nomeCompCurric, 
+                                "codPreRequisito"=> $codPreRequisito, 
+                                "nomePreRequisito"=> $nomePreRequisito
+                            ];
 
        return json_encode($dependenciaArray);
     }
@@ -134,7 +139,7 @@ class DependenciaTest extends TestCase
     // Teste de sucesso
     // Metodos GET 
 
-    public function testGetDependenciaExistente()
+    public function testGetDependenciantnt()
     {
         $response = $this->http->request('GET', 'dependencias/7/1', ['http_errors' => FALSE] );
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -148,22 +153,35 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($dependenciaArray, $contentBody);
     }
-    public function testGetAllDependenciaExistente()
+
+    public function testGetAllDependenciantnt()
     {
         $response = $this->http->request('GET', 'dependencias', ['http_errors' => FALSE] );
         $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();
+        $contentBody = json_decode($response->getBody()->getContents());
 
-        $dependenciaArray=$this->generateArrayDependencia("Psicologia",
-                                                          65, "Fundamentos de Mecânica Clássica", 
-                                                          62, "Introdução à Ciência da Computação");
+        $dependenciaArray=$this->generateArrayDependencia("Ciência da Computação",
+                                                          7, "Fundamentos de Mecânica Clássica", 
+                                                          1, "Cálculo I");
         
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
+        $this->assertEquals($dependenciaArray,json_encode($contentBody[0]));
     }
 
-    //Métodos POST
+    public function testGetAllDependenciantntByIdPpc()
+    {
+        $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1/dependencias', ['http_errors' => FALSE] );
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = json_decode($response->getBody()->getContents());
+
+        $dependenciaArray = [ "codCompCurric"=> 7, "codPreRequisito"=> 1 ];
+                            
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertEquals(json_encode($dependenciaArray),json_encode($contentBody[0]));
+    }
+
     public function testPostDependencia()
     {
         $response = $this->http->request('POST', 'dependencias', [ 'json' => ['codCompCurric' => 15,
@@ -176,10 +194,10 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($message, $contentBody);     
     }
-    //Métodos PUT
-    public function testPutDependencia1()
+
+    public function testPutDependenciaFirst()
     {
-        $response = $this->http->request('PUT', 'dependencias/6/1',[ 'json' => ['codCompCurric' => 7,
+        $response = $this->http->request('PUT', 'dependencias/6/1',[ 'json' => ['codCompCurric' => 18,
         'codPreRequisito' => 2], 'http_errors' => FALSE]);
         
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -190,9 +208,10 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
-    public function testPutDependencia2()
+
+    public function testPutDependenciaSecond()
     {
-        $response = $this->http->request('PUT', 'dependencias/6/1',[ 'json' => ['codCompCurric' => 15], 
+        $response = $this->http->request('PUT', 'dependencias/6/1',[ 'json' => ['codCompCurric' => 19], 
                                          'http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -204,9 +223,9 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
     
-    public function testPutDependencia3()
+    public function testPutDependenciaThird()
     {
-        $response = $this->http->request('PUT', 'dependencias/15/2',[ 'json' => ['codPreRequisito' => 1], 
+        $response = $this->http->request('PUT', 'dependencias/15/2',[ 'json' => ['codPreRequisito' => 25], 
         'http_errors' => FALSE]);
         
         $contentBody = $response->getBody()->getContents();
@@ -216,6 +235,7 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
+
     public function testDeleteDependencia()
     {
         $response = $this->http->request('DELETE', 'dependencias/64/59', ['http_errors' => FALSE]);
@@ -230,9 +250,9 @@ class DependenciaTest extends TestCase
 
     //Teste de instâncias não encontradas
     
-    public function testGetDependenciaNaoExistente()
+    public function testGetDependenciaNaontnt()
     {
-        $response = $this->http->request('GET', 'dependencias/15/1', ['http_errors' => FALSE] );
+        $response = $this->http->request('GET', 'dependencias/98/1', ['http_errors' => FALSE] );
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
         $message = $this->getStdMessage(self::NOT_FOUND);
@@ -242,7 +262,7 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
 
-    public function testPutDependenciaNaoExistente()
+    public function testPutDependenciaNaontnt()
     {
         $response = $this->http->request('PUT', 'dependencias/12/2',[ 'json' => ['codCompCurric' => 18,
                                          'codPreRequisito' => 1], 'http_errors' => FALSE]);
@@ -256,7 +276,7 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);     
     }
 
-    public function testDeleteDependenciaFalha()
+    public function testDeleteDependenciaNaoExistent()
     {
         $response = $this->http->request('DELETE', 'dependencias/7/2', ['http_errors' => FALSE]);
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -270,7 +290,7 @@ class DependenciaTest extends TestCase
 
     //Teste de erros gerados por constraints de validação
 
-    public function testPostDependenciaFalha()
+    public function testPostDependenciaPeriodoIgual()
     {
         $response = $this->http->request('POST', 'dependencias',[ 'json' => ['codCompCurric' => 5,
                                          'codPreRequisito' => 1], 'http_errors' => FALSE]);
@@ -283,21 +303,7 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($message, $contentBody);       
     }
-    
-    public function testPostDependenciaPeriodoIgual()
-    {
-        $response = $this->http->request('POST', 'dependencias', [ 'json' => ['codCompCurric' => 5,
-                                         'codPreRequisito' => 1], 'http_errors' => FALSE]);
-        
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_PERIODO_IGUAL, "componenteCurricular");
-
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertJsonStringEqualsJsonString($message, $contentBody); 
-    }
-
+   
     public function testPostDependenciaPpcDiferente()
     {
         $response = $this->http->request('POST', 'dependencias', [ 'json' => ['codCompCurric' => 120,
@@ -311,8 +317,7 @@ class DependenciaTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
-
-    public function testPutDependenciaFalha1PpcDiferente()
+    public function testPutDependenciaPpcDiferenteFirst()
     {
         $response = $this->http->request('PUT', 'dependencias/15/1',[ 'json' => ['codCompCurric' => 7,
                                          'codPreRequisito' => 2], 'http_errors' => FALSE]);
@@ -326,21 +331,7 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
 
-    public function testPutDependenciaFalha1PeriodoIgual()
-    {
-        $response = $this->http->request('PUT', 'dependencias/14/11',[ 'json' => ['codCompCurric' => 5,
-                                         'codPreRequisito' => 3], 'http_errors' => FALSE]);
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_PERIODO_IGUAL, "componenteCurricular");
-        
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertJsonStringEqualsJsonString($message, $contentBody);
-    }
-
-    public function testPutDependenciaFalha2PpcDiferente()
+    public function testPutDependenciaPpcDiferenteSecond()
     {
         $response = $this->http->request('PUT', 'dependencias/18/14',[ 'json' => ['codCompCurric' => 100], 
                                          'http_errors' => FALSE]);
@@ -354,7 +345,35 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
 
-    public function testPutDependenciaFalha2Periodoigual()
+    public function testPutDependenciaPpcDiferenteThird()
+    {
+        $response = $this->http->request('PUT', 'dependencias/17/5',[ 'json' => ['codPreRequisito' => 160],
+                                         'http_errors' => FALSE]);
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::CONSTRAINT_PPC_DIFERENTE, "componenteCurricular");
+        
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message, $contentBody);
+    }
+
+    public function testPutDependenciaPeriodoIgualFirst()
+    {
+        $response = $this->http->request('PUT', 'dependencias/14/11',[ 'json' => ['codCompCurric' => 5,
+                                         'codPreRequisito' => 3], 'http_errors' => FALSE]);
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::CONSTRAINT_PERIODO_IGUAL, "componenteCurricular");
+        
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message, $contentBody);
+    }
+
+    public function testPutDependenciaPeriodoigualSecond()
     {
         $response = $this->http->request('PUT', 'dependencias/20/14',[ 'json' => ['codCompCurric' => 15], 
                                          'http_errors' => FALSE]);
@@ -368,21 +387,7 @@ class DependenciaTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
 
-    public function testPutDependenciaFalha3PpcDiferente()
-    {
-        $response = $this->http->request('PUT', 'dependencias/17/5',[ 'json' => ['codPreRequisito' => 160],
-                                         'http_errors' => FALSE]);
-        
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $contentBody = $response->getBody()->getContents();
-        $message = $this->getStdMessage(self::CONSTRAINT_PPC_IGUAL, "componenteCurricular");
-        
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-        $this->assertJsonStringEqualsJsonString($message, $contentBody);
-    }
-
-    public function testPutDependenciaFalha3Periodoigual()
+    public function testPutDependenciaPeriodoigualThird()
     {
         $response = $this->http->request('PUT', 'dependencias/17/5',['json' =>['codPreRequisito' => 16],
                                          'http_errors' => FALSE]);
@@ -406,13 +411,59 @@ class DependenciaTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();        
         
-        $violations = [self::CONSTRAINT_NOT_NULL => ['componenteCurricular','preRequisito'] ]; 
-        $errorArray = $this->getMultipleErrorMessages($violations);       
+        $violations = [
+                        [self::CONSTRAINT_NOT_NULL,'componenteCurricular'],
+                        [self::CONSTRAINT_NOT_NULL,'preRequisito'] 
+                     ];
+        $errorArray = $this->getMultipleErrorMessages($violations);
+
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($errorArray,$contentBody);
     }
 
+    public function testPutDependenciaInputValuesNullFirst()
+    {
+        $response = $this->http->request('PUT','dependencias/7/1', [ 'json' => ['codCompCurric' => null,
+        'codPreRequisito' => null], 'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        
+        $violations = [
+                        [self::CONSTRAINT_NOT_NULL,'componenteCurricular'],
+                        [self::CONSTRAINT_NOT_NULL,'preRequisito'] 
+                     ];
+        $errorArray = $this->getMultipleErrorMessages($violations);  
 
-     
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($errorArray,$contentBody);
+    }
+
+    public function testPutDependenciaInputValuesNullSecond()
+    {
+        $response = $this->http->request('PUT','dependencias/7/1', [ 'json' => ['codCompCurric' => null], 'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::CONSTRAINT_NOT_NULL,"componenteCurricular");
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message, $contentBody);         
+    }
+
+    public function testPutDependenciaInputValuesNullThird()
+    {
+        $response = $this->http->request('PUT','dependencias/7/1', [ 'json' => ['codPreRequisito' => null], 'http_errors' => FALSE] );
+        
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();        
+        $message = $this->getStdMessage(self::CONSTRAINT_NOT_NULL,"preRequisito");
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message, $contentBody);         
+    }
 }

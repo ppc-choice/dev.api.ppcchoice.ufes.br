@@ -24,10 +24,15 @@ class CursoTest extends TestCase
     const EXCEPTION = 'EXCEPTION';
 
     const CONSTRAINT_NOT_NULL = 'CONSTRAINT_NOT_NULL';
+
     const CONSTRAINT_NOT_BLANK = 'CONSTRAINT_NOT_BLANK';
+
     const CONSTRAINT_NOT_NUMERIC = 'CONSTRAINT_NOT_NUMERIC';
+
     const CONSTRAINT_RANGE_MIN_1950 = 'CONSTRAINT_RANGE_MIN_1950';
+
     const CONSTRAINT_NUM_VALID = 'CONSTRAINT_NUM_VALID';
+
     const CONSTRAINT_TYPE_INTEGER = 'CONSTRAINT_TYPE_INTEGER';
 
 
@@ -139,16 +144,6 @@ class CursoTest extends TestCase
     {
         $response = $this->http->request('GET', 'cursos', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testGetCurso2()
-    {
-        $response = $this->http->request('GET', 'cursos', ['http_errors' => FALSE] );
-
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
         $message = $this->getStdMessage(self::NOT_FOUND);
@@ -160,16 +155,6 @@ class CursoTest extends TestCase
 
     public function testGetCursoNaoExistente()
     {
-        $response = $this->http->request('GET', 'cursos/80', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testGetCursoNaoExistente2()
-    {
         $response = $this->http->request('GET', 'cursos/100', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -180,6 +165,45 @@ class CursoTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
+
+    public function testGetCursoSucesso()
+    {
+        $response = $this->http->request('GET', 'cursos/1', ['http_errors' => FALSE] );
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $curso = ["codCurso"=> 1,
+                    "nome"=> "Ciência da Computação",
+                    "anoCriacao"=> 2011];
+
+        $cursoJson = json_encode($curso);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($cursoJson, $contentBody);
+    }
+
+    public function testGetCursoAllSucesso()
+    {
+        $response = $this->http->request('GET', 'cursos', ['http_errors' => FALSE] );
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $curso = ["codCurso"=> 1,
+                "nomeCurso"=> "Ciência da Computação",
+                "anoCriacao"=> 2011,
+                "nomeUnidadeEnsino"=> "Campus São Mateus",
+                "nomeIes"=> "Universidade Federal do Espírito Santo"];
+
+        $cursoJson = json_encode($curso);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($cursoJson, $contentBody);
+    }
+
     //POST
     public function testPostCursoSucesso()
     {
@@ -201,16 +225,6 @@ class CursoTest extends TestCase
 
     //PUT
     public function testPutCursoNaoExistente()
-    {
-        $response = $this->http->request('PUT', 'cursos/111', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
-    public function testPutCursoNaoExistente2()
     {
         $response = $this->http->request('PUT', 'cursos/111', ['http_errors' => FALSE] );
 
@@ -242,16 +256,6 @@ class CursoTest extends TestCase
     }
 
     //DELETE
-    public function testDeleteCursoNaoExistente()
-    {
-        $response = $this->http->request('DELETE', 'cursos/157', ['http_errors' => FALSE] );
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testDeleteCursoNaoExistente2()
     {
         $response = $this->http->request('DELETE', 'cursos/157', ['http_errors' => FALSE] );
@@ -265,7 +269,7 @@ class CursoTest extends TestCase
         $this->assertJsonStringEqualsJsonString($contentBody,$message);
     }
 
-    public function testDeleteCurso() // Testado e funcionando
+    public function testDeleteCurso()
     {
         $response = $this->http->request('DELETE', 'cursos/14', ['http_errors' => FALSE] );
 
@@ -279,21 +283,6 @@ class CursoTest extends TestCase
     }
 
     // Métodos com atributos null
-    public function testPostCursoAllNull()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => null,
-        'anoCriacao'=> null,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoAllNullBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -317,21 +306,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoAllNull()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => null,
-        'anoCriacao'=> null,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoAllNullBody()
@@ -360,21 +334,6 @@ class CursoTest extends TestCase
     }
 
     //Caracteres numéricos no nome
-    public function testPostCursoNomeNumerico()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Teste 222',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => 2],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoNomeNumericoBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -393,21 +352,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoNomeNumerico()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'ABC 123',
-        'anoCriacao'=> 2000,
-        'codUnidadeEnsino' => 2],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoNomeNumericoBody()
@@ -431,21 +375,6 @@ class CursoTest extends TestCase
     }
 
     //Ano de criacao com letra
-    public function testPostCursoAnoCriacaoLetra()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Criado para Teste',
-        'anoCriacao'=> 'aaa',
-        'codUnidadeEnsino' => 2],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoAnoCriacaoLetraBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -465,21 +394,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoAnoCriacaoLetra()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 'aaa',
-        'codUnidadeEnsino' => 2],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoAnoCriacaoLetraBody()
@@ -504,21 +418,6 @@ class CursoTest extends TestCase
     }
 
     // CodUnidadeEnsino com letra
-    public function testPostCursoCodUnidadeEnsinoLetra()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Criado para Teste',
-        'anoCriacao'=> 2000,
-        'codUnidadeEnsino' => 'aa'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoCodUnidadeEnsinoLetraBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -538,21 +437,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoCodUnidadeEnsinoLetra()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => 'cc'],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoCodUnidadeEnsinoLetraBody()
@@ -577,21 +461,6 @@ class CursoTest extends TestCase
     }
 
     //CodUnidadeEnsino null
-    public function testPostCursoCodUnidadeEnsinoNull()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoCodUnidadeEnsinoNullBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -611,21 +480,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoCodUnidadeEnsinoNull()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => null],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoCodUnidadeEnsinoNullBody()
@@ -650,21 +504,6 @@ class CursoTest extends TestCase
     }
 
     //CodUnidadeEnsino Vazia
-    public function testPostCursoCodUnidadeEnsinoVazia()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoCodUnidadeEnsinoVaziaBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -684,21 +523,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoCodUnidadeEnsinoVazia()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => ''],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoCodUnidadeEnsinoVaziaBody()
@@ -723,21 +547,6 @@ class CursoTest extends TestCase
     }
 
     //Ano de criação deve ser superior a 1950
-    public function testPostCursoAnoCriacaoSuperior()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Criado para Teste',
-        'anoCriacao'=> 1849,
-        'codUnidadeEnsino' => 2],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoAnoCriacaoSuperiorBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -756,21 +565,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoAnoCriacaoSuperior() 
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Modificado para Teste',
-        'anoCriacao'=> 1900,
-        'codUnidadeEnsino' => 3],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoAnoCriacaoSuperiorBody()
@@ -794,21 +588,6 @@ class CursoTest extends TestCase
     }
 
     //Unidade de Ensino Não existente
-    public function testPostCursoCodUnidadeEnsinoNaoExistente()
-    {
-        $response = $this->http->request('POST', 'cursos',
-        [ 'json' => [
-        'nome' => 'Curso Criado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => 1593],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
-
     public function testPostCursoCodUnidadeEnsinoNaoExistenteBody()
     {
         $response = $this->http->request('POST','cursos', 
@@ -828,21 +607,6 @@ class CursoTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
-    }
-
-    public function testPutCursoCodUnidadeEnsinoNaoExistente()
-    {
-        $response = $this->http->request('PUT', 'cursos/8',
-        [ 'json' => [
-        'nome' => 'Curso Criado para Teste',
-        'anoCriacao'=> 2001,
-        'codUnidadeEnsino' => 1593],
-        'http_errors' => FALSE] );
-
-        $this->assertEquals(400, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
     }
 
     public function testPutCursoCodUnidadeEnsinoNaoExistenteBody()
@@ -865,5 +629,4 @@ class CursoTest extends TestCase
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
         $this->assertContains($errorArray,$contentBody);
     }
-
 }

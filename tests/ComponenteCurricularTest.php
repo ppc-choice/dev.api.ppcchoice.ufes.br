@@ -146,30 +146,72 @@ class ComponenteCurricularTest extends TestCase
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $componenteArray = [ "nome"=> "Cálculo I",
+                "codCompCurric"=> 1,
+                "periodo"=> 1,
+                "credito"=> 5,
+                "codDepto"=> 2,
+                "depto"=> "DMA",
+                "numDisciplina"=> 5670,
+                "codPpc"=> 1];
+
+        $componenteJson = json_encode($componenteArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($componenteJson, $contentBody);
     }
 
     public function testGetComponente()
     {
         $response = $this->http->request('GET', 'componentes-curriculares/1', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $componenteArray = [ "nome"=> "Cálculo I",
+                    "codCompCurric"=> 1,
+                    "ch"=> 75,
+                    "periodo"=> 1,
+                    "credito"=> 5,
+                    "codDepto"=> 2,
+                    "depto"=> "DMA",
+                    "numDisciplina"=> 5670,
+                    "codPpc"=> 1];
+
+        $componenteJson = json_encode($componenteArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($componenteJson, $contentBody);
     }
 
     public function testGetComponentesPpc()
     {
         $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1/componentes-curriculares', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $componenteArray = [ "codCompCurric"=> 1,
+                    "nome"=> "Cálculo I",
+                    "ch"=> 75,
+                    "tipo"=> "OBRIGATORIA",
+                    "periodo"=> 1];
+
+        $componenteJson = json_encode($componenteArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($componenteJson, $contentBody);
     }
     
-    // Testes POST
 
+    // Testes POST
     public function testPostComponente()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 
@@ -191,8 +233,8 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    // Teste PUT
 
+    // Teste PUT
     public function testPutComponente()
     {
         $response = $this->http->request('PUT', 'componentes-curriculares/221', 
@@ -214,26 +256,23 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
+
     // Teste DELETE
+    public function testDeleteComponente()
+    {
+        $response = $this->http->request('DELETE', 'componentes-curriculares/227', ['http_errors' => FALSE] );
 
-    // public function testDeleteComponente()
-    // {
-    //     $response = $this->http->request('DELETE', 'componentes-curriculares/227', ['http_errors' => FALSE] );
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::DELETED);
 
-    //     $contentType = $response->getHeaders()["Content-Type"][0];
-    //     $contentBody = $response->getBody()->getContents();
-    //     $message = $this->getStdMessage(self::DELETED);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
+    }
 
-    //     $this->assertEquals(200, $response->getStatusCode());
-    //     $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    //     $this->assertJsonStringEqualsJsonString($message,$contentBody);
-    // }
-
-
-    // Teste de erros GET
 
     // Testes por ppc não existente ou não encontrado
-
     public function testGetComponentesPpcNaoExistente()
     {
         $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1234/componentes-curriculares', ['http_errors' => FALSE] );
@@ -338,10 +377,8 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    // teste departamento não existente
 
-    // Testes por disciplina não existente ou não encontrada
-    
+    // Testes por disciplina não existente ou não encontrada 
     public function testPostComponenteDisciplinaNaoExistente()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 
@@ -384,8 +421,8 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    //  Teste por período de valor inválido
 
+    //  Teste por período de valor inválido
     public function testPostComponentePeriodoInvalido()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 
@@ -423,8 +460,8 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    // Teste por crédito de valor inválido
 
+    // Teste por crédito de valor inválido
     public function testPostComponenteCreditoInvalido()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 
@@ -464,7 +501,6 @@ class ComponenteCurricularTest extends TestCase
 
 
     // Teste por tipo de valor inválido
-
     public function testPostComponenteTipoInvalido()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 
@@ -502,8 +538,8 @@ class ComponenteCurricularTest extends TestCase
         $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
-    // Teste valores NULL
 
+    // Teste valores NULL
     public function testPostComponenteValoresNull()
     {
         $response = $this->http->request('POST', 'componentes-curriculares', 

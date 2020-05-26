@@ -126,14 +126,23 @@ class TransicaoTest extends TestCase
     // Testes de comportamento normal
 
     // Teste de rotas GET
-    public function testGetTransicao()
+    public function testGetAllTransicoes()
     {
         $response = $this->http->request('GET', 'transicoes', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $transicao = [ "ppcAtual"=> "Ciência da Computação (2011)",
+                    "codPpcAtual"=> 1,
+                    "ppcAlvo"=> "Ciência da Computação (2019)",
+                    "codPpcAlvo"=> 2];
+
+        $transicaoJson = json_encode($transicao);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($transicaoJson, $contentBody);
         
     }
 
@@ -141,20 +150,35 @@ class TransicaoTest extends TestCase
     {
         $response = $this->http->request('GET', 'projetos-pedagogicos-curso/1/transicoes', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $transicao = [ "ppcAtual"=> "Ciência da Computação (2011)",
+                    "codPpcAtual"=> 1,
+                    "ppcAlvo"=> "Ciência da Computação (2019)",
+                    "codPpcAlvo"=> 2];
+
+        $transicaoJson = json_encode($transicao);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($transicaoJson, $contentBody);
     }
 
     public function testGetTransicaoUnidadeEnsino()
     {
         $response = $this->http->request('GET', 'unidades-ensino/1/transicoes', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $transicao = ["nomeCurso"=> "Ciência da Computação (2011)", "codPpc"=> 1];
+
+        $transicaoJson = json_encode($transicao);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($transicaoJson, $contentBody);
     }
 
 
