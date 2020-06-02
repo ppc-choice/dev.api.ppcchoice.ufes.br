@@ -10,7 +10,7 @@ class ComponenteCurricularRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, disc.codDepto',
+            ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.tipo, disc.codDepto',
                     'dep.abreviatura as depto,  disc.numDisciplina, p.codPpc')
             ->from('Entities\ComponenteCurricular','c')
             ->innerJoin('c.disciplina','disc')
@@ -39,7 +39,7 @@ class ComponenteCurricularRepository extends EntityRepository
     public function findByCodCompCurric($codCompCurric)
     {
         return $this->_em->createQueryBuilder()
-            ->select('disc.nome, c.codCompCurric,disc.ch, c.periodo, c.credito, disc.codDepto',
+            ->select('disc.nome, c.codCompCurric,disc.ch, c.periodo, c.credito, c.tipo, disc.codDepto',
                     'dep.abreviatura as depto,  disc.numDisciplina, p.codPpc')
             ->from('Entities\ComponenteCurricular', 'c')
             ->innerJoin('c.disciplina', 'disc')

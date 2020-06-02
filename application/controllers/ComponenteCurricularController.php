@@ -22,6 +22,7 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {String}   componenteCurricular[depto]               Abreviatura de departamento.
      * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
+     * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
      * 
      * @apiError {String[]} error Entities\\ComponenteCurricular:    Instância não encontrada.
      */
@@ -59,6 +60,7 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {String} componenteCurricular[nome]              Nome da disciplina.
      * @apiSuccess {Number} componenteCurricular[ch]                Carga horária da componente curricular.
      * @apiSuccess {Number} componenteCurricular[periodo]           Período da componente curricular.
+     * @apiSuccess {Number} componenteCurricular[tipo]              Tipo de componente curricular.
      * 
      * @apiError {String[]} error  Entities\\ComponenteCurricular:    Instância não encontrada.
      */
@@ -98,6 +100,7 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {Number} ch Carga        horária da componente curricular.
      * @apiSuccess {Number} periodo         Período da componente curricular.
      * @apiSuccess {Number} credito         Crédito da componente curricular.
+     * @apiSuccess {Number} tipo            Tipo de componente curricular.
      * @apiSuccess {Number} codDepto        Identificador único de departamento e parte do identificador único de disciplina.
      * @apiSuccess {String} depto           Abreviatura de departamento.
      * @apiSuccess {Number} numDisciplina   Número da disciplina, parte do identificador único de disciplina.
