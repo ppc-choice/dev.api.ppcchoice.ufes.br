@@ -140,8 +140,6 @@ class ComponenteCurricularController extends APIController
      * @apiGroup Componente Curricular
      * 
      * @apiSuccess {String[]} tipos    Array de String com os tipos definidos como constantes.
-     * 
-     * @apiError {String[]} error           Entities\\ComponenteCurricular\\tipo:    Instância não encontrada.
      */
     public function findTipos()
     {
@@ -151,20 +149,18 @@ class ComponenteCurricularController extends APIController
                 'methods' => array('GET'), 
             ));
         
-        $tipos = array(TP_CC_OBRIGATORIA,TP_CC_OPTATIVA,TP_CC_ESTAGIO,TP_CC_ATV_CMPLT,TP_CC_ATV_EXT,TP_CC_PROJ_CONC);
+        $tipos = array(TP_CC_OBRIGATORIA,
+		       TP_CC_OPTATIVA,
+		       TP_CC_ESTAGIO,
+		       TP_CC_ATV_CMPLT,
+		       TP_CC_ATV_EXT,
+		       TP_CC_PROJ_CONC);
         
-        if(!empty($tipos))
-        {
-            $this->apiReturn($tipos,
+       
+        $this->apiReturn($tipos,
                 self::HTTP_OK
             );
-            
-        }else{
-            $this->apiReturn(array(
-                    'error' =>  $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
-        }
+           
     }
 
     /**
