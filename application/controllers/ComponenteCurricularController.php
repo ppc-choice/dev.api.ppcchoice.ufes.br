@@ -55,12 +55,16 @@ class ComponenteCurricularController extends APIController
      * 
      * @apiParam {Number} codPpc Identificador único de projeto pedagógico de curso (PPC).
      * 
-     * @apiSuccess {ComponenteCurricular[]} componenteCurricular    Array de objetos do tipo ComponenteCurricular.
-     * @apiSuccess {Number} componenteCurricular[codCompCurric]     Identificador único de componente curricular.
-     * @apiSuccess {String} componenteCurricular[nome]              Nome da disciplina.
-     * @apiSuccess {Number} componenteCurricular[ch]                Carga horária da componente curricular.
-     * @apiSuccess {Number} componenteCurricular[periodo]           Período da componente curricular.
-     * @apiSuccess {Number} componenteCurricular[tipo]              Tipo de componente curricular.
+     * @apiSuccess {ComponenteCurricular[]} componentesCurriculares     Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {String}   componenteCurricular[nome]                Nome da diciplina.
+     * @apiSuccess {Number}   componenteCurricular[codCompCurric]       Identificador único de componente curricular.
+     * @apiSuccess {Number}   componenteCurricular[periodo]             Período da componente.
+     * @apiSuccess {Number}   componenteCurricular[credito]             Crédito da componente.
+     * @apiSuccess {Number}   componenteCurricular[codDepto]            Identificador único de departamento e parte do identificador único de disciplina.
+     * @apiSuccess {String}   componenteCurricular[depto]               Abreviatura de departamento.
+     * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
+     * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
      * 
      * @apiError {String[]} error  Entities\\ComponenteCurricular:    Instância não encontrada.
      */

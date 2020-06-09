@@ -24,7 +24,8 @@ class ComponenteCurricularRepository extends EntityRepository
     public function findByCodPpc($codPpc)
     {
         return $this->_em->createQueryBuilder()
-            ->select('c.codCompCurric, disc.nome, disc.ch, c.tipo, c.periodo')
+            ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.tipo, disc.codDepto',
+            'dep.abreviatura as depto,  disc.numDisciplina, p.codPpc')
             ->from('Entities\ComponenteCurricular','c')
             ->innerJoin('c.disciplina','disc')
             ->innerJoin('disc.departamento','dep')
