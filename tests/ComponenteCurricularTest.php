@@ -237,7 +237,7 @@ class ComponenteCurricularTest extends TestCase
     // Teste PUT
     public function testPutComponente()
     {
-        $response = $this->http->request('PUT', 'componentes-curriculares/221', 
+        $response = $this->http->request('PUT', 'componentes-curriculares/220', 
         ['json' => [
             'codDepto'=>  1,
             'numDisciplina'=> 6,
@@ -260,7 +260,7 @@ class ComponenteCurricularTest extends TestCase
     // Teste DELETE
     public function testDeleteComponente()
     {
-        $response = $this->http->request('DELETE', 'componentes-curriculares/227', ['http_errors' => FALSE] );
+        $response = $this->http->request('DELETE', 'componentes-curriculares/220', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();

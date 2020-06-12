@@ -17,11 +17,11 @@ class CorrespondenciaController extends APIController
      * @apiSuccess {Number}   correspondencia[codCompCurric]    Identificador único de componente curricular.
      * @apiSuccess {String}   correspondencia[depto]            Abreviatura de departamento.
      * @apiSuccess {Number}   correspondencia[numDisciplina]    Número de disciplina, parte do identificador único de disciplina.
-     * @apiSuccess {String}   correspondencia[NomeDisciplina]   Nome de disciplina
-     * @apiSuccess {Number}   correspondencia[codCompCorresp]   Identificador único de componente curricular.
+     * @apiSuccess {String}   correspondencia[nomeDisciplina]   Nome de disciplina
+     * @apiSuccess {Number}   correspondencia[codCompCurricCorresp]   Identificador único de componente curricular.
      * @apiSuccess {String}   correspondencia[deptoDisciplinaCorresp] Abreviatura de departamento.
      * @apiSuccess {Number}   correspondencia[numDisciplinaCorresp] Número de disciplina, parte do identificador único de disciplina.
-     * @apiSuccess {String}   correspondencia[NomeDisciplinaCorresp] Nome de disciplina
+     * @apiSuccess {String}   correspondencia[nomeDisciplinaCorresp] Nome de disciplina
      * @apiSuccess {Number}   correspondencia[percentual] Percentual de correspondência entre componentes.
      * 
      * 

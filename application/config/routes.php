@@ -73,6 +73,7 @@ $route['dependencias/(:num)/(:num)']['DELETE'] = 'DependenciaController/delete/$
 $route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
 $route['componentes-curriculares/(:num)']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
 $route['projetos-pedagogicos-curso/(:num)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
+$route['componentes-curriculares/tipos']['GET'] = 'ComponenteCurricularController/findTipos';
 $route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/create';
 $route['componentes-curriculares/(:num)']['PUT'] = 'ComponenteCurricularController/update/$1';
 $route['componentes-curriculares/(:num)']['DELETE'] = 'ComponenteCurricularController/delete/$1';
