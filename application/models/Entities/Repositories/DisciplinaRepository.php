@@ -9,7 +9,7 @@ class DisciplinaRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select('d.numDisciplina, d.nome, d.ch, d.codDepto, dep.nome AS nomeDepto')
+            ->select('d.numDisciplina, d.nome, d.ch, d.codDepto, dep.abreviatura AS abreviaturaDepto')
             ->from('Entities\Disciplina', 'd')
             ->innerJoin('d.departamento', 'dep')
             ->getQuery()
