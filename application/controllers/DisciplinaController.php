@@ -13,11 +13,20 @@ class DisciplinaController extends APIController
      * @apiName findAll
      * @apiGroup Disciplina
      *
+<<<<<<< Updated upstream
      * @apiSuccess {Number} numDisciplina Identificador único da disciplina.
      * @apiSuccess {String} nome Nome da disciplina.
      * @apiSuccess {Number} ch Carga horária da disciplina.
      * @apiSuccess {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
      * @apiSuccess {String} nomeDepto Nome do departamento cujo qual a disciplina está vinculada.
+=======
+     * @apiSuccess {Disciplina[]} disciplina Array de objetos do tipo Disciplina.
+     * @apiSuccess {Number} disciplina[numDisciplina] Identificador único da disciplina.
+     * @apiSuccess {String} disciplina[nome] Nome da disciplina.
+     * @apiSuccess {Number} disciplina[ch] Carga horária da disciplina.
+     * @apiSuccess {Number} disciplina[codDepto] Código do departamento cujo qual a disciplina está vinculada.
+     * @apiSuccess {String} disciplina[abreviaturaDepto] Abreviatura do departamento cujo qual a disciplina está vinculada.
+>>>>>>> Stashed changes
      * 
      * @apiError {String[]} 404 Nenhuma disciplina foi encontrada.
      */
@@ -95,7 +104,7 @@ class DisciplinaController extends APIController
      */
     public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('POST')
@@ -163,7 +172,7 @@ class DisciplinaController extends APIController
      */
     public function update($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('PUT')
@@ -229,7 +238,7 @@ class DisciplinaController extends APIController
      */
     public function delete($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('DELETE')
