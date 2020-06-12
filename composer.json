@@ -1,6 +1,6 @@
 {
 	"description": "Api consumo interno PPC-Choice",
-	"name": "ppcchoiceapi",
+	"name": "ppcchoice/api",
 	"type": "project",
 	"homepage": "http://ppcchoice.ufes.br",
 	"license": "MIT",

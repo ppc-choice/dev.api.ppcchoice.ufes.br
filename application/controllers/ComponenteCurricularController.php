@@ -13,9 +13,17 @@ class ComponenteCurricularController extends APIController
      * @apiName findAll
      * @apiGroup Componente Curricular
      *
-     * @apiSuccess {ComponenteCurricular[]} ComponentesCurriculares Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {ComponenteCurricular[]} componentesCurriculares     Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {String}   componenteCurricular[nome]                Nome da diciplina.
+     * @apiSuccess {Number}   componenteCurricular[codCompCurric]       Identificador único de componente curricular.
+     * @apiSuccess {Number}   componenteCurricular[periodo]             Período da componente.
+     * @apiSuccess {Number}   componenteCurricular[credito]             Crédito da componente.
+     * @apiSuccess {Number}   componenteCurricular[codDepto]            Identificador único de departamento e parte do identificador único de disciplina.
+     * @apiSuccess {String}   componenteCurricular[depto]               Abreviatura de departamento.
+     * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
      * 
-     * @apiError {String[]} 404 Nenhuma componente curricular encontrada.
+     * @apiError {String[]} error Entities\\ComponenteCurricular:    Instância não encontrada.
      */
     public function findAll()
 	{
@@ -26,9 +34,17 @@ class ComponenteCurricularController extends APIController
     
         $colecaoCompCurric = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findAll();
         
-        $this->apiReturn($colecaoCompCurric,
-            self::HTTP_OK
+        if(!empty($colecaoCompCurric))
+        {
+            $this->apiReturn($colecaoCompCurric,
+                self::HTTP_OK
+            );
+        } else {
+            $this->apiReturn(array(
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+            ),self::HTTP_NOT_FOUND
         );
+        }
         
     }
     /**
@@ -36,20 +52,20 @@ class ComponenteCurricularController extends APIController
      * @apiName findByCodPpc
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codPpc Código de projeto pedagógico de curso (PPC).
+     * @apiParam {Number} codPpc Identificador único de projeto pedagógico de curso (PPC).
      * 
-     * @apiSuccess {ComponenteCurricular[]} ComponentesCurriculares Array de objetos do tipo ComponenteCurricular.
-     * @apiSuccess {Number} codCompCurric Código da componente curricular.
-     * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
-     * @apiSuccess {Number} ch Carga horária da disciplina da componente curricular.
-     * @apiSuccess {Number} periodo Período da componente curricular.
+     * @apiSuccess {ComponenteCurricular[]} componenteCurricular    Array de objetos do tipo ComponenteCurricular.
+     * @apiSuccess {Number} componenteCurricular[codCompCurric]     Identificador único de componente curricular.
+     * @apiSuccess {String} componenteCurricular[nome]              Nome da disciplina.
+     * @apiSuccess {Number} componenteCurricular[ch]                Carga horária da componente curricular.
+     * @apiSuccess {Number} componenteCurricular[periodo]           Período da componente curricular.
      * 
-     * @apiError {String[]} 404 O <code>codPpc</code> não corresponde a um ppc cadastrado.
+     * @apiError {String[]} error  Entities\\ComponenteCurricular:    Instância não encontrada.
      */
 	public function findByCodPpc($codPpc)
 	{
-        
         header("Access-Control-Allow-Origin: *");
+
         $this->_apiConfig(array(
                 'methods' => array('GET'), 
             ));
@@ -64,29 +80,30 @@ class ComponenteCurricularController extends APIController
             
         }else{
             $this->apiReturn(array(
-                    'error' => array('Não foram encontradas componentes curriculares para o ppc solicitado.')
+                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
     }
     
     /**
-     * @api {get} componentes-curriculares/:codCompCurric Requisitar uma componente curricular
+     * @api {get} componentes-curriculares/:codCompCurric Solicitar uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCurric     Identificador único de componente curricular.
      *
-     * @apiSuccess {String} nome Nome da disciplina que a componente integraliza no projeto pedagógico de curso.
-     * @apiSuccess {Number} codCompCurric Código da componente curricular.
-     * @apiSuccess {Number} ch Carga horária da disciplina.
-     * @apiSuccess {Number} periodo Número do período da componente curricular.
-     * @apiSuccess {Number} credito Crédito da componente curricular.
-     * @apiSuccess {Number} codDepto Código do departamento.
-     * @apiSuccess {String} codDisc Código da disciplina.
-     * @apiSuccess {Number} codPpc Código do projeto pedagógico de curso o qual a componente pertence.
+     * @apiSuccess {String} nome            Nome da disciplina.
+     * @apiSuccess {Number} codCompCurric   Identificador único de componente curricular.
+     * @apiSuccess {Number} ch Carga        horária da componente curricular.
+     * @apiSuccess {Number} periodo         Período da componente curricular.
+     * @apiSuccess {Number} credito         Crédito da componente curricular.
+     * @apiSuccess {Number} codDepto        Identificador único de departamento e parte do identificador único de disciplina.
+     * @apiSuccess {String} depto           Abreviatura de departamento.
+     * @apiSuccess {Number} numDisciplina   Número da disciplina, parte do identificador único de disciplina.
+     * @apiSuccess {Number} codPpc          Identificador único de ppc.
      * 
-     * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a uma componente curricular cadastrada.
+     * @apiError {String[]} error           Entities\\ComponenteCurricular:    Instância não encontrada.
      */
 	public function findByCodCompCurric($codCompCurric)
 	{
@@ -107,7 +124,7 @@ class ComponenteCurricularController extends APIController
             
         }else{
             $this->apiReturn(array(
-                    'error' =>  array('Componente curricular não encontrada.')
+                    'error' =>  $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -119,20 +136,17 @@ class ComponenteCurricularController extends APIController
      * @apiName create
      * @apiGroup Componente Curricular
      * 
-     * @apiParam (Request Body/JSON) {String} periodo  Período da componente.
-     * @apiParam (Request Body/JSON) {String} credito  Crédito da componente.
-     * @apiParam (Request Body/JSON) {String} tipo  Tipo da componente.
-     * @apiParam (Request Body/JSON) {String} codDepto  Código do departamento.
-     * @apiParam (Request Body/JSON) {String} numDisciplina  Número da disicplina.
-     * @apiParam (Request Body/JSON) {String} codPpc  Código do ppc.
+     * @apiParam (Request Body/JSON) {Number}   periodo  Período da componente.
+     * @apiParam (Request Body/JSON) {Number}   credito  Crédito da componente.
+     * @apiParam (Request Body/JSON) {String = "OBRIGATORIA", "OPTATIVA", "ESTAGIO", "ATIVIDADE COMPLEMENTAR", "ATIVIDADE EXTENSAO", "PROJETO CONCLUSAO"} tipo  Tipo da componente.
+     * @apiParam (Request Body/JSON) {Number}   codDepto  Identificador único de departamento e parte do identificador único de disciplina.
+     * @apiParam (Request Body/JSON) {Number}   numDisciplina  Número da disicplina, parte do identificador único de disciplina.
+     * @apiParam (Request Body/JSON) {Number}   codPpc  Identificador único de ppc.
      * 
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular criada com sucesso"
-     *     }
+     * @apiSuccess {String[]} message   Entities\\ComponenteCurricular: Instância criada com sucesso.
      * 
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
      */
     public function create()
     {
@@ -172,25 +186,21 @@ class ComponenteCurricularController extends APIController
             try{
                 $this->entityManager->persist($componenteCurricular);
                 $this->entityManager->flush();
-
+                
                 $this->apiReturn(array(
-                    'message' => array('Componente curricular criada com sucesso.'),
+                    'message' => $this->getApiMessage(STD_MSG_CREATED),
                 ), self::HTTP_OK);
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION)
                     ),self::HTTP_BAD_REQUEST
                 );
             }
 
             
         }else{
-            $msgViolacoes = $constraints->messageArray();
-
             $this->apiReturn(array(
-                'error' => $msgViolacoes
+                'error' => $constraints->messageArray(),
                 ), self::HTTP_BAD_REQUEST
             );
         }
@@ -201,22 +211,19 @@ class ComponenteCurricularController extends APIController
      * @apiName update
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
-     * @apiParam (Request Body/JSON) {String} periodo  Período da componente.
-     * @apiParam (Request Body/JSON) {String} credito  Crédito da componente.
-     * @apiParam (Request Body/JSON) {String} tipo  Tipo da componente.
-     * @apiParam (Request Body/JSON) {String} codDepto  Código do departamento.
-     * @apiParam (Request Body/JSON) {String} numDisciplina  Número da disicplina.
-     * @apiParam (Request Body/JSON) {String} codPpc  Código do ppc.
+     * @apiParam {Number} codCompCurric                         Identificador único de componente curricular.
+     * @apiParam (Request Body/JSON) {Number} [periodo]         Período da componente.
+     * @apiParam (Request Body/JSON) {Number} [credito]         Crédito da componente.
+     * @apiParam (Request Body/JSON) {String = "OBRIGATORIA", "OPTATIVA", "ESTAGIO", "ATIVIDADE COMPLEMENTAR", "ATIVIDADE EXTENSAO", "PROJETO CONCLUSAO"} [tipo]  Tipo da componente.
+     * @apiParam (Request Body/JSON) {Number} [codDepto]        Identificador único de departamento.
+     * @apiParam (Request Body/JSON) {Number} [numDisciplina]   Número da disciplina, parte do idenficador único de disciplina.
+     * @apiParam (Request Body/JSON) {Number} [codPpc]          Identificador único de ppc.
      * 
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular atualizada com sucesso."
-     *     }
+     * @apiSuccess {String[]} message  Entities\\ComponenteCurricular: Instância atualizada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a uma componente curricular cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\ComponenteCurricular:    Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Ocorreu uma exceção ao persistir a instância.
      */
     public function update($codCompCurric)
     {
@@ -232,29 +239,40 @@ class ComponenteCurricularController extends APIController
 
         if(!is_null($componenteCurricular))
         {
-            if(isset($payload['codPpc']))
+            if(array_key_exists('codPpc', $payload))
             {
-                $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpc']);
+                if(isset($payload['codPpc'])){
+                    $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpc']);
+                } else {
+                    $ppc = null;
+                }                
                 $componenteCurricular->setPpc($ppc);
             }
 
-            if(isset($payload['numDisciplina'],$payload['codDepto']))
+            if(array_key_exists('numDisciplina', $payload) && array_key_exists('codDepto', $payload))
             {
-                $disciplina = $this->entityManager->find('Entities\Disciplina',
-                    array('numDisciplina' => $payload['numDisciplina'], 'codDepto' => $payload['codDepto']));
+                if(isset($payload['numDisciplina'], $payload['codDepto'])){
+                    $disciplina = $this->entityManager->find('Entities\Disciplina',
+                    array('numDisciplina' =>  $payload['numDisciplina'], 'codDepto' =>  $payload['codDepto']));
+                } else {
+                    $disciplina = null;
+                }                
                 $componenteCurricular->setDisciplina($disciplina);
             }
 
-            if(isset($payload['periodo'])){
-                $componenteCurricular->setPeriodo($payload['periodo']);
+            if(array_key_exists('periodo', $payload))
+            {
+                $componenteCurricular->setPeriodo( $payload['periodo']);
             }
 
-            if(isset($payload['credito'])){
-                $componenteCurricular->setCredito($payload['credito']);
+            if(array_key_exists('credito', $payload))
+            {
+                $componenteCurricular->setCredito( $payload['credito']);
             }
             
-            if(isset($payload['tipo'])){
-                $componenteCurricular->setTipo($payload['tipo']);
+            if(array_key_exists('tipo', $payload))
+            {
+                $componenteCurricular->setTipo( $payload['tipo']);
             }
             
             $constraints = $this->validator->validate($componenteCurricular);
@@ -266,27 +284,23 @@ class ComponenteCurricularController extends APIController
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
-                        'message' => array('Componente Curricular atualizada com sucesso')
+                        'message' => $this->getApiMessage(STD_MSG_UPDATED),
                     ),self::HTTP_OK);
                 } catch (\Exception $e) {
-                    $msgExcecao = array($e->getMessage());
-
                     $this->apiReturn(array(
-                        'error' => $msgExcecao
+                        'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                         ), self::HTTP_BAD_REQUEST
                     );
                 }
             }else{
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Componente Curricular não encontrada'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),         
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -297,16 +311,13 @@ class ComponenteCurricularController extends APIController
      * @apiName delete
      * @apiGroup Componente Curricular
      * 
-     * @apiParam {Number} codCompCurric Código de componente curricular.
+     * @apiParam {Number} codCompCurric     Identificador único de componente curricular.
      * 
-     *  @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "message": "Componente curricular removida com sucesso"
-     *     }
+     * @apiSuccess {String[]} message       Entities\\ComponenteCurricular: Instância deletada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codCompCurric</code> não corresponde a uma componente curricular cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error           Entities\\ComponenteCurricular:    Instância não encontrada.
+     * @apiError {String[]} error           Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error           Ocorreu uma exceção ao persistir a instância.
      */
     public function delete($codCompCurric)
     {
@@ -326,20 +337,18 @@ class ComponenteCurricularController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array('Componente Curricular removida com sucesso')
+                    'message' => $this->getApiMessage(STD_MSG_DELETED),
                     ), self::HTTP_OK
                 );
             } catch (\Exception $e) {
-                $msgExcecao = array($e->getMessage());
-                
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
         }else{ 
             $this->apiReturn(array(
-                'error' => array('Componente Curricular não encontrada'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }

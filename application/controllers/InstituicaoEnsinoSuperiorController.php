@@ -9,16 +9,18 @@ class InstituicaoEnsinoSuperiorController extends APIController
     }
   
 	/**
-	 * @api {get} instituicoes-ensino-superior/ Solicitar dados de todas Instituições de Ensino Superior.
+	 * @api {get} instituicoes-ensino-superior Solicitar dados de todas Instituições de Ensino Superior.
 	 * @apiName findAll
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicoesEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
+	 * @apiSuccess {InstituicaoEnsinoSuperior[]} InstituicaoEnsinoSuperior Array de objetos do tipo InstituicaoEnsinoSuperior.
+	 * 
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
     public function findAll()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -26,17 +28,24 @@ class InstituicaoEnsinoSuperiorController extends APIController
 		);
 		
         $colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
-        $x = $this->doctrineToArray($colecaoIes,TRUE);
+		
+		if (!empty($colecaoIes) ){
+			$colecaoIes = $this->doctrineToArray($colecaoIes,TRUE);
+			$this->apiReturn($colecaoIes,
+				self::HTTP_OK
+			);
+		} else {
+			$this->apiReturn(array(
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+			), self::HTTP_NOT_FOUND);
+		}
 
-		$this->apiReturn($x,
-			self::HTTP_OK
-		);
 	}
 
 	/**
 	 * @api {get} instituicoes-ensino-superior/:codIes Solicitar dados de uma Instituição de Ensino Superior.
 	 * @apiName findById
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 *
 	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior requerida.
@@ -44,12 +53,11 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiSuccess {String} nome   Nome da Instituição de Ensino Superior.
 	 * @apiSuccess {String} abreviatura  Sigla da Instituição de Ensino Superior.
 	 * 
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
     public function findById($codIes)
     {   
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -66,31 +74,29 @@ class InstituicaoEnsinoSuperiorController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => array('Instituicao de Ensino Superior não encontrada!'),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 			), self::HTTP_NOT_FOUND);
 		}
 
 	}
-	
 
 	/**
-	 * @api {post} instituicoes-ensino-superior/ Criar uma Instituição de Ensino Superior.
+	 * @api {post} instituicoes-ensino-superior Criar uma Instituição de Ensino Superior.
 	 * @apiName create
-	 * @apiGroup Instituições de Ensino Superior
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {Number} codIes   Identificador único da Instituição de Ensino Superior.
 	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
 	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
 	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior criada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('POST'),
@@ -112,46 +118,43 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 	
 				$this->apiReturn(array(
-					'result' => array('Instituicao de Ensino Superior Criada com Sucesso!'),
+					'message' => $this->stdMessage(STD_MSG_CREATED),
 					), self::HTTP_OK
 				);
 			} catch (\Exception $e) {
-				$msgExcecao = array($e->getMessage());
-				
 				$this->apiReturn(array(
-					'error' => $msgExcecao,
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}	
 		}else {
-			$msgViolacoes = $constraints->messageArray();
-
 			$this->apiReturn(array(
-				'error' => $msgViolacoes,
+				'error' => $constraints->messageArray(),
 				), self::HTTP_BAD_REQUEST
 			);	
 		} 
  
     }
-   
 
 	/**
      * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
      * @apiName update
-     * @apiGroup Instituições de Ensino Superior
+     * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {String} nome   Nome da Instituição de Ensino Superior.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla da Instituição de Ensino Superior.
+	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
 	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior atualizada com sucesso.
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome da Instituição de Ensino Superior.
+	 * @apiParam (Request Body/JSON) {String} [abreviatura]  Sigla da Instituição de Ensino Superior.
+	 * 
+	 * @apiSuccess {String[]} message Entities\\InstituicaoEnsinoSuperior: Instância atualizada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function update($codIes)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('PUT'),
@@ -174,51 +177,46 @@ class InstituicaoEnsinoSuperiorController extends APIController
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
-						'message' => array('Instituição de Ensino Superior atualizada com sucesso!')
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						), self::HTTP_OK
 					);
 					
 				} catch (\Exception $e) {
-					$msgExcecao = array($e->getMessage());
-					
 					$this->apiReturn(array(
-						'error' => $msgExcecao
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}	
 			} else {
-				$msgViolacoes = $constraints->messageArray();
-	
 				$this->apiReturn(array(
-					'error' => $msgViolacoes,
+					'error' => $constraints->messageArray(),
 					), self::HTTP_BAD_REQUEST
 				);	
 			}
 
         }else{
             $this->apiReturn(array(
-                'error' => array('Instituição de Ensino Superior não encontrada!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
         }
 	}
 	
-
 	/**
      * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
      * @apiName delete
-     * @apiGroup Instituições de Ensino Superior
+     * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
    	 * 
-	 * @apiSuccess {String} message  Instituição de Ensino Superior deletada com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codIes</code> não corresponde a uma Instituição de Ensino Superior cadastrada.
+	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
      */
 	public function delete($codIes)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -234,21 +232,19 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => array('Instituição de Ensino Superior removida com sucesso!')
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 					), self::HTTP_OK
 				);
 				
 			} catch (\Exception $e) {
-				$msgExcecao = array($e->getMessage());
-
 				$this->apiReturn(array(
-					'error' => $msgExcecao
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}	
 		}else{
 			$this->apiReturn(array(
-                'error' => array('Instituição de Ensino Superior não encontrada!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}
