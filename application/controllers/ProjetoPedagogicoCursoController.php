@@ -91,6 +91,41 @@ class ProjetoPedagogicoCursoController extends APIController
         }
     }  
 
+     /**
+    * @api {get} cursos/:codCurso/projetos-pedagogicos-curso Requisitar todos Projetos Pedagógicos de Curso de um Curso.
+    * @apiParam {Number} codCurso Código de identificação de um Curso.
+    *
+    * @apiName findByIdCurso
+    * @apiGroup Projeto Pedagógico Curso
+    *
+    * @apiSuccess {ProjetoPedagogicoCurso[]} Projeto Pedagógico Curso Array de objetos do tipo Projeto Pedagógico Curso.
+    * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
+    *
+    */
+    public function findByIdCurso($codCurso)
+    {
+        header("Access-Control-Allow-Origin: *");
+
+        $this->_apiConfig(array(
+            'methods' => array('GET'), 
+        ));
+       
+        $colecaoPpc = $this->entityManager->getRepository('Entities\ProjetoPedagogicoCurso')->findByCurso($codCurso);
+        
+        if(!empty($colecaoPpc)){
+            $colecaoPpc = $this->doctrineToArray($colecaoPpc,TRUE);
+            
+            $this->apiReturn($colecaoPpc,
+                self::HTTP_OK 
+            ); 
+        }else{
+            $this->apiReturn(array(
+                'error' => array("Curso não encontrado!"),
+                ),self::HTTP_NOT_FOUND 
+            );
+        }
+    }
+
     /**
     * @api {post} projetos-pedagogicos-curso Criar um novo Projeto Pedagógico de Curso.
     * @apiParam (Request Body/JSON) {DateTime} dtInicioVigencia Data correspondente ao ínicio de vigência do projeto pedagógico do curso.
@@ -114,7 +149,7 @@ class ProjetoPedagogicoCursoController extends APIController
     * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
     */
-    
+        
     public function create()
 	{
         header("Access-Control-Allow-Origin: *");
