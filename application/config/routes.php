@@ -53,6 +53,7 @@ $route['unidades-ensino/(:num)']['DELETE'] = 'UnidadeEnsinoController/delete/$1'
 // Projeto Pedagógico de Curso : Guilherme
 $route['projetos-pedagogicos-curso/(:num)']['GET'] = 'ProjetoPedagogicoCursoController/findById/$1';
 $route['projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findAll';
+$route['cursos/(:num)/projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findByIdCurso/$1';
 $route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/create';
 $route['projetos-pedagogicos-curso/(:num)']['PUT'] = 'ProjetoPedagogicoCursoController/update/$1';
 $route['projetos-pedagogicos-curso/(:num)']['DELETE'] = 'ProjetoPedagogicoCursoController/delete/$1';
