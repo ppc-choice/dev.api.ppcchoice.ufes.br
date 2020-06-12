@@ -139,20 +139,39 @@ class DisciplinaTest extends TestCase
     {
         $response = $this->http->request('GET', 'disciplinas', ['http_errors' => FALSE] );
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $disciplinaArray = ["numDisciplina" => 6,
+                            "nome" => "Matemática Discreta",
+                            "ch" => 60,
+                            "codDepto" => 1,
+                            "nomeDepto" => "Departamento de Computação e Eletrônica"];
+
+        $disciplinaJson = json_encode($disciplinaArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($disciplinaJson, $contentBody);
+        
     }
 
     public function testGetDisciplinaSucesso()
     {
-        $response = $this->http->request('GET', 'disciplinas/6/1', ['http_errors' => FALSE] );
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $response = $this->http->request('GET', 'disciplinas/1/6', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $disciplinaArray = ["nome" => "Matemática Discreta",
+                            "ch" => 60,
+                            "nomeDepto" => "Departamento de Computação e Eletrônica"];
+
+        $disciplinaJson = json_encode($disciplinaArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($disciplinaJson, $contentBody);
     }
 
     public function testGetDisciplinaNaoExistente()
@@ -174,10 +193,13 @@ class DisciplinaTest extends TestCase
         $response = $this->http->request('POST', 'disciplinas', ['json' => ['numDisciplina' => 84,
         'codDepto' => 3, 'nome' => 'Nome Disciplina', 'ch' => 60], 'http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::CREATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPostDisciplinaJaExisteNoBanco()
@@ -268,10 +290,13 @@ class DisciplinaTest extends TestCase
         $response = $this->http->request('PUT', 'disciplinas/6/1', 
         ['json' => ['nome' => 'Nome Disciplina', 'ch' => 60], 'http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::UPDATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPutDisciplinaNaoExistente()
@@ -355,15 +380,18 @@ class DisciplinaTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'disciplinas/3/84', ['http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::DELETED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testDeleteDisciplinaNaoExistente()
     {
-        $response = $this->http->request('DELETE', 'disciplinas/1/6', ['http_errors' => FALSE]);
+        $response = $this->http->request('DELETE', 'disciplinas/3/84', ['http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
         $contentBody = $response->getBody()->getContents();
