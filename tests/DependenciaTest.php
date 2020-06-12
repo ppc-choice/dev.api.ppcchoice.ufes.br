@@ -43,7 +43,7 @@ class DependenciaTest extends TestCase
     ];
 
     public function setUp(){
-        $this->http = new GuzzleHttp\Client(['base_uri' => 'http://dev.api.ppcchoice.ufes.br:8080/']);
+        $this->http = new GuzzleHttp\Client(['base_uri' => 'http://dev.api.ppcchoice.ufes.br/']);
         $this->entity = preg_replace('/Test$/', "", get_class($this));
     }
 

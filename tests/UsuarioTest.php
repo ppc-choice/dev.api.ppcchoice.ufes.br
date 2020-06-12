@@ -67,109 +67,109 @@ class UsuarioTest extends TestCase
         ]]);
     }
 
-    public function testGetTodosUsuarios()
-    {
-        $response = $this->http->request('GET', 'usuarios', ['http_errors' => FALSE]);
+    // public function testGetTodosUsuarios()
+    // {
+    //     $response = $this->http->request('GET', 'usuarios', ['http_errors' => FALSE]);
         
-        $this->assertEquals(200, $response->getStatusCode());
+    //     $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+    //     $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
 
-        $body = json_decode($response->getBody()->getContents());
+    //     $body = json_decode($response->getBody()->getContents());
         
-        $this->assertInternalType('array', $body);
+    //     $this->assertInternalType('array', $body);
 
-        $usuarioEsperado = [
-            "codUsuario" =>  2,
-            "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
-            "nome" => "Hadamo",
-            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
-            "email" => "hadamo.egito@ppcchoice",
-            "papel" => "ADMIN",
-            "conjuntoSelecao" => null
-        ];
+    //     $usuarioEsperado = [
+    //         "codUsuario" =>  2,
+    //         "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
+    //         "nome" => "Hadamo",
+    //         "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+    //         "email" => "hadamo.egito@ppcchoice",
+    //         "papel" => "ADMIN",
+    //         "conjuntoSelecao" => null
+    //     ];
 
-        $this->assertContains($usuarioEsperado,$body);
+    //     $this->assertContains($usuarioEsperado,$body);
 
-    }
+    // }
     
-    public function testGetUsuarioById()
-    {
-        $response = $this->http->request('GET', 'usuarios/2', ['http_errors' => FALSE]);
+    // public function testGetUsuarioById()
+    // {
+    //     $response = $this->http->request('GET', 'usuarios/2', ['http_errors' => FALSE]);
         
-        $this->assertEquals(200, $response->getStatusCode());
+    //     $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+    //     $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
 
-        $usuario = [
-            "codUsuario" =>  2,
-            "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
-            "nome" => "Hadamo",
-            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
-            "email" => "hadamo.egito@ppcchoice",
-            "papel" => "ADMIN",
-            "conjuntoSelecao" => null
-        ];
+    //     $usuario = [
+    //         "codUsuario" =>  2,
+    //         "senha" => "$2a$10$.urkFh/lvzcnzm1S.TQ6rup5Slv.DQ0NZfkwFXPijBeNO.E032Ugi",
+    //         "nome" => "Hadamo",
+    //         "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+    //         "email" => "hadamo.egito@ppcchoice",
+    //         "papel" => "ADMIN",
+    //         "conjuntoSelecao" => null
+    //     ];
 
-        $this->assertJsonStringEqualsJsonString( json_encode($usuario), $response->getBody()->getContents());
-    }
+    //     $this->assertJsonStringEqualsJsonString( json_encode($usuario), $response->getBody()->getContents());
+    // }
 
-    public function testCriarUsuarioTodosCamposValidos()
-    {
-        $usuario = [
-            "senha" => "senhaTeste",
-            "nome" => "Teste",
-            "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
-            "email" => "meuemail@gmail.com",
-            "papel" => "VISITOR",
-            "conjuntoSelecao" => null
-        ];
+    // public function testCriarUsuarioTodosCamposValidos()
+    // {
+    //     $usuario = [
+    //         "senha" => "senhaTeste",
+    //         "nome" => "Teste",
+    //         "dtUltimoAcesso" => "2019-02-01T00:00:00-02:00",
+    //         "email" => "meuemail@gmail.com",
+    //         "papel" => "VISITOR",
+    //         "conjuntoSelecao" => null
+    //     ];
 
-        $response = $this->http->request('POST', 'usuarios', [ 
-        'headers' => [
-            'Content-Type' => 'application/json'
-        ],
-        'json' => $usuario,
-        'http_errors' => FALSE]);
+    //     $response = $this->http->request('POST', 'usuarios', [ 
+    //     'headers' => [
+    //         'Content-Type' => 'application/json'
+    //     ],
+    //     'json' => $usuario,
+    //     'http_errors' => FALSE]);
         
-        $this->assertEquals(200, $response->getStatusCode());
+    //     $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
+    //     $this->assertEquals("application/json; charset=UTF-8", $response->getHeader('Content-Type')[0]);
 
-        $this->assertJsonStringEqualsJsonString( $this->getStdMessage(self::CREATED), $response->getBody()->getContents());
+    //     $this->assertJsonStringEqualsJsonString( $this->getStdMessage(self::CREATED), $response->getBody()->getContents());
         
-    }   
+    // }   
 
-    // Testes
+    // // Testes
 
-    public function testGetUsuarioNaoExistente()
-    {
-        $response = $this->http->request('GET', 'usuarios/100', ['http_errors' => FALSE] );
+    // public function testGetUsuarioNaoExistente()
+    // {
+    //     $response = $this->http->request('GET', 'usuarios/100', ['http_errors' => FALSE] );
 
-        $this->assertEquals(404, $response->getStatusCode());
+    //     $this->assertEquals(404, $response->getStatusCode());
 
-        // $this->assertEquals("application/json; charset=UTF-8", $response->getContentType());
+    //     // $this->assertEquals("application/json; charset=UTF-8", $response->getContentType());
 
 
-    }
+    // }
 
-    // Exemplo
-    public function testPostUsuarioDadoInvalido()
-    {
-        $response = $this->http->request('POST', 'usuarios', [
-            'http_errors' => FALSE,
-            'headers' => [
-                // 'Content-Type' => 'application/json',
-                'Cache-Control' => 'no-cache'        
-            ],
-            'json' => [
-                    'nome' => 'x',
-            ],
-        ]);
-        // echo $response->getBody()->getContents();
-        // $this->assertEquals(200, $response->getStatusCode());
+    // // Exemplo
+    // public function testPostUsuarioDadoInvalido()
+    // {
+    //     $response = $this->http->request('POST', 'usuarios', [
+    //         'http_errors' => FALSE,
+    //         'headers' => [
+    //             // 'Content-Type' => 'application/json',
+    //             'Cache-Control' => 'no-cache'        
+    //         ],
+    //         'json' => [
+    //                 'nome' => 'x',
+    //         ],
+    //     ]);
+    //     // echo $response->getBody()->getContents();
+    //     // $this->assertEquals(200, $response->getStatusCode());
 
-        // $contentType = $response->getHeaders()["Content-Type"][0];
-        // $this->assertEquals("application/json; charset=UTF-8", $contentType);
-    }
+    //     // $contentType = $response->getHeaders()["Content-Type"][0];
+    //     // $this->assertEquals("application/json; charset=UTF-8", $contentType);
+    // }
 }

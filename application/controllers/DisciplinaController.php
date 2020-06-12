@@ -18,7 +18,7 @@ class DisciplinaController extends APIController
      * @apiSuccess {String} disciplina[nome] Nome da disciplina.
      * @apiSuccess {Number} disciplina[ch] Carga horária da disciplina.
      * @apiSuccess {Number} disciplina[codDepto] Código do departamento cujo qual a disciplina está vinculada.
-     * @apiSuccess {String} disciplina[nomeDepto] Nome do departamento cujo qual a disciplina está vinculada.
+     * @apiSuccess {String} disciplina[abreviaturaDepto] Abreviatura do departamento cujo qual a disciplina está vinculada.
      * 
      * @apiError {String[]} error Entities\\Disciplina: Instância não encontrada.
      */

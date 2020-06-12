@@ -143,20 +143,37 @@ class UnidadeEnsinoTest extends TestCase
     {
         $response = $this->http->request('GET', 'unidades-ensino', ['http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $uesArray = ["codUnidadeEnsino" => 1,
+                    "nome" => "Universidade Federal do Espírito Santo (UFES)-Campus São Mateus"];
+
+        $uesJson = json_encode($uesArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertContains($uesJson, $contentBody);
     }
 
     public function testGetUnidadeEnsinoSucesso()
     {
-        $response = $this->http->request('GET', 'unidades-ensino/4', ['http_errors' => FALSE] );
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $response = $this->http->request('GET', 'unidades-ensino/1', ['http_errors' => FALSE] );
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+       
+        $uesArray = ["nomeInstituicao" => "Universidade Federal do Espírito Santo",
+                    "abreviatura" => "UFES",
+                    "codIes" => 573,
+                    "nome" => "Campus São Mateus",
+                    "cnpj" => "32.479.123/0001-43"];
+
+        $uesJson = json_encode($uesArray);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($uesJson, $contentBody);
     }
 
     public function testGetUnidadeEnsinoNaoExistente()
@@ -178,10 +195,13 @@ class UnidadeEnsinoTest extends TestCase
         $response = $this->http->request('POST', 'unidades-ensino', ['json' => ['nome' => 'Nome Unidade Ensino',
         'codIes' => 573, 'cnpj' => '12.123.123/1234-12'], 'http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::CREATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPostUnidadeEnsinoNulo()
@@ -254,13 +274,16 @@ class UnidadeEnsinoTest extends TestCase
     // PUT
     public function testPutUnidadeEnsinoSucesso()
     {
-        $response = $this->http->request('PUT', 'unidades-ensino/1', ['json' => ['nome' => 'Nome Unidade Ensino',
+        $response = $this->http->request('PUT', 'unidades-ensino/4', ['json' => ['nome' => 'Nome Unidade Ensino',
         'codIes' => 573, 'cnpj' => '12.123.123/1234-12'], 'http_errors' => FALSE]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::UPDATED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testPutUnidadeEnsinoNaoExistente()
@@ -276,7 +299,7 @@ class UnidadeEnsinoTest extends TestCase
 
     public function testPutUnidadeEnsinoNulo()
     {
-        $response = $this->http->request('PUT', 'unidades-ensino/1', ['json' => ['nome' => null,
+        $response = $this->http->request('PUT', 'unidades-ensino/4', ['json' => ['nome' => null,
         'codIes' => null, 'cnpj' => null], 'http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
@@ -342,21 +365,27 @@ class UnidadeEnsinoTest extends TestCase
     // DELETE
     public function testDeleteUnidadeEnsinoSucesso()
     {
-        $response = $this->http->request('DELETE', 'unidades-ensino/31', ['http_errors' => FALSE]);
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $response = $this->http->request('DELETE', 'unidades-ensino/5', ['http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::DELETED);
+
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message,$contentBody);
     }
 
     public function testDeleteUnidadeEnsinoNaoExistente()
     {
-        $response = $this->http->request('DELETE', 'unidades-ensino/27', ['http_errors' => FALSE]);
-
-        $this->assertEquals(404, $response->getStatusCode());
+        $response = $this->http->request('DELETE', 'unidades-ensino/200', ['http_errors' => FALSE]);
 
         $contentType = $response->getHeaders()["Content-Type"][0];
+        $contentBody = $response->getBody()->getContents();
+        $message = $this->getStdMessage(self::NOT_FOUND);
+
+        $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonStringEqualsJsonString($message, $contentBody);
     }
 }

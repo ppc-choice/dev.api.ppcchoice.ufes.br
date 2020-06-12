@@ -24,6 +24,16 @@ Entities\ComponenteCurricular:
       type: string
       length: 255
       nullable: false
+    posicaoColuna:
+      type: integer
+      nullable: true
+      column: posicao_coluna
+    top:
+      type: integer
+      nullable: true
+    left:
+      type: integer
+      nullable: true
   manyToOne:
     disciplina:
       targetEntity: Disciplina

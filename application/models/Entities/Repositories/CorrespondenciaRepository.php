@@ -11,9 +11,9 @@ class CorrespondenciaRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as depto',
-                'disc1.numDisciplina as numDisciplina, disc1.nome as NomeDisciplina, cc2.codCompCurric as codCompCorresp', 
+                'disc1.numDisciplina as numDisciplina, disc1.nome as nomeDisciplina, cc2.codCompCurric as codCompCurricCorresp', 
                 'dep2.abreviatura as deptoDisciplinaCorresp,disc2.numDisciplina  as numDisciplinaCorresp', 
-                'disc2.nome as NomeDisciplinaCorresp, cor.percentual')
+                'disc2.nome as nomeDisciplinaCorresp, cor.percentual')
             ->from('Entities\Correspondencia','cor')
             ->innerJoin('cor.componenteCurricular','cc1')
             ->innerJoin('cc1.disciplina','disc1')
@@ -46,9 +46,9 @@ class CorrespondenciaRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as depto',
-                'disc1.numDisciplina as numDisciplina, disc1.nome as NomeDisciplina',
+                'disc1.numDisciplina as numDisciplina, disc1.nome as nomeDisciplina',
                 'cc2.codCompCurric as codCompCorresp, dep2.abreviatura as deptoDisciplinaCorresp',
-                'disc2.numDisciplina  as numDisciplinaCorresp, disc2.nome as NomeDisciplinaCorresp, cor.percentual')
+                'disc2.numDisciplina  as numDisciplinaCorresp, disc2.nome as nomeDisciplinaCorresp, cor.percentual')
             ->from('Entities\Correspondencia','cor')
             ->innerJoin('cor.componenteCurricular','cc1')
             ->innerJoin('cc1.disciplina','disc1')
