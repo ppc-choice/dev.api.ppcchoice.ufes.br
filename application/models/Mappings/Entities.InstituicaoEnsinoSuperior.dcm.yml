@@ -19,3 +19,7 @@ Entities\InstituicaoEnsinoSuperior:
       type: string
       length: 255
       nullable: false
+  oneToMany:
+    unidadesEnsino:
+      targetEntity: UnidadeEnsino
+      mappedBy: ies    

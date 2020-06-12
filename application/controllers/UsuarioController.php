@@ -5,7 +5,7 @@ require_once APPPATH . 'libraries/APIController.php';
 class UsuarioController extends APIController 
 {
 	public function __construct() {
-        parent::__construct();
+		parent::__construct();
     }
 
 	/**
@@ -22,7 +22,7 @@ class UsuarioController extends APIController
 	{
 		
 		header("Access-Control-Allow-Origin: *");
-
+		
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -198,7 +198,7 @@ class UsuarioController extends APIController
 	public function update($codUsuario)
 	{
 		header("Access-Control-Allow-Origin: *");
-
+		
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
 			)

@@ -27,17 +27,51 @@ class UnidadeEnsinoController extends APIController
             'methods' => array('GET'),
         ));
 
-        $colecaoUnidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findAll();
-        
-        if ( !is_null($colecaoUnidadeEnsino) ){
-            $this->apiReturn($colecaoUnidadeEnsino,
-                self::HTTP_OK
-            );
+        $groupBy = strtolower($this->input->get('groupBy'));
+
+        if ( $groupBy === "ies" )
+        { 
+            $colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
+
+            if ( !empty($colecaoIes) )
+            {
+                $grupoUnEnsino = array();
+
+                foreach ($colecaoIes as $key => $ies) 
+                {
+                    $grupoUnEnsino[$key]['instituicaoEnsino'] = $ies->getNome();
+                    $grupoUnEnsino[$key]['unidadesEnsino'] = array();
+                    
+                    foreach ($ies->getUnidadesEnsino() as $unEnsino){
+                        array_push( $grupoUnEnsino[$key]['unidadesEnsino'], $this->doctrineToArray($unEnsino, TRUE));
+                    }
+                }
+                
+                $colecaoIes = $this->doctrineToArray($grupoUnEnsino);
+                
+                $this->apiReturn($colecaoIes,
+                    self::HTTP_OK
+                );
+            } else {
+                $this->apiReturn(array(
+                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+                    ), self::HTTP_NOT_FOUND
+                );
+            }   
+
         } else {
-            $this->apiReturn(array(
-                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND
-            );
+            $colecaoUnidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findAll();
+            
+            if ( !is_null($colecaoUnidadeEnsino) ){
+                $this->apiReturn($colecaoUnidadeEnsino,
+                    self::HTTP_OK
+                );
+            } else {
+                $this->apiReturn(array(
+                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+                    ), self::HTTP_NOT_FOUND
+                );
+            }
         }
     }
 

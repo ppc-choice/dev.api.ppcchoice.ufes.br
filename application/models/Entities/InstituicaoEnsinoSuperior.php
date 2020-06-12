@@ -93,4 +93,49 @@ class InstituicaoEnsinoSuperior
     {
         return $this->abreviatura;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $unidadesEnsino;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->unidadesEnsino = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add unidadesEnsino
+     *
+     * @param \Entities\UnidadeEnsino $unidadesEnsino
+     * @return InstituicaoEnsinoSuperior
+     */
+    public function addUnidadesEnsino(\Entities\UnidadeEnsino $unidadesEnsino)
+    {
+        $this->unidadesEnsino[] = $unidadesEnsino;
+    
+        return $this;
+    }
+
+    /**
+     * Remove unidadesEnsino
+     *
+     * @param \Entities\UnidadeEnsino $unidadesEnsino
+     */
+    public function removeUnidadesEnsino(\Entities\UnidadeEnsino $unidadesEnsino)
+    {
+        $this->unidadesEnsino->removeElement($unidadesEnsino);
+    }
+
+    /**
+     * Get unidadesEnsino
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUnidadesEnsino()
+    {
+        return $this->unidadesEnsino;
+    }
 }

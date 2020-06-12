@@ -164,4 +164,116 @@ class ComponenteCurricular
     {
         return $this->ppc;
     }
+    /**
+     * @var integer
+     */
+    private $posicaoColuna;
+
+    /**
+     * @var integer
+     */
+    private $top;
+
+    /**
+     * @var string
+     */
+    private $left;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+
+    /**
+     * Set posicaoColuna
+     *
+     * @param integer $posicaoColuna
+     * @return ComponenteCurricular
+     */
+    public function setPosicaoColuna($posicaoColuna)
+    {
+        $this->posicaoColuna = $posicaoColuna;
+    
+        return $this;
+    }
+
+    /**
+     * Get posicaoColuna
+     *
+     * @return integer 
+     */
+    public function getPosicaoColuna()
+    {
+        return $this->posicaoColuna;
+    }
+
+    /**
+     * Set top
+     *
+     * @param integer $top
+     * @return ComponenteCurricular
+     */
+    public function setTop($top)
+    {
+        $this->top = $top;
+    
+        return $this;
+    }
+
+    /**
+     * Get top
+     *
+     * @return integer 
+     */
+    public function getTop()
+    {
+        return $this->top;
+    }
+
+    /**
+     * Set left
+     *
+     * @param string $left
+     * @return ComponenteCurricular
+     */
+    public function setLeft($left)
+    {
+        $this->left = $left;
+    
+        return $this;
+    }
+
+    /**
+     * Get left
+     *
+     * @return string 
+     */
+    public function getLeft()
+    {
+        return $this->left;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return ComponenteCurricular
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
