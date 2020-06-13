@@ -1,6 +1,7 @@
 Entities\Departamento:
   type: entity
   table: departamento
+  repositoryClass: Entities\Repositories\DepartamentoRepository
   uniqueConstraints:
     cod_depto_index:
       columns:

@@ -54,6 +54,8 @@ class DepartamentoController extends APIController
 	 * @apiSuccess {String} nome   Nome do Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {String} unidadeEnsino   Nome da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {String} ies   Nome da Instituição de Ensino Superior na qual o Departamento está registrado.
 	 * 
 	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
@@ -66,7 +68,7 @@ class DepartamentoController extends APIController
 			)
 		);
 		
-		$depto = $this->entityManager->find('Entities\Departamento',$codDepto);
+		$depto = $this->entityManager->getRepository('Entities\Departamento')->findById($codDepto);
 		
 		if ( !is_null($depto) ) {
 			$depto = $this->doctrineToArray($depto,TRUE);	
