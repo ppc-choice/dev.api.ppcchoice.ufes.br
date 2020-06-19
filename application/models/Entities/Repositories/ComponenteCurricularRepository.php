@@ -11,7 +11,7 @@ class ComponenteCurricularRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.tipo, disc.codDepto',
-                    'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc')
+                    'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc, c.top, c.left, c.posicaoColuna')
             ->from('Entities\ComponenteCurricular','c')
             ->innerJoin('c.disciplina','disc')
             ->innerJoin('disc.departamento','dep')
@@ -25,7 +25,7 @@ class ComponenteCurricularRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.tipo, disc.codDepto',
-            'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc')
+            'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc, c.top, c.left, c.posicaoColuna')
             ->from('Entities\ComponenteCurricular','c')
             ->innerJoin('c.disciplina','disc')
             ->innerJoin('disc.departamento','dep')
@@ -41,7 +41,7 @@ class ComponenteCurricularRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('disc.nome, c.codCompCurric, c.periodo, c.credito, c.tipo, disc.codDepto',
-            'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc')
+            'dep.abreviatura as depto,  disc.numDisciplina, disc.ch, p.codPpc, c.top, c.left, c.posicaoColuna')
             ->from('Entities\ComponenteCurricular', 'c')
             ->innerJoin('c.disciplina', 'disc')
             ->innerJoin('disc.departamento', 'dep')

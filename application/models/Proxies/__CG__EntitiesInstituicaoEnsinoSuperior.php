@@ -81,10 +81,28 @@ class InstituicaoEnsinoSuperior extends \Entities\InstituicaoEnsinoSuperior impl
         return parent::getAbreviatura();
     }
 
+    public function addUnidadesEnsino(\Entities\UnidadeEnsino $unidadesEnsino)
+    {
+        $this->__load();
+        return parent::addUnidadesEnsino($unidadesEnsino);
+    }
+
+    public function removeUnidadesEnsino(\Entities\UnidadeEnsino $unidadesEnsino)
+    {
+        $this->__load();
+        return parent::removeUnidadesEnsino($unidadesEnsino);
+    }
+
+    public function getUnidadesEnsino()
+    {
+        $this->__load();
+        return parent::getUnidadesEnsino();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codIes', 'nome', 'abreviatura');
+        return array('__isInitialized__', 'codIes', 'nome', 'abreviatura', 'unidadesEnsino');
     }
 
     public function __clone()
