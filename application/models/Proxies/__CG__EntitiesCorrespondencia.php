@@ -54,7 +54,7 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
         return parent::getPercentual();
     }
 
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = NULL)
     {
         $this->__load();
         return parent::setComponenteCurricular($componenteCurricular);
@@ -66,7 +66,7 @@ class Correspondencia extends \Entities\Correspondencia implements \Doctrine\ORM
         return parent::getComponenteCurricular();
     }
 
-    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp)
+    public function setComponenteCurricularCorresp(\Entities\ComponenteCurricular $componenteCurricularCorresp = NULL)
     {
         $this->__load();
         return parent::setComponenteCurricularCorresp($componenteCurricularCorresp);

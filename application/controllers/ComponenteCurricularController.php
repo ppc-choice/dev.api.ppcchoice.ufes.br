@@ -23,6 +23,9 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
      * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
+     * @apiSuccess {Number}   componenteCurricular[top]                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[left]                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[posicaoColuna]       Posição da componente na coluna da grade curricular.
      * 
      * @apiError {String[]} error Entities\\ComponenteCurricular:    Instância não encontrada.
      */
@@ -65,7 +68,10 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
      * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
-     * 
+     * @apiSuccess {Number}   componenteCurricular[top]                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[left]                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[posicaoColuna]       Posição da componente na coluna da grade curricular
+     *  
      * @apiError {String[]} error  Entities\\ComponenteCurricular:    Instância não encontrada.
      */
 	public function findByCodPpc($codPpc)
@@ -109,6 +115,9 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {String} depto           Abreviatura de departamento.
      * @apiSuccess {Number} numDisciplina   Número da disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number} codPpc          Identificador único de ppc.
+     * @apiSuccess {Number} top                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number} left                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number} posicaoColuna       Posição da componente na coluna da grade curricular
      * 
      * @apiError {String[]} error           Entities\\ComponenteCurricular:    Instância não encontrada.
      */

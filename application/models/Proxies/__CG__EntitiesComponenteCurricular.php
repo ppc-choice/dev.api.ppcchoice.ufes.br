@@ -111,10 +111,58 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getPpc();
     }
 
+    public function setPosicaoColuna($posicaoColuna)
+    {
+        $this->__load();
+        return parent::setPosicaoColuna($posicaoColuna);
+    }
+
+    public function getPosicaoColuna()
+    {
+        $this->__load();
+        return parent::getPosicaoColuna();
+    }
+
+    public function setTop($top)
+    {
+        $this->__load();
+        return parent::setTop($top);
+    }
+
+    public function getTop()
+    {
+        $this->__load();
+        return parent::getTop();
+    }
+
+    public function setLeft($left)
+    {
+        $this->__load();
+        return parent::setLeft($left);
+    }
+
+    public function getLeft()
+    {
+        $this->__load();
+        return parent::getLeft();
+    }
+
+    public function setType($type)
+    {
+        $this->__load();
+        return parent::setType($type);
+    }
+
+    public function getType()
+    {
+        $this->__load();
+        return parent::getType();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'disciplina', 'ppc');
+        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'posicaoColuna', 'top', 'left', 'disciplina', 'ppc');
     }
 
     public function __clone()
