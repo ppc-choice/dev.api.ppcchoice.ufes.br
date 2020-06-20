@@ -87,6 +87,7 @@ class DependenciaController extends APIController
     /**
     * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
     * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
+    * @apiParam (URL) {bool} allowEmpty Parâmetro que informa se o método deve retornar um array de Depêndencias vazio.
     *
     * @apiName findByIdPpc
     * @apiGroup Dependência
@@ -113,12 +114,24 @@ class DependenciaController extends APIController
             $this->apiReturn($colecaoDependencia,
                 self::HTTP_OK 
             ); 
-        }else{    
-            $this->apiReturn(
-                array(
-                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND 
-            );
+        }else{
+            
+            $allowEmpty = strtolower($this->input->get('allowEmpty'));
+            
+            if($allowEmpty === "true" ){
+                
+                $this->apiReturn($colecaoDependencia,
+                    self::HTTP_OK 
+                ); 
+                
+            }else{
+
+                $this->apiReturn(
+                    array(
+                        'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+                    ), self::HTTP_NOT_FOUND 
+                );
+            }
         }
     } 
 
