@@ -62,7 +62,7 @@ class UnidadeEnsinoController extends APIController
         } else {
             $colecaoUnidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findAll();
             
-            if ( !is_null($colecaoUnidadeEnsino) ){
+            if ( !empty($colecaoUnidadeEnsino) ){
                 $this->apiReturn($colecaoUnidadeEnsino,
                     self::HTTP_OK
                 );
