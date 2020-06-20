@@ -9,16 +9,18 @@ class DepartamentoController extends APIController
 	}
 	
 	/**
-	 * @api {get} departamentos/ Solicitar dados de todos Departamentos.
-	 * @apiName getAll
-	 * @apiGroup Departamentos
+	 * @api {get} departamentos Solicitar dados de todos Departamentos.
+	 * @apiName findAll
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {departamentos[]} Departamento Array de objetos do tipo Departamentos.
+	 * @apiSuccess {Departamento[]} departamento Array de objetos do tipo Departamento.
+	 * 
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findAll()
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -26,17 +28,25 @@ class DepartamentoController extends APIController
 		);
 
 		$colecaoDepto = $this->entityManager->getRepository('Entities\Departamento')->findAll();
-		$colecaoDepto = $this->doctrineToArray($colecaoDepto,TRUE);	
+		
+		if ( !empty($colecaoDepto) ){
+			$colecaoDepto = $this->doctrineToArray($colecaoDepto,TRUE);	
 
-		$this->apiReturn($colecaoDepto,
-			self::HTTP_OK
-		);
+			$this->apiReturn($colecaoDepto,
+				self::HTTP_OK
+			);
+		} else {
+			$this->apiReturn(array(
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+				), self::HTTP_NOT_FOUND
+			);
+		}
 	}
 
 	/**
 	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
 	 * @apiName findById
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
@@ -44,21 +54,21 @@ class DepartamentoController extends APIController
 	 * @apiSuccess {String} nome   Nome do Departamento.
 	 * @apiSuccess {String} abreviatura  Sigla do Departamento.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {String} unidadeEnsino   Nome da Unidade de Ensino na qual o Departamento está registrado.
+	 * @apiSuccess {String} ies   Nome da Instituição de Ensino Superior na qual o Departamento está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
-	 * 
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
 	 */
     public function findById($codDepto)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
 			)
 		);
 		
-		$depto = $this->entityManager->find('Entities\Departamento',$codDepto);
+		$depto = $this->entityManager->getRepository('Entities\Departamento')->findById($codDepto);
 		
 		if ( !is_null($depto) ) {
 			$depto = $this->doctrineToArray($depto,TRUE);	
@@ -68,29 +78,29 @@ class DepartamentoController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => array('Departamento não encontrado!'),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}
     }
     	
 	/**
-	 * @api {post} departamentos/ Criar um Departamento.
+	 * @api {post} departamentos Criar um Departamento.
 	 * @apiName create
-	 * @apiGroup Departamentos
+	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {String{3..5}} abreviatura  Sigla do Departamento.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
 	 * 
-	 * @apiSuccess {String} message  Departamento criado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância criada com sucesso.
 	 *  
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -116,48 +126,45 @@ class DepartamentoController extends APIController
 				$this->entityManager->flush();
 	
 				$this->apiReturn(array(
-					'message' => array('Departamento criado com Sucesso!'),
+					'message' => $this->getApiMessage(STD_MSG_CREATED),
 					), self::HTTP_OK
 				);
 
 			} catch (\Exception $e) {
-				$msgExcecao = array($e->getMessage());
-
 				$this->apiReturn(array(
-					'error' => $msgExcecao,
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 
 			}
 		} else {
-			$msgViolacoes = $constraints->messageArray();
-			
 			$this->apiReturn(array(
-				'error' => $msgViolacoes,
+				'error' => $constraints->messageArray(),
 				), self::HTTP_BAD_REQUEST
 			);	
 		}
 	}
 	
-
 	/**
      * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
      * @apiName update
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiParam (Request Body/JSON) {String} nome   Nome do Departamento.
-	 * @apiParam (Request Body/JSON) {String} abreviatura  Sigla do Departamento.
-	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino  Identificador único da Unidade de Ensino.
+	 * @apiParam {Number} codDepto Identificador único do Departamento requerido.
+	 * 
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Departamento.
+	 * @apiParam (Request Body/JSON) {String{3..5}} [abreviatura]  Sigla do Departamento.
+	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]  Identificador único da Unidade de Ensino.
 	 *  
-	 * @apiSuccess {String} message  Departamento atualizado com sucesso.
+	 * @apiSuccess {String[]} message Entities\\Departamento: Instância atualizada com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a um Departamento cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */	
 	public function update($codDepto)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -169,16 +176,20 @@ class DepartamentoController extends APIController
 		
         if(!is_null($depto))
         {            
-			if(isset($payload['codUnidadeEnsino']))
+			if(array_key_exists('codUnidadeEnsino', $payload))
             {
-                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
-				$depto->setUnidadeEnsino($ues);
+				if (is_numeric($payload['codUnidadeEnsino'])){
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+					$depto->setUnidadeEnsino($ues);
+				}else{
+					$depto->setUnidadeEnsino(null);
+				}
 			}
 			
 			if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
 			if ( array_key_exists('abreviatura', $payload) ) $depto->setAbreviatura($payload['abreviatura']);
 
-			$constraints = $this->validator->validate($depto, null, array('Departamento'));
+			$constraints = $this->validator->validate($depto);
 
 			if ( $constraints->success() ){
 				try {
@@ -186,29 +197,25 @@ class DepartamentoController extends APIController
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
-						'message' => array('Departamento atualizado com sucesso!')
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						), self::HTTP_OK
 					);
 				} catch (\Exception $e) {
-					$msgExcecao = array($e->getMessage());
-					
 					$this->apiReturn(array(
-						'error' => $msgExcecao
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}	
 			} else {
-				$msgViolacoes = $constraints->messageArray();
-	
 				$this->apiReturn(array(
-					'error' => $msgViolacoes,
+					'error' => $constraints->messageArray(),
 					), self::HTTP_BAD_REQUEST
 				);	
 			}
 
         }else{
             $this->apiReturn(array(
-                'error' => array('Departamento não encontrado!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
         }
@@ -217,18 +224,18 @@ class DepartamentoController extends APIController
 	/**
      * @api {delete} departamentos/:codDepto Excluir um Departamento.
      * @apiName delete
-     * @apiGroup Departamentos
+     * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codDepto Identificador único do Departamento.
    	 * 
-	 * @apiSuccess {String} message  Departamento deletado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Departamento: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codDepto</code> não corresponde a uma Departamento cadastrado.
+	 * @apiError {String[]} error Entities\\Departamento: Instância não encontrada.
      */
 	public function delete($codDepto)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -244,21 +251,19 @@ class DepartamentoController extends APIController
 				$this->entityManager->flush();
 				
 				$this->apiReturn(array(
-					'message' => array('Departamento removido com sucesso!')
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 					), self::HTTP_OK
 				);
 				
 			} catch (\Exception $e) {
-				$msgExcecao = array($e->getMessage());
-				
 				$this->apiReturn(array(
-					'error' => $msgExcecao
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}
 		}else{
 			$this->apiReturn(array(
-                'error' => array('Departamento não encontrado!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}

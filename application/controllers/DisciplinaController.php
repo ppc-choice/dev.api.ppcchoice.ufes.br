@@ -13,13 +13,14 @@ class DisciplinaController extends APIController
      * @apiName findAll
      * @apiGroup Disciplina
      *
-     * @apiSuccess {Number} numDisciplina Identificador único da disciplina.
-     * @apiSuccess {String} nome Nome da disciplina.
-     * @apiSuccess {Number} ch Carga horária da disciplina.
-     * @apiSuccess {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
-     * @apiSuccess {String} nomeDepto Nome do departamento cujo qual a disciplina está vinculada.
+     * @apiSuccess {Disciplina[]} disciplina Array de objetos do tipo Disciplina.
+     * @apiSuccess {Number} disciplina[numDisciplina] Identificador único da disciplina.
+     * @apiSuccess {String} disciplina[nome] Nome da disciplina.
+     * @apiSuccess {Number} disciplina[ch] Carga horária da disciplina.
+     * @apiSuccess {Number} disciplina[codDepto] Código do departamento cujo qual a disciplina está vinculada.
+     * @apiSuccess {String} disciplina[abreviaturaDepto] Abreviatura do departamento cujo qual a disciplina está vinculada.
      * 
-     * @apiError {String[]} 404 Nenhuma disciplina foi encontrada.
+     * @apiError {String[]} error Entities\\Disciplina: Instância não encontrada.
      */
     public function findAll()
     {
@@ -37,7 +38,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplinas não encontradas.")
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -55,7 +56,7 @@ class DisciplinaController extends APIController
      * @apiSuccess {Number} ch Carga horária da disciplina.
      * @apiSuccess {String} nomeDepto Nome do departamento cujo qual a disciplina está vinculada.
      * 
-     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
+     * @apiError {String[]} error Entities\\Disciplina: Instância não encontrada.
      */
     public function findById($codDepto, $numDisciplina)
     {
@@ -73,7 +74,7 @@ class DisciplinaController extends APIController
             );
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada.")
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -89,20 +90,19 @@ class DisciplinaController extends APIController
      * @apiParam (Request Body/JSON) {Number} ch Carga horária da disciplina.
      * @apiParam (Request Body/JSON) {Number} codDepto Identificador secundário da disciplina (identificador primário do departamento que ela está vinculada).
      * 
-     * @apiSuccess {String} message Disciplina criada com sucesso.
+     * @apiSuccess {String[]} message Entities\\Disciplina: Instância criada com sucesso.
      * 
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
     public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('POST')
         ));
 
         $payload = json_decode(file_get_contents('php://input'), TRUE);
-
         $disciplina = new Entities\Disciplina();
 
         if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
@@ -125,22 +125,19 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
             
                 $this->apiReturn(array(
-                    'message' => array("Disciplina criada com sucesso."),
+                    'message' => $this->getApiMessage(STD_MSG_CREATED),
                     ),self::HTTP_OK
                 );
                 
             } catch (\Exception $e){
-                $msgExcecao =  array($e->getMessage());
                 $this->apiReturn(array(
-                    'error' => $msgExcecao,
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         }else{
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
@@ -153,17 +150,17 @@ class DisciplinaController extends APIController
      *
      * @apiParam {Number} numDisciplina Identificador único de uma disciplina.
      * @apiParam {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
-     * @apiParam (Request Body/JSON) {String} nome Nome da disciplina.
-     * @apiParam (Request Body/JSON) {Number} ch Carga horária da disciplina.
+     * @apiParam (Request Body/JSON) {String} [nome] Nome da disciplina.
+     * @apiParam (Request Body/JSON) {Number} [ch] Carga horária da disciplina.
      * 
-     * @apiSuccess {String} message Disciplina atualizada com sucesso.
+     * @apiSuccess {String[]} message Entities\\Disciplina: Instância atualizada com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\Disciplina: Instância não encontrada.
+     * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
     public function update($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('PUT')
@@ -185,30 +182,26 @@ class DisciplinaController extends APIController
                     $this->entityManager->flush();
         
                     $this->apiReturn(array(
-                        'message' => array("Disciplina atualizada com sucesso."),
+                        'message' => $this->getApiMessage(STD_MSG_UPDATED),
                         ),self::HTTP_OK
                     );
                 } catch (\Exception $e){
-                    $msgExcecao =  array($e->getMessage());
-                    
                     $this->apiReturn(array(
-                        'error' => $msgExcecao,
+                        'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                         ),self::HTTP_BAD_REQUEST
                     );
                 }
                 
             } else {
-                $msgViolacoes = $constraints->messageArray();
-
                 $this->apiReturn(array(
-                    'error' => $msgViolacoes
+                    'error' => $constraints->messageArray(),
                     ),self::HTTP_BAD_REQUEST
                 );
             }
         
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada."),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ),self::HTTP_NOT_FOUND
             );
         }
@@ -222,14 +215,13 @@ class DisciplinaController extends APIController
      * @apiParam {Number} numDisciplina Identificador único da disciplina.
      * @apiParam {Number} codDepto Código do departamento cujo qual a disciplina está vinculada.
      *
-     * @apiSuccess {String} message Disciplina deletada com sucesso.
+     * @apiSuccess {String[]} message Entities\\Disciplina: Instância removida com sucesso.
      * 
-     * @apiError {String[]} 404 O <code>codDepto</code> e <code>numDisciplina</code> não correspondem a uma disciplina cadastrada.
-     * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+     * @apiError {String[]} error Entities\\Disciplina: Instância não encontrada.
      */
     public function delete($codDepto, $numDisciplina)
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
             'methods' => array('DELETE')
@@ -244,21 +236,19 @@ class DisciplinaController extends APIController
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
-                    'message' => array("Disciplina deletada com sucesso.")
+                    'message' => $this->getApiMessage(STD_MSG_DELETED),
                 ), self::HTTP_OK);
             
             } catch ( \Exception $e ){
-                $msgExcecao = array($e->getMessage());
-
                 $this->apiReturn(array(
-                    'error' => $msgExcecao
+                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
                     ), self::HTTP_BAD_REQUEST
                 );
             }
 
         } else {
             $this->apiReturn(array(
-                'error' => array("Disciplina não encontrada.")
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
                 ), self::HTTP_NOT_FOUND
             );
         }

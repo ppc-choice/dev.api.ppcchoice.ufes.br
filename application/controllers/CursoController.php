@@ -9,16 +9,18 @@ class CursoController extends APIController
 	}
 	
 	/**
-	 * @api {get} cursos/ Requisitar todos Cursos registrados.
+	 * @api {get} cursos Solicitar todos Cursos registrados.
 	 * @apiName findAll
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
-	 * @apiSuccess {cursos[]} Curso Array de objetos do tipo Cursos.
+	 * @apiSuccess {Curso[]} curso Array de objetos do tipo Curso.
+	 * 
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
 	public function findAll()
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
@@ -28,35 +30,45 @@ class CursoController extends APIController
 		$colecaoCurso = $this->entityManager->getRepository('Entities\Curso')->findAll();
 		$colecaoCurso = $this->doctrineToArray($colecaoCurso,TRUE);
 
-		$this->apiReturn(array($colecaoCurso,
-			), self::HTTP_OK
-		);
+		if (!empty($colecaoCurso)){
+			$this->apiReturn($colecaoCurso,
+				self::HTTP_OK
+			);
+
+		} else {
+            $this->apiReturn(
+                array(
+                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+                ),self::HTTP_NOT_FOUND
+            );
+        }
 	}
 	
 	/**
 	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 *
 	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 *
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiSuccess {String} unidadeEnsino   Nome da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiSuccess {String} ies   Nome da Instituição de Ensino Superior na qual o Curso está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
     public function findById($codCurso)
 	{   
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('GET'),
 			)
 		);
 		
-		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
+		$curso = $this->entityManager->getRepository('Entities\Curso')->findById($codCurso);
         
 		if ( !is_null($curso) ) {
 			$curso = $this->doctrineToArray($curso,TRUE);	
@@ -66,29 +78,29 @@ class CursoController extends APIController
 			);
 		} else {
 			$this->apiReturn(array(
-				'error' => array('Curso não encontrado!'),
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}
     }
     
-	
 	/**
-	 * @api {post} cursos/ Criar um Curso.
+	 * @api {post} cursos Criar um Curso.
 	 * @apiName create
-	 * @apiGroup Cursos
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
-	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number{1950-2020}} anoCriacao  Ano em que o curso foi criado.
 	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiSuccess {String[]} message  Entities\\Curso: Instância criada com sucesso.
+	 * 
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */
 	public function create()
     {
-        header("Access-Controll-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('POST'),
@@ -115,22 +127,18 @@ class CursoController extends APIController
 					$this->entityManager->flush();
 		
 					$this->apiReturn(array(
-						'message' => array('Curso criado com Sucesso!'),
+						'message' => $this->getApiMessage(STD_MSG_CREATED),
 						), self::HTTP_OK
 					);
 				} catch (\Exception $e) {
-					$msgExcecao = array($e->getMessage());
-
 					$this->apiReturn(array(
-						'error' => $msgExcecao,
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}
 			} else {
-				$msgViolacoes = $constraints->messageArray();
-	
 				$this->apiReturn(array(
-					'error' => $msgViolacoes,
+					'error' => $constraints->messageArray(),
 					), self::HTTP_BAD_REQUEST
 				);	
 			}
@@ -139,21 +147,23 @@ class CursoController extends APIController
 	/**
      * @api {put} cursos/:codCurso Atualizar dados de um Curso.
      * @apiName update
-     * @apiGroup Cursos
+     * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
-     * @apiParam (Request Body/JSON) {String} nome   Nome do Curso.
-	 * @apiParam (Request Body/JSON) {Number} anoCriacao  Ano em que o curso foi criado.
-	 * @apiParam (Request Body/JSON) {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 * 
-	 * @apiSuccess {String} message Curso atualizado com sucesso.
+     * @apiParam (Request Body/JSON) {String} [nome]   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {Number{1950-2020}} [anoCriacao]  Ano em que o curso foi criado.
+	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a um Curso cadastrado.
-	 * @apiError {String[]} 400 Campo obrigatório não informado ou contém valor inválido.
+	 * @apiSuccess {String[]} message Entities\\Curso: Instância atualizada com sucesso.
+	 * 
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
+	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
      */
 	public function update($codCurso)
     {
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('PUT'),
@@ -165,10 +175,14 @@ class CursoController extends APIController
 		
         if(!is_null($curso))
         {            
-			if(isset($payload['codUnidadeEnsino']))
+			if(array_key_exists('codUnidadeEnsino', $payload))
             {
-                $ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
-				$curso->setUnidadeEnsino($ues);
+				if (is_numeric($payload['codUnidadeEnsino'])){
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+					$curso->setUnidadeEnsino($ues);
+				}else{
+					$curso->setUnidadeEnsino(null);
+				}
 			}
 			
 			if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
@@ -183,29 +197,25 @@ class CursoController extends APIController
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
-						'message' => array('Curso atualizado com sucesso!')
+						'message' => $this->getApiMessage(STD_MSG_UPDATED),
 						), self::HTTP_OK
 					);
 				} catch (\Exception $e) {
-					$msgExcecao = array($e->getMessage());
-					
 					$this->apiReturn(array(
-						'error' => $msgExcecao
+						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 						), self::HTTP_BAD_REQUEST
 					);
 				}	
 			} else {
-				$msg = $constraints->messageArray();
-
 				$this->apiReturn(array(
-					'error' => $msg,
+					'error' => $constraints->messageArray(),
 					), self::HTTP_BAD_REQUEST
 				);	
 			}
 
         }else{
             $this->apiReturn(array(
-                'error' => array('Curso não encontrado!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
         }
@@ -214,18 +224,18 @@ class CursoController extends APIController
 	/**
      * @api {delete} cursos/:codCurso Excluir um Curso.
      * @apiName delete
-     * @apiGroup Cursos
+     * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
      * @apiParam {Number} codCurso Identificador único do Curso.
    	 * 
-	 * @apiSuccess {String} message  Curso deletado com sucesso.
+	 * @apiSuccess {String[]} message  Entities\\Curso: Instância removida com sucesso.
 	 *  
-	 * @apiError {String[]} 404 O <code>codCurso</code> não corresponde a uma Curso cadastrado.
+	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
      */
 	public function delete($codCurso)
 	{
-		header("Access-Controll-Allow-Origin: *");
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
 				'methods' => array('DELETE'),
@@ -241,20 +251,18 @@ class CursoController extends APIController
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
-					'message' => array('Curso removido com sucesso!')
+					'message' => $this->getApiMessage(STD_MSG_DELETED),
 				), self::HTTP_OK);
 				
 			} catch (\Exception $e) {
-				$msgExcecao = array($e->getMessage());
-
 				$this->apiReturn(array(
-					'error' => $msgExcecao
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
 					), self::HTTP_BAD_REQUEST
 				);
 			}
 		}else{
 			$this->apiReturn(array(
-                'error' => array('Curso não encontrado!'),
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 				), self::HTTP_NOT_FOUND
 			);
 		}

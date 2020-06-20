@@ -25,6 +25,7 @@ Entities\UnidadeEnsino:
   manyToOne:
     ies:
       targetEntity: InstituicaoEnsinoSuperior
+      inversedBy: unidadesEnsino
       joinColumns:
         cod_ies:
           referencedColumnName: cod_ies

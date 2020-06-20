@@ -13,7 +13,7 @@ class DependenciaValidator
             if($dependencia->getComponenteCurricular()->getPpc()->getCodPpc() !=  $dependencia->getPreRequisito()->getPpc()->getCodPpc()){
                 $context->addViolationAt(
                     'componenteCurricular',
-                    'As componentes curriculares devem pertencer ao mesmo ppc',
+                    'As componentes curriculares devem pertencer ao mesmo Projeto Pedagógico de Curso.',
                     array(),
                     null
                 );
@@ -26,14 +26,17 @@ class DependenciaValidator
         
         if(!is_null($dependencia->getPreRequisito() ) && !is_null($dependencia->getComponenteCurricular()))
         {
-            if($dependencia->getComponenteCurricular()->getPeriodo() <= $dependencia->getPreRequisito()->getPeriodo())
-            {
-                $context->addViolationAt(
-                    'componenteCurricular',
-                    'A componente curricular deve ter periodo maior que o seu pré-requisito.',
-                    array(),
-                    null
-                );
+            if($dependencia->getComponenteCurricular()->getPpc()->getCodPpc() ==  $dependencia->getPreRequisito()->getPpc()->getCodPpc())
+            {  
+                if($dependencia->getComponenteCurricular()->getPeriodo() <= $dependencia->getPreRequisito()->getPeriodo())
+                {
+                    $context->addViolationAt(
+                        'componenteCurricular',
+                        'A componente curricular deve ter periodo maior que o seu pré-requisito.',
+                        array(),
+                        null
+                    );
+                }
             }
         }
     }

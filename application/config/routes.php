@@ -53,6 +53,7 @@ $route['unidades-ensino/(:num)']['DELETE'] = 'UnidadeEnsinoController/delete/$1'
 // Projeto Pedagógico de Curso : Guilherme
 $route['projetos-pedagogicos-curso/(:num)']['GET'] = 'ProjetoPedagogicoCursoController/findById/$1';
 $route['projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findAll';
+$route['cursos/(:num)/projetos-pedagogicos-curso']['GET'] = 'ProjetoPedagogicoCursoController/findByIdCurso/$1';
 $route['projetos-pedagogicos-curso']['POST'] = 'ProjetoPedagogicoCursoController/create';
 $route['projetos-pedagogicos-curso/(:num)']['PUT'] = 'ProjetoPedagogicoCursoController/update/$1';
 $route['projetos-pedagogicos-curso/(:num)']['DELETE'] = 'ProjetoPedagogicoCursoController/delete/$1';
@@ -73,6 +74,7 @@ $route['dependencias/(:num)/(:num)']['DELETE'] = 'DependenciaController/delete/$
 $route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
 $route['componentes-curriculares/(:num)']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
 $route['projetos-pedagogicos-curso/(:num)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
+$route['componentes-curriculares/tipos']['GET'] = 'ComponenteCurricularController/findTipos';
 $route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/create';
 $route['componentes-curriculares/(:num)']['PUT'] = 'ComponenteCurricularController/update/$1';
 $route['componentes-curriculares/(:num)']['DELETE'] = 'ComponenteCurricularController/delete/$1';
@@ -81,7 +83,7 @@ $route['componentes-curriculares/(:num)']['DELETE'] = 'ComponenteCurricularContr
 // Correspondencia : Hadamo
 $route['correspondencias']['GET'] = 'CorrespondenciaController/findAll';
 $route['projetos-pedagogicos-curso/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findAllByCodPpc/$1/$2';
-$route['componentes-curriculares/(:num)/correspondencias']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1';
+$route['componentes-curriculares/(:num)/correspondencias/(:num)']['GET'] = 'CorrespondenciaController/findByCodCompCurric/$1/$2';
 $route['correspondencias']['POST'] = 'CorrespondenciaController/create';
 $route['correspondencias/(:num)/(:num)']['PUT'] = 'CorrespondenciaController/update/$1/$2';
 $route['correspondencias/(:num)/(:num)']['DELETE'] = 'CorrespondenciaController/delete/$1/$2';
@@ -104,3 +106,6 @@ $route['usuarios/(:num)']['GET'] = 'UsuarioController/findById/$1';
 $route['usuarios']['POST'] = 'UsuarioController/create';
 $route['usuarios/(:num)']['PUT'] = 'UsuarioController/update/$1';
 $route['usuarios/(:num)']['DELETE'] = 'UsuarioController/delete/$1';
+$route['usuarios/login']['POST'] = 'UsuarioController/login';
+
+$route['usuarios/test']['GET'] = 'UsuarioController/test';
