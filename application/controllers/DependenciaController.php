@@ -118,7 +118,7 @@ class DependenciaController extends APIController
             
             $allowEmpty = strtolower($this->input->get('allowEmpty'));
             
-            if($allowEmpty === "true" ){
+            if( $allowEmpty === "true" ){
                 
                 $this->apiReturn($colecaoDependencia,
                     self::HTTP_OK 

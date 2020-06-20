@@ -30,6 +30,21 @@ class ComponenteCurricular
     private $tipo;
 
     /**
+     * @var integer
+     */
+    private $posicaoColuna;
+
+    /**
+     * @var integer
+     */
+    private $top;
+
+    /**
+     * @var integer
+     */
+    private $left;
+
+    /**
      * @var \Entities\Disciplina
      */
     private $disciplina;
@@ -120,72 +135,6 @@ class ComponenteCurricular
     }
 
     /**
-     * Set disciplina
-     *
-     * @param \Entities\Disciplina $disciplina
-     * @return ComponenteCurricular
-     */
-    public function setDisciplina(\Entities\Disciplina $disciplina = null)
-    {
-        $this->disciplina = $disciplina;
-    
-        return $this;
-    }
-
-    /**
-     * Get disciplina
-     *
-     * @return \Entities\Disciplina 
-     */
-    public function getDisciplina()
-    {
-        return $this->disciplina;
-    }
-
-    /**
-     * Set ppc
-     *
-     * @param \Entities\ProjetoPedagogicoCurso $ppc
-     * @return ComponenteCurricular
-     */
-    public function setPpc(\Entities\ProjetoPedagogicoCurso $ppc = null)
-    {
-        $this->ppc = $ppc;
-    
-        return $this;
-    }
-
-    /**
-     * Get ppc
-     *
-     * @return \Entities\ProjetoPedagogicoCurso 
-     */
-    public function getPpc()
-    {
-        return $this->ppc;
-    }
-    /**
-     * @var integer
-     */
-    private $posicaoColuna;
-
-    /**
-     * @var integer
-     */
-    private $top;
-
-    /**
-     * @var string
-     */
-    private $left;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-
-    /**
      * Set posicaoColuna
      *
      * @param integer $posicaoColuna
@@ -234,7 +183,7 @@ class ComponenteCurricular
     /**
      * Set left
      *
-     * @param string $left
+     * @param integer $left
      * @return ComponenteCurricular
      */
     public function setLeft($left)
@@ -247,7 +196,7 @@ class ComponenteCurricular
     /**
      * Get left
      *
-     * @return string 
+     * @return integer 
      */
     public function getLeft()
     {
@@ -255,25 +204,48 @@ class ComponenteCurricular
     }
 
     /**
-     * Set type
+     * Set disciplina
      *
-     * @param string $type
+     * @param \Entities\Disciplina $disciplina
      * @return ComponenteCurricular
      */
-    public function setType($type)
+    public function setDisciplina(\Entities\Disciplina $disciplina = null)
     {
-        $this->type = $type;
+        $this->disciplina = $disciplina;
     
         return $this;
     }
 
     /**
-     * Get type
+     * Get disciplina
      *
-     * @return string 
+     * @return \Entities\Disciplina 
      */
-    public function getType()
+    public function getDisciplina()
     {
-        return $this->type;
+        return $this->disciplina;
+    }
+
+    /**
+     * Set ppc
+     *
+     * @param \Entities\ProjetoPedagogicoCurso $ppc
+     * @return ComponenteCurricular
+     */
+    public function setPpc(\Entities\ProjetoPedagogicoCurso $ppc = null)
+    {
+        $this->ppc = $ppc;
+    
+        return $this;
+    }
+
+    /**
+     * Get ppc
+     *
+     * @return \Entities\ProjetoPedagogicoCurso 
+     */
+    public function getPpc()
+    {
+        return $this->ppc;
     }
 }

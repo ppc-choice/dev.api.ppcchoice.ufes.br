@@ -42,7 +42,7 @@ class Dependencia extends \Entities\Dependencia implements \Doctrine\ORM\Proxy\P
     }
 
     
-    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular = NULL)
+    public function setComponenteCurricular(\Entities\ComponenteCurricular $componenteCurricular)
     {
         $this->__load();
         return parent::setComponenteCurricular($componenteCurricular);
@@ -54,7 +54,7 @@ class Dependencia extends \Entities\Dependencia implements \Doctrine\ORM\Proxy\P
         return parent::getComponenteCurricular();
     }
 
-    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito = NULL)
+    public function setPreRequisito(\Entities\ComponenteCurricular $preRequisito)
     {
         $this->__load();
         return parent::setPreRequisito($preRequisito);
