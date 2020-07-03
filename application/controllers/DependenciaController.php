@@ -89,7 +89,7 @@ class DependenciaController extends APIController
     * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
     * @apiParam (URL) {bool} allowEmpty Parâmetro que informa se o método deve retornar um array de Depêndencias vazio.
     *
-    * @apiName findByIdPpc
+    * @apiName findByCodPpc
     * @apiGroup Dependência
     *
     * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
@@ -97,7 +97,7 @@ class DependenciaController extends APIController
     *
     * @apiError {String[]} error Entities\\Dependencia: Instância não encontrada.
     */
-    public function findByIdPpc($codPpc)
+    public function findByCodPpc($codPpc)
     {
         
         header("Access-Control-Allow-Origin: *");
