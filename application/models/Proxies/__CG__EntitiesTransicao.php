@@ -42,7 +42,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
-    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual = NULL)
+    public function setPpcAtual(\Entities\ProjetoPedagogicoCurso $ppcAtual)
     {
         $this->__load();
         return parent::setPpcAtual($ppcAtual);
@@ -54,7 +54,7 @@ class Transicao extends \Entities\Transicao implements \Doctrine\ORM\Proxy\Proxy
         return parent::getPpcAtual();
     }
 
-    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo = NULL)
+    public function setPpcAlvo(\Entities\ProjetoPedagogicoCurso $ppcAlvo)
     {
         $this->__load();
         return parent::setPpcAlvo($ppcAlvo);

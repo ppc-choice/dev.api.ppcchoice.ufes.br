@@ -186,10 +186,10 @@ class Usuario
     /**
      * Get conjuntoSelecao
      *
-     * @return array 
+     * @return string 
      */
     public function getConjuntoSelecao()
     {
-        return json_decode($this->conjuntoSelecao, TRUE);
+        return $this->conjuntoSelecao;
     }
 }

@@ -95,14 +95,14 @@ class ProjetoPedagogicoCursoController extends APIController
     * @api {get} cursos/:codCurso/projetos-pedagogicos-curso Requisitar todos Projetos Pedagógicos de Curso de um Curso.
     * @apiParam {Number} codCurso Código de identificação de um Curso.
     *
-    * @apiName findByIdCurso
+    * @apiName findByCodCurso
     * @apiGroup Projeto Pedagógico Curso
     *
     * @apiSuccess {ProjetoPedagogicoCurso[]} Projeto Pedagógico Curso Array de objetos do tipo Projeto Pedagógico Curso.
     * @apiError {String[]} error Entities\\ProjetoPedagogicoCurso: Instância não encontrada.
     *
     */
-    public function findByIdCurso($codCurso)
+    public function findByCodCurso($codCurso)
     {
         header("Access-Control-Allow-Origin: *");
 

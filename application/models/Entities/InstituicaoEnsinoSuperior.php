@@ -24,7 +24,19 @@ class InstituicaoEnsinoSuperior
      */
     private $abreviatura;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $unidadesEnsino;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->unidadesEnsino = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Set codIes
      *
@@ -93,19 +105,7 @@ class InstituicaoEnsinoSuperior
     {
         return $this->abreviatura;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $unidadesEnsino;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->unidadesEnsino = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Add unidadesEnsino
      *

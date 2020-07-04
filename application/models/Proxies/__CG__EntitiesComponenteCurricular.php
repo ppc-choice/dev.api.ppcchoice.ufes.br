@@ -87,30 +87,6 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getTipo();
     }
 
-    public function setDisciplina(\Entities\Disciplina $disciplina = NULL)
-    {
-        $this->__load();
-        return parent::setDisciplina($disciplina);
-    }
-
-    public function getDisciplina()
-    {
-        $this->__load();
-        return parent::getDisciplina();
-    }
-
-    public function setPpc(\Entities\ProjetoPedagogicoCurso $ppc = NULL)
-    {
-        $this->__load();
-        return parent::setPpc($ppc);
-    }
-
-    public function getPpc()
-    {
-        $this->__load();
-        return parent::getPpc();
-    }
-
     public function setPosicaoColuna($posicaoColuna)
     {
         $this->__load();
@@ -147,16 +123,28 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getLeft();
     }
 
-    public function setType($type)
+    public function setDisciplina(\Entities\Disciplina $disciplina = NULL)
     {
         $this->__load();
-        return parent::setType($type);
+        return parent::setDisciplina($disciplina);
     }
 
-    public function getType()
+    public function getDisciplina()
     {
         $this->__load();
-        return parent::getType();
+        return parent::getDisciplina();
+    }
+
+    public function setPpc(\Entities\ProjetoPedagogicoCurso $ppc = NULL)
+    {
+        $this->__load();
+        return parent::setPpc($ppc);
+    }
+
+    public function getPpc()
+    {
+        $this->__load();
+        return parent::getPpc();
     }
 
 
