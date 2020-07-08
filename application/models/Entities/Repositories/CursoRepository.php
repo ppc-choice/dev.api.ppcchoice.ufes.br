@@ -12,7 +12,7 @@ class CursoRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('curso.codCurso, curso.nome, curso.anoCriacao', 
-                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as unidadeEnsino, instEnsinoSuperior.nome as ies')
+                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as nomeUnidadeEnsino, instEnsinoSuperior.nome as nomeIes')
             ->from('Entities\Curso','curso')
             ->innerJoin('curso.unidadeEnsino', 'uniEnsino')
             ->innerJoin('uniEnsino.ies', 'instEnsinoSuperior')
@@ -24,7 +24,7 @@ class CursoRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('curso.codCurso, curso.nome, curso.anoCriacao', 
-                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as unidadeEnsino, instEnsinoSuperior.nome as ies')
+                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as nomeUnidadeEnsino, instEnsinoSuperior.nome as nomeIes')
             ->from('Entities\Curso','curso')
             ->innerJoin('curso.unidadeEnsino', 'uniEnsino')
             ->innerJoin('uniEnsino.ies', 'instEnsinoSuperior')
