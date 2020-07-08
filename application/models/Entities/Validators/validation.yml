@@ -400,6 +400,31 @@ Entities\ComponenteCurricular:
         ppc:
             - NotNull: 
                 message: Este valor não deve ser nulo.
+        top:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+            - Range:
+                min:  0 
+                minMessage: Este valor deve ser positivo.
+                invalidMessage: O valor deve ser um número válido.
+        left:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+            - Range:
+                min:  0 
+                minMessage: Este valor deve ser positivo.
+                invalidMessage: O valor deve ser um número válido.
+        posicaoColuna:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+            - Range:
+                min:  0 
+                minMessage: Este valor deve ser positivo.
+                invalidMessage: O valor deve ser um número válido.
+
 Entities\Correspondencia:
     properties:
         componenteCurricular:

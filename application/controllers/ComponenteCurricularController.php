@@ -224,6 +224,21 @@ class ComponenteCurricularController extends APIController
             $componenteCurricular->setPpc($ppc);
         }
 
+        if(array_key_exists('top', $payload))
+        {
+            $componenteCurricular->setTop( $payload['top']);
+        }
+
+        if(array_key_exists('left', $payload))
+        {
+            $componenteCurricular->setLeft( $payload['left']);
+        }
+
+        if(array_key_exists('posicaoColuna', $payload))
+        {
+            $componenteCurricular->setPosicaoColuna( $payload['posicaoColuna']);
+        }
+        
         $constraints = $this->validator->validate($componenteCurricular);
 
         if($constraints->success())
@@ -318,6 +333,21 @@ class ComponenteCurricularController extends APIController
             if(array_key_exists('tipo', $payload))
             {
                 $componenteCurricular->setTipo( $payload['tipo']);
+            }
+
+            if(array_key_exists('top', $payload))
+            {
+                $componenteCurricular->setTop( $payload['top']);
+            }
+
+            if(array_key_exists('left', $payload))
+            {
+                $componenteCurricular->setLeft( $payload['left']);
+            }
+
+            if(array_key_exists('posicaoColuna', $payload))
+            {
+                $componenteCurricular->setPosicaoColuna( $payload['posicaoColuna']);
             }
             
             $constraints = $this->validator->validate($componenteCurricular);
