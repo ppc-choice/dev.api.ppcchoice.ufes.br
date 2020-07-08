@@ -10,9 +10,9 @@ class CorrespondenciaRepository extends EntityRepository
     public function findAll()
     {
         return $this->_em->createQueryBuilder()
-            ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as depto',
+            ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as abreviaturaDepto',
                 'disc1.numDisciplina as numDisciplina, disc1.nome as nomeDisciplina, cc2.codCompCurric as codCompCurricCorresp', 
-                'dep2.abreviatura as deptoDisciplinaCorresp,disc2.numDisciplina  as numDisciplinaCorresp', 
+                'dep2.abreviatura as abreviaturaDeptoCorresp, disc2.numDisciplina  as numDisciplinaCorresp', 
                 'disc2.nome as nomeDisciplinaCorresp, cor.percentual')
             ->from('Entities\Correspondencia','cor')
             ->innerJoin('cor.componenteCurricular','cc1')
@@ -45,9 +45,9 @@ class CorrespondenciaRepository extends EntityRepository
     public function findByCodCompCurric($codCompCurric,$codCompCurricCorresp)
     {
         return $this->_em->createQueryBuilder()
-            ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as depto',
+            ->select('cc1.codCompCurric as codCompCurric, dep1.abreviatura as abreviaturaDepto',
                 'disc1.numDisciplina as numDisciplina, disc1.nome as nomeDisciplina',
-                'cc2.codCompCurric as codCompCurricCorresp, dep2.abreviatura as deptoDisciplinaCorresp',
+                'cc2.codCompCurric as codCompCurricCorresp, dep2.abreviatura as abreviaturaDeptoCorresp',
                 'disc2.numDisciplina  as numDisciplinaCorresp, disc2.nome as nomeDisciplinaCorresp, cor.percentual')
             ->from('Entities\Correspondencia','cor')
             ->innerJoin('cor.componenteCurricular','cc1')
