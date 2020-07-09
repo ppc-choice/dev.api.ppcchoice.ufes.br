@@ -83,11 +83,11 @@ class UnidadeEnsinoController extends APIController
      *
      * @apiParam {Number} codUnidadeEnsino Codigo unico de uma unidade de ensino.
      *
-     * @apiSuccess {String} nomeInstituicao Nome da instituição de ensino que a unidade de ensino está vinculada.
-     * @apiSuccess {String} nome Nome da unidade de ensino.
-     * @apiSuccess {Number} codUnEnsino Identificador único da unidade de ensino.
-     * @apiSuccess {String} cnpj CNPJ da unidade de ensino.
+     * @apiSuccess {String} nomeIes Nome da instituição de ensino que a unidade de ensino está vinculada.
+     * @apiSuccess {String} abreviaturaIes Abreviatura da instituição de ensino vinculada à unidade de ensino.
      * @apiSuccess {Number} codIes Identificador único da instutuição de ensino que a unidade de ensino está vinculada.
+     * @apiSuccess {String} nome Nome da unidade de ensino.
+     * @apiSuccess {String} cnpj CNPJ da unidade de ensino.
      * 
      * @apiError {String[]} error Entities\\UnidadeEnsino: Instância não encontrada.
      */
