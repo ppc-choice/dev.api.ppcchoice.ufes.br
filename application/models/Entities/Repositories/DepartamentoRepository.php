@@ -12,7 +12,7 @@ class DepartamentoRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('departamento.codDepto, departamento.nome, departamento.abreviatura', 
-                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as unidadeEnsino, instEnsinoSuperior.nome as ies')
+                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as nomeUnidadeEnsino, instEnsinoSuperior.nome as nomeIes')
             ->from('Entities\Departamento','departamento')
             ->innerJoin('departamento.unidadeEnsino', 'uniEnsino')
             ->innerJoin('uniEnsino.ies', 'instEnsinoSuperior')
@@ -24,7 +24,7 @@ class DepartamentoRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
             ->select('departamento.codDepto, departamento.nome, departamento.abreviatura', 
-                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as unidadeEnsino, instEnsinoSuperior.nome as ies')
+                'uniEnsino.codUnidadeEnsino', 'uniEnsino.nome as nomeUnidadeEnsino, instEnsinoSuperior.nome as nomeIes')
             ->from('Entities\Departamento','departamento')
             ->innerJoin('departamento.unidadeEnsino', 'uniEnsino')
             ->innerJoin('uniEnsino.ies', 'instEnsinoSuperior')

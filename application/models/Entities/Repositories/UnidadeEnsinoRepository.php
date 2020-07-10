@@ -19,7 +19,7 @@ class UnidadeEnsinoRepository extends EntityRepository
     public function findbyId($codUnidadeEnsino)
     {
         return $this->_em->createQueryBuilder()
-            ->select('ies.nome AS nomeInstituicao, ies.abreviatura, ies.codIes, u.nome, u.cnpj')
+            ->select('ies.nome AS nomeIes, ies.abreviatura AS abreviaturaIes, ies.codIes, u.nome, u.cnpj')
             ->from('Entities\UnidadeEnsino', 'u')
             ->innerJoin('u.ies', 'ies')
             ->where('u.codUnidadeEnsino = :codUnidadeEnsino')
