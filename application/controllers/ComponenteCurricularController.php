@@ -23,8 +23,8 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
      * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
-     * @apiSuccess {Number}   componenteCurricular[top]                 Posição Vertical da componente na grade curricular.
-     * @apiSuccess {Number}   componenteCurricular[left]                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[styleTop]                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[styleLeft]                Posição Horizontal da componente na grade curricular.
      * @apiSuccess {Number}   componenteCurricular[posicaoColuna]       Posição da componente na coluna da grade curricular.
      * 
      * @apiError {String[]} error Entities\\ComponenteCurricular:    Instância não encontrada.
@@ -68,8 +68,8 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {Number}   componenteCurricular[numDisciplina]       Número de disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number}   componenteCurricular[codPpc]              Identificador único de ppc.
      * @apiSuccess {Number}   componenteCurricular[tipo]                Tipo de componente curricular.
-     * @apiSuccess {Number}   componenteCurricular[top]                 Posição Vertical da componente na grade curricular.
-     * @apiSuccess {Number}   componenteCurricular[left]                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[styleTop]                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number}   componenteCurricular[styleLeft]                Posição Horizontal da componente na grade curricular.
      * @apiSuccess {Number}   componenteCurricular[posicaoColuna]       Posição da componente na coluna da grade curricular
      *  
      * @apiError {String[]} error  Entities\\ComponenteCurricular:    Instância não encontrada.
@@ -115,8 +115,8 @@ class ComponenteCurricularController extends APIController
      * @apiSuccess {String} depto           Abreviatura de departamento.
      * @apiSuccess {Number} numDisciplina   Número da disciplina, parte do identificador único de disciplina.
      * @apiSuccess {Number} codPpc          Identificador único de ppc.
-     * @apiSuccess {Number} top                 Posição Vertical da componente na grade curricular.
-     * @apiSuccess {Number} left                Posição Horizontal da componente na grade curricular.
+     * @apiSuccess {Number} styleTop                 Posição Vertical da componente na grade curricular.
+     * @apiSuccess {Number} styleLeft                Posição Horizontal da componente na grade curricular.
      * @apiSuccess {Number} posicaoColuna       Posição da componente na coluna da grade curricular
      * 
      * @apiError {String[]} error           Entities\\ComponenteCurricular:    Instância não encontrada.
@@ -187,6 +187,9 @@ class ComponenteCurricularController extends APIController
      * @apiParam (Request Body/JSON) {Number}   codDepto  Identificador único de departamento e parte do identificador único de disciplina.
      * @apiParam (Request Body/JSON) {Number}   numDisciplina  Número da disicplina, parte do identificador único de disciplina.
      * @apiParam (Request Body/JSON) {Number}   codPpc  Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number}   [styleTop]  Posição vertical da componente na grade curricular.
+     * @apiParam (Request Body/JSON) {Number}   [styleLeft]  Posição horizontal da componente na grade curricular.
+     * @apiParam (Request Body/JSON) {Number}   [posicaoColuna]  Posição da componente na coluna da grade curricular
      * 
      * @apiSuccess {String[]} message   Entities\\ComponenteCurricular: Instância criada com sucesso.
      * 
@@ -224,17 +227,17 @@ class ComponenteCurricularController extends APIController
             $componenteCurricular->setPpc($ppc);
         }
 
-        if(array_key_exists('top', $payload))
+        if(isset($payload['styleTop']))
         {
-            $componenteCurricular->setTop( $payload['top']);
+            $componenteCurricular->setStyleTop( $payload['styleTop']);
         }
 
-        if(array_key_exists('left', $payload))
+        if(isset($payload['styleLeft']))
         {
-            $componenteCurricular->setLeft( $payload['left']);
+            $componenteCurricular->setStyleLeft( $payload['styleLeft']);
         }
 
-        if(array_key_exists('posicaoColuna', $payload))
+        if(isset($payload['posicaoColuna']))
         {
             $componenteCurricular->setPosicaoColuna( $payload['posicaoColuna']);
         }
@@ -251,6 +254,7 @@ class ComponenteCurricularController extends APIController
                     'message' => $this->getApiMessage(STD_MSG_CREATED),
                 ), self::HTTP_OK);
             } catch (\Exception $e) {
+                echo $e;
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION)
                     ),self::HTTP_BAD_REQUEST
@@ -278,6 +282,9 @@ class ComponenteCurricularController extends APIController
      * @apiParam (Request Body/JSON) {Number} [codDepto]        Identificador único de departamento.
      * @apiParam (Request Body/JSON) {Number} [numDisciplina]   Número da disciplina, parte do idenficador único de disciplina.
      * @apiParam (Request Body/JSON) {Number} [codPpc]          Identificador único de ppc.
+     * @apiParam (Request Body/JSON) {Number}   [styleTop]  Posição vertical da componente na grade curricular.
+     * @apiParam (Request Body/JSON) {Number}   [styleLeft]  Posição horizontal da componente na grade curricular.
+     * @apiParam (Request Body/JSON) {Number}   [posicaoColuna]  Posição da componente na coluna da grade curricular
      * 
      * @apiSuccess {String[]} message  Entities\\ComponenteCurricular: Instância atualizada com sucesso.
      * 
@@ -335,14 +342,14 @@ class ComponenteCurricularController extends APIController
                 $componenteCurricular->setTipo( $payload['tipo']);
             }
 
-            if(array_key_exists('top', $payload))
+            if(array_key_exists('styleTop', $payload))
             {
-                $componenteCurricular->setTop( $payload['top']);
+                $componenteCurricular->setStyleTop( $payload['styleTop']);
             }
 
-            if(array_key_exists('left', $payload))
+            if(array_key_exists('styleLeft', $payload))
             {
-                $componenteCurricular->setLeft( $payload['left']);
+                $componenteCurricular->setStyleLeft( $payload['styleLeft']);
             }
 
             if(array_key_exists('posicaoColuna', $payload))
