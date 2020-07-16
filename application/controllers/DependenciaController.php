@@ -88,7 +88,7 @@ class DependenciaController extends APIController
     * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
     * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
     * @apiParam (URL) {bool} allowEmpty Parâmetro que informa se o método deve retornar um array de Depêndencias vazio.
-    * @apiParam (URL) {bool} senseConection Parâmetro que informa se o método deve retornar uma string de sentido da dependencia concatenada ao seu respectivo código.
+    * @apiParam (URL) {bool} senseConnection Parâmetro que informa se o método deve retornar uma string de sentido da dependencia concatenada ao seu respectivo código.
     *
     * @apiName findByCodPpc
     * @apiGroup Dependência
@@ -109,19 +109,20 @@ class DependenciaController extends APIController
     
         $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByCodPpc($codPpc);
         
-        $senseConection = $this->input->get('senseConection');
+        $senseConnection = $this->input->get('senseConnection');
 
         if(!empty($colecaoDependencia)){
             $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
 
-            if( $senseConection === "true" ){
-                $sentidoDependencia = array();
+            if( $senseConnection === "true" ){
+                $sentidoDependencia= array();
 
                 foreach ( $colecaoDependencia as $key => $dependencia ) {
                   
-                   $sentidoDependencia[$key]['codCompCurric'] = $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC;
-                   $sentidoDependencia[$key]['codPreRequisito'] = $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO;                    
-                  
+                    $sentidoDependencia[$key]= array();
+                    array_push($sentidoDependencia[$key], $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO);
+                    array_push($sentidoDependencia[$key], $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC);
+                                      
                 }    
                 
                 $this->apiReturn($sentidoDependencia,
