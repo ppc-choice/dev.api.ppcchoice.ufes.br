@@ -88,6 +88,7 @@ class DependenciaController extends APIController
     * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
     * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
     * @apiParam (URL) {bool} allowEmpty Parâmetro que informa se o método deve retornar um array de Depêndencias vazio.
+    * @apiParam (URL) {bool} senseConection Parâmetro que informa se o método deve retornar uma string de sentido da dependencia concatenada ao seu respectivo código.
     *
     * @apiName findByCodPpc
     * @apiGroup Dependência
@@ -108,12 +109,31 @@ class DependenciaController extends APIController
     
         $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByCodPpc($codPpc);
         
+        $senseConection = $this->input->get('senseConection');
+
         if(!empty($colecaoDependencia)){
             $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
-            
-            $this->apiReturn($colecaoDependencia,
+
+            if( $senseConection === "true" ){
+                $sentidoDependencia = array();
+
+                foreach ( $colecaoDependencia as $key => $dependencia ) {
+                  
+                   $sentidoDependencia[$key]['codCompCurric'] = $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC;
+                   $sentidoDependencia[$key]['codPreRequisito'] = $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO;                    
+                  
+                }    
+                
+                $this->apiReturn($sentidoDependencia,
                 self::HTTP_OK 
-            ); 
+                ); 
+
+            }else{
+                $this->apiReturn($colecaoDependencia,
+                self::HTTP_OK 
+                ); 
+            }
+
         }else{
             
             $allowEmpty = strtolower($this->input->get('allowEmpty'));
