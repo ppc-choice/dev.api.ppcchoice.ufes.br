@@ -115,16 +115,17 @@ class DependenciaController extends APIController
             $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
 
             if( $senseConnection === "true" ){
-                $sentidoDependencia= array();
+                $sentidoDependencia['uuids']= array();
 
                 foreach ( $colecaoDependencia as $key => $dependencia ) {
                   
-                    $sentidoDependencia[$key]= array();
-                    array_push($sentidoDependencia[$key], $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO);
-                    array_push($sentidoDependencia[$key], $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC);
+                    $sentidoDependencia['uuids'][$key]= array();
+                    array_push($sentidoDependencia['uuids'][$key], $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO);
+                    array_push($sentidoDependencia['uuids'][$key], $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC);
                                       
                 }    
                 
+                // echo var_dump($sentidoDependencia);
                 $this->apiReturn($sentidoDependencia,
                 self::HTTP_OK 
                 ); 
