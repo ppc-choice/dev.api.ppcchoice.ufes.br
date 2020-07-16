@@ -54,8 +54,8 @@ class CursoController extends APIController
 	 * @apiSuccess {String} nome   Nome do Curso.
 	 * @apiSuccess {Number} anoCriacao  Ano em que o curso foi criado.
 	 * @apiSuccess {Number} codUnidadeEnsino   Identificador único da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiSuccess {String} unidadeEnsino   Nome da Unidade de Ensino na qual o Curso está registrado.
-	 * @apiSuccess {String} ies   Nome da Instituição de Ensino Superior na qual o Curso está registrado.
+	 * @apiSuccess {String} nomeUnidadeEnsino   Nome da Unidade de Ensino na qual o Curso está registrado.
+	 * @apiSuccess {String} nomeIes   Nome da Instituição de Ensino Superior na qual o Curso está registrado.
 	 * 
 	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */

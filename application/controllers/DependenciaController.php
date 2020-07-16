@@ -50,7 +50,7 @@ class DependenciaController extends APIController
     * @apiName findById
     * @apiGroup Dependência
     *
-    * @apiSuccess {String} curso Nome do curso que a componente curricular pertence.
+    * @apiSuccess {String} nomeCurso Nome do curso que a componente curricular pertence.
     * @apiSuccess {Number} codCompCurric Código identificador de uma componente curricular.
     * @apiSuccess {String} nomeCompCurric Nome da componente curricular.
     * @apiSuccess {Number} codPreRequisito Código identificador de uma componente curricular que é pré-requisito.
@@ -106,7 +106,7 @@ class DependenciaController extends APIController
             'methods' => array('GET'), 
         ));
     
-        $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByIdPpc($codPpc);
+        $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByCodPpc($codPpc);
         
         if(!empty($colecaoDependencia)){
             $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
