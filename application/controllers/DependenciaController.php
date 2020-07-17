@@ -109,24 +109,34 @@ class DependenciaController extends APIController
     
         $colecaoDependencia = $this->entityManager->getRepository('Entities\Dependencia')->findByCodPpc($codPpc);
         
-        $senseConnection = $this->input->get('senseConnection');
-
+        
         if(!empty($colecaoDependencia)){
+            $asConnection = strtolower($this->input->get('asConnection'));
             $colecaoDependencia = $this->doctrineToArray($colecaoDependencia);
 
-            if( $senseConnection === "true" ){
-                $sentidoDependencia= array();
+            if( $asConnection === "true" ){
+                // $sentidoDependencia= array();
 
-                foreach ( $colecaoDependencia as $key => $dependencia ) {
+                // foreach ( $colecaoDependencia as $key => $dependencia ) {
                   
-                    $sentidoDependencia[$key]['uuids']= array();
-                    array_push($sentidoDependencia[$key]['uuids'], $dependencia['codPreRequisito'] . SENTIDO_PREREQUISITO);
-                    array_push($sentidoDependencia[$key]['uuids'], $dependencia['codCompCurric'] . SENTIDO_COMPCURRIC);
+                //     $sentidoDependencia[$key]['uuids']= array();
+                //     array_push($sentidoDependencia[$key]['uuids'], $dependencia['codPreRequisito'] . SENTIDO_CONEXAO_DIREITA);
+                //     array_push($sentidoDependencia[$key]['uuids'], $dependencia['codCompCurric'] . SENTIDO_CONEXAO_ESQUERDA);
                                       
-                }    
+                // }    
                 
-                // echo var_dump($sentidoDependencia);
-                $this->apiReturn($sentidoDependencia,
+                $conexoes = array_map(function($dependencia){
+                    $conexao = array(
+                        'uuids' => array(
+                            $dependencia['codPreRequisito'] . SENTIDO_CONEXAO_DIREITA,
+                            $dependencia['codCompCurric'] . SENTIDO_CONEXAO_ESQUERDA
+                        )
+                    );
+
+                    return $conexao;
+                }, $colecaoDependencia);
+
+                $this->apiReturn($conexoes,
                 self::HTTP_OK 
                 ); 
 
