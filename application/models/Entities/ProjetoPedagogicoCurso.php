@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProjetoPedagogicoCurso
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codPpc;
 
@@ -86,9 +86,22 @@ class ProjetoPedagogicoCurso
 
 
     /**
+     * Set codPpc
+     *
+     * @param string $codPpc
+     * @return ProjetoPedagogicoCurso
+     */
+    public function setCodPpc($codPpc)
+    {
+        $this->codPpc = $codPpc;
+    
+        return $this;
+    }
+
+    /**
      * Get codPpc
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodPpc()
     {

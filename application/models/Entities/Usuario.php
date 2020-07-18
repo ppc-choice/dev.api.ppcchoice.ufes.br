@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Usuario
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codUsuario;
 
@@ -46,9 +46,22 @@ class Usuario
 
 
     /**
+     * Set codUsuario
+     *
+     * @param string $codUsuario
+     * @return Usuario
+     */
+    public function setCodUsuario($codUsuario)
+    {
+        $this->codUsuario = $codUsuario;
+    
+        return $this;
+    }
+
+    /**
      * Get codUsuario
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodUsuario()
     {

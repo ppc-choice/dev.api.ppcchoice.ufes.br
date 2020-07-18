@@ -7,10 +7,9 @@ Entities\Usuario:
         - email
   fields:
     codUsuario:
-      type: integer
+      type: string
+      length: 255
       id: true
-      generator:
-        strategy: AUTO
       column: cod_usuario
     senha:
       type: string

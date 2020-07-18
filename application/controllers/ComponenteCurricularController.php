@@ -202,7 +202,7 @@ class ComponenteCurricularController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $componenteCurricular = new Entities\ComponenteCurricular();
 
         if(isset($payload['periodo'])) $componenteCurricular->setPeriodo($payload['periodo']);
@@ -224,6 +224,22 @@ class ComponenteCurricularController extends APIController
             $componenteCurricular->setPpc($ppc);
         }
 
+        if(isset($payload['styleTop']))
+        {
+            $componenteCurricular->setStyleTop( $payload['styleTop']);
+        }
+
+        if(isset($payload['styleLeft']))
+        {
+            $componenteCurricular->setStyleLeft( $payload['styleLeft']);
+        }
+
+        if(isset($payload['posicaoColuna']))
+        {
+            $componenteCurricular->setPosicaoColuna( $payload['posicaoColuna']);
+        }
+
+        $componenteCurricular->setCodCompCurric($this->uniqIdV2());
         $constraints = $this->validator->validate($componenteCurricular);
 
         if($constraints->success())
@@ -237,7 +253,8 @@ class ComponenteCurricularController extends APIController
                 ), self::HTTP_OK);
             } catch (\Exception $e) {
                 $this->apiReturn(array(
-                    'error' => $this->getApiMessage(STD_MSG_EXCEPTION)
+                    // 'error' => $this->getApiMessage(STD_MSG_EXCEPTION)
+                    'error' => $e->getMessage()
                     ),self::HTTP_BAD_REQUEST
                 );
             }
@@ -279,7 +296,7 @@ class ComponenteCurricularController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$codCompCurric);
 
         if(!is_null($componenteCurricular))
@@ -318,6 +335,21 @@ class ComponenteCurricularController extends APIController
             if(array_key_exists('tipo', $payload))
             {
                 $componenteCurricular->setTipo( $payload['tipo']);
+            }
+            
+            if(array_key_exists('styleTop', $payload))
+            {
+                $componenteCurricular->setStyleTop( $payload['styleTop']);
+            }
+
+            if(array_key_exists('styleLeft', $payload))
+            {
+                $componenteCurricular->setStyleLeft( $payload['styleLeft']);
+            }
+
+            if(array_key_exists('posicaoColuna', $payload))
+            {
+                $componenteCurricular->setPosicaoColuna( $payload['posicaoColuna']);
             }
             
             $constraints = $this->validator->validate($componenteCurricular);

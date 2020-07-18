@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Curso
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codCurso;
 
@@ -31,9 +31,22 @@ class Curso
 
 
     /**
+     * Set codCurso
+     *
+     * @param string $codCurso
+     * @return Curso
+     */
+    public function setCodCurso($codCurso)
+    {
+        $this->codCurso = $codCurso;
+    
+        return $this;
+    }
+
+    /**
      * Get codCurso
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodCurso()
     {

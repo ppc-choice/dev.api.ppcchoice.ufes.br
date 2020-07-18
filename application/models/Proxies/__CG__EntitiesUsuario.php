@@ -42,10 +42,16 @@ class Usuario extends \Entities\Usuario implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    public function setCodUsuario($codUsuario)
+    {
+        $this->__load();
+        return parent::setCodUsuario($codUsuario);
+    }
+
     public function getCodUsuario()
     {
         if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codUsuario"];
+            return $this->_identifier["codUsuario"];
         }
         $this->__load();
         return parent::getCodUsuario();

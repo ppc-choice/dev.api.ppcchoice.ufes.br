@@ -159,7 +159,7 @@ class ProjetoPedagogicoCursoController extends APIController
 			)
 		);
 
-		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		$payload = $this->getBodyRequest();
         $ppc = new Entities\ProjetoPedagogicoCurso();
         
         if(isset($payload['codCurso'])) 
@@ -232,6 +232,7 @@ class ProjetoPedagogicoCursoController extends APIController
         
         if(array_key_exists('situacao', $payload)) $ppc->setSituacao(strtoupper($payload['situacao']));
         
+        $ppc->setCodPpc($this->uniqIdV2());
         $constraints = $this->validator->validate($ppc);
         
         if ( $constraints->success() ){
@@ -299,7 +300,7 @@ class ProjetoPedagogicoCursoController extends APIController
 			)
 		);
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $ppc = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$codPpc);
         
         if(!is_null($ppc))

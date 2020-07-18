@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ComponenteCurricular
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codCompCurric;
 
@@ -37,12 +37,12 @@ class ComponenteCurricular
     /**
      * @var integer
      */
-    private $top;
+    private $styleTop;
 
     /**
      * @var integer
      */
-    private $left;
+    private $styleLeft;
 
     /**
      * @var \Entities\Disciplina
@@ -56,9 +56,22 @@ class ComponenteCurricular
 
 
     /**
+     * Set codCompCurric
+     *
+     * @param string $codCompCurric
+     * @return ComponenteCurricular
+     */
+    public function setCodCompCurric($codCompCurric)
+    {
+        $this->codCompCurric = $codCompCurric;
+    
+        return $this;
+    }
+
+    /**
      * Get codCompCurric
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodCompCurric()
     {
@@ -158,49 +171,49 @@ class ComponenteCurricular
     }
 
     /**
-     * Set top
+     * Set styleTop
      *
-     * @param integer $top
+     * @param integer $styleTop
      * @return ComponenteCurricular
      */
-    public function setTop($top)
+    public function setStyleTop($styleTop)
     {
-        $this->top = $top;
+        $this->styleTop = $styleTop;
     
         return $this;
     }
 
     /**
-     * Get top
+     * Get styleTop
      *
      * @return integer 
      */
-    public function getTop()
+    public function getStyleTop()
     {
-        return $this->top;
+        return $this->styleTop;
     }
 
     /**
-     * Set left
+     * Set styleLeft
      *
-     * @param integer $left
+     * @param integer $styleLeft
      * @return ComponenteCurricular
      */
-    public function setLeft($left)
+    public function setStyleLeft($styleLeft)
     {
-        $this->left = $left;
+        $this->styleLeft = $styleLeft;
     
         return $this;
     }
 
     /**
-     * Get left
+     * Get styleLeft
      *
      * @return integer 
      */
-    public function getLeft()
+    public function getStyleLeft()
     {
-        return $this->left;
+        return $this->styleLeft;
     }
 
     /**

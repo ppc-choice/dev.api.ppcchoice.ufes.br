@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Departamento
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codDepto;
 
@@ -31,9 +31,22 @@ class Departamento
 
 
     /**
+     * Set codDepto
+     *
+     * @param string $codDepto
+     * @return Departamento
+     */
+    public function setCodDepto($codDepto)
+    {
+        $this->codDepto = $codDepto;
+    
+        return $this;
+    }
+
+    /**
      * Get codDepto
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodDepto()
     {

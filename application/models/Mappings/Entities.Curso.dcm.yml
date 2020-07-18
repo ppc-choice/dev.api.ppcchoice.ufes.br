@@ -8,11 +8,10 @@ Entities\Curso:
         - cod_curso
   fields:
     codCurso:
-      type: integer
+      type: string
+      length: 255
       id: true
       nullable: false
-      generator: 
-        strategy: AUTO
       column: cod_curso
     nome:
       type: string

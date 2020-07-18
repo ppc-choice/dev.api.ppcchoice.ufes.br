@@ -8,11 +8,10 @@ Entities\UnidadeEnsino:
         - cod_un_ensino
   fields:
     codUnidadeEnsino:
-      type: integer
+      type: string
+      length: 255
       id: true
       nullable: false
-      generator:
-        strategy: AUTO
       column: cod_un_ensino
     nome:
       type: string

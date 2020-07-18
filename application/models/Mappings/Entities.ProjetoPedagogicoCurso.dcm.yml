@@ -8,12 +8,10 @@ Entities\ProjetoPedagogicoCurso:
         - cod_ppc
   fields:
     codPpc:
-      type: integer
+      type: string
       id: true
       nullable: false
       column: cod_ppc
-      generator:
-        strategy: auto 
     dtInicioVigencia:
       type: date
       nullable: false

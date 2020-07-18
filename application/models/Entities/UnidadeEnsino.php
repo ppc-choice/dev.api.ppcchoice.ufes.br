@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UnidadeEnsino
 {
     /**
-     * @var integer
+     * @var string
      */
     private $codUnidadeEnsino;
 
@@ -31,9 +31,22 @@ class UnidadeEnsino
 
 
     /**
+     * Set codUnidadeEnsino
+     *
+     * @param string $codUnidadeEnsino
+     * @return UnidadeEnsino
+     */
+    public function setCodUnidadeEnsino($codUnidadeEnsino)
+    {
+        $this->codUnidadeEnsino = $codUnidadeEnsino;
+    
+        return $this;
+    }
+
+    /**
      * Get codUnidadeEnsino
      *
-     * @return integer 
+     * @return string 
      */
     public function getCodUnidadeEnsino()
     {

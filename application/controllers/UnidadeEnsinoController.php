@@ -134,7 +134,7 @@ class UnidadeEnsinoController extends APIController
             'methods' => array('POST')
         ));
 
-        $payload = json_decode(file_get_contents('php://input'), TRUE);
+        $payload = $this->getBodyRequest();
         $ues = new Entities\UnidadeEnsino();
         
         if ( array_key_exists('nome', $payload) )   $ues->setNome($payload['nome']);
@@ -144,7 +144,7 @@ class UnidadeEnsinoController extends APIController
             $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
             if ( !is_null($ies) ) $ues->setIes($ies);
         }
-
+        $ues->setCodUnidadeEnsino($this->uniqIdV2());
         $constraints = $this->validator->validate($ues);
 
         if ( $constraints->success() ){
@@ -194,7 +194,7 @@ class UnidadeEnsinoController extends APIController
             'methods' => array('PUT')
         ));
 
-        $payload = json_decode(file_get_contents('php://input'), TRUE);
+        $payload = $this->getBodyRequest();
         $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
         if ( !is_null($ues) ){

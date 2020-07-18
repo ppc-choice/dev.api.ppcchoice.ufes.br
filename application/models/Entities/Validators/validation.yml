@@ -306,7 +306,7 @@ Entities\Disciplina:
             - NotNull:
                 message: Este valor não deve ser nulo.
             - Type:
-                type: integer
+                type: string
                 message: Este valor deve ser do tipo {{ type }}.
         nome:
             - NotNull:
@@ -336,7 +336,7 @@ Entities\UnidadeEnsino:
     properties:
         codUnidadeEnsino:
             - Type: 
-                type: integer
+                type: string
                 message: Este valor deve ser do tipo {{ type }}.
         nome:
             - NotNull:
@@ -394,6 +394,18 @@ Entities\ComponenteCurricular:
             - OneOf:
                 choices: [OBRIGATORIA, OPTATIVA, ESTAGIO, ATIVIDADE COMPLEMENTAR, ATIVIDADE EXTENSAO, PROJETO CONCLUSAO]
                 message: O valor selecionado não é uma opção válida.
+        styleTop:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}. 
+        styleLeft:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
+        posicaoColuna:
+            - Type:
+                type: integer
+                message: Este valor deve ser do tipo {{ type }}.
         disciplina:
             - NotNull: 
                 message: Este valor não deve ser nulo.
