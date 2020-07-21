@@ -86,9 +86,25 @@ class ComponenteCurricularController extends APIController
         
         if(!empty($colecaoCompCurric))
         {
-            $this->apiReturn($colecaoCompCurric,
-                self::HTTP_OK
-            );
+            $asNode = strtolower($this->input->get('asNode'));
+
+            if( $asNode === "true" )
+            {
+                $colecaoNode = array_map(function($compCurric){
+                    $node = array_merge($compCurric, array('id' => $compCurric['codCompCurric']));
+                    return $node;
+                }, $colecaoCompCurric );    
+
+                $this->apiReturn($colecaoNode,
+                    self::HTTP_OK
+                );
+
+            } else {
+                $this->apiReturn($colecaoCompCurric,
+                    self::HTTP_OK
+                );
+            }
+
             
         }else{
             $this->apiReturn(array(

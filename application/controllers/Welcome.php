@@ -8,8 +8,8 @@ class Welcome extends APIController
 
 	public function index()
 	{
-		if ( file_exists('doc') ) {
-			redirect('doc','refresh');
+		if ( file_exists('documentation') ) {
+			redirect('documentation','refresh');
 		} else {
 			$this->load->view('welcome_message');
 		}
@@ -53,4 +53,10 @@ class Welcome extends APIController
 		echo "Sucess";
 	}
 
+	public function getUUID(){
+
+		 $this->apiReturn( array(
+			 'uuid' => $this->uniqIdV2()
+		 ), self::HTTP_OK );
+	}
 }

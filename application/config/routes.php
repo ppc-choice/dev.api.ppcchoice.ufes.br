@@ -109,3 +109,6 @@ $route['usuarios/(:any)']['DELETE'] = 'UsuarioController/delete/$1';
 $route['usuarios/login']['POST'] = 'UsuarioController/login';
 
 $route['usuarios/test']['GET'] = 'UsuarioController/test';
+
+
+$route['uuid']['GET'] = 'Welcome/getUUID';
