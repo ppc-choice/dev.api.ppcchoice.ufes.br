@@ -40,12 +40,15 @@ Entities\ComponenteCurricular:
       targetEntity: Disciplina
       joinColumns:
         cod_depto:
+          nullable: false
           referencedColumnName: cod_depto
         num_disciplina:
+          nullable: false
           referencedColumnName: num_disciplina
     ppc:
       targetEntity: ProjetoPedagogicoCurso
       joinColumns:
         cod_ppc:
+          nullable: false
           referencedColumnName: cod_ppc
         

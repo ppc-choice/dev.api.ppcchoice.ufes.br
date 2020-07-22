@@ -40,6 +40,7 @@ class UnidadeEnsinoController extends APIController
                 foreach ($colecaoIes as $key => $ies) 
                 {
                     $grupoUnEnsino[$key]['nomeIes'] = $ies->getNome();
+                    $grupoUnEnsino[$key]['codIes'] = $ies->getCodIes();
                     $grupoUnEnsino[$key]['abreviaturaIes'] = $ies->getAbreviatura();
                     $grupoUnEnsino[$key]['unidadesEnsino'] = array();
                     

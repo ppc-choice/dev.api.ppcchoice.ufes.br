@@ -27,4 +27,5 @@ Entities\UnidadeEnsino:
       inversedBy: unidadesEnsino
       joinColumns:
         cod_ies:
+          nullable: false
           referencedColumnName: cod_ies

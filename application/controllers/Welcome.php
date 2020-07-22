@@ -18,7 +18,7 @@ class Welcome extends APIController
 	public function updateSchema()
 	{
 		$folder = 'database/';
-		$database = 'bancoppc';
+		$database = 'ppcchoice';
 		$order = array('instituicao_ensino_superior', 
 			'unidade_ensino', 
 			'curso', 

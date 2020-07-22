@@ -67,4 +67,5 @@ Entities\ProjetoPedagogicoCurso:
       targetEntity: Curso
       joinColumns:
         cod_curso:
+          nullable: false
           referencedColumnName: cod_curso

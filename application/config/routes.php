@@ -108,7 +108,7 @@ $route['usuarios/(:any)']['PUT'] = 'UsuarioController/update/$1';
 $route['usuarios/(:any)']['DELETE'] = 'UsuarioController/delete/$1';
 $route['usuarios/login']['POST'] = 'UsuarioController/login';
 
-$route['usuarios/test']['GET'] = 'UsuarioController/test';
+$route['usuarios/schema']['POST'] = 'Welcome/updateSchema';
 
 
 $route['uuid']['GET'] = 'Welcome/getUUID';
