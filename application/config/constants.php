@@ -109,3 +109,7 @@ define('STD_MSG_CREATED', 'CREATED');
 define('STD_MSG_UPDATED', 'UPDATED');
 define('STD_MSG_DELETED', 'DELETED');
 define('STD_MSG_INVALID_CREDENTIAL', 'INVALID_CREDENTIAL');
+
+// Constantes de sentido da dependência
+define('SENTIDO_CONEXAO_ESQUERDA', 'left');
+define('SENTIDO_CONEXAO_DIREITA', 'right');
