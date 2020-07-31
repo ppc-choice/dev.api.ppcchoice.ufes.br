@@ -72,9 +72,9 @@ $route['dependencias/(:any)/(:any)']['DELETE'] = 'DependenciaController/delete/$
 
 // Componente Curricular : Hadamo
 $route['componentes-curriculares']['GET'] = 'ComponenteCurricularController/findAll';
-$route['componentes-curriculares/(:any)']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
-$route['projetos-pedagogicos-curso/(:any)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
+$route['componentes-curriculares/([a-f0-9]{13})']['GET'] = 'ComponenteCurricularController/findByCodCompCurric/$1';
 $route['componentes-curriculares/tipos']['GET'] = 'ComponenteCurricularController/findTipos';
+$route['projetos-pedagogicos-curso/(:any)/componentes-curriculares']['GET'] = 'ComponenteCurricularController/findByCodPpc/$1';
 $route['componentes-curriculares']['POST'] = 'ComponenteCurricularController/create';
 $route['componentes-curriculares/(:any)']['PUT'] = 'ComponenteCurricularController/update/$1';
 $route['componentes-curriculares/(:any)']['DELETE'] = 'ComponenteCurricularController/delete/$1';
