@@ -107,7 +107,7 @@ class DepartamentoController extends APIController
 			)
 		);
  
-		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		$payload = $this->getBodyRequest();
 		$depto = new Entities\Departamento();
 
 		if ( array_key_exists('nome', $payload) ) $depto->setNome($payload['nome']);
@@ -118,6 +118,7 @@ class DepartamentoController extends APIController
 			$depto->setUnidadeEnsino($ues);
 		}
 
+		$depto->setCodDepto($this->uniqIdV2());
 		$constraints = $this->validator->validate($depto);
 
 		if ( $constraints->success() ){		
@@ -171,7 +172,7 @@ class DepartamentoController extends APIController
 			)
 		);
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $depto = $this->entityManager->find('Entities\Departamento',$codDepto);
 		
         if(!is_null($depto))

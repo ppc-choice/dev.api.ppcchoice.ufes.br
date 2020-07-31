@@ -33,8 +33,7 @@ application/logs/*
 
 
 ### APIDOC ###
-doc/*
-apidoc.json
+documentation/*
 
 ## SQL FILE ###
 /database/

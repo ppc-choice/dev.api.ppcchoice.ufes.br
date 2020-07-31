@@ -142,6 +142,7 @@ class UsuarioController extends APIController
 		}
 		
 		$usuario->setDtUltimoAcesso(new DateTime('NOW'));
+		$usuario->setCodUsuario($this->uniqIdV2());
 
 		$constraints = $this->validator->validate($usuario);
 	

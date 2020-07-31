@@ -42,10 +42,16 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
     }
 
     
+    public function setCodCompCurric($codCompCurric)
+    {
+        $this->__load();
+        return parent::setCodCompCurric($codCompCurric);
+    }
+
     public function getCodCompCurric()
     {
         if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codCompCurric"];
+            return $this->_identifier["codCompCurric"];
         }
         $this->__load();
         return parent::getCodCompCurric();
@@ -99,28 +105,28 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
         return parent::getPosicaoColuna();
     }
 
-    public function setTop($top)
+    public function setStyleTop($styleTop)
     {
         $this->__load();
-        return parent::setTop($top);
+        return parent::setStyleTop($styleTop);
     }
 
-    public function getTop()
+    public function getStyleTop()
     {
         $this->__load();
-        return parent::getTop();
+        return parent::getStyleTop();
     }
 
-    public function setLeft($left)
+    public function setStyleLeft($styleLeft)
     {
         $this->__load();
-        return parent::setLeft($left);
+        return parent::setStyleLeft($styleLeft);
     }
 
-    public function getLeft()
+    public function getStyleLeft()
     {
         $this->__load();
-        return parent::getLeft();
+        return parent::getStyleLeft();
     }
 
     public function setDisciplina(\Entities\Disciplina $disciplina = NULL)
@@ -150,7 +156,7 @@ class ComponenteCurricular extends \Entities\ComponenteCurricular implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'posicaoColuna', 'top', 'left', 'disciplina', 'ppc');
+        return array('__isInitialized__', 'codCompCurric', 'periodo', 'credito', 'tipo', 'posicaoColuna', 'styleTop', 'styleLeft', 'disciplina', 'ppc');
     }
 
     public function __clone()

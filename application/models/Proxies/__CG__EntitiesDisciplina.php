@@ -51,7 +51,7 @@ class Disciplina extends \Entities\Disciplina implements \Doctrine\ORM\Proxy\Pro
     public function getCodDepto()
     {
         if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codDepto"];
+            return $this->_identifier["codDepto"];
         }
         $this->__load();
         return parent::getCodDepto();

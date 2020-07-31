@@ -147,7 +147,7 @@ class TransicaoController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $transicao = new Entities\Transicao();
 
         if( isset($payload['codPpcAtual']))
@@ -213,7 +213,7 @@ class TransicaoController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $transicao = $this->entityManager->find('Entities\Transicao',
                 array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
 

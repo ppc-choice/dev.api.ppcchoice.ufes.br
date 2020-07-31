@@ -180,7 +180,7 @@ class DependenciaController extends APIController
 			)
 		);
 
-		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		$payload = $this->getBodyRequest();
         $dependencia = new Entities\Dependencia();
         
         if ( isset($payload['codCompCurric'])){
@@ -246,7 +246,7 @@ class DependenciaController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $dependencia = $this->entityManager->find('Entities\Dependencia',
         	array('componenteCurricular' => $codCompCurric, 'preRequisito' => $codPreRequisito));
         
