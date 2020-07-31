@@ -42,10 +42,16 @@ class Departamento extends \Entities\Departamento implements \Doctrine\ORM\Proxy
     }
 
     
+    public function setCodDepto($codDepto)
+    {
+        $this->__load();
+        return parent::setCodDepto($codDepto);
+    }
+
     public function getCodDepto()
     {
         if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["codDepto"];
+            return $this->_identifier["codDepto"];
         }
         $this->__load();
         return parent::getCodDepto();

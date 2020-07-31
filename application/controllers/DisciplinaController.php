@@ -102,7 +102,7 @@ class DisciplinaController extends APIController
             'methods' => array('POST')
         ));
 
-        $payload = json_decode(file_get_contents('php://input'), TRUE);
+        $payload = $this->getBodyRequest();
         $disciplina = new Entities\Disciplina();
 
         if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
@@ -168,7 +168,7 @@ class DisciplinaController extends APIController
 
         $disciplina = $this->entityManager->find('Entities\Disciplina', 
             array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
-        $payload = json_decode(file_get_contents('php://input'), TRUE);
+        $payload = $this->getBodyRequest();
 
         if ( !is_null($disciplina) ){
             if ( array_key_exists('nome', $payload) )   $disciplina->setNome($payload['nome']);

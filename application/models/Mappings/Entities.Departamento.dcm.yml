@@ -8,11 +8,10 @@ Entities\Departamento:
         - cod_depto
   fields:
     codDepto:
-      type: integer
+      type: string
+      length: 255
       id: true
       nullable: false
-      generator: 
-        strategy: AUTO
       column: cod_depto
     nome:
       type: string
@@ -20,11 +19,12 @@ Entities\Departamento:
       nullable: false
     abreviatura:
       type: string
-      length: 15
+      length: 50
       nullable: false
   manyToOne:
     unidadeEnsino:
       targetEntity: UnidadeEnsino
       joinColumns:
         cod_un_ensino:
+          nullable: false
           referencedColumnName: cod_un_ensino

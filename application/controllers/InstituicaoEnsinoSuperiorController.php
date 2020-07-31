@@ -103,7 +103,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
             )
         );
  
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
 		$ies = new Entities\InstituicaoEnsinoSuperior();
 
 		if ( array_key_exists('codIes', $payload) ) $ies->setCodIes($payload['codIes']);
@@ -161,7 +161,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
             )
 		);
 		
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
 		
         if(!is_null($ies))

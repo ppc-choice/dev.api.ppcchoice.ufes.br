@@ -107,7 +107,7 @@ class CursoController extends APIController
 			)
 		);
  
-		$payload = json_decode(file_get_contents('php://input'),TRUE);
+		$payload = $this->getBodyRequest();
 		$curso = new Entities\Curso();
 
 		if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
@@ -118,7 +118,7 @@ class CursoController extends APIController
 			$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
 			$curso->setUnidadeEnsino($ues);
 		}
-
+			$curso->setCodCurso($this->uniqIdV2());
 			$constraints = $this->validator->validate($curso);
 
 			if ( $constraints->success() ){
@@ -171,7 +171,7 @@ class CursoController extends APIController
 		);
 
         $curso = $this->entityManager->find('Entities\Curso',$codCurso);
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
 		
         if(!is_null($curso))
         {            

@@ -9,7 +9,8 @@ Entities\Disciplina:
         - num_disciplina
   fields:
     codDepto:
-      type: integer
+      type: string
+      length: 255
       id: true
       nullable: false
       column: cod_depto

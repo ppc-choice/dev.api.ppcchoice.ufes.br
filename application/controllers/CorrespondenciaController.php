@@ -157,7 +157,7 @@ class CorrespondenciaController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $correspondencia = new Entities\Correspondencia();
 
         if (isset( $payload['codCompCurric']))
@@ -227,7 +227,7 @@ class CorrespondenciaController extends APIController
             )
         );
 
-        $payload = json_decode(file_get_contents('php://input'),TRUE);
+        $payload = $this->getBodyRequest();
         $correspondencia = $this->entityManager->find('Entities\Correspondencia',
                 array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
 
