@@ -8,22 +8,19 @@
 ## :jigsaw: Descrição
 API RESTful construída para consumo interno do projeto PPCChoice, uma aplicação Web de comparação e visualização de Projetos Pedagógicos de Curso.
 
-### :computer: Status do Projeto
+## :computer: Status do Projeto
 
 	🚧 🚀 Em construção...  🚧
-
-
 
 ## :dark_sunglasses: Demonstração da aplicação
 
 Para realizar requisições diretamente a API de uma forma mais fácil, é recomendado que você tenha o software [Postman](https://www.postman.com/). Em seguida basta fazer o download da pasta abaixo e importa-la.
 
-
-> Pasta do postman aqui
+> Arquivo do postman aqui
 
 # :balloon: Contribuição
 
-# :pushpin: Pré-requisitos
+## :pushpin: Pré-requisitos
 
 Antes de começar, você vai precisar ter instalado e configurado em sua máquina as seguintes ferramentas:
 - [PHP]() <= 5.3.7
@@ -33,19 +30,11 @@ Antes de começar, você vai precisar ter instalado e configurado em sua máquin
 Além disto é bom ter um editor para trabalhar com o código como [VSCode:computer:](https://code.visualstudio.com/).
 
 ## :dart: Clone este repositório
-#### XAMPP
 ```bash
-Na pasta htdocs
 $ git clone <https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br>
 ```
 
-#### WAMP
-```bash
-Na pasta www
-$ git clone <https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br>
-```
-
-# :clipboard: Testes
+## :clipboard: Testes
 Para executar os testes é necessário a instalação do composer. Neste caso, você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes. 
 
 Na raiz do projeto execute:
@@ -56,19 +45,19 @@ Para gerar um log de todos os testes no terminal execute:
 ```
 ./vendor/bin/phpunit tests
 ```
-# :books: Documentação da API
+
+## :books: Documentação da API
 Você pode ter acesso a toda documentação da API clicando [aqui](http://dev.ppcchoice.ufes.br/api/doc).
 
-# :rocket: Tecnologias
+## :rocket: Tecnologias
 Ferramentas usadas na construção do projeto:
 
-- [MySql](https://www.mysql.com/products/workbench/)
+- [MySql](https://www.mysql.com/)
 - [PHP](https://www.php.net/)
 - [Doctrine](https://www.doctrine-project.org/)
 
 # :ghost: Problemas
 Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
-
 
 # :pencil2: Autores
 <table>
