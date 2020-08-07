@@ -14,11 +14,13 @@ API RESTful construída para consumo interno do projeto PPCChoice, uma aplicaç�
 
 
 
-# Demonstração da aplicação
+## Demonstração da aplicação
+
 Para realizar requisições diretamente a API de uma forma mais fácil, é recomendado que você tenha o software [Postman](https://www.postman.com/) e em seguida fazer o download da pasta abaixo e importa-la no Postaman.
------------------------------
+
+
 Pasta do postman aqui
------------------------------
+
 
 
 # :pushpin: Pré-requisitos
@@ -57,10 +59,10 @@ Para gerar um log de todos os testes no terminal execute:
 # :books: Documentação da API
 Você pode ter acesso a toda documentação da API clicando [aqui](http://dev.ppcchoice.ufes.br/api/doc).
 
-# :rocket: Tecnlogias
+# :rocket: Tecnologias
 Ferramentas usadas na construção do projeto:
 
-- [MySql Workbench](https://www.mysql.com/products/workbench/)
+- [MySql](https://www.mysql.com/products/workbench/)
 - [PHP](https://www.php.net/)
 - [Doctrine](https://www.doctrine-project.org/)
 
@@ -134,4 +136,5 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a soluç�
     </td>
   </tr>
 </table>
+
 # :closed_book: Licença
