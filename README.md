@@ -8,9 +8,24 @@
 ## :jigsaw: Descrição
 API RESTful construída para consumo interno do projeto PPCChoice, uma aplicação Web de comparação e visualização de Projetos Pedagógicos de Curso.
 
+[![PHP](https://img.shields.io/static/v1?label=PHP&message=5.35&colorA=lightblue&color=black&logo=PHP)](https://www.php.net/)
+[![CodeIgniter](https://img.shields.io/static/v1?label=CodeIgniter&message=v3&colorA=darkred&color=black&logo=CodeIgniter&logoColor=white)](https://codeigniter.com/)
+[![jsPlumb](https://img.shields.io/static/v1?label=jsPlumb&message=2.13.2&colorA=green&color=black&logo=Material)](https://jsplumbtoolkit.com/community)
+[![Apidocjs](https://img.shields.io/static/v1?label=apiDocJS&message=1.26.3&colorA=pink&color=black&logo=apidoc)](https://apidocjs.com/)
+
 ## :computer: Status do Projeto
 
 	🚧 🚀 Em construção...  🚧
+
+## :books: Documentação da API
+Você pode ter acesso a toda documentação da API clicando <b>[aqui](http://dev.ppcchoice.ufes.br/api/doc)</b>.
+
+## :rocket: Tecnologias
+Ferramentas usadas na construção do projeto:
+
+- [MySql](https://www.mysql.com/)
+- [PHP](https://www.php.net/)
+- [Doctrine](https://www.doctrine-project.org/)
 
 ## :dark_sunglasses: Demonstração da aplicação
 
@@ -24,8 +39,8 @@ Para realizar requisições diretamente a API de uma forma mais fácil, é recom
 
 Antes de começar, você vai precisar ter instalado e configurado em sua máquina as seguintes ferramentas:
 - [PHP]() <= 5.3.7
-- [Git:octocat:](https://git-scm.com)
-- [XAMPP](https://www.apachefriends.org/pt_br/index.html) ou [WAMP](https://www.wampserver.com/en/).
+- [Git:octocat:](https://git-scm.com/downloads)
+- [Servidor Apache](https://httpd.apache.org/download.cgi)
 
 Além disto é bom ter um editor para trabalhar com o código como [VSCode:computer:](https://code.visualstudio.com/).
 
@@ -45,16 +60,6 @@ Para gerar um log de todos os testes no terminal execute:
 ```
 ./vendor/bin/phpunit tests
 ```
-
-## :books: Documentação da API
-Você pode ter acesso a toda documentação da API clicando [aqui](http://dev.ppcchoice.ufes.br/api/doc).
-
-## :rocket: Tecnologias
-Ferramentas usadas na construção do projeto:
-
-- [MySql](https://www.mysql.com/)
-- [PHP](https://www.php.net/)
-- [Doctrine](https://www.doctrine-project.org/)
 
 # :ghost: Problemas
 Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
