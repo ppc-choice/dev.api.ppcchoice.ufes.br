@@ -70,9 +70,10 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solu√ß√
         <sub><b>H√°damo Egito</b>
         </sub>
       </a>
-        <div style = "font-size:10px; bottom: -20px;">
+      </br>
+        <!-- <div style = "font-size:10px; bottom: -20px;">
             senhorio do badge
-         </div>
+         </div> -->
       <a href="https://www.linkedin.com/in/hadamo/">
         <img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hadamo/"/>
       </a></td>
@@ -84,9 +85,10 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solu√ß√
           <b>Elyabe Alves</b>
         </sub>
       </a>
-      <div style = "font-size:10px; bottom: -20px;">
+      </br>
+      <!-- <div style = "font-size:10px; bottom: -20px;">
             o chefe
-      </div>
+      </div> -->
       <a href="https://www.linkedin.com/in/elyabe/">
         <img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/elyabe/"/>
       </a>
@@ -98,9 +100,10 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solu√ß√
           <b>Guilherme Gon√ßalves</b>
         </sub>
       </a>
-      <div style = "font-size:10px; bottom: -20px;">
+      </br>
+      <!-- <div style = "font-size:10px; bottom: -20px;">
             vamo vava?
-         </div>
+         </div> -->
       <a href="https://www.linkedin.com/in/guilhermegoncalvess/">
         <img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/guilhermegoncalvess/"/>
       </a>
@@ -113,9 +116,10 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solu√ß√
           <b>Wellerson Prenholato</b>
         </sub>
       </a>
-      <div style = "font-size:10px; bottom: -20px;">
+      </br>
+      <!-- <div style = "font-size:10px; bottom: -20px;">
             commito no master
-         </div>
+         </div> -->
       <a href="https://www.linkedin.com/in/wellersonprenholato/">
         <img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/wellersonprenholato/"/>
       </a>
@@ -128,9 +132,10 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solu√ß√
           <b>Gabriel Lima</b>
         </sub>
       </a>
-         <div style = "font-size:10px; bottom: -20px;">
+      </br>
+         <!-- <div style = "font-size:10px; bottom: -20px;">
             npm install
-         </div>
+         </div> -->
          <a href="https://www.linkedin.com/in/gabriel-mota-bromonschenkel-lima-182521140/"> 
             <img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gabriel-mota-bromonschenkel-lima-182521140/"/>
          </a>
