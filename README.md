@@ -5,7 +5,7 @@
 
 # dev.api.ppcchoice.ufes.br
 
-## :abacus: Descrição
+## :jigsaw: Descrição
 API RESTful construída para consumo interno do projeto PPCChoice, uma aplicação Web de comparação e visualização de Projetos Pedagógicos de Curso.
 
 ### :computer: Status do Projeto
@@ -14,14 +14,14 @@ API RESTful construída para consumo interno do projeto PPCChoice, uma aplicaç�
 
 
 
-## Demonstração da aplicação
+## :dark_sunglasses: Demonstração da aplicação
 
-Para realizar requisições diretamente a API de uma forma mais fácil, é recomendado que você tenha o software [Postman](https://www.postman.com/) e em seguida fazer o download da pasta abaixo e importa-la no Postaman.
-
-
-Pasta do postman aqui
+Para realizar requisições diretamente a API de uma forma mais fácil, é recomendado que você tenha o software [Postman](https://www.postman.com/). Em seguida basta fazer o download da pasta abaixo e importa-la.
 
 
+> Pasta do postman aqui
+
+# :balloon: Contribuição
 
 # :pushpin: Pré-requisitos
 
@@ -46,7 +46,7 @@ $ git clone <https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br>
 ```
 
 # :clipboard: Testes
-Para executar os testes é necessário a instalação do composer. E neste caso você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes. 
+Para executar os testes é necessário a instalação do composer. Neste caso, você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes. 
 
 Na raiz do projeto execute:
 ```
@@ -69,7 +69,6 @@ Ferramentas usadas na construção do projeto:
 # :ghost: Problemas
 Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
 
-# :balloon: Contribuição
 
 # :pencil2: Autores
 <table>
@@ -78,7 +77,7 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a soluç�
       <a href="https://github.com/hadamo">
         <img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/33159326?s=460&u=5a82be8963d06c627b4f59131823d83c70fb3334&v=4" width="100px;" alt=""/>
         <br />
-        <sub><b>Hádamo Egito:trollface:</b></sub>
+        <sub><b>Hádamo Egito</b></sub>
       </a>
         <br />
       <a href="https://www.linkedin.com/in/hadamo/">
