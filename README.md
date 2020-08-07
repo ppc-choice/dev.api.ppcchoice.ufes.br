@@ -67,7 +67,8 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a soluç�
       <a href="https://github.com/hadamo">
         <img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/33159326?s=460&u=5a82be8963d06c627b4f59131823d83c70fb3334&v=4" width="100px;" alt=""/>
         <br />
-        <sub><b>Hádamo Egito</b></sub>
+        <sub><b>Hádamo Egito</b><br>
+        </sub>
       </a>
         <br />
       <a href="https://www.linkedin.com/in/hadamo/">
@@ -104,7 +105,6 @@ Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a soluç�
         <sub>
           <b>Wellerson Prenholato</b>
         </sub>
-        Só commito no master
       </a>
       <br />
       <a href="https://www.linkedin.com/in/wellersonprenholato/">
