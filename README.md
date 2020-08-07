@@ -10,7 +10,6 @@ API RESTful construída para consumo interno do projeto PPCChoice, uma aplicaç�
 
 [![PHP](https://img.shields.io/static/v1?label=PHP&message=5.35&colorA=lightblue&color=black&logo=PHP)](https://www.php.net/)
 [![CodeIgniter](https://img.shields.io/static/v1?label=CodeIgniter&message=v3&colorA=darkred&color=black&logo=CodeIgniter&logoColor=white)](https://codeigniter.com/)
-[![jsPlumb](https://img.shields.io/static/v1?label=jsPlumb&message=2.13.2&colorA=green&color=black&logo=Material)](https://jsplumbtoolkit.com/community)
 [![Apidocjs](https://img.shields.io/static/v1?label=apiDocJS&message=1.26.3&colorA=pink&color=black&logo=apidoc)](https://apidocjs.com/)
 
 ## :computer: Status do Projeto
