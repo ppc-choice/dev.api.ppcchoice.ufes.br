@@ -1,4 +1,4 @@
-# Logo ou Banner
+<!-- # Logo ou Banner -->
 <!-- <p align="center">
    <img src="https://trello-attachments.s3.amazonaws.com/5c3b9c9903d1b107b15a5271/182x42/078f443628a4ad74cafa0b01f44b4a7f/ppclogov1-2.png" alt="PPC Choice" width="280"/>
 </p> -->
