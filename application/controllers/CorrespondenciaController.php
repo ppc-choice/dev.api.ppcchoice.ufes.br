@@ -61,6 +61,12 @@ class CorrespondenciaController extends APIController
      *
      * @apiSuccess {Correspondencia[]}  correspondencia                     Array de objetos do tipo Correspondência.
      * @apiSuccess {Number}             correspondencia[codCompCurric]      Identificador único de componente curricular.
+     * @apiSuccess {String}             correspondencia[nomeDisciplina]     Nome de disciplina
+     * @apiSuccess {String}             correspondencia[nomeDisciplinaCorresp] Nome de disciplina
+     * @apiSuccess {Number}             componenteCurricular[tipoCompCurric]          Tipo de componente curricular.
+     * @apiSuccess {Number}             componenteCurricular[tipoCompCurricCorresp]   Tipo de componente curricular.
+     * @apiSuccess {Number}             componenteCurricular[chDisciplina]   Carga Horária de disciplina.
+     * @apiSuccess {Number}             componenteCurricular[chDisciplinaCorresp]   Carga Horária de disciplina.
      * @apiSuccess {Number}             correspondencia[codCompCorresp]     Identificador único de componente curricular.
      * @apiSuccess {Number}             correspondencia[percentual]         Percentual de correspondência entre componentes.
      * 
