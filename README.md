@@ -27,7 +27,7 @@ Você pode acessar mais detalhes na seção [Documentação](./#books-documentac
 * [Documentação](#documentacao)
 * [Demonstração](#demonstracao)
 * [Problemas](#problemas)
-* [Contribuição](#contribuicao)
+* [Contribuição](#Contribuiao)
   * [Pré-requisitos e limitações](#pre-requisito)
   * [*Fork* este repositório e realize alterações](#fork-alteracoes)
   * [Planeje e execute testes](#teste)
@@ -44,13 +44,14 @@ Recomendamos o [Postman](https://www.postman.com/) para solicitação de requisi
 
 > [Baixe o arquivo do Postman](link)
 
-# :ghost: Problemas {#problemas}
+:ghost: Problemas
+===================
 Sinta-se à vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
 
 Caso encontre algum problema, por favor, faça uma *issue* descrevendo o problema e não se esqueça de incluir as etapas para que possamos reproduzi-lo facilmente.
 
-# :balloon: Contribuição {#contribuicao}
-<!-- Conta bancaria: 8002-1 OP:013 CAIXA -->
+# Contribuição 
+
 Agradecemos seu interesse em contribuir!
 
 Caso você tenha alguma ideia para melhorias, sinta-se a vontade em compartilhar por meio de uma *issue*, mas não espere uma resposta em tempo hábil.
