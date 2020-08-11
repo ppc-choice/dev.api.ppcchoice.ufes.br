@@ -28,7 +28,7 @@ Você pode acessar mais detalhes na seção [Documentação](./#books-documentac
 * [Demonstração](#dark_sunglasses-Demonstração-da-aplicação)
 * [Problemas](#ghost-Problemas)
 * [Contribuição](#balloon-Contribuição)
-  * [Pré-requisitos e limitações](#1.-pushpin-Pré\-requisitos-e-limitações)
+  * [Pré-requisitos e limitações](#1. pushpin-Pré-requisitos-e-limitações)
   * [Fork este repositório e realize alterações](#2.-fork_and_knife-Fork-este-repositório-e-realize-alterações)
   * [Planeje e execute testes](#3.-clipboard-Planeje-e-execute-testes)
   * [Solicite a incorporação](#4.-heavy_check_mark-Solicite-a-incorporação)
