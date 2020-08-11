@@ -29,12 +29,18 @@ class CorrespondenciaRepository extends EntityRepository
     public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
     {
         return $this->_em->createQueryBuilder()
-            ->select('cc1.codCompCurric as codCompCurric, cc2.codCompCurric as codCompCurricCorresp, cor.percentual')
+            ->select(' disc1.nome as nomeDisciplina, disc1.ch as chDisciplina, cc1.tipo as tipoCompCurric', 
+                    'cc1.codCompCurric as codCompCurric', 
+                    'cc2.codCompCurric as codCompCurricCorresp',
+                    'disc2.nome as nomeDisciplinaCorresp, disc2.ch as chDisciplinaCorresp, cc2.tipo as tipoCompCurricCorresp', 
+                    'cor.percentual')
             ->from('Entities\Correspondencia','cor')
             ->innerJoin('cor.componenteCurricular','cc1')
             ->innerJoin('cc1.ppc','ppcAtual')
+            ->innerJoin('cc1.disciplina','disc1')
             ->innerJoin('cor.componenteCurricularCorresp','cc2')
             ->innerJoin('cc2.ppc','ppcAlvo')
+            ->innerJoin('cc2.disciplina','disc2')
             ->where('ppcAtual.codPpc = :codPpcAtual AND ppcAlvo.codPpc = :codPpcAlvo')
             ->setParameters(array('codPpcAtual' => $codPpcAtual, 'codPpcAlvo' => $codPpcAlvo))
             ->orderBy('cc1.codCompCurric, cc2.codCompCurric','ASC')
