@@ -4,63 +4,105 @@
 </p> -->
 
 # :rocket: dev.api.ppcchoice.ufes.br
-[![PHP](https://img.shields.io/static/v1?label=PHP&message=5.35&colorA=lightblue&color=black&logo=PHP)](https://www.php.net/)
-[![CodeIgniter](https://img.shields.io/static/v1?label=CodeIgniter&message=v3&colorA=darkred&color=black&logo=CodeIgniter&logoColor=white)](https://codeigniter.com/)
-[![Apidocjs](https://img.shields.io/static/v1?label=apiDocJS&message=1.26.3&colorA=pink&color=black&logo=apidoc)](https://apidocjs.com/)
-[![MySQL](https://img.shields.io/static/v1?label=MySQL&message=9&colorA=blue&color=black&logo=mysql&logoColor=white)](https://mysql.com/)
-[![Symfony Doctrine ORM](https://img.shields.io/static/v1?label=Symfony%20Doctrine&message=6.0&colorA=blue&color=black&logo=symfony)](https://www.doctrine-project.org/)
-[![PHPUnit](https://img.shields.io/static/v1?label=PHPUnit&message=7.0&colorA=blue&color=black)](https://www.doctrine-project.org/)
-[![GuzzleHTTP](https://img.shields.io/static/v1?label=Guzzle%20HTTP&message=1.3.1&colorA=blue&color=black&logo=guzzle)](https://www.doctrine-project.org/)
+[![PHP](https://img.shields.io/static/v1?label=PHP&message=5.35&colorA=purple&color=black&logo=PHP&logoColor=white)](https://www.php.net/) [![CodeIgniter](https://img.shields.io/static/v1?label=CodeIgniter&message=v3&colorA=darkred&color=black&logo=CodeIgniter&logoColor=white)](https://codeigniter.com/) [![Apidocjs](https://img.shields.io/static/v1?label=apiDocJS&message=1.26.3&colorA=pink&color=black&logo=javascript&logoColor=white)](https://apidocjs.com/) [![MySQL](https://img.shields.io/static/v1?label=MySQL&message=9&colorA=darkblue&color=black&logo=mysql&logoColor=white)](https://mysql.com/) [![Symfony Doctrine ORM](https://img.shields.io/static/v1?label=Symfony%20Doctrine&message=6.0&colorA=blue&color=black&logo=symfony)](https://www.doctrine-project.org/) [![PHPUnit](https://img.shields.io/static/v1?label=PHPUnit&message=7.0&colorA=blue&color=black&logo=PHP&logoColor=white)](https://phpunit.de/) [![GuzzleHTTP](https://img.shields.io/static/v1?label=Guzzle%20HTTP&message=1.3.1&colorA=blue&color=black&logo=PHP&logoColor=white)](http://docs.guzzlephp.org/en/stable/)
 
 
-## :jigsaw: Descrição
-API RESTful construída para consumo interno do projeto PPCChoice, uma aplicação Web de comparação e visualização de Projetos Pedagógicos de Curso.
+## [:book: Descrição](#book-descricao)
+API RESTful construída para consumo interno do projeto [PPC Choice](http://ppcchoice.ufes.br), uma aplicação *web* de comparação e visualização de Projetos Pedagógicos de Curso e fornece dados dos seguintes recursos:
+- Instituições de Ensino (Superior)
+- Unidades de Ensino
+- Departamentos da unidade de ensino
+- Componentes curriculares 
+- Cursos
+- Projetos Pedagógicos de Curso (PPC)
 
-## :computer: Status do Projeto
+Você pode acessar mais detalhes na seção [Documentação](./#books-documentacao)
 
-	🚧 🚀 Em construção...  🚧
+## [:computer: Status do Projeto](#computer-status-projeto)
 
-## :books: Documentação da API
-Você pode ter acesso a toda documentação da API clicando <b>[aqui](http://dev.ppcchoice.ufes.br/api/doc)</b>.
+	🚧 🚀 Em construção ...  🚧
 
-## :dark_sunglasses: Demonstração da aplicação
+### Sumário
 
-Para realizar requisições diretamente a API de uma forma mais fácil, é recomendado que você tenha o software [Postman](https://www.postman.com/). Em seguida basta fazer o download da pasta abaixo e importa-la.
+* [Documentação](#documentacao)
+* [Demonstração](#demonstracao)
+* [Problemas](#problemas)
+* [Contribuição](#contribuicao)
+  * [Pré-requisitos e limitações](#pre-requisito)
+  * [*Fork* este repositório e realize alterações](#fork-alteracoes)
+  * [Planeje e execute testes](#teste)
+  * [Solicite a incorporação](#incorporacao)
+  * [Combo](#combo)
+* [Tests](#testes)
+* [Autores](#tecnologias)
 
-> Arquivo do postman aqui
 
-# :balloon: Contribuição
+## [:books: Documentação da API](#documentacao)
+Você pode ter acesso a toda documentação da API clicando <b>[aqui](#)</b>. Nela constam todas as rotas, parâmetros e suas respectivas restrições. 
 
-## :pushpin: Pré-requisitos
+## [:dark_sunglasses: Demonstração da aplicação](#demonstracao)
 
-Antes de começar, você vai precisar ter instalado e configurado em sua máquina as seguintes ferramentas:
-- [PHP]() <= 5.3.7
-- [Git:octocat:](https://git-scm.com/downloads)
+Recomendamos o [Postman](https://www.postman.com/) para solicitação de requisições. Um arquivo inicial com todas as requisições pode ser baixado a seguir.
+
+> [Baixe o arquivo do Postman](link)
+
+# [:ghost: Problemas](#problemas)
+Sinta-se à vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
+
+Caso encontre algum problema, por favor, faça uma *issue* descrevendo o problema e não se esqueça de incluir as etapas para que possamos reproduzi-lo facilmente.
+
+# [:balloon: Contribuição](#contribuicao)
+<!-- Conta bancaria: 8002-1 OP:013 CAIXA -->
+Agradecemos seu interesse em contribuir!
+
+Caso você tenha alguma ideia para melhorias, sinta-se a vontade em compartilhar por meio de uma *issue*, mas não espere uma resposta em tempo hábil.
+
+Guia e protocolo de contribuição:
+
+#### 1. [:pushpin: Pré-requisitos e limitações](#pre-requisito)
+
+Antes de começar, instale e configure as seguintes ferramentas:
+- [PHP]() >= 5.3.7
+- [Git](https://git-scm.com/downloads)
 - [Servidor Apache](https://httpd.apache.org/download.cgi)
+- Editor de texto de sua preferência (recomendado: [VSCode](https://code.visualstudio.com/))
+- Ferramenta de requisições HTTP (recomendado: [Postman](https://www.postman.com/))
 
-Além disto é bom ter um editor para trabalhar com o código como [VSCode:computer:](https://code.visualstudio.com/).
+> **Alerta**: Embora seja recomendado utilizar versões estáveis mais atualizadas da linguagem, é uma imposição do serviço de hospedagem da universidade que a versão do PHP seja 5.3. 
 
-## :dart: Clone este repositório
-```bash
-$ git clone <https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br>
-```
+#### 2. [:fork_and_knife: *Fork* este repositório e realize alterações](#fork-alteracoes)
+- Faça um *fork* deste repositório.
 
-## :clipboard: Testes
-Para executar os testes é necessário a instalação do composer. Neste caso, você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes. 
+- Crie um branch para suas mudanças. Isso separa as mudanças no *pull request* de suas outras mudanças e torna mais fácil editar/corrigir os *commits* no pull request. 
+- Edite as alterações e confirme-as localmente.
+- Envie-as para o *fork* do GitHub.
 
-Na raiz do projeto execute:
-```
-composer install
-```
-Para gerar um log de todos os testes no terminal execute: 
+  
+
+<!-- Se precisar alterar algo na solicitação pull existente, você pode usar git push -fpara substituir os commits originais. Isso é fácil e seguro ao usar um branch de recursos. -->
+
+<!-- #### 3. :dart: Implemente
+- Uma vez finalizada a implementação: -->
+  <!-- - Certifique-se de que seu *fork* está atualizado. -->
+  <!-- - Crie e verifique o branch em seu *fork*. -->
+
+#### 3. [:clipboard: Planeje e execute testes](#teste)
+<!-- Para executar os testes é necessário a instalação do composer. Neste caso, você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes.  -->
+Nesta etapa recomenda-se que seus testes sejam escritos e executados utilizando a ferramenta [PHPUnit](https://phpunit.de/) e [GuzzleHttp](http://docs.guzzlephp.org/en/stable/#) . 
+Ah! E não se esqueça de documentar ostensivamente seus testes.
+
+Para executar os testes pré-existentes, execute o seguinte comando na raíz do projeto:
+
 ```
 ./vendor/bin/phpunit tests
 ```
+#### 4. (:heavy_check_mark: Solicite a incorporação)[#incorporacao]
+<!-- Siga o [procedimento de incorporação de contribuição](#). Ficaremos felizes em avaliar sua contribuição. -->
+  - Visite o GitHub e crie uma pull request para solicitar a inclusão de suas alterações no repositório original.
+  - Descreva suas alterações de forma clara e sucinta no texto da pull request e marque a *issue* se for o caso.
+  - Se mais tarde você precisar adicionar novos *commits* à solicitação pull, você pode simplesmente enviar as alterações para o branch local e usar *git push* para atualizar automaticamente a solicitação *pull*.
 
-# :ghost: Problemas
-Sinta-se a vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
-
-# :pencil2: Autores
+# :pencil2: [Autores](#autores)
 <table>
   <tr>
     <td align="center">
