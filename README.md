@@ -7,7 +7,7 @@
 [![PHP](https://img.shields.io/static/v1?label=PHP&message=5.35&colorA=purple&color=black&logo=PHP&logoColor=white)](https://www.php.net/) [![CodeIgniter](https://img.shields.io/static/v1?label=CodeIgniter&message=v3&colorA=darkred&color=black&logo=CodeIgniter&logoColor=white)](https://codeigniter.com/) [![Apidocjs](https://img.shields.io/static/v1?label=apiDocJS&message=1.26.3&colorA=pink&color=black&logo=javascript&logoColor=white)](https://apidocjs.com/) [![MySQL](https://img.shields.io/static/v1?label=MySQL&message=9&colorA=darkblue&color=black&logo=mysql&logoColor=white)](https://mysql.com/) [![Symfony Doctrine ORM](https://img.shields.io/static/v1?label=Symfony%20Doctrine&message=6.0&colorA=blue&color=black&logo=symfony)](https://www.doctrine-project.org/) [![PHPUnit](https://img.shields.io/static/v1?label=PHPUnit&message=7.0&colorA=blue&color=black&logo=PHP&logoColor=white)](https://phpunit.de/) [![GuzzleHTTP](https://img.shields.io/static/v1?label=Guzzle%20HTTP&message=1.3.1&colorA=blue&color=black&logo=PHP&logoColor=white)](http://docs.guzzlephp.org/en/stable/)
 
 
-## [:book: Descrição](#book-descricao)
+## :book: Descrição {#book-descricao}
 API RESTful construída para consumo interno do projeto [PPC Choice](http://ppcchoice.ufes.br), uma aplicação *web* de comparação e visualização de Projetos Pedagógicos de Curso e fornece dados dos seguintes recursos:
 - Instituições de Ensino (Superior)
 - Unidades de Ensino
@@ -18,7 +18,7 @@ API RESTful construída para consumo interno do projeto [PPC Choice](http://ppcc
 
 Você pode acessar mais detalhes na seção [Documentação](./#books-documentacao)
 
-## [:computer: Status do Projeto](#computer-status-projeto)
+## :computer: Status do Projeto {#computer-status-projeto}
 
 	🚧 🚀 Em construção ...  🚧
 
@@ -32,26 +32,24 @@ Você pode acessar mais detalhes na seção [Documentação](./#books-documentac
   * [*Fork* este repositório e realize alterações](#fork-alteracoes)
   * [Planeje e execute testes](#teste)
   * [Solicite a incorporação](#incorporacao)
-  * [Combo](#combo)
-* [Tests](#testes)
-* [Autores](#tecnologias)
+* [Autores](#autores)
 
 
-## [:books: Documentação da API](#documentacao)
+## :books: Documentação da API {#documentacao}
 Você pode ter acesso a toda documentação da API clicando <b>[aqui](#)</b>. Nela constam todas as rotas, parâmetros e suas respectivas restrições. 
 
-## [:dark_sunglasses: Demonstração da aplicação](#demonstracao)
+## :dark_sunglasses: Demonstração da aplicação {#demonstracao}
 
 Recomendamos o [Postman](https://www.postman.com/) para solicitação de requisições. Um arquivo inicial com todas as requisições pode ser baixado a seguir.
 
 > [Baixe o arquivo do Postman](link)
 
-# [:ghost: Problemas](#problemas)
+# :ghost: Problemas {#problemas}
 Sinta-se à vontade em registrar novos problemas. Caso tenha encontrado a solução, ficaríamos gratos em analisar tal situação. 
 
 Caso encontre algum problema, por favor, faça uma *issue* descrevendo o problema e não se esqueça de incluir as etapas para que possamos reproduzi-lo facilmente.
 
-# [:balloon: Contribuição](#contribuicao)
+# :balloon: Contribuição {#contribuicao}
 <!-- Conta bancaria: 8002-1 OP:013 CAIXA -->
 Agradecemos seu interesse em contribuir!
 
@@ -59,7 +57,7 @@ Caso você tenha alguma ideia para melhorias, sinta-se a vontade em compartilhar
 
 Guia e protocolo de contribuição:
 
-#### 1. [:pushpin: Pré-requisitos e limitações](#pre-requisito)
+#### 1. :pushpin: Pré-requisitos e limitações {#pre-requisito}
 
 Antes de começar, instale e configure as seguintes ferramentas:
 - [PHP]() >= 5.3.7
@@ -70,7 +68,7 @@ Antes de começar, instale e configure as seguintes ferramentas:
 
 > **Alerta**: Embora seja recomendado utilizar versões estáveis mais atualizadas da linguagem, é uma imposição do serviço de hospedagem da universidade que a versão do PHP seja 5.3. 
 
-#### 2. [:fork_and_knife: *Fork* este repositório e realize alterações](#fork-alteracoes)
+#### 2. :fork_and_knife: *Fork* este repositório e realize alterações {#fork-alteracoes}
 - Faça um *fork* deste repositório.
 
 - Crie um branch para suas mudanças. Isso separa as mudanças no *pull request* de suas outras mudanças e torna mais fácil editar/corrigir os *commits* no pull request. 
@@ -86,7 +84,7 @@ Antes de começar, instale e configure as seguintes ferramentas:
   <!-- - Certifique-se de que seu *fork* está atualizado. -->
   <!-- - Crie e verifique o branch em seu *fork*. -->
 
-#### 3. [:clipboard: Planeje e execute testes](#teste)
+#### 3. :clipboard: Planeje e execute testes {#teste}
 <!-- Para executar os testes é necessário a instalação do composer. Neste caso, você pode utilizar uma versão mais recente do PHP para criar e atualizar os testes.  -->
 Nesta etapa recomenda-se que seus testes sejam escritos e executados utilizando a ferramenta [PHPUnit](https://phpunit.de/) e [GuzzleHttp](http://docs.guzzlephp.org/en/stable/#) . 
 Ah! E não se esqueça de documentar ostensivamente seus testes.
@@ -96,13 +94,13 @@ Para executar os testes pré-existentes, execute o seguinte comando na raíz do 
 ```
 ./vendor/bin/phpunit tests
 ```
-#### 4. (:heavy_check_mark: Solicite a incorporação)[#incorporacao]
+#### 4. :heavy_check_mark: Solicite a incorporação {#incorporacao}
 <!-- Siga o [procedimento de incorporação de contribuição](#). Ficaremos felizes em avaliar sua contribuição. -->
   - Visite o GitHub e crie uma pull request para solicitar a inclusão de suas alterações no repositório original.
   - Descreva suas alterações de forma clara e sucinta no texto da pull request e marque a *issue* se for o caso.
   - Se mais tarde você precisar adicionar novos *commits* à solicitação pull, você pode simplesmente enviar as alterações para o branch local e usar *git push* para atualizar automaticamente a solicitação *pull*.
 
-# :pencil2: [Autores](#autores)
+# :pencil2: Autores {#autores}
 <table>
   <tr>
     <td align="center">
