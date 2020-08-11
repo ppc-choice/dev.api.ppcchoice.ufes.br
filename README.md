@@ -42,7 +42,7 @@ Você pode ter acesso a toda documentação da API clicando <b>[aqui](#)</b>. Ne
 
 Recomendamos o [Postman](https://www.postman.com/) para realização de requisições. Um arquivo inicial com todas as requisições pode ser baixado a seguir.
 
-> [Baixe os arquivos do Postman](https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br/tree/Wellerson-readme-api/postman)
+> [Baixe os arquivos do Postman](https://github.com/ppc-choice/dev.api.ppcchoice.ufes.br/tree/master/postman)
 
 # :ghost: Problemas
 
