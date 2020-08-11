@@ -1,0 +1,1675 @@
+{
+	"info": {
+		"_postman_id": "08f96654-6748-4990-915e-443abcbe1b7a",
+		"name": "PPC-CHOICE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Componente Curricular",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodCompCurric",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares/:codCompCurric",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares",
+								":codCompCurric"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findTipos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares/tipos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares",
+								"tipos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodPpc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpc/componentes-curriculares",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpc",
+								"componentes-curriculares"
+							],
+							"variable": [
+								{
+									"key": "codPpc",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodo\" : ,\r\n    \"credito\" : ,\r\n    \"tipo\" : ,\r\n    \"codDepto\" : ,\r\n    \"numDisciplina\" : ,\r\n    \"codPpc\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodo\" : ,\r\n    \"credito\" : ,\r\n    \"tipo\" : ,\r\n    \"codDepto\" : ,\r\n    \"numDisciplina\" : ,\r\n    \"codPpc\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares/:codCompCurric",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares",
+								":codCompCurric"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares/:codCompCurric",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares",
+								":codCompCurric"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Correspondencia",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/correspondencias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"correspondencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllByCodPpc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpcAtual",
+								"correspondencias",
+								":codPpcAlvo"
+							],
+							"variable": [
+								{
+									"key": "codPpcAtual",
+									"value": ""
+								},
+								{
+									"key": "codPpcAlvo",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodCompCurric",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/componentes-curriculares/:codCompCurric/correspondencias/:codCompCorresp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"componentes-curriculares",
+								":codCompCurric",
+								"correspondencias",
+								":codCompCorresp"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codCompCorresp",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"codCompCurric\": ,\n\t\"codCompCurricCorresp\": ,\n\t\"percentual\": \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/correspondencias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"correspondencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codCompCurric\": ,\r\n    \"codCompCurricCorresp\": ,\r\n    \"percentual\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/correspondencias/:codCompCurric/:codCompCorresp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"correspondencias",
+								":codCompCurric",
+								":codCompCorresp"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codCompCorresp",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/correspondencias/:codCompCurric/:codCompCorresp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"correspondencias",
+								":codCompCurric",
+								":codCompCorresp"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codCompCorresp",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Curso",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos/:codCurso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								":codCurso"
+							],
+							"variable": [
+								{
+									"key": "codCurso",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"anoCriacao\" : ,\r\n    \"codUnidadeEnsino\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cursos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"anoCriacao\" : ,\r\n    \"codUnidadeEnsino\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cursos/:codCurso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								":codCurso"
+							],
+							"variable": [
+								{
+									"key": "codCurso",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos/:codCurso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								":codCurso"
+							],
+							"variable": [
+								{
+									"key": "codCurso",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Departamento",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/departamentos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"departamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/departamentos/:codDepto",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"departamentos",
+								":codDepto"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"abreviatura\" : ,\r\n    \"codUnidadeEnsino\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/departamentos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"departamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"abreviatura\" : ,\r\n    \"codUnidadeEnsino\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/departamentos/:codDepto",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"departamentos",
+								":codDepto"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/departamentos/:codDepto",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"departamentos",
+								":codDepto"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Dependencia",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/dependencias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"dependencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/dependencias/:codCompCurric/:codPreRequisito",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"dependencias",
+								":codCompCurric",
+								":codPreRequisito"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codPreRequisito",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodPpc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpc/dependencias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpc",
+								"dependencias"
+							],
+							"variable": [
+								{
+									"key": "codPpc",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"codCompCurric\" : ,\n\t\"codPreRequisito\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/dependencias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"dependencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"codCompCurric\" : ,\n\t\"codPreRequisito\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/dependencias/:codCompCurric/:codPreRequisito",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"dependencias",
+								":codCompCurric",
+								":codPreRequisito"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codPreRequisito",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/dependencias/:codCompCurric/:codPreRequisito",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"dependencias",
+								":codCompCurric",
+								":codPreRequisito"
+							],
+							"variable": [
+								{
+									"key": "codCompCurric",
+									"value": ""
+								},
+								{
+									"key": "codPreRequisito",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Disciplina",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/disciplinas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"disciplinas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/disciplinas/:codDepto/:numDisciplina",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"disciplinas",
+								":codDepto",
+								":numDisciplina"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								},
+								{
+									"key": "numDisciplina",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"numDisciplina\" : ,\n\t\"ch\" : ,\n\t\"nome\" : ,\n\t\"codDepto\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/disciplinas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"disciplinas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nome\" : ,\n\t\"ch\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/disciplinas/:codDepto/:numDisciplina",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"disciplinas",
+								":codDepto",
+								":numDisciplina"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								},
+								{
+									"key": "numDisciplina",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/disciplinas/:codDepto/:numDisciplina",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"disciplinas",
+								":codDepto",
+								":numDisciplina"
+							],
+							"variable": [
+								{
+									"key": "codDepto",
+									"value": ""
+								},
+								{
+									"key": "numDisciplina",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Instituicao Ensino Superior",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/instituicoes-ensino-superior",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"instituicoes-ensino-superior"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/instituicoes-ensino-superior/:codIes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"instituicoes-ensino-superior",
+								":codIes"
+							],
+							"variable": [
+								{
+									"key": "codIes",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"codIes\" : ,\r\n    \"abreviatura\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/instituicoes-ensino-superior",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"instituicoes-ensino-superior"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"abreviatura\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/instituicoes-ensino-superior/:codIes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"instituicoes-ensino-superior",
+								":codIes"
+							],
+							"variable": [
+								{
+									"key": "codIes",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/instituicoes-ensino-superior/:codIes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"instituicoes-ensino-superior",
+								":codIes"
+							],
+							"variable": [
+								{
+									"key": "codIes",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Projeto Pedagogico Curso",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpc"
+							],
+							"variable": [
+								{
+									"key": "codPpc",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodCurso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos/:codCurso/projetos-pedagogicos-curso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								":codCurso",
+								"projetos-pedagogicos-curso"
+							],
+							"variable": [
+								{
+									"key": "codCurso",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"codCurso\" : ,\n\t\"dtInicioVigencia\" : ,\n\t\"dtTerminoVigencia\" : ,\n\t\"chTotalDisciplinaOpt\" : ,\n    \"chTotalDisciplinaOb\" : ,\n    \"chTotalAtividadeExt\" : ,\n    \"chTotalAtividadeCmplt\" : ,\n    \"chTotalProjetoConclusao\" : ,\n    \"chTotalEstagio\" : ,\n    \"duracao\" : ,\n    \"qtdPeriodos\" : ,\n    \"chTotal\" : ,\n    \"anoAprovacao\" : ,\n    \"situacao\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"codCurso\" : ,\n\t\"dtInicioVigencia\" : ,\n\t\"dtTerminoVigencia\" : ,\n\t\"chTotalDisciplinaOpt\" : ,\n    \"chTotalDisciplinaOb\" : ,\n    \"chTotalAtividadeExt\" : ,\n    \"chTotalAtividadeCmplt\" : ,\n    \"chTotalProjetoConclusao\" : ,\n    \"chTotalEstagio\" : ,\n    \"duracao\" : ,\n    \"qtdPeriodos\" : ,\n    \"chTotal\" : ,\n    \"anoAprovacao\" : ,\n    \"situacao\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpc"
+							],
+							"variable": [
+								{
+									"key": "codPpc",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpc"
+							],
+							"variable": [
+								{
+									"key": "codPpc",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Transicao",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/transicoes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"transicoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodUnidadeEnsino",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino/:codUnidadeEnsino/transicoes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino",
+								":codUnidadeEnsino",
+								"transicoes"
+							],
+							"variable": [
+								{
+									"key": "codUnidadeEnsino",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByCodPpc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/projetos-pedagogicos-curso/:codPpcAtual/transicoes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"projetos-pedagogicos-curso",
+								":codPpcAtual",
+								"transicoes"
+							],
+							"variable": [
+								{
+									"key": "codPpcAtual",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codPpcAtual\" : ,\r\n    \"codPpcAlvo\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/transicoes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"transicoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codPpcAtual\" : ,\r\n    \"codPpcAlvo\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/transicao/:codPpcAtual/:codPpcAlvo",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"transicao",
+								":codPpcAtual",
+								":codPpcAlvo"
+							],
+							"variable": [
+								{
+									"key": "codPpcAtual",
+									"value": ""
+								},
+								{
+									"key": "codPpcAlvo",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/transicao/:codPpcAtual/:codPpcAlvo",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"transicao",
+								":codPpcAtual",
+								":codPpcAlvo"
+							],
+							"variable": [
+								{
+									"key": "codPpcAtual",
+									"value": ""
+								},
+								{
+									"key": "codPpcAlvo",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Unidade Ensino",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino/:codUnidadeEnsino",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino",
+								":codUnidadeEnsino"
+							],
+							"variable": [
+								{
+									"key": "codUnidadeEnsino",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nome\" : ,\n\t\"codIes\" : ,\n\t\"cnpj\" : \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\" : ,\r\n    \"codIes\" : ,\r\n    \"cnpj\" : \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino/:codUnidadeEnsino",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino",
+								":codUnidadeEnsino"
+							],
+							"variable": [
+								{
+									"key": "codUnidadeEnsino",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/unidades-ensino/:codUnidadeEnsino",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"unidades-ensino",
+								":codUnidadeEnsino"
+							],
+							"variable": [
+								{
+									"key": "codUnidadeEnsino",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios/:codUsuario",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								":codUsuario"
+							],
+							"variable": [
+								{
+									"key": "codUsuario",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : ,\r\n    \"nome\" : ,\r\n    \"papel\": ,\r\n    \"senha\" : ,\r\n    \"conjuntoSelecao\" : {\r\n        \"ppcAtual\" : ,\r\n        \"ppcAlvo\" : ,\r\n        \"componentesCurriculares\" :\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : ,\r\n    \"senha\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : ,\r\n    \"nome\" : ,\r\n    \"papel\": ,\r\n    \"senha\" : ,\r\n    \"dtUltimoAcesso\" : ,\r\n    \"conjuntoSelecao\" : {\r\n        \"ppcAtual\" : ,\r\n        \"ppcAlvo\" : ,\r\n        \"componentesCurriculares\" :\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios/:codUsuario",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								":codUsuario"
+							],
+							"variable": [
+								{
+									"key": "codUsuario",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios/:codUsuario",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								":codUsuario"
+							],
+							"variable": [
+								{
+									"key": "codUsuario",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
