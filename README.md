@@ -28,11 +28,11 @@ Você pode acessar mais detalhes na seção [Documentação](./#books-documentac
 * [Demonstração](#dark_sunglasses-Demonstração-da-aplicação)
 * [Problemas](#ghost-Problemas)
 * [Contribuição](#balloon-Contribuição)
-  * [Pré-requisitos e limitações](#1. pushpin-Pré-requisitos-e-limitações)
-  * [Fork este repositório e realize alterações](#2.-fork_and_knife-Fork-este-repositório-e-realize-alterações)
-  * [Planeje e execute testes](#3.-clipboard-Planeje-e-execute-testes)
-  * [Solicite a incorporação](#4.-heavy_check_mark-Solicite-a-incorporação)
-* [Autores](#:pencil2-Autores)
+  * [Pré-requisitos e limitações](#1-pushpin-Pré-requisitos-e-limitações)
+  * [Fork este repositório e realize alterações](#2-fork_and_knife-Fork-este-repositório-e-realize-alterações)
+  * [Planeje e execute testes](#3-clipboard-Planeje-e-execute-testes)
+  * [Solicite a incorporação](#4-heavy_check_mark-Solicite-a-incorporação)
+* [Autores](#pencil2-Autores)
 
 
 ## :books: Documentação da API 
@@ -58,7 +58,7 @@ Caso você tenha alguma ideia para melhorias, sinta-se a vontade em compartilhar
 
 Guia e protocolo de contribuição:
 
-#### 1. :pushpin: Pré-requisitos e limitações 
+#### 1. :pushpin: Pré-requisitos e limitações
 
 Antes de começar, instale e configure as seguintes ferramentas:
 - [PHP]() >= 5.3.7
