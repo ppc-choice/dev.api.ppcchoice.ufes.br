@@ -16,7 +16,7 @@ API RESTful construída para consumo interno do projeto [PPC Choice](http://ppcc
 - Cursos
 - Projetos Pedagógicos de Curso (PPC)
 
-Você pode acessar mais detalhes na seção [Documentação](./#books-documentacao)
+Você pode acessar mais detalhes na seção [Documentação](#books-Documentação-da-API)
 
 ## :computer: Status do Projeto 
 
