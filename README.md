@@ -76,8 +76,6 @@ Antes de começar, instale e configure as seguintes ferramentas:
 - Edite as alterações e confirme-as localmente.
 - Envie-as para o *fork* do GitHub.
 
-  
-
 <!-- Se precisar alterar algo na solicitação pull existente, você pode usar git push -fpara substituir os commits originais. Isso é fácil e seguro ao usar um branch de recursos. -->
 
 <!-- #### 3. :dart: Implemente
