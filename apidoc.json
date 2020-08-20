@@ -1,8 +1,8 @@
 {
-  "name": "API-PPC",
+  "name": "API-EGO",
   "version": "0.1.0",
-  "description": "API do projeto PPCChoice para consumo interno",
-  "title": "API PPC Choice - Documentation",
-  "sampleUrl": "http://dev.ppcchoice.ufes.br/api/",
-  "url" : "http://dev.ppcchoice.ufes.br/api/"
+  "description": "EGO's API",
+  "title": "EGO's API - Documentation",
+  "sampleUrl": "http://dev.encomp.ufes.br/api/",
+  "url" : "http://dev.encomp.ufes.br/api/"
 }

@@ -18,20 +18,8 @@ class Welcome extends APIController
 	public function updateSchema()
 	{
 		$folder = 'database/';
-		$database = 'ppcchoice';
-		$order = array('instituicao_ensino_superior', 
-			'unidade_ensino', 
-			'curso', 
-			'departamento', 
-			'disciplina',
-			'projeto_pedagogico_curso', 
-			'componente_curricular',
-			'correspondencia',
-			'dependencia',
-			'transicao',
-			'usuario',
-			'api_limit',
-			'api_keys');
+		$database = 'encomp';
+		$order = array();
 
 		try {
 			foreach ( $order as $file) 
@@ -50,7 +38,7 @@ class Welcome extends APIController
 		}
 		
 		
-		echo "Sucess";
+		echo "Success";
 	}
 
 	public function getUUID(){
