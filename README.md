@@ -16,7 +16,7 @@ API RESTful construída para consumo interno do projeto [PPC Choice](http://ppcc
 - Cursos
 - Projetos Pedagógicos de Curso (PPC)
 
-Você pode acessar mais detalhes na seção [Documentação](./#books-documentacao)
+Você pode acessar mais detalhes na seção [Documentação](#books-Documentação-da-API)
 
 ## :computer: Status do Projeto 
 
@@ -75,8 +75,6 @@ Antes de começar, instale e configure as seguintes ferramentas:
 - Crie um branch para suas mudanças. Isso separa as mudanças no *pull request* de suas outras mudanças e torna mais fácil editar/corrigir os *commits* no pull request. 
 - Edite as alterações e confirme-as localmente.
 - Envie-as para o *fork* do GitHub.
-
-  
 
 <!-- Se precisar alterar algo na solicitação pull existente, você pode usar git push -fpara substituir os commits originais. Isso é fácil e seguro ao usar um branch de recursos. -->
 
