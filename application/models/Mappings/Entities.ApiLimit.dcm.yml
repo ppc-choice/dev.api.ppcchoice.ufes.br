@@ -1,0 +1,39 @@
+Entities\ApiLimit:
+  type: entity
+  table: api_limit
+  uniqueConstraints:
+    api_limit_index:
+      columns:
+        - id
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    userId:
+      type: integer
+      length: 32
+      nullable: true
+      column: user_id
+    uri:
+      type: string
+      length: 255
+      nullable: false
+    class:
+      type: string
+      length: 255
+      nullable: false
+    method:
+      type: string
+      length: 255
+      nullable: false
+    ipAddress:
+      type: string
+      length: 255
+      nullable: true
+      column: ip_address
+    time:
+      type: string
+      length: 255
+      nullable: false

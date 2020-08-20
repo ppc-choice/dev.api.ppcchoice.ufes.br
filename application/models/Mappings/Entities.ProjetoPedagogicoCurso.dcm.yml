@@ -1,0 +1,71 @@
+Entities\ProjetoPedagogicoCurso:
+  type: entity
+  table: projeto_pedagogico_curso
+  repositoryClass: Entities\Repositories\ProjetoPedagogicoCursoRepository
+  uniqueConstraints:
+    cod_ppc_index:
+      columns:
+        - cod_ppc
+  fields:
+    codPpc:
+      type: string
+      id: true
+      nullable: false
+      column: cod_ppc
+    dtInicioVigencia:
+      type: date
+      nullable: false
+      column: dt_inicio_vigencia
+    dtTerminoVigencia:
+      type: date
+      nullable: true
+      column: dt_termino_vigencia
+    chTotalDisciplinaOpt:
+      type: integer
+      nullable: false
+      column: ch_total_disciplina_opt
+    chTotalDisciplinaOb:
+      type: integer
+      nullable: false
+      column: ch_total_disciplina_ob
+    chTotalAtividadeExt:
+      type: integer
+      nullable: false
+      column: ch_total_atividade_ext
+    chTotalAtividadeCmplt:
+      type: integer
+      nullable: false
+      column: ch_total_atividade_cmplt
+    chTotalProjetoConclusao:
+      type: integer
+      nullable: false
+      column: ch_total_projeto_conclusao
+    chTotalEstagio:
+      type: integer
+      nullable: false
+      column: ch_total_estagio
+    duracao:
+      type: float
+      nullable: false
+    qtdPeriodos: 
+      type: integer
+      nullable: false
+      column: qtd_periodos
+    chTotal: 
+      type: integer
+      nullable: false
+      column: ch_total
+    anoAprovacao: 
+      type: integer
+      nullable: false
+      column: ano_aprovacao
+    situacao:
+      type: string
+      length: 255
+  manyToOne:
+    curso:
+      targetEntity: Curso
+      joinColumns:
+        cod_curso:
+          nullable: false
+          referencedColumnName: cod_curso

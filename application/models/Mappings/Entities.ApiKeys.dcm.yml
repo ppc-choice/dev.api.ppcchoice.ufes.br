@@ -1,0 +1,29 @@
+Entities\ApiKeys:
+  type: entity
+  table: api_keys
+  uniqueConstraints:
+    api_keys_index:
+      columns:
+        - id
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    apiKey:
+      type: integer
+      nullable: true
+      column: api_key
+    controller:
+      type: string
+      length: 255
+      nullable: false
+    dateCreated:
+      type: datetime
+      nullable: true
+      column: date_created
+    dateModified:
+      type: datetime
+      nullable: true
+      columns: date_modified
