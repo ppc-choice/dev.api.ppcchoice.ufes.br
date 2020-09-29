@@ -552,6 +552,7 @@ class APIController extends CI_Controller
         // Add JSON_NUMERIC_CHECK for numeric filed
         print_r(json_encode($data, JSON_NUMERIC_CHECK));
         ob_end_flush();
+        exit;
     }
 
 /** 
