@@ -51,12 +51,21 @@ class VerificationUploadController extends APIController
             if ( is_null($verificationComponente) ) {
                 $this->apiReturn(array('message' => 'Componente Inválida'), self::HTTP_BAD_REQUEST);
             }
+
+            $compPertencePpcAtual = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findOneBy(array('ppc'=> $ppcAtual, 'codCompCurric' => $componente));
+            
+            if ( is_null($compPertencePpcAtual) ) {
+                $this->apiReturn(array('message' => 'A componente não pertence ao  Ppc Atual'), self::HTTP_BAD_REQUEST);
+            }
         }
 
-        //  Verificar se a componente pertence ao curso atual - findBy (Verificar o retorno, talvez retorne o vetor vazio)
-
         // Verificar se o ppc atual pertence a unidade de ensino
+        $codUes = $ppcAtual->getCurso()->getUnidadeEnsino()->getCodUnidadeEnsino();
 
+        if ( $ue->getCodUnidadeEnsino() != $codUes) {
+            $this->apiReturn(array('message' => 'O PPC Atual não pertence a Unidade de Ensino'), self::HTTP_BAD_REQUEST);
+        }
+        
         $this->apiReturn(array(
             'message' => 'Verificação feita com sucesso!',
             ), self::HTTP_OK
