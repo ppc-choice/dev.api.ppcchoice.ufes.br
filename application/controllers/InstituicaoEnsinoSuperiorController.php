@@ -1,13 +1,14 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
 class InstituicaoEnsinoSuperiorController extends APIController
 {
-    public function __construct() {
-        parent::__construct();
-    }
-  
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	/**
 	 * @api {get} instituicoes-ensino-superior Solicitar dados de todas Instituições de Ensino Superior.
 	 * @apiName findAll
@@ -18,20 +19,20 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
 	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
-    public function findAll()
-    {
+	public function findAll()
+	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-		
-        $colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
-		
-		if (!empty($colecaoIes) ){
-			$colecaoIes = $this->doctrineToArray($colecaoIes,TRUE);
-			$this->apiReturn($colecaoIes,
+			'methods' => array('GET'),
+		));
+
+		$colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
+
+		if (!empty($colecaoIes)) {
+			$colecaoIes = $this->doctrineToArray($colecaoIes, TRUE);
+			$this->apiReturn(
+				$colecaoIes,
 				self::HTTP_OK
 			);
 		} else {
@@ -39,7 +40,6 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 			), self::HTTP_NOT_FOUND);
 		}
-
 	}
 
 	/**
@@ -55,21 +55,21 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * 
 	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 */
-    public function findById($codIes)
-    {   
-        header("Access-Control-Allow-Origin: *");
+	public function findById($codIes)
+	{
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-		
-		$ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
-		
-		if ( !is_null($ies) ) {
-			$ies = $this->doctrineToArray($ies,TRUE);	
+			'methods' => array('GET'),
+		));
 
-			$this->apiReturn($ies,
+		$ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $codIes);
+
+		if (!is_null($ies)) {
+			$ies = $this->doctrineToArray($ies, TRUE);
+
+			$this->apiReturn(
+				$ies,
 				self::HTTP_OK
 			);
 		} else {
@@ -77,7 +77,6 @@ class InstituicaoEnsinoSuperiorController extends APIController
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
 			), self::HTTP_NOT_FOUND);
 		}
-
 	}
 
 	/**
@@ -93,53 +92,49 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância criada com sucesso.
 	 *  
 	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-	 */	
+	 */
 	public function create()
-    {
+	{
 		header("Access-Control-Allow-Origin: *");
 
-        $this->_apiConfig(array(
-            'methods' => array('POST'),
-            )
-        );
- 
-        $payload = $this->getBodyRequest();
+		$this->_apiConfig(array(
+			'methods' => array('POST'),
+			'requireAuthorization' => TRUE,
+		));
+
+		$payload = $this->getBodyRequest();
 		$ies = new Entities\InstituicaoEnsinoSuperior();
 
-		if ( array_key_exists('codIes', $payload) ) $ies->setCodIes($payload['codIes']);
-		if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
-		if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
+		if (array_key_exists('codIes', $payload)) $ies->setCodIes($payload['codIes']);
+		if (array_key_exists('nome', $payload)) $ies->setNome($payload['nome']);
+		if (array_key_exists('abreviatura', $payload)) $ies->setAbreviatura($payload['abreviatura']);
 
 		$constraints = $this->validator->validate($ies);
 
-		if ( $constraints->success() ){		
+		if ($constraints->success()) {
 			try {
 				$this->entityManager->persist($ies);
 				$this->entityManager->flush();
-	
+
 				$this->apiReturn(array(
 					'message' => $this->getApiMessage(STD_MSG_CREATED),
-					), self::HTTP_OK
-				);
+				), self::HTTP_OK);
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-					), self::HTTP_BAD_REQUEST
-				);
-			}	
-		}else {
+				), self::HTTP_BAD_REQUEST);
+			}
+		} else {
 			$this->apiReturn(array(
 				'error' => $constraints->messageArray(),
-				), self::HTTP_BAD_REQUEST
-			);	
-		} 
- 
-    }
+			), self::HTTP_BAD_REQUEST);
+		}
+	}
 
 	/**
-     * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
-     * @apiName update
-     * @apiGroup Instituição de Ensino Superior
+	 * @api {put} instituicoes-ensino-superior/:codIes Atualizar dados de uma Instituição de Ensino Superior.
+	 * @apiName update
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
@@ -151,102 +146,90 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	 *  
 	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
 	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-	 */	
+	 */
 	public function update($codIes)
-    {
+	{
 		header("Access-Control-Allow-Origin: *");
 
-        $this->_apiConfig(array(
-            'methods' => array('PUT'),
-            )
-		);
-		
-        $payload = $this->getBodyRequest();
-        $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
-		
-        if(!is_null($ies))
-        {            
-			if ( array_key_exists('nome', $payload) ) $ies->setNome($payload['nome']);
-			if ( array_key_exists('abreviatura', $payload) ) $ies->setAbreviatura($payload['abreviatura']);
-			
+		$this->_apiConfig(array(
+			'methods' => array('PUT'),
+			'requireAuthorization' => TRUE,
+		));
+
+		$payload = $this->getBodyRequest();
+		$ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $codIes);
+
+		if (!is_null($ies)) {
+			if (array_key_exists('nome', $payload)) $ies->setNome($payload['nome']);
+			if (array_key_exists('abreviatura', $payload)) $ies->setAbreviatura($payload['abreviatura']);
+
 			$constraints = $this->validator->validate($ies);
 
-			if ( $constraints->success()){
+			if ($constraints->success()) {
 				try {
 					$this->entityManager->merge($ies);
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
 						'message' => $this->getApiMessage(STD_MSG_UPDATED),
-						), self::HTTP_OK
-					);
-					
+					), self::HTTP_OK);
 				} catch (\Exception $e) {
 					$this->apiReturn(array(
 						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-						), self::HTTP_BAD_REQUEST
-					);
-				}	
+					), self::HTTP_BAD_REQUEST);
+				}
 			} else {
 				$this->apiReturn(array(
 					'error' => $constraints->messageArray(),
-					), self::HTTP_BAD_REQUEST
-				);	
+				), self::HTTP_BAD_REQUEST);
 			}
-
-        }else{
-            $this->apiReturn(array(
-                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				), self::HTTP_NOT_FOUND
-			);
-        }
+		} else {
+			$this->apiReturn(array(
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+			), self::HTTP_NOT_FOUND);
+		}
 	}
-	
+
 	/**
-     * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
-     * @apiName delete
-     * @apiGroup Instituição de Ensino Superior
+	 * @api {delete} instituicoes-ensino-superior/:codIes Excluir uma Instituição de Ensino Superior.
+	 * @apiName delete
+	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
 	 * 
-     * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
-   	 * 
+	 * @apiParam {Number} codIes Identificador único da Instituição de Ensino Superior.
+	 * 
 	 * @apiSuccess {String[]} message  Entities\\InstituicaoEnsinoSuperior: Instância removida com sucesso.
 	 *  
 	 * @apiError {String[]} error Entities\\InstituicaoEnsinoSuperior: Instância não encontrada.
-     */
+	 */
 	public function delete($codIes)
 	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('DELETE'),
-			)
-		);
+			'methods' => array('DELETE'),
+			'requireAuthorization' => TRUE,
+		));
 
-		$ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior',$codIes);
-		
-		if(!is_null($ies))
-		{
+		$ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $codIes);
+
+		if (!is_null($ies)) {
 			try {
 				$this->entityManager->remove($ies);
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
 					'message' => $this->getApiMessage(STD_MSG_DELETED),
-					), self::HTTP_OK
-				);
-				
+				), self::HTTP_OK);
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-					), self::HTTP_BAD_REQUEST
-				);
-			}	
-		}else{
+				), self::HTTP_BAD_REQUEST);
+			}
+		} else {
 			$this->apiReturn(array(
-                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				), self::HTTP_NOT_FOUND
-			);
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 }

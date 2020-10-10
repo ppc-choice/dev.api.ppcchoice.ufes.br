@@ -1,13 +1,14 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
 class DisciplinaController extends APIController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
-    
+
     /**
      * @api {get} disciplinas Solicitar dados de todas as disciplinas
      * @apiName findAll
@@ -32,15 +33,15 @@ class DisciplinaController extends APIController
 
         $colecaoDisciplina = $this->entityManager->getRepository('Entities\Disciplina')->findAll();
 
-        if ( !is_null($colecaoDisciplina) ){
-            $this->apiReturn($colecaoDisciplina,
+        if (!is_null($colecaoDisciplina)) {
+            $this->apiReturn(
+                $colecaoDisciplina,
                 self::HTTP_OK
             );
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -68,15 +69,15 @@ class DisciplinaController extends APIController
 
         $disciplina = $this->entityManager->getRepository('Entities\Disciplina')->findById($numDisciplina, $codDepto);
 
-        if ( !is_null($disciplina) ){
-            $this->apiReturn($disciplina,
+        if (!is_null($disciplina)) {
+            $this->apiReturn(
+                $disciplina,
                 self::HTTP_OK
             );
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -99,48 +100,45 @@ class DisciplinaController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('POST')
+            'methods' => array('POST'),
+            'requireAuthorization' => TRUE,
         ));
 
         $payload = $this->getBodyRequest();
         $disciplina = new Entities\Disciplina();
 
-        if ( array_key_exists('numDisciplina', $payload) )  $disciplina->setNumDisciplina($payload['numDisciplina']);
-        if ( array_key_exists('ch', $payload) )             $disciplina->setCh($payload['ch']);
-        if ( array_key_exists('nome', $payload) )           $disciplina->setNome($payload['nome']);
+        if (array_key_exists('numDisciplina', $payload))  $disciplina->setNumDisciplina($payload['numDisciplina']);
+        if (array_key_exists('ch', $payload))             $disciplina->setCh($payload['ch']);
+        if (array_key_exists('nome', $payload))           $disciplina->setNome($payload['nome']);
 
-        if ( isset($payload['codDepto']) ){
+        if (isset($payload['codDepto'])) {
             $depto = $this->entityManager->find('Entities\Departamento', $payload['codDepto']);
-            if ( !is_null($depto) ){
+            if (!is_null($depto)) {
                 $disciplina->setDepartamento($depto);
                 $disciplina->setCodDepto($payload['codDepto']);
-            }   
+            }
         }
 
         $constraints = $this->validator->validate($disciplina);
 
-        if ( $constraints->success() ){
+        if ($constraints->success()) {
             try {
                 $this->entityManager->persist($disciplina);
                 $this->entityManager->flush();
-            
+
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_CREATED),
-                    ),self::HTTP_OK
-                );
-                
-            } catch (\Exception $e){
+                ), self::HTTP_OK);
+            } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ),self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{
-                $this->apiReturn(array(
-                    'error' => $constraints->messageArray(),
-                    ),self::HTTP_BAD_REQUEST
-                );
-            }
+        } else {
+            $this->apiReturn(array(
+                'error' => $constraints->messageArray(),
+            ), self::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -163,47 +161,44 @@ class DisciplinaController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('PUT')
+            'methods' => array('PUT'),
+            'requireAuthorization' => TRUE,
         ));
 
-        $disciplina = $this->entityManager->find('Entities\Disciplina', 
-            array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
+        $disciplina = $this->entityManager->find(
+            'Entities\Disciplina',
+            array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina)
+        );
         $payload = $this->getBodyRequest();
 
-        if ( !is_null($disciplina) ){
-            if ( array_key_exists('nome', $payload) )   $disciplina->setNome($payload['nome']);
-            if ( array_key_exists('ch', $payload) )     $disciplina->setCh($payload['ch']);
-                
+        if (!is_null($disciplina)) {
+            if (array_key_exists('nome', $payload))   $disciplina->setNome($payload['nome']);
+            if (array_key_exists('ch', $payload))     $disciplina->setCh($payload['ch']);
+
             $constraints = $this->validator->validate($disciplina);
 
-            if ( $constraints->success() ){
+            if ($constraints->success()) {
                 try {
                     $this->entityManager->merge($disciplina);
                     $this->entityManager->flush();
-        
+
                     $this->apiReturn(array(
                         'message' => $this->getApiMessage(STD_MSG_UPDATED),
-                        ),self::HTTP_OK
-                    );
-                } catch (\Exception $e){
+                    ), self::HTTP_OK);
+                } catch (\Exception $e) {
                     $this->apiReturn(array(
                         'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                        ),self::HTTP_BAD_REQUEST
-                    );
+                    ), self::HTTP_BAD_REQUEST);
                 }
-                
             } else {
                 $this->apiReturn(array(
                     'error' => $constraints->messageArray(),
-                    ),self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -224,13 +219,16 @@ class DisciplinaController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('DELETE')
+            'methods' => array('DELETE'),
+            'requireAuthorization' => TRUE,
         ));
 
-        $disciplina = $this->entityManager->find('Entities\Disciplina', 
-        array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina));
+        $disciplina = $this->entityManager->find(
+            'Entities\Disciplina',
+            array('codDepto' => $codDepto, 'numDisciplina' => $numDisciplina)
+        );
 
-        if ( !is_null($disciplina) ){
+        if (!is_null($disciplina)) {
             try {
                 $this->entityManager->remove($disciplina);
                 $this->entityManager->flush();
@@ -238,19 +236,15 @@ class DisciplinaController extends APIController
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_DELETED),
                 ), self::HTTP_OK);
-            
-            } catch ( \Exception $e ){
+            } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 }

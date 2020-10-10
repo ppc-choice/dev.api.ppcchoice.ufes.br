@@ -1,10 +1,11 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
-class TransicaoController extends APIController 
+class TransicaoController extends APIController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -22,26 +23,27 @@ class TransicaoController extends APIController
      * @apiError {String[]} error Entities\\Transicao:    Instância não encontrada.
      */
     public function findAll()
-	{
+    {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('GET'),
-            )
-        );
+        ));
 
         $colecaoTransicao = $this->entityManager->getRepository('Entities\Transicao')->findAll();
-        if(!empty($colecaoTransicao)){
+        if (!empty($colecaoTransicao)) {
             $colecaoTransicao = $this->doctrineToArray($colecaoTransicao);
-            
-            $this->apiReturn($colecaoTransicao,
+
+            $this->apiReturn(
+                $colecaoTransicao,
                 self::HTTP_OK
             );
-        }else{
+        } else {
             $this->apiReturn(
                 array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
+                ),
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -62,25 +64,26 @@ class TransicaoController extends APIController
      * 
      */
     public function findByCodUnidadeEnsino($codUnidadeEnsino)
-	{
+    {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('GET'),
-            )
-        );
+        ));
 
         $colecaoTransicao =  $this->entityManager->getRepository('Entities\Transicao')->findByCodUnidadeEnsino($codUnidadeEnsino);
 
-        if(!empty($colecaoTransicao)){
-            $this->apiReturn( $colecaoTransicao,
+        if (!empty($colecaoTransicao)) {
+            $this->apiReturn(
+                $colecaoTransicao,
                 self::HTTP_OK
             );
-        }else{
+        } else {
             $this->apiReturn(
                 array(
                     'error' =>  $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
+                ),
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -101,25 +104,26 @@ class TransicaoController extends APIController
      * @apiError {String[]} error   Entities\\Transicao:    Instância não encontrada.
      */
     public function findByCodPpc($codPpcAtual)
-	{
+    {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('GET'),
-            )
-        );
+        ));
 
         $colecaoTransicao =  $this->entityManager->getRepository('Entities\Transicao')->findByCodPpc($codPpcAtual);
 
-        if(!empty($colecaoTransicao)){
-            $this->apiReturn($colecaoTransicao,
+        if (!empty($colecaoTransicao)) {
+            $this->apiReturn(
+                $colecaoTransicao,
                 self::HTTP_OK
             );
-        }else{
+        } else {
             $this->apiReturn(
                 array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
+                ),
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -144,46 +148,40 @@ class TransicaoController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            )
-        );
+            'requireAuthorization' => TRUE,
+        ));
 
         $payload = $this->getBodyRequest();
         $transicao = new Entities\Transicao();
 
-        if( isset($payload['codPpcAtual']))
-        {
-            $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-            if(!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
+        if (isset($payload['codPpcAtual'])) {
+            $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpcAtual']);
+            if (!is_null($ppcAtual)) $transicao->setPpcAtual($ppcAtual);
         }
-        if( isset($payload['codPpcAlvo']))
-        {
-            $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
-            if(!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
+        if (isset($payload['codPpcAlvo'])) {
+            $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpcAlvo']);
+            if (!is_null($ppcAlvo)) $transicao->setPpcAlvo($ppcAlvo);
         }
 
         $constraints = $this->validator->validate($transicao);
 
-        if($constraints->success())
-        {
-            try{
+        if ($constraints->success()) {
+            try {
                 $this->entityManager->persist($transicao);
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_CREATED),
-                    ), self::HTTP_OK
-                );
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{
+        } else {
             $this->apiReturn(array(
                 'error' => $constraints->messageArray(),
-                ), self::HTTP_BAD_REQUEST
-            );
+            ), self::HTTP_BAD_REQUEST);
         }
     }
 
@@ -204,70 +202,65 @@ class TransicaoController extends APIController
      * @apiError {String[]} error       Campo obrigatório não informado ou contém valor inválido.
      * @apiError {String[]} error       Ocorreu uma exceção ao persistir a instância.
      */
-    public function update($codPpcAtual,$codPpcAlvo)
+    public function update($codPpcAtual, $codPpcAlvo)
     {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('PUT'),
-            )
-        );
+            'requireAuthorization' => TRUE,
+        ));
 
         $payload = $this->getBodyRequest();
-        $transicao = $this->entityManager->find('Entities\Transicao',
-                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
+        $transicao = $this->entityManager->find(
+            'Entities\Transicao',
+            array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo)
+        );
 
-        if(!is_null($transicao))
-        {
-            if(array_key_exists('codPpcAtual',$payload)){
-                if( isset($payload['codPpcAtual'])){
-                    $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAtual']);
-                }else{
+        if (!is_null($transicao)) {
+            if (array_key_exists('codPpcAtual', $payload)) {
+                if (isset($payload['codPpcAtual'])) {
+                    $ppcAtual = $this->entityManager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpcAtual']);
+                } else {
                     $ppcAtual = null;
-                } 
-                
+                }
+
                 $transicao->setPpcAtual($ppcAtual);
             }
 
-            if(array_key_exists('codPpcAlvo',$payload))
-            {
-                if(isset($payload['codPpcAlvo']))
-                    $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso',$payload['codPpcAlvo']);
-                else{
+            if (array_key_exists('codPpcAlvo', $payload)) {
+                if (isset($payload['codPpcAlvo']))
+                    $ppcAlvo = $this->entityManager->find('Entities\ProjetoPedagogicoCurso', $payload['codPpcAlvo']);
+                else {
                     $ppcAlvo = null;
                 }
                 $transicao->setPpcAlvo($ppcAlvo);
             }
-            
+
             $constraints = $this->validator->validate($transicao);
 
-            if($constraints->success())
-            {
+            if ($constraints->success()) {
                 try {
                     $this->entityManager->merge($transicao);
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
                         'message' => $this->getApiMessage(STD_MSG_UPDATED),
-                        ), self::HTTP_OK
-                    );
+                    ), self::HTTP_OK);
                 } catch (\Exception $e) {
                     $this->apiReturn(array(
                         'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                        ), self::HTTP_BAD_REQUEST
-                    );
-                } 
-            }else{
+                    ), self::HTTP_BAD_REQUEST);
+                }
+            } else {
                 $this->apiReturn(array(
                     'error' => $constraints->messageArray(),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{
+        } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -285,38 +278,36 @@ class TransicaoController extends APIController
      * @apiError {String[]} error   Campo obrigatório não informado ou contém valor inválido.
      * @apiError {String[]} error   Ocorreu uma exceção ao persistir a instância.
      */
-    public function delete($codPpcAtual,$codPpcAlvo )
+    public function delete($codPpcAtual, $codPpcAlvo)
     {
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
-            )
+            'requireAuthorization' => TRUE,
+        ));
+
+        $transicao = $this->entityManager->find(
+            'Entities\Transicao',
+            array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo)
         );
 
-        $transicao = $this->entityManager->find('Entities\Transicao',
-                array('ppcAtual' => $codPpcAtual, 'ppcAlvo' => $codPpcAlvo));
-
-        if(!is_null($transicao))
-        {
+        if (!is_null($transicao)) {
             try {
                 $this->entityManager->remove($transicao);
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_DELETED),
-                    ), self::HTTP_OK
-                );
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{ 
+        } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 }

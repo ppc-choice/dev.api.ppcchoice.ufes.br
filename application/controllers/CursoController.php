@@ -1,13 +1,14 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
-class CursoController extends APIController 
+class CursoController extends APIController
 {
-	public function __construct() {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 	}
-	
+
 	/**
 	 * @api {get} cursos Solicitar todos Cursos registrados.
 	 * @apiName findAll
@@ -19,31 +20,31 @@ class CursoController extends APIController
 	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
 	public function findAll()
-	{   
+	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
+			'methods' => array('GET'),
+		));
 
 		$colecaoCurso = $this->entityManager->getRepository('Entities\Curso')->findAll();
-		$colecaoCurso = $this->doctrineToArray($colecaoCurso,TRUE);
+		$colecaoCurso = $this->doctrineToArray($colecaoCurso, TRUE);
 
-		if (!empty($colecaoCurso)){
-			$this->apiReturn($colecaoCurso,
+		if (!empty($colecaoCurso)) {
+			$this->apiReturn(
+				$colecaoCurso,
 				self::HTTP_OK
 			);
-
 		} else {
-            $this->apiReturn(
-                array(
-                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
-        }
+			$this->apiReturn(
+				array(
+					'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+				),
+				self::HTTP_NOT_FOUND
+			);
+		}
 	}
-	
+
 	/**
 	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
 	 * @apiName findById
@@ -59,31 +60,30 @@ class CursoController extends APIController
 	 * 
 	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 */
-    public function findById($codCurso)
-	{   
+	public function findById($codCurso)
+	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-		
+			'methods' => array('GET'),
+		));
+
 		$curso = $this->entityManager->getRepository('Entities\Curso')->findById($codCurso);
-        
-		if ( !is_null($curso) ) {
-			$curso = $this->doctrineToArray($curso,TRUE);	
-			
-			$this->apiReturn($curso,
+
+		if (!is_null($curso)) {
+			$curso = $this->doctrineToArray($curso, TRUE);
+
+			$this->apiReturn(
+				$curso,
 				self::HTTP_OK
 			);
 		} else {
 			$this->apiReturn(array(
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				), self::HTTP_NOT_FOUND
-			);
+			), self::HTTP_NOT_FOUND);
 		}
-    }
-    
+	}
+
 	/**
 	 * @api {post} cursos Criar um Curso.
 	 * @apiName create
@@ -99,60 +99,57 @@ class CursoController extends APIController
 	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
 	 */
 	public function create()
-    {
-        header("Access-Control-Allow-Origin: *");
+	{
+		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('POST'),
-			)
-		);
- 
+			'methods' => array('POST'),
+			'requireAuthorization' => TRUE,
+		));
+
 		$payload = $this->getBodyRequest();
 		$curso = new Entities\Curso();
 
-		if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
+		if (array_key_exists('nome', $payload)) $curso->setNome($payload['nome']);
 
-		if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
- 
-        if (isset($payload['codUnidadeEnsino'])){
+		if (array_key_exists('anoCriacao', $payload)) $curso->setAnoCriacao($payload['anoCriacao']);
+
+		if (isset($payload['codUnidadeEnsino'])) {
 			$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
 			$curso->setUnidadeEnsino($ues);
 		}
-			$curso->setCodCurso($this->uniqIdV2());
-			$constraints = $this->validator->validate($curso);
+		$curso->setCodCurso($this->uniqIdV2());
+		$constraints = $this->validator->validate($curso);
 
-			if ( $constraints->success() ){
-				try {
-					$this->entityManager->persist($curso);
-					$this->entityManager->flush();
-		
-					$this->apiReturn(array(
-						'message' => $this->getApiMessage(STD_MSG_CREATED),
-						), self::HTTP_OK
-					);
-				} catch (\Exception $e) {
-					$this->apiReturn(array(
-						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-						), self::HTTP_BAD_REQUEST
-					);
-				}
-			} else {
+		if ($constraints->success()) {
+			try {
+				$this->entityManager->persist($curso);
+				$this->entityManager->flush();
+
 				$this->apiReturn(array(
-					'error' => $constraints->messageArray(),
-					), self::HTTP_BAD_REQUEST
-				);	
+					'message' => $this->getApiMessage(STD_MSG_CREATED),
+				), self::HTTP_OK);
+			} catch (\Exception $e) {
+				$this->apiReturn(array(
+					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
+				), self::HTTP_BAD_REQUEST);
 			}
+		} else {
+			$this->apiReturn(array(
+				'error' => $constraints->messageArray(),
+			), self::HTTP_BAD_REQUEST);
+		}
 	}
-	
+
 	/**
-     * @api {put} cursos/:codCurso Atualizar dados de um Curso.
-     * @apiName update
-     * @apiGroup Curso
+	 * @api {put} cursos/:codCurso Atualizar dados de um Curso.
+	 * @apiName update
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
 	 * @apiParam {Number} codCurso Identificador único do Curso requerido.
 	 * 
-     * @apiParam (Request Body/JSON) {String} [nome]   Nome do Curso.
+	 * @apiParam (Request Body/JSON) {String} [nome]   Nome do Curso.
 	 * @apiParam (Request Body/JSON) {Number{1950-2020}} [anoCriacao]  Ano em que o curso foi criado.
 	 * @apiParam (Request Body/JSON) {Number} [codUnidadeEnsino]   Identificador único da Unidade de Ensino na qual o Curso está registrado.
 	 * 
@@ -160,92 +157,84 @@ class CursoController extends APIController
 	 * 
 	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
 	 * @apiError {String[]} error Campo obrigatório não informado ou contém valor inválido.
-     */
+	 */
 	public function update($codCurso)
-    {
+	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('PUT'),
-			)
-		);
+			'methods' => array('PUT'),
+			'requireAuthorization' => TRUE,
+		));
 
-        $curso = $this->entityManager->find('Entities\Curso',$codCurso);
-        $payload = $this->getBodyRequest();
-		
-        if(!is_null($curso))
-        {            
-			if(array_key_exists('codUnidadeEnsino', $payload))
-            {
-				if (is_numeric($payload['codUnidadeEnsino'])){
-					$ues = $this->entityManager->find('Entities\UnidadeEnsino',$payload['codUnidadeEnsino']);
+		$curso = $this->entityManager->find('Entities\Curso', $codCurso);
+		$payload = $this->getBodyRequest();
+
+		if (!is_null($curso)) {
+			if (array_key_exists('codUnidadeEnsino', $payload)) {
+				if (is_numeric($payload['codUnidadeEnsino'])) {
+					$ues = $this->entityManager->find('Entities\UnidadeEnsino', $payload['codUnidadeEnsino']);
 					$curso->setUnidadeEnsino($ues);
-				}else{
+				} else {
 					$curso->setUnidadeEnsino(null);
 				}
 			}
-			
-			if ( array_key_exists('nome', $payload) ) $curso->setNome($payload['nome']);
-			
-			if ( array_key_exists('anoCriacao', $payload) ) $curso->setAnoCriacao($payload['anoCriacao']);
+
+			if (array_key_exists('nome', $payload)) $curso->setNome($payload['nome']);
+
+			if (array_key_exists('anoCriacao', $payload)) $curso->setAnoCriacao($payload['anoCriacao']);
 
 			$constraints = $this->validator->validate($curso);
 
-			if ( $constraints->success() ){
+			if ($constraints->success()) {
 				try {
 					$this->entityManager->merge($curso);
 					$this->entityManager->flush();
 
 					$this->apiReturn(array(
 						'message' => $this->getApiMessage(STD_MSG_UPDATED),
-						), self::HTTP_OK
-					);
+					), self::HTTP_OK);
 				} catch (\Exception $e) {
 					$this->apiReturn(array(
 						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-						), self::HTTP_BAD_REQUEST
-					);
-				}	
+					), self::HTTP_BAD_REQUEST);
+				}
 			} else {
 				$this->apiReturn(array(
 					'error' => $constraints->messageArray(),
-					), self::HTTP_BAD_REQUEST
-				);	
+				), self::HTTP_BAD_REQUEST);
 			}
-
-        }else{
-            $this->apiReturn(array(
-                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				), self::HTTP_NOT_FOUND
-			);
-        }
+		} else {
+			$this->apiReturn(array(
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+			), self::HTTP_NOT_FOUND);
+		}
 	}
 
 	/**
-     * @api {delete} cursos/:codCurso Excluir um Curso.
-     * @apiName delete
-     * @apiGroup Curso
+	 * @api {delete} cursos/:codCurso Excluir um Curso.
+	 * @apiName delete
+	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
 	 * 
-     * @apiParam {Number} codCurso Identificador único do Curso.
-   	 * 
+	 * @apiParam {Number} codCurso Identificador único do Curso.
+	 * 
 	 * @apiSuccess {String[]} message  Entities\\Curso: Instância removida com sucesso.
 	 *  
 	 * @apiError {String[]} error Entities\\Curso: Instância não encontrada.
-     */
+	 */
 	public function delete($codCurso)
 	{
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('DELETE'),
-			)
-		);
+			'methods' => array('DELETE'),
+			'requireAuthorization' => TRUE,
+		));
 
-		$curso = $this->entityManager->find('Entities\Curso',$codCurso);
-		
-		if(!is_null($curso))
-		{
+		$curso = $this->entityManager->find('Entities\Curso', $codCurso);
+
+		if (!is_null($curso)) {
 			try {
 				$this->entityManager->remove($curso);
 				$this->entityManager->flush();
@@ -253,18 +242,15 @@ class CursoController extends APIController
 				$this->apiReturn(array(
 					'message' => $this->getApiMessage(STD_MSG_DELETED),
 				), self::HTTP_OK);
-				
 			} catch (\Exception $e) {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-					), self::HTTP_BAD_REQUEST
-				);
+				), self::HTTP_BAD_REQUEST);
 			}
-		}else{
+		} else {
 			$this->apiReturn(array(
-                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				), self::HTTP_NOT_FOUND
-			);
+				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 }

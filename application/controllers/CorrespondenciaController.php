@@ -1,13 +1,14 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
 class CorrespondenciaController extends APIController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
-    
+
     /**
      * @api {get} correspondencias Listar todas as correspondências de todas as componentes curriculares.
      * @apiName findAll
@@ -31,24 +32,21 @@ class CorrespondenciaController extends APIController
     {
         header("Access-Control-Allow-Origin: *");
         $this->_apiConfig(array(
-                'methods' => array('GET'), 
-            ));
-                
+            'methods' => array('GET'),
+        ));
+
         $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAll();
-     
-        if(!empty($colecaoCorrespondencia))
-        {
-            $this->apiReturn($colecaoCorrespondencia,
+
+        if (!empty($colecaoCorrespondencia)) {
+            $this->apiReturn(
+                $colecaoCorrespondencia,
                 self::HTTP_OK
             );
-        }else{
+        } else {
             $this->apiReturn(array(
-                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+            ), self::HTTP_NOT_FOUND);
         }
-
-        
     }
 
     /**
@@ -72,27 +70,27 @@ class CorrespondenciaController extends APIController
      * 
      * @apiError {String[]} error       Entities\\Correspondencia:    Instância não encontrada.
      */
-    public function findAllByCodPpc($codPpcAtual,$codPpcAlvo)
-	{
+    public function findAllByCodPpc($codPpcAtual, $codPpcAlvo)
+    {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-                'methods' => array('GET'), 
-            ));
-   
-        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAllByCodPpc($codPpcAtual,$codPpcAlvo);
-        
-        if(!empty($colecaoCorrespondencia))
-        {
-            $this->apiReturn($colecaoCorrespondencia,
+            'methods' => array('GET'),
+        ));
+
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findAllByCodPpc($codPpcAtual, $codPpcAlvo);
+
+        if (!empty($colecaoCorrespondencia)) {
+            $this->apiReturn(
+                $colecaoCorrespondencia,
                 self::HTTP_OK
             );
-            
-        }else{
+        } else {
             $this->apiReturn(
                 array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
+                ),
+                self::HTTP_NOT_FOUND
             );
         }
     }
@@ -115,27 +113,25 @@ class CorrespondenciaController extends APIController
      * 
      * @apiError {String[]} error   Entities\\Correspondencia:    Instância não encontrada.
      */
-    public function findByCodCompCurric($codCompCurric,$codCompCorresp)
-	{
+    public function findByCodCompCurric($codCompCurric, $codCompCorresp)
+    {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
-                'methods' => array('GET'), 
+            'methods' => array('GET'),
         ));
-              
-        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric,$codCompCorresp);
 
-        if(!empty($colecaoCorrespondencia))
-        {
-            $this->apiReturn($colecaoCorrespondencia,
+        $colecaoCorrespondencia = $this->entityManager->getRepository('Entities\Correspondencia')->findByCodCompCurric($codCompCurric, $codCompCorresp);
+
+        if (!empty($colecaoCorrespondencia)) {
+            $this->apiReturn(
+                $colecaoCorrespondencia,
                 self::HTTP_OK
             );
-            
-        }else{
+        } else {
             $this->apiReturn(array(
-                    'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+                'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -160,50 +156,44 @@ class CorrespondenciaController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('POST'),
-            )
-        );
+            'requireAuthorization' => TRUE,
+        ));
 
         $payload = $this->getBodyRequest();
         $correspondencia = new Entities\Correspondencia();
 
-        if (isset( $payload['codCompCurric']))
-        {
-            $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
-            if(!is_null($componenteCurricular)) $correspondencia->setComponenteCurricular($componenteCurricular);
+        if (isset($payload['codCompCurric'])) {
+            $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
+            if (!is_null($componenteCurricular)) $correspondencia->setComponenteCurricular($componenteCurricular);
         }
-        
-        if (isset($payload['codCompCurricCorresp']))
-        {
-            $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
-            if(!is_null($componenteCurricularCorresp)) $correspondencia->setComponenteCurricularCorresp($componenteCurricularCorresp);
-        } 
+
+        if (isset($payload['codCompCurricCorresp'])) {
+            $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurricCorresp']);
+            if (!is_null($componenteCurricularCorresp)) $correspondencia->setComponenteCurricularCorresp($componenteCurricularCorresp);
+        }
 
         if (isset($payload['percentual'])) $correspondencia->setPercentual($payload['percentual']);
-        
+
         $constraints = $this->validator->validate($correspondencia);
 
-        if($constraints->success())
-        {
+        if ($constraints->success()) {
             try {
                 $this->entityManager->persist($correspondencia);
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_CREATED),
-                    ), self::HTTP_OK
-                );
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ),self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{
+        } else {
             $this->apiReturn(array(
                 'error' => $constraints->messageArray(),
-                ),self::HTTP_BAD_REQUEST
-            );
-        }         
+            ), self::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -224,72 +214,66 @@ class CorrespondenciaController extends APIController
      * @apiError {String[]}     error       Campo obrigatório não informado ou contém valor inválido.
      * @apiError {String[]}     error       Ocorreu uma exceção ao persistir a instância.
      */
-    public function update($codCompCurric,$codCompCorresp)
+    public function update($codCompCurric, $codCompCorresp)
     {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('PUT'),
-            )
-        );
+            'requireAuthorization' => TRUE,
+        ));
 
         $payload = $this->getBodyRequest();
-        $correspondencia = $this->entityManager->find('Entities\Correspondencia',
-                array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
+        $correspondencia = $this->entityManager->find(
+            'Entities\Correspondencia',
+            array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp)
+        );
 
-        if(!is_null($correspondencia))
-        {
-            if (array_key_exists('codCompCurric', $payload))
-            {
-                if(isset($payload['codCompCurric'])){
-                    $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurric']);
+        if (!is_null($correspondencia)) {
+            if (array_key_exists('codCompCurric', $payload)) {
+                if (isset($payload['codCompCurric'])) {
+                    $componenteCurricular = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurric']);
                 } else {
                     $componenteCurricular = null;
                 }
                 $correspondencia->setComponenteCurricular($componenteCurricular);
             }
 
-            if (array_key_exists('codCompCurricCorresp',$payload))
-            {
-                if(isset($payload['codCompCurricCorresp'])){
-                    $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular',$payload['codCompCurricCorresp']);
+            if (array_key_exists('codCompCurricCorresp', $payload)) {
+                if (isset($payload['codCompCurricCorresp'])) {
+                    $componenteCurricularCorresp = $this->entityManager->find('Entities\ComponenteCurricular', $payload['codCompCurricCorresp']);
                 } else {
                     $componenteCurricularCorresp = null;
-                } 
+                }
                 $correspondencia->setComponenteCurricularCorresp($componenteCurricularCorresp);
-            } 
-            
-            if(array_key_exists('percentual',$payload)) $correspondencia->setPercentual($payload['percentual']);
-            
+            }
+
+            if (array_key_exists('percentual', $payload)) $correspondencia->setPercentual($payload['percentual']);
+
             $constraints = $this->validator->validate($correspondencia);
 
-            if($constraints->success())
-            {
+            if ($constraints->success()) {
                 try {
                     $this->entityManager->merge($correspondencia);
                     $this->entityManager->flush();
 
                     $this->apiReturn(array(
                         'message' => $this->getApiMessage(STD_MSG_UPDATED),
-                        ), self::HTTP_OK
-                    );
+                    ), self::HTTP_OK);
                 } catch (\Exception $e) {
                     $this->apiReturn(array(
                         'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                        ),self::HTTP_BAD_REQUEST
-                    );
+                    ), self::HTTP_BAD_REQUEST);
                 }
-            }else{
+            } else {
                 $this->apiReturn(array(
                     'error' => $constraints->messageArray(),
-                    ),self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{
+        } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -307,38 +291,36 @@ class CorrespondenciaController extends APIController
      * @apiError {String[]}     error           Campo obrigatório não informado ou contém valor inválido.
      * @apiError {String[]}     error           Ocorreu uma exceção ao persistir a instância.
      */
-    public function delete($codCompCurric,$codCompCorresp)
+    public function delete($codCompCurric, $codCompCorresp)
     {
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
-            )
+            'requireAuthorization' => TRUE,
+        ));
+        $correspondencia = $this->entityManager->find(
+            'Entities\Correspondencia',
+            array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp)
         );
-        $correspondencia = $this->entityManager->find('Entities\Correspondencia',
-                array('componenteCurricular' => $codCompCurric, 'componenteCurricularCorresp' => $codCompCorresp));
 
-        if(!is_null($correspondencia))
-        {
+        if (!is_null($correspondencia)) {
             try {
                 $this->entityManager->remove($correspondencia);
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_DELETED),
-                    ), self::HTTP_OK
-                );
+                ), self::HTTP_OK);
             } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ),self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-        }else{ 
+        } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ),self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 }

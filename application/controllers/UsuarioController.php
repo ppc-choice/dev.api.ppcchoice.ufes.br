@@ -1,12 +1,13 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
-class UsuarioController extends APIController 
+class UsuarioController extends APIController
 {
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
-    }
+	}
 
 	/**
 	 * @api {get} usuarios Solicitar dados da coleção dos usuários
@@ -20,29 +21,28 @@ class UsuarioController extends APIController
 	 */
 	public function findAll()
 	{
-		
+
 		header("Access-Control-Allow-Origin: *");
-		
+
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-			)
-		);
-		
+			'methods' => array('GET'),
+			'requireAuthorization' => TRUE,
+		));
+
 		$colecaoUsuario = $this->entityManager->getRepository('Entities\Usuario')->findAll();
-		
-		if ( !empty($colecaoUsuario) ){
+
+		if (!empty($colecaoUsuario)) {
 			$colecaoUsuario = $this->doctrineToArray($colecaoUsuario);
-			$this->apiReturn($colecaoUsuario,
+			$this->apiReturn(
+				$colecaoUsuario,
 				self::HTTP_OK
 			);
 		} else {
 			$this->apiReturn(array(
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				),self::HTTP_NOT_FOUND
-			);
+			), self::HTTP_NOT_FOUND);
 		}
-
 	}
 
 	/**
@@ -71,27 +71,26 @@ class UsuarioController extends APIController
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('GET'),
-				// 'requireAuthorization' => TRUE,
-				// 'limit' => array(1,'ip','everyday')
-			)
-		);
-		
-		$usuario = $this->entityManager->find('Entities\Usuario',$codUsuario);
-		
-		if ( !is_null($usuario) ) {
-			$usuario = $this->doctrineToArray($usuario);	
-			$this->apiReturn($usuario,
+			'methods' => array('GET'),
+			'requireAuthorization' => TRUE,
+			// 'limit' => array(1,'ip','everyday')
+		));
+
+		$usuario = $this->entityManager->find('Entities\Usuario', $codUsuario);
+
+		if (!is_null($usuario)) {
+			$usuario = $this->doctrineToArray($usuario);
+			$this->apiReturn(
+				$usuario,
 				self::HTTP_OK
 			);
 		} else {
 			$this->apiReturn(array(
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				),self::HTTP_NOT_FOUND
-			);
+			), self::HTTP_NOT_FOUND);
 		}
 	}
-	
+
 	/**
 	 * @api {post} usuarios Criar um usuário
 	 * @apiName create
@@ -116,38 +115,38 @@ class UsuarioController extends APIController
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('POST'),
-			)
-		);
+			'methods' => array('POST'),
+			'requireAuthorization' => TRUE,
+		));
 
 		$payload = $this->getBodyRequest();
 		$usuario = new Entities\Usuario();
-		
-		if ( array_key_exists('nome', $payload) ) $usuario->setNome($payload['nome']);
-		if ( array_key_exists('email', $payload) ) $usuario->setEmail($payload['email']);
-		if ( array_key_exists('senha', $payload) ) $usuario->setSenha($payload['senha']);
-		if ( array_key_exists('conjuntoSelecao', $payload) ) {
+
+		if (array_key_exists('nome', $payload)) $usuario->setNome($payload['nome']);
+		if (array_key_exists('email', $payload)) $usuario->setEmail($payload['email']);
+		if (array_key_exists('senha', $payload)) $usuario->setSenha($payload['senha']);
+		if (array_key_exists('conjuntoSelecao', $payload)) {
 			$conjuntoSelecaoJSON = json_encode($payload['conjuntoSelecao']);
 
-			if ( is_string($conjuntoSelecaoJSON) ) {
-				$usuario->setConjuntoSelecao($conjuntoSelecaoJSON);}
-			else {
-				$usuario->setConjuntoSelecao(null);}
-		}	
+			if (is_string($conjuntoSelecaoJSON)) {
+				$usuario->setConjuntoSelecao($conjuntoSelecaoJSON);
+			} else {
+				$usuario->setConjuntoSelecao(null);
+			}
+		}
 
-		if ( array_key_exists('papel', $payload) ){
+		if (array_key_exists('papel', $payload)) {
 			$usuario->setPapel($payload['papel']);
 		} else {
 			$usuario->setPapel(PAPEL_USUARIO_VISITOR);
 		}
-		
+
 		$usuario->setDtUltimoAcesso(new DateTime('NOW'));
 		$usuario->setCodUsuario($this->uniqIdV2());
 
 		$constraints = $this->validator->validate($usuario);
-	
-		if ( $constraints->success() )
-		{
+
+		if ($constraints->success()) {
 			$this->load->library('Bcrypt');
 			$usuario->setSenha($this->bcrypt->hash($payload['senha']));
 
@@ -157,21 +156,16 @@ class UsuarioController extends APIController
 
 				$this->apiReturn(array(
 					'message' => $this->getApiMessage(STD_MSG_CREATED),
-					),self::HTTP_OK
-				);	
-				
+				), self::HTTP_OK);
 			} catch (Exception $e) {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-					),self::HTTP_BAD_REQUEST
-				);	
+				), self::HTTP_BAD_REQUEST);
 			}
-			
 		} else {
 			$this->apiReturn(array(
 				'error' => $constraints->messageArray(),
-				),self::HTTP_BAD_REQUEST
-			);	
+			), self::HTTP_BAD_REQUEST);
 		}
 	}
 
@@ -199,67 +193,60 @@ class UsuarioController extends APIController
 	public function update($codUsuario)
 	{
 		header("Access-Control-Allow-Origin: *");
-		
+
 		$this->_apiConfig(array(
-				'methods' => array('PUT'),
-			)
-		);
+			'methods' => array('PUT'),
+			'requireAuthorization' => TRUE,
+		));
 
 		$payload = $this->getBodyRequest();
-		$usuario = $this->entityManager->find('Entities\Usuario',$codUsuario);
+		$usuario = $this->entityManager->find('Entities\Usuario', $codUsuario);
 
-		if ( !is_null($usuario) ) 
-		{
-			if ( array_key_exists('nome', $payload) ) $usuario->setNome($payload['nome']);
-			if ( array_key_exists('papel', $payload) ) $usuario->setPapel($payload['papel']);
-			if ( array_key_exists('email', $payload) ) $usuario->setEmail($payload['email']);
-			if ( array_key_exists('senha', $payload) ) $usuario->setSenha($payload['senha']);
+		if (!is_null($usuario)) {
+			if (array_key_exists('nome', $payload)) $usuario->setNome($payload['nome']);
+			if (array_key_exists('papel', $payload)) $usuario->setPapel($payload['papel']);
+			if (array_key_exists('email', $payload)) $usuario->setEmail($payload['email']);
+			if (array_key_exists('senha', $payload)) $usuario->setSenha($payload['senha']);
 
-			if ( array_key_exists('conjuntoSelecao', $payload) ) {
+			if (array_key_exists('conjuntoSelecao', $payload)) {
 				$conjuntoSelecaoJSON = json_encode($payload['conjuntoSelecao']);
-				
-				if ( is_string($conjuntoSelecaoJSON) ) {
-					$usuario->setConjuntoSelecao($conjuntoSelecaoJSON);}
-				else {
-					$usuario->setConjuntoSelecao(null);}
-				}	
+
+				if (is_string($conjuntoSelecaoJSON)) {
+					$usuario->setConjuntoSelecao($conjuntoSelecaoJSON);
+				} else {
+					$usuario->setConjuntoSelecao(null);
+				}
+			}
 
 			$usuario->setDtUltimoAcesso(new DateTime('NOW'));
 
 			$constraints = $this->validator->validate($usuario);
-		
-			if ( $constraints->success() )
-			{
+
+			if ($constraints->success()) {
 				$this->load->library('Bcrypt');
 				$usuario->setSenha($this->bcrypt->hash($payload['senha']));
 
 				try {
 					$this->entityManager->merge($usuario);
 					$this->entityManager->flush();
-	
+
 					$this->apiReturn(array(
 						'message' => $this->getApiMessage(STD_MSG_UPDATED),
-						),self::HTTP_OK
-					);	
-					
+					), self::HTTP_OK);
 				} catch (Exception $e) {
 					$this->apiReturn(array(
 						'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-						),self::HTTP_BAD_REQUEST
-					);	
+					), self::HTTP_BAD_REQUEST);
 				}
-				
 			} else {
 				$this->apiReturn(array(
 					'error' => $constraints->messageArray(),
-					),self::HTTP_BAD_REQUEST
-				);	
+				), self::HTTP_BAD_REQUEST);
 			}
 		} else {
 			$this->apiReturn(array(
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				),self::HTTP_NOT_FOUND
-			);
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 
@@ -280,37 +267,33 @@ class UsuarioController extends APIController
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('DELETE'),
-			)
-		);
+			'methods' => array('DELETE'),
+			'requireAuthorization' => TRUE,
+		));
 
-		$usuario = $this->entityManager->find('Entities\Usuario',$codUsuario);
+		$usuario = $this->entityManager->find('Entities\Usuario', $codUsuario);
 
-		if ( !is_null($usuario) ) {
+		if (!is_null($usuario)) {
 			try {
 				$this->entityManager->remove($usuario);
 				$this->entityManager->flush();
 
 				$this->apiReturn(array(
 					'message' => $this->getApiMessage(STD_MSG_DELETED),
-					),self::HTTP_OK
-				);	
-				
+				), self::HTTP_OK);
 			} catch (Exception $e) {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-					),self::HTTP_BAD_REQUEST
-				);	
+				), self::HTTP_BAD_REQUEST);
 			}
 		} else {
 			$this->apiReturn(array(
 				'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-				),self::HTTP_NOT_FOUND
-			);
+			), self::HTTP_NOT_FOUND);
 		}
 	}
 
-    /**
+	/**
 	 * @api {post} usuarios/login Entrar na conta de usuário
 	 * @apiName login
 	 * @apiGroup Usuário
@@ -332,29 +315,25 @@ class UsuarioController extends APIController
 		header("Access-Control-Allow-Origin: *");
 
 		$this->_apiConfig(array(
-				'methods' => array('POST'),
-			)
-		);
+			'methods' => array('POST'),
+		));
 
 		$payload = $this->getBodyRequest();
 		$usuarioRequisicao = new Entities\Usuario();
 
-		if ( array_key_exists('email', $payload) ) $usuarioRequisicao->setEmail($payload['email']);
-		if ( array_key_exists('senha', $payload) ) $usuarioRequisicao->setSenha($payload['senha']);
+		if (array_key_exists('email', $payload)) $usuarioRequisicao->setEmail($payload['email']);
+		if (array_key_exists('senha', $payload)) $usuarioRequisicao->setSenha($payload['senha']);
 
-		$constraints = $this->validator->validate($usuarioRequisicao,'Login');
+		$constraints = $this->validator->validate($usuarioRequisicao, 'Login');
 
-		if ( $constraints->success() )
-		{
+		if ($constraints->success()) {
 			$usuario = $this->entityManager->getRepository('Entities\Usuario')
 				->findOneByEmail($usuarioRequisicao->getEmail());
 
-			if ( !is_null($usuario))
-			{
+			if (!is_null($usuario)) {
 				$this->load->library('Bcrypt');
 
-				if ( $this->bcrypt->check($usuarioRequisicao->getSenha(), $usuario->getSenha()) )
-				{
+				if ($this->bcrypt->check($usuarioRequisicao->getSenha(), $usuario->getSenha())) {
 					$usuario->setDtUltimoAcesso(new DateTime('NOW'));
 
 					$this->load->library('AuthorizationToken');
@@ -366,10 +345,9 @@ class UsuarioController extends APIController
 					} catch (\Throwable $th) {
 						$this->apiReturn(array(
 							'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-							),self::HTTP_UNAUTHORIZED
-						);
-					}	
-					
+						), self::HTTP_UNAUTHORIZED);
+					}
+
 					$perfilUsuario = array(
 						'email' => $usuario->getEmail(),
 						'dtUltimoAcesso' => $usuario->getDtUltimoAcesso()->format('c'),
@@ -380,33 +358,26 @@ class UsuarioController extends APIController
 					$this->apiReturn(array(
 						'usuario' => $perfilUsuario,
 						'token' => $token
-						),self::HTTP_OK
-					);
+					), self::HTTP_OK);
 				} else {
 					$this->apiReturn(array(
 						'error' => $this->getApiMessage(STD_MSG_INVALID_CREDENTIAL, 'senha'),
-						),self::HTTP_UNAUTHORIZED
-					);
+					), self::HTTP_UNAUTHORIZED);
 				}
-
 			} else {
 				$this->apiReturn(array(
 					'error' => $this->getApiMessage(STD_MSG_INVALID_CREDENTIAL, 'email'),
-					),self::HTTP_UNAUTHORIZED
-				);
+				), self::HTTP_UNAUTHORIZED);
 			}
-
 		} else {
 			$this->apiReturn(array(
 				'error' => $constraints->messageArray(),
-				),self::HTTP_BAD_REQUEST
-			);
+			), self::HTTP_BAD_REQUEST);
 		}
-
-
 	}
 
-	public function test(){
+	public function test()
+	{
 		echo uniqid();
 	}
 }

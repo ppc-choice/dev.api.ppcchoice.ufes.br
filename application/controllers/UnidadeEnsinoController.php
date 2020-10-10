@@ -1,10 +1,11 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/APIController.php';
 
 class UnidadeEnsinoController extends APIController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -29,50 +30,46 @@ class UnidadeEnsinoController extends APIController
 
         $groupBy = strtolower($this->input->get('groupBy'));
 
-        if ( $groupBy === "ies" )
-        { 
+        if ($groupBy === "ies") {
             $colecaoIes = $this->entityManager->getRepository('Entities\InstituicaoEnsinoSuperior')->findAll();
 
-            if ( !empty($colecaoIes) )
-            {
+            if (!empty($colecaoIes)) {
                 $grupoUnEnsino = array();
 
-                foreach ($colecaoIes as $key => $ies) 
-                {
+                foreach ($colecaoIes as $key => $ies) {
                     $grupoUnEnsino[$key]['nomeIes'] = $ies->getNome();
                     $grupoUnEnsino[$key]['codIes'] = $ies->getCodIes();
                     $grupoUnEnsino[$key]['abreviaturaIes'] = $ies->getAbreviatura();
                     $grupoUnEnsino[$key]['unidadesEnsino'] = array();
-                    
-                    foreach ($ies->getUnidadesEnsino() as $unEnsino){
-                        array_push( $grupoUnEnsino[$key]['unidadesEnsino'], $this->doctrineToArray($unEnsino, TRUE));
+
+                    foreach ($ies->getUnidadesEnsino() as $unEnsino) {
+                        array_push($grupoUnEnsino[$key]['unidadesEnsino'], $this->doctrineToArray($unEnsino, TRUE));
                     }
                 }
-                
+
                 $colecaoIes = $this->doctrineToArray($grupoUnEnsino);
-                
-                $this->apiReturn($colecaoIes,
+
+                $this->apiReturn(
+                    $colecaoIes,
                     self::HTTP_OK
                 );
             } else {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                    ), self::HTTP_NOT_FOUND
-                );
-            }   
-
+                ), self::HTTP_NOT_FOUND);
+            }
         } else {
             $colecaoUnidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findAll();
-            
-            if ( !empty($colecaoUnidadeEnsino) ){
-                $this->apiReturn($colecaoUnidadeEnsino,
+
+            if (!empty($colecaoUnidadeEnsino)) {
+                $this->apiReturn(
+                    $colecaoUnidadeEnsino,
                     self::HTTP_OK
                 );
             } else {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                    ), self::HTTP_NOT_FOUND
-                );
+                ), self::HTTP_NOT_FOUND);
             }
         }
     }
@@ -102,15 +99,15 @@ class UnidadeEnsinoController extends APIController
 
         $unidadeEnsino = $this->entityManager->getRepository('Entities\UnidadeEnsino')->findById($codUnidadeEnsino);
 
-        if ( !is_null($unidadeEnsino) ){
-            $this->apiReturn($unidadeEnsino,
+        if (!is_null($unidadeEnsino)) {
+            $this->apiReturn(
+                $unidadeEnsino,
                 self::HTTP_OK
             );
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -132,46 +129,43 @@ class UnidadeEnsinoController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('POST')
+            'methods' => array('POST'),
+            'requireAuthorization' => TRUE,
         ));
 
         $payload = $this->getBodyRequest();
         $ues = new Entities\UnidadeEnsino();
-        
-        if ( array_key_exists('nome', $payload) )   $ues->setNome($payload['nome']);
-        if ( array_key_exists('cnpj', $payload) )   $ues->setCnpj($payload['cnpj']);
 
-        if ( isset($payload['codIes']) ){
+        if (array_key_exists('nome', $payload))   $ues->setNome($payload['nome']);
+        if (array_key_exists('cnpj', $payload))   $ues->setCnpj($payload['cnpj']);
+
+        if (isset($payload['codIes'])) {
             $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
-            if ( !is_null($ies) ) $ues->setIes($ies);
+            if (!is_null($ies)) $ues->setIes($ies);
         }
         $ues->setCodUnidadeEnsino($this->uniqIdV2());
         $constraints = $this->validator->validate($ues);
 
-        if ( $constraints->success() ){
+        if ($constraints->success()) {
             try {
                 $this->entityManager->persist($ues);
                 $this->entityManager->flush();
-            
+
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_CREATED),
-                    ), self::HTTP_OK
-                );
-                
-            } catch (\Exception $e){
+                ), self::HTTP_OK);
+            } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
         } else {
             $this->apiReturn(array(
                 'error' => $constraints->messageArray(),
-                ), self::HTTP_BAD_REQUEST
-            );
+            ), self::HTTP_BAD_REQUEST);
         }
     }
-    
+
     /**
      * @api {put} unidades-ensino/:codUnidadeEnsino Atualizar dados de uma unidade de ensino
      * @apiName update
@@ -192,52 +186,46 @@ class UnidadeEnsinoController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('PUT')
+            'methods' => array('PUT'),
+            'requireAuthorization' => TRUE,
         ));
 
         $payload = $this->getBodyRequest();
         $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
-        if ( !is_null($ues) ){
-            if ( array_key_exists('nome', $payload) ) $ues->setNome($payload['nome']);
-            if ( array_key_exists('cnpj', $payload) ) $ues->setCnpj($payload['cnpj']);
+        if (!is_null($ues)) {
+            if (array_key_exists('nome', $payload)) $ues->setNome($payload['nome']);
+            if (array_key_exists('cnpj', $payload)) $ues->setCnpj($payload['cnpj']);
 
-            if ( isset($payload['codIes']) ){
+            if (isset($payload['codIes'])) {
                 $ies = $this->entityManager->find('Entities\InstituicaoEnsinoSuperior', $payload['codIes']);
-                if ( !is_null($ies) ) $ues->setIes($ies);
+                if (!is_null($ies)) $ues->setIes($ies);
             }
 
             $constraints = $this->validator->validate($ues);
 
-            if($constraints->success())
-            {
+            if ($constraints->success()) {
                 try {
                     $this->entityManager->merge($ues);
                     $this->entityManager->flush();
-            
+
                     $this->apiReturn(array(
                         'message' => $this->getApiMessage(STD_MSG_UPDATED),
-                        ), self::HTTP_OK
-                    );
-    
-                } catch (\Exception $e){
+                    ), self::HTTP_OK);
+                } catch (\Exception $e) {
                     $this->apiReturn(array(
                         'error' => $this->getApiMessage(STD_MSG_EXCEPTION),
-                        ), self::HTTP_BAD_REQUEST
-                    );
+                    ), self::HTTP_BAD_REQUEST);
                 }
-            }else{
+            } else {
                 $this->apiReturn(array(
                     'error' => $constraints->messageArray(),
-                    ), self::HTTP_BAD_REQUEST
-                );
+                ), self::HTTP_BAD_REQUEST);
             }
-            
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 
@@ -258,33 +246,29 @@ class UnidadeEnsinoController extends APIController
         header("Access-Control-Allow-Origin: *");
 
         $this->_apiconfig(array(
-            'methods' => array('DELETE')
+            'methods' => array('DELETE'),
+            'requireAuthorization' => TRUE,
         ));
 
         $ues = $this->entityManager->find('Entities\UnidadeEnsino', $codUnidadeEnsino);
 
-        if ( !is_null($ues) ){
+        if (!is_null($ues)) {
             try {
                 $this->entityManager->remove($ues);
                 $this->entityManager->flush();
 
                 $this->apiReturn(array(
                     'message' => $this->getApiMessage(STD_MSG_DELETED),
-                    ), self::HTTP_OK
-                );
-            
-            } catch ( \Exception $e ){
+                ), self::HTTP_OK);
+            } catch (\Exception $e) {
                 $this->apiReturn(array(
                     'error' => $this->getApiMessage(STD_MSG_NOT_EXCEPTION),
-                    ), self::HTTP_BAD_REQUEST
-                );
-            } 
-
+                ), self::HTTP_BAD_REQUEST);
+            }
         } else {
             $this->apiReturn(array(
                 'error' => $this->getApiMessage(STD_MSG_NOT_FOUND),
-                ), self::HTTP_NOT_FOUND
-            );
+            ), self::HTTP_NOT_FOUND);
         }
     }
 }
