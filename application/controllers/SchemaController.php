@@ -12,7 +12,7 @@ class SchemaController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('POST', 'PUT'),
-            // 'requireAuthorization' => TRUE,
+            'requireAuthorization' => TRUE,
         ));
 
         $folder = 'database/';
@@ -53,7 +53,7 @@ class SchemaController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('DELETE'),
-            // 'requireAuthorization' => TRUE,
+            'requireAuthorization' => TRUE,
         ));
 
         $folder = 'database/';
