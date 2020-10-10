@@ -79,7 +79,6 @@ class ComponenteCurricularController extends APIController
 
         $this->_apiConfig(array(
             'methods' => array('GET'),
-            'requireAuthorization' => TRUE,
         ));
 
         $colecaoCompCurric = $this->entityManager->getRepository('Entities\ComponenteCurricular')->findByCodPpc($codPpc);

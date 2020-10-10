@@ -177,7 +177,7 @@ class ProjetoPedagogicoCursoController extends APIController
         }
 
         if (array_key_exists('dtInicioVigencia', $payload)) {
-            if (is_null($payload['dtInicioVigencia']) || empty(($payload['dtInicioVigencia'])))
+            if (is_null($payload['dtInicioVigencia']) || empty($payload['dtInicioVigencia']))
                 $ppc->setDtInicioVigencia($payload['dtInicioVigencia']);
             else
                 $ppc->setDtInicioVigencia(new DateTime($payload['dtInicioVigencia']));
