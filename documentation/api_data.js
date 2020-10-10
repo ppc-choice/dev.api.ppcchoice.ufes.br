@@ -963,6 +963,48 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "correspondencia[nomeDisciplina]",
+            "description": "<p>Nome de disciplina</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "correspondencia[nomeDisciplinaCorresp]",
+            "description": "<p>Nome de disciplina</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "componenteCurricular[tipoCompCurric]",
+            "description": "<p>Tipo de componente curricular.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "componenteCurricular[tipoCompCurricCorresp]",
+            "description": "<p>Tipo de componente curricular.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "componenteCurricular[chDisciplina]",
+            "description": "<p>Carga Horária de disciplina.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "componenteCurricular[chDisciplinaCorresp]",
+            "description": "<p>Carga Horária de disciplina.</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Number",
             "optional": false,
             "field": "correspondencia[codCompCorresp]",
