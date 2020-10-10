@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 // Reserved routes - CI
 $route['default_controller'] = 'welcome';
@@ -108,7 +108,8 @@ $route['usuarios/(:any)']['PUT'] = 'UsuarioController/update/$1';
 $route['usuarios/(:any)']['DELETE'] = 'UsuarioController/delete/$1';
 $route['usuarios/login']['POST'] = 'UsuarioController/login';
 
-$route['usuarios/schema']['POST'] = 'Welcome/updateSchema';
-
-
-$route['uuid']['GET'] = 'Welcome/getUUID';
+// Schema
+$route['schema']['POST'] = 'SchemaController/create';
+$route['schema']['PUT'] = 'SchemaController/create';
+$route['schema']['DELETE'] = 'SchemaController/delete';
+$route['schema/uuid']['GET'] = 'SchemaController/getUuid';
