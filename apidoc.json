@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "description": "API do projeto PPCChoice para consumo interno",
   "title": "API PPC Choice - Documentation",
-  "sampleUrl": "http://dev.ppcchoice.ufes.br/api/",
-  "url" : "http://dev.ppcchoice.ufes.br/api/"
+  "sampleUrl": "http://ppcchoice.ufes.br/api/",
+  "url": "http://ppcchoice.ufes.br/api/"
 }

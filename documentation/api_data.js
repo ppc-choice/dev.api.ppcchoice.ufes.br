@@ -92,7 +92,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares"
       }
     ]
   },
@@ -146,7 +146,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
       }
     ]
   },
@@ -271,7 +271,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares"
       }
     ]
   },
@@ -409,7 +409,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
       }
     ]
   },
@@ -547,7 +547,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc/componentes-curriculares"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc/componentes-curriculares"
       }
     ]
   },
@@ -575,7 +575,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares/tipos"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares/tipos"
       }
     ]
   },
@@ -681,7 +681,7 @@ define({ "api": [
     "groupTitle": "Componente_Curricular",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric"
       }
     ]
   },
@@ -749,7 +749,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/correspondencias"
+        "url": "http://ppcchoice.ufes.br/api/correspondencias"
       }
     ]
   },
@@ -810,7 +810,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/correspondencias/:codCompCurric/:codCompCorresp"
+        "url": "http://ppcchoice.ufes.br/api/correspondencias/:codCompCurric/:codCompCorresp"
       }
     ]
   },
@@ -914,7 +914,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/correspondencias"
+        "url": "http://ppcchoice.ufes.br/api/correspondencias"
       }
     ]
   },
@@ -1038,7 +1038,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpcAtual/correspondencias/:codPpcAlvo"
       }
     ]
   },
@@ -1141,7 +1141,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric/correspondencias/:codCompCorresp"
+        "url": "http://ppcchoice.ufes.br/api/componentes-curriculares/:codCompCurric/correspondencias/:codCompCorresp"
       }
     ]
   },
@@ -1225,7 +1225,7 @@ define({ "api": [
     "groupTitle": "Correspondência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/correspondencia/:codCompCurric/:codCompCorresp"
+        "url": "http://ppcchoice.ufes.br/api/correspondencia/:codCompCurric/:codCompCorresp"
       }
     ]
   },
@@ -1299,7 +1299,7 @@ define({ "api": [
     "groupTitle": "Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos"
+        "url": "http://ppcchoice.ufes.br/api/cursos"
       }
     ]
   },
@@ -1358,7 +1358,7 @@ define({ "api": [
     "groupTitle": "Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos/:codCurso"
+        "url": "http://ppcchoice.ufes.br/api/cursos/:codCurso"
       }
     ]
   },
@@ -1404,7 +1404,7 @@ define({ "api": [
     "groupTitle": "Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos"
+        "url": "http://ppcchoice.ufes.br/api/cursos"
       }
     ]
   },
@@ -1486,7 +1486,7 @@ define({ "api": [
     "groupTitle": "Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos/:codCurso"
+        "url": "http://ppcchoice.ufes.br/api/cursos/:codCurso"
       }
     ]
   },
@@ -1569,7 +1569,7 @@ define({ "api": [
     "groupTitle": "Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos/:codCurso"
+        "url": "http://ppcchoice.ufes.br/api/cursos/:codCurso"
       }
     ]
   },
@@ -1643,7 +1643,7 @@ define({ "api": [
     "groupTitle": "Departamento",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/departamentos"
+        "url": "http://ppcchoice.ufes.br/api/departamentos"
       }
     ]
   },
@@ -1702,7 +1702,7 @@ define({ "api": [
     "groupTitle": "Departamento",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/departamentos/:codDepto"
+        "url": "http://ppcchoice.ufes.br/api/departamentos/:codDepto"
       }
     ]
   },
@@ -1748,7 +1748,7 @@ define({ "api": [
     "groupTitle": "Departamento",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/departamentos"
+        "url": "http://ppcchoice.ufes.br/api/departamentos"
       }
     ]
   },
@@ -1835,7 +1835,7 @@ define({ "api": [
     "groupTitle": "Departamento",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/departamentos/:codDepto"
+        "url": "http://ppcchoice.ufes.br/api/departamentos/:codDepto"
       }
     ]
   },
@@ -1918,7 +1918,7 @@ define({ "api": [
     "groupTitle": "Departamento",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/departamentos/:codDepto"
+        "url": "http://ppcchoice.ufes.br/api/departamentos/:codDepto"
       }
     ]
   },
@@ -1979,7 +1979,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/dependencias"
+        "url": "http://ppcchoice.ufes.br/api/dependencias"
       }
     ]
   },
@@ -2054,7 +2054,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
+        "url": "http://ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
       }
     ]
   },
@@ -2095,7 +2095,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/dependencias"
+        "url": "http://ppcchoice.ufes.br/api/dependencias"
       }
     ]
   },
@@ -2170,7 +2170,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc/dependencias"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc/dependencias"
       }
     ]
   },
@@ -2259,7 +2259,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
+        "url": "http://ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
       }
     ]
   },
@@ -2336,7 +2336,7 @@ define({ "api": [
     "groupTitle": "Dependência",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
+        "url": "http://ppcchoice.ufes.br/api/dependencias/:codCompCurric/:codPreReq"
       }
     ]
   },
@@ -2411,7 +2411,7 @@ define({ "api": [
     "groupTitle": "Disciplina",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/disciplinas"
+        "url": "http://ppcchoice.ufes.br/api/disciplinas"
       }
     ]
   },
@@ -2472,7 +2472,7 @@ define({ "api": [
     "groupTitle": "Disciplina",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
+        "url": "http://ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
       }
     ]
   },
@@ -2548,7 +2548,7 @@ define({ "api": [
     "groupTitle": "Disciplina",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/disciplinas"
+        "url": "http://ppcchoice.ufes.br/api/disciplinas"
       }
     ]
   },
@@ -2623,7 +2623,7 @@ define({ "api": [
     "groupTitle": "Disciplina",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
+        "url": "http://ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
       }
     ]
   },
@@ -2700,7 +2700,7 @@ define({ "api": [
     "groupTitle": "Disciplina",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
+        "url": "http://ppcchoice.ufes.br/api/disciplinas/:codDepto/:numDisciplina"
       }
     ]
   },
@@ -2773,7 +2773,7 @@ define({ "api": [
     "groupTitle": "Instituição_de_Ensino_Superior",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/instituicoes-ensino-superior"
+        "url": "http://ppcchoice.ufes.br/api/instituicoes-ensino-superior"
       }
     ]
   },
@@ -2832,7 +2832,7 @@ define({ "api": [
     "groupTitle": "Instituição_de_Ensino_Superior",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
+        "url": "http://ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
       }
     ]
   },
@@ -2878,7 +2878,7 @@ define({ "api": [
     "groupTitle": "Instituição_de_Ensino_Superior",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/instituicoes-ensino-superior"
+        "url": "http://ppcchoice.ufes.br/api/instituicoes-ensino-superior"
       }
     ]
   },
@@ -2944,7 +2944,7 @@ define({ "api": [
     "groupTitle": "Instituição_de_Ensino_Superior",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
+        "url": "http://ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
       }
     ]
   },
@@ -3019,7 +3019,7 @@ define({ "api": [
     "groupTitle": "Instituição_de_Ensino_Superior",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
+        "url": "http://ppcchoice.ufes.br/api/instituicoes-ensino-superior/:codIes"
       }
     ]
   },
@@ -3161,7 +3161,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso"
       }
     ]
   },
@@ -3215,7 +3215,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
       }
     ]
   },
@@ -3256,7 +3256,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso"
       }
     ]
   },
@@ -3310,7 +3310,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/cursos/:codCurso/projetos-pedagogicos-curso"
+        "url": "http://ppcchoice.ufes.br/api/cursos/:codCurso/projetos-pedagogicos-curso"
       }
     ]
   },
@@ -3460,7 +3460,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
       }
     ]
   },
@@ -3605,7 +3605,7 @@ define({ "api": [
     "groupTitle": "Projeto_Pedagógico_Curso",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpc"
       }
     ]
   },
@@ -3666,7 +3666,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/transicoes"
+        "url": "http://ppcchoice.ufes.br/api/transicoes"
       }
     ]
   },
@@ -3727,7 +3727,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/transicoes/:codPpcAtual/:codPpcAlvo"
+        "url": "http://ppcchoice.ufes.br/api/transicoes/:codPpcAtual/:codPpcAlvo"
       }
     ]
   },
@@ -3796,7 +3796,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/transicoes"
+        "url": "http://ppcchoice.ufes.br/api/transicoes"
       }
     ]
   },
@@ -3878,7 +3878,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpcAtual/transicoes"
+        "url": "http://ppcchoice.ufes.br/api/projetos-pedagogicos-curso/:codPpcAtual/transicoes"
       }
     ]
   },
@@ -3946,7 +3946,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino/transicoes"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino/transicoes"
       }
     ]
   },
@@ -4023,7 +4023,7 @@ define({ "api": [
     "groupTitle": "Transição",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/transicao/:codPpcAtual/:codPpcAlvo"
+        "url": "http://ppcchoice.ufes.br/api/transicao/:codPpcAtual/:codPpcAlvo"
       }
     ]
   },
@@ -4091,7 +4091,7 @@ define({ "api": [
     "groupTitle": "Unidade_de_Ensino",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino"
       }
     ]
   },
@@ -4145,7 +4145,7 @@ define({ "api": [
     "groupTitle": "Unidade_de_Ensino",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
       }
     ]
   },
@@ -4200,7 +4200,7 @@ define({ "api": [
     "groupTitle": "Unidade_de_Ensino",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino"
       }
     ]
   },
@@ -4282,7 +4282,7 @@ define({ "api": [
     "groupTitle": "Unidade_de_Ensino",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
       }
     ]
   },
@@ -4359,7 +4359,7 @@ define({ "api": [
     "groupTitle": "Unidade_de_Ensino",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
+        "url": "http://ppcchoice.ufes.br/api/unidades-ensino/:codUnidadeEnsino"
       }
     ]
   },
@@ -4473,7 +4473,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios"
+        "url": "http://ppcchoice.ufes.br/api/usuarios"
       }
     ]
   },
@@ -4532,7 +4532,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios/:codUsuario"
+        "url": "http://ppcchoice.ufes.br/api/usuarios/:codUsuario"
       }
     ]
   },
@@ -4578,7 +4578,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios"
+        "url": "http://ppcchoice.ufes.br/api/usuarios"
       }
     ]
   },
@@ -4700,7 +4700,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios/:codUsuario"
+        "url": "http://ppcchoice.ufes.br/api/usuarios/:codUsuario"
       }
     ]
   },
@@ -4796,7 +4796,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios/login"
+        "url": "http://ppcchoice.ufes.br/api/usuarios/login"
       }
     ]
   },
@@ -4918,7 +4918,7 @@ define({ "api": [
     "groupTitle": "Usuário",
     "sampleRequest": [
       {
-        "url": "http://dev.ppcchoice.ufes.br/api/usuarios/:codUsuario"
+        "url": "http://ppcchoice.ufes.br/api/usuarios/:codUsuario"
       }
     ]
   }
