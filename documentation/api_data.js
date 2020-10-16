@@ -4982,7 +4982,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "application/controllers/VerificationUploadController.php",
+    "filename": "application/controllers/VerificacaoArquivoUploadController.php",
     "groupTitle": "Verification_Upload",
     "sampleRequest": [
       {

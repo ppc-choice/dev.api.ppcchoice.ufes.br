@@ -32,7 +32,7 @@ $route['cursos/(:any)']['PUT'] = 'CursoController/update/$1';
 $route['cursos/(:any)']['DELETE'] = 'CursoController/delete/$1';
 
 //Verificação de Upload: Wellerson
-$route['verificacao-upload']['POST'] = 'VerificationUploadController/create';
+$route['verificacao-upload']['POST'] = 'VerificacaoArquivoUploadController/create';
 
 // Disciplinas : Gabriel
 $route['disciplinas']['GET'] = 'DisciplinaController/findAll';

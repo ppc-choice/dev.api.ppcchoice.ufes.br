@@ -3,7 +3,7 @@
 require_once APPPATH . 'libraries/APIController.php';
 
 
-class VerificationUploadController extends APIController
+class VerificacaoArquivoUploadController extends APIController
 {
     public function __construct()
     {
@@ -42,7 +42,7 @@ class VerificationUploadController extends APIController
         ) {
             $this->apiReturn(
                 array(
-                    'message' => array('Campo obrigatório não informado ou contém valor inválido')
+                    'error' => array('Campo obrigatório não informado ou contém valor inválido')
                 ),
                 self::HTTP_BAD_REQUEST
             );
@@ -53,7 +53,7 @@ class VerificationUploadController extends APIController
         if (is_null($ue)) {
             $this->apiReturn(
                 array(
-                    'message' => array('Unidade de Ensino Inválida')
+                    'error' => array('Unidade de Ensino Inválida')
                 ),
                 self::HTTP_BAD_REQUEST
             );
@@ -64,7 +64,7 @@ class VerificationUploadController extends APIController
         if (is_null($ppcAtual)) {
             $this->apiReturn(
                 array(
-                    'message' => array('PPC Atual Inválido')
+                    'error' => array('PPC Atual Inválido')
                 ),
                 self::HTTP_BAD_REQUEST
             );
@@ -75,7 +75,7 @@ class VerificationUploadController extends APIController
         if (is_null($ppcAlvo)) {
             $this->apiReturn(
                 array(
-                    'message' => array('PPC Alvo Inválido')
+                    'error' => array('PPC Alvo Inválido')
                 ),
                 self::HTTP_BAD_REQUEST
             );
@@ -89,19 +89,19 @@ class VerificationUploadController extends APIController
         if (is_null($transicao)) {
             $this->apiReturn(
                 array(
-                    'message' => array('Transição de PPC Inválido')
+                    'error' => array('Transição de PPC Inválido')
                 ),
                 self::HTTP_BAD_REQUEST
             );
         }
 
         foreach ($payload['conjuntoSelecao'] as $componente) {
-            $verificationComponente = $this->entityManager->find('Entities\ComponenteCurricular', $componente);
+            $verificacaoComponente = $this->entityManager->find('Entities\ComponenteCurricular', $componente);
 
-            if (is_null($verificationComponente)) {
+            if (is_null($verificacaoComponente)) {
                 $this->apiReturn(
                     array(
-                        'message' => array('Componente Inválida')
+                        'error' => array('Componente Inválida')
                     ),
                     self::HTTP_BAD_REQUEST
                 );
@@ -113,7 +113,7 @@ class VerificationUploadController extends APIController
             if (is_null($compPertencePpcAtual)) {
                 $this->apiReturn(
                     array(
-                        'message' => array('A componente não pertence ao PPC Atual')
+                        'error' => array('A componente não pertence ao PPC Atual')
                     ),
                     self::HTTP_BAD_REQUEST
                 );
@@ -126,7 +126,7 @@ class VerificationUploadController extends APIController
         if ($ue->getCodUnidadeEnsino() != $codUes) {
             $this->apiReturn(
                 array(
-                    'message' => array('O PPC Atual não pertence a Unidade de Ensino')
+                    'error' => array('O PPC Atual não pertence a Unidade de Ensino')
                 ),
                 self::HTTP_BAD_REQUEST
             );
