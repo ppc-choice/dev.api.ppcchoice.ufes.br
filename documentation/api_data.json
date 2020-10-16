@@ -4921,5 +4921,73 @@
         "url": "http://ppcchoice.ufes.br/api/usuarios/:codUsuario"
       }
     ]
+  },
+  {
+    "type": "post",
+    "url": "verificacao-upload",
+    "title": "Verificar a autenticidade do arquivo JSON",
+    "name": "create",
+    "group": "Verification_Upload",
+    "parameter": {
+      "fields": {
+        "Request Body/JSON": [
+          {
+            "group": "Request Body/JSON",
+            "type": "String",
+            "optional": false,
+            "field": "codUnidadeEnsino",
+            "description": "<p>Código de identificação da Unidade de Ensino.</p>"
+          },
+          {
+            "group": "Request Body/JSON",
+            "type": "String",
+            "optional": false,
+            "field": "codPpcAtual",
+            "description": "<p>Código de identificação do Projeto Pedagógico do Curso atual.</p>"
+          },
+          {
+            "group": "Request Body/JSON",
+            "type": "String[]",
+            "optional": false,
+            "field": "conjuntoSelecao[componentesCurriculares]",
+            "description": "<p>Conjunto de identificadores únicos das componentes curriculares selecionadas.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Verificação feita com sucesso!.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String[]",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Campo obrigatório não informado ou contém valor inválido.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/controllers/VerificationUploadController.php",
+    "groupTitle": "Verification_Upload",
+    "sampleRequest": [
+      {
+        "url": "http://ppcchoice.ufes.br/api/verificacao-upload"
+      }
+    ]
   }
 ]
