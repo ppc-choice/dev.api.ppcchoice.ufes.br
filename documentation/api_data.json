@@ -99,7 +99,7 @@
   {
     "type": "delete",
     "url": "componentes-curriculares/:codCompCurric",
-    "title": "Deletar Componente Curricular",
+    "title": "Excluir Componente Curricular",
     "name": "delete",
     "group": "Componente_Curricular",
     "parameter": {
@@ -278,7 +278,7 @@
   {
     "type": "get",
     "url": "componentes-curriculares/:codCompCurric",
-    "title": "Solicitar uma componente curricular",
+    "title": "Listar dados de uma componente curricular",
     "name": "findByCodCompCurric",
     "group": "Componente_Curricular",
     "parameter": {
@@ -554,7 +554,7 @@
   {
     "type": "get",
     "url": "componentes-curriculares/tipos",
-    "title": "Solicitar tipos definidos de componente curricular",
+    "title": "Listar tipos definidos de componente curricular",
     "name": "findTipos",
     "group": "Componente_Curricular",
     "success": {
@@ -756,7 +756,7 @@
   {
     "type": "delete",
     "url": "correspondencias/:codCompCurric/:codCompCorresp",
-    "title": "Deletar Correspondência",
+    "title": "Excluir Correspondência",
     "name": "delete",
     "group": "Correspondência",
     "parameter": {
@@ -1365,7 +1365,7 @@
   {
     "type": "get",
     "url": "cursos",
-    "title": "Solicitar todos Cursos registrados.",
+    "title": "Listar todos Cursos registrados.",
     "name": "findAll",
     "group": "Curso",
     "permission": [
@@ -1411,7 +1411,7 @@
   {
     "type": "get",
     "url": "cursos/:codCurso",
-    "title": "Solicitar dados de um Curso.",
+    "title": "Listar dados de um Curso.",
     "name": "findById",
     "group": "Curso",
     "parameter": {
@@ -1709,7 +1709,7 @@
   {
     "type": "get",
     "url": "departamentos",
-    "title": "Solicitar dados de todos Departamentos.",
+    "title": "Listar dados de todos Departamentos.",
     "name": "findAll",
     "group": "Departamento",
     "permission": [
@@ -1755,7 +1755,7 @@
   {
     "type": "get",
     "url": "departamentos/:codDepto",
-    "title": "Solicitar dados de um Departamento específico.",
+    "title": "Listar dados de um Departamento específico.",
     "name": "findById",
     "group": "Departamento",
     "permission": [
@@ -1842,7 +1842,7 @@
   {
     "type": "put",
     "url": "departamentos/:codDepto",
-    "title": "Atualizar dados de um Departamento.",
+    "title": "Listar dados de um Departamento.",
     "name": "update",
     "group": "Departamento",
     "permission": [
@@ -1986,7 +1986,7 @@
   {
     "type": "DELETE",
     "url": "dependencias/:codCompCurric/:codPreReq",
-    "title": "Deletar dependência entre componentes curriculares.",
+    "title": "Excluir dependência entre componentes curriculares.",
     "parameter": {
       "fields": {
         "URL": [
@@ -2061,7 +2061,7 @@
   {
     "type": "GET",
     "url": "dependencias",
-    "title": "Solicitar todas dependências existentes entre componentes curriculares.",
+    "title": "Listar todas dependências existentes entre componentes curriculares.",
     "name": "findAll",
     "group": "Dependência",
     "success": {
@@ -2102,7 +2102,7 @@
   {
     "type": "GET",
     "url": "projetos-pedagogicos-curso/:codPpc/dependencias",
-    "title": "Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.",
+    "title": "Listar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.",
     "parameter": {
       "fields": {
         "URL": [
@@ -2177,7 +2177,7 @@
   {
     "type": "GET",
     "url": "dependencias/:codCompCurric/:codPreReq",
-    "title": "Solicitar dependências entre componentes curriculares.",
+    "title": "Listar dependências entre componentes curriculares.",
     "parameter": {
       "fields": {
         "URL": [
@@ -2479,7 +2479,7 @@
   {
     "type": "get",
     "url": "disciplinas",
-    "title": "Solicitar dados de todas as disciplinas",
+    "title": "Listar dados de todas as disciplinas",
     "name": "findAll",
     "group": "Disciplina",
     "success": {
@@ -2555,7 +2555,7 @@
   {
     "type": "get",
     "url": "disciplinas/:codDepto/:numDisciplina",
-    "title": "Solicitar dados de uma disciplina",
+    "title": "Listar dados de uma disciplina",
     "name": "findById",
     "group": "Disciplina",
     "parameter": {
@@ -2839,7 +2839,7 @@
   {
     "type": "get",
     "url": "instituicoes-ensino-superior",
-    "title": "Solicitar dados de todas Instituições de Ensino Superior.",
+    "title": "Listar dados de todas Instituições de Ensino Superior.",
     "name": "findAll",
     "group": "Instituição_de_Ensino_Superior",
     "permission": [
@@ -2885,7 +2885,7 @@
   {
     "type": "get",
     "url": "instituicoes-ensino-superior/:codIes",
-    "title": "Solicitar dados de uma Instituição de Ensino Superior.",
+    "title": "Listar dados de uma Instituição de Ensino Superior.",
     "name": "findById",
     "group": "Instituição_de_Ensino_Superior",
     "permission": [
@@ -3168,7 +3168,7 @@
   {
     "type": "DELETE",
     "url": "projetos-pedagogicos-curso/:codPpc",
-    "title": "Deletar Projeto Pedagógico de Curso.",
+    "title": "Excluir Projeto Pedagógico de Curso.",
     "parameter": {
       "fields": {
         "URL": [
@@ -3222,7 +3222,7 @@
   {
     "type": "GET",
     "url": "projetos-pedagogicos-curso",
-    "title": "Solicitar todos Projetos Pedagógicos de Curso.",
+    "title": "Listar todos Projetos Pedagógicos de Curso.",
     "name": "findAll",
     "group": "Projeto_Pedagógico_Curso",
     "success": {
@@ -3263,7 +3263,7 @@
   {
     "type": "get",
     "url": "cursos/:codCurso/projetos-pedagogicos-curso",
-    "title": "Requisitar todos Projetos Pedagógicos de Curso de um Curso.",
+    "title": "Listar todos Projetos Pedagógicos de Curso de um Curso.",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -3317,7 +3317,7 @@
   {
     "type": "GET",
     "url": "projetos-pedagogicos-curso/:codPpc",
-    "title": "Solicitar Projeto Pedagógico de Curso.",
+    "title": "Listar Projeto Pedagógico de Curso.",
     "parameter": {
       "fields": {
         "URL": [
@@ -3673,7 +3673,7 @@
   {
     "type": "delete",
     "url": "transicoes/:codPpcAtual/:codPpcAlvo",
-    "title": "Deletar Componente Curricular",
+    "title": "Excluir Componente Curricular",
     "name": "delete",
     "group": "Transição",
     "parameter": {
@@ -4152,7 +4152,7 @@
   {
     "type": "get",
     "url": "unidades-ensino",
-    "title": "Solicitar dados de todas as unidades de ensino",
+    "title": "Listar dados de todas as unidades de ensino",
     "name": "findAll",
     "group": "Unidade_de_Ensino",
     "success": {
@@ -4207,7 +4207,7 @@
   {
     "type": "get",
     "url": "unidades-ensino/:codUnidadeEnsino",
-    "title": "Solicitar dados de uma unidade de ensino",
+    "title": "Listar dados de uma unidade de ensino",
     "name": "findById",
     "group": "Unidade_de_Ensino",
     "parameter": {
@@ -4539,7 +4539,7 @@
   {
     "type": "get",
     "url": "usuarios",
-    "title": "Solicitar dados da coleção dos usuários",
+    "title": "Listar dados da coleção dos usuários",
     "name": "findAll",
     "group": "Usuário",
     "permission": [
@@ -4585,7 +4585,7 @@
   {
     "type": "get",
     "url": "usuarios/:codUsuario",
-    "title": "Solicitar dados de um usuário",
+    "title": "Listar dados de um usuário",
     "name": "findById",
     "group": "Usuário",
     "permission": [

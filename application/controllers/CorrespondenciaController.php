@@ -278,7 +278,7 @@ class CorrespondenciaController extends APIController
     }
 
     /**
-     * @api {delete} correspondencias/:codCompCurric/:codCompCorresp Deletar Correspondência
+     * @api {delete} correspondencias/:codCompCurric/:codCompCorresp Excluir Correspondência
      * @apiName delete
      * @apiGroup Correspondência
      * 

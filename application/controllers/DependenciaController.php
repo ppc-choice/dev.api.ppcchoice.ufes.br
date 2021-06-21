@@ -10,7 +10,7 @@ class DependenciaController extends APIController
     }
 
     /**
-     * @api {GET} dependencias Solicitar todas dependências existentes entre componentes curriculares.
+     * @api {GET} dependencias Listar todas dependências existentes entre componentes curriculares.
      *
      * @apiName findAll
      * @apiGroup Dependência
@@ -45,7 +45,7 @@ class DependenciaController extends APIController
     }
 
     /**
-     * @api {GET} dependencias/:codCompCurric/:codPreReq Solicitar dependências entre componentes curriculares.
+     * @api {GET} dependencias/:codCompCurric/:codPreReq Listar dependências entre componentes curriculares.
      * @apiParam (URL) {Number} codCompCurric Código de identificação de uma componente curricular.
      * @apiParam (URL) {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
      *
@@ -89,7 +89,7 @@ class DependenciaController extends APIController
 
 
     /**
-     * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Solicitar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
+     * @api {GET} projetos-pedagogicos-curso/:codPpc/dependencias Listar todas dependências entre componentes as curriculares de um Projeto Pedagógico de Curso.
      * @apiParam (URL) {Number} codPpc Código identificador de um projeto pedagógico de curso.
      * @apiParam (URL) {bool} allowEmpty Parâmetro que informa se o método deve retornar um array de Depêndencias vazio.
      * @apiParam (URL) {bool} senseConnection Parâmetro que informa se o método deve retornar uma string de sentido da dependencia concatenada ao seu respectivo código.
@@ -303,7 +303,7 @@ class DependenciaController extends APIController
     }
 
     /**
-     * @api {DELETE} dependencias/:codCompCurric/:codPreReq Deletar dependência entre componentes curriculares.
+     * @api {DELETE} dependencias/:codCompCurric/:codPreReq Excluir dependência entre componentes curriculares.
      * @apiParam (URL) {Number} codCompCurric Código de identificação de uma componente curricular.
      * @apiParam (URL) {Number} codPreReq Código de identificação de uma componente curricular que é pré-requisito.
      *

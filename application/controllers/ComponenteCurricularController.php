@@ -110,7 +110,7 @@ class ComponenteCurricularController extends APIController
     }
 
     /**
-     * @api {get} componentes-curriculares/:codCompCurric Solicitar uma componente curricular
+     * @api {get} componentes-curriculares/:codCompCurric Listar dados de uma componente curricular
      * @apiName findByCodCompCurric
      * @apiGroup Componente Curricular
      * 
@@ -156,7 +156,7 @@ class ComponenteCurricularController extends APIController
     }
 
     /**
-     * @api {get} componentes-curriculares/tipos Solicitar tipos definidos de componente curricular
+     * @api {get} componentes-curriculares/tipos Listar tipos definidos de componente curricular
      * @apiName findTipos
      * @apiGroup Componente Curricular
      * 
@@ -375,7 +375,7 @@ class ComponenteCurricularController extends APIController
     }
 
     /**
-     * @api {delete} componentes-curriculares/:codCompCurric Deletar Componente Curricular
+     * @api {delete} componentes-curriculares/:codCompCurric Excluir Componente Curricular
      * @apiName delete
      * @apiGroup Componente Curricular
      * 

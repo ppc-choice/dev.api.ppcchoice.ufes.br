@@ -10,7 +10,7 @@ class DepartamentoController extends APIController
 	}
 
 	/**
-	 * @api {get} departamentos Solicitar dados de todos Departamentos.
+	 * @api {get} departamentos Listar dados de todos Departamentos.
 	 * @apiName findAll
 	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
@@ -44,7 +44,7 @@ class DepartamentoController extends APIController
 	}
 
 	/**
-	 * @api {get} departamentos/:codDepto Solicitar dados de um Departamento específico.
+	 * @api {get} departamentos/:codDepto Listar dados de um Departamento específico.
 	 * @apiName findById
 	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR
@@ -141,7 +141,7 @@ class DepartamentoController extends APIController
 	}
 
 	/**
-	 * @api {put} departamentos/:codDepto Atualizar dados de um Departamento.
+	 * @api {put} departamentos/:codDepto Listar dados de um Departamento.
 	 * @apiName update
 	 * @apiGroup Departamento
 	 * @apiPermission ADMINISTRATOR

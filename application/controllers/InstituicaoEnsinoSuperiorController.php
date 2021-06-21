@@ -10,7 +10,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	}
 
 	/**
-	 * @api {get} instituicoes-ensino-superior Solicitar dados de todas Instituições de Ensino Superior.
+	 * @api {get} instituicoes-ensino-superior Listar dados de todas Instituições de Ensino Superior.
 	 * @apiName findAll
 	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR
@@ -43,7 +43,7 @@ class InstituicaoEnsinoSuperiorController extends APIController
 	}
 
 	/**
-	 * @api {get} instituicoes-ensino-superior/:codIes Solicitar dados de uma Instituição de Ensino Superior.
+	 * @api {get} instituicoes-ensino-superior/:codIes Listar dados de uma Instituição de Ensino Superior.
 	 * @apiName findById
 	 * @apiGroup Instituição de Ensino Superior
 	 * @apiPermission ADMINISTRATOR

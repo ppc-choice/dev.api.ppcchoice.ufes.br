@@ -10,7 +10,7 @@ class UnidadeEnsinoController extends APIController
     }
 
     /**
-     * @api {get} unidades-ensino Solicitar dados de todas as unidades de ensino
+     * @api {get} unidades-ensino Listar dados de todas as unidades de ensino
      * @apiName findAll
      * @apiGroup Unidade de Ensino
      * 
@@ -75,7 +75,7 @@ class UnidadeEnsinoController extends APIController
     }
 
     /**
-     * @api {get} unidades-ensino/:codUnidadeEnsino Solicitar dados de uma unidade de ensino
+     * @api {get} unidades-ensino/:codUnidadeEnsino Listar dados de uma unidade de ensino
      * @apiName findById
      * @apiGroup Unidade de Ensino
      *

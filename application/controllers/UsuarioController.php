@@ -10,7 +10,7 @@ class UsuarioController extends APIController
 	}
 
 	/**
-	 * @api {get} usuarios Solicitar dados da coleção dos usuários
+	 * @api {get} usuarios Listar dados da coleção dos usuários
 	 * @apiName findAll
 	 * @apiGroup Usuário
 	 * @apiPermission ADMINISTRATOR
@@ -46,7 +46,7 @@ class UsuarioController extends APIController
 	}
 
 	/**
-	 * @api {get} usuarios/:codUsuario Solicitar dados de um usuário
+	 * @api {get} usuarios/:codUsuario Listar dados de um usuário
 	 * @apiName findById
 	 * @apiGroup Usuário
 	 * @apiPermission ADMINISTRATOR

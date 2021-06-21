@@ -10,7 +10,7 @@ class DisciplinaController extends APIController
     }
 
     /**
-     * @api {get} disciplinas Solicitar dados de todas as disciplinas
+     * @api {get} disciplinas Listar dados de todas as disciplinas
      * @apiName findAll
      * @apiGroup Disciplina
      *
@@ -46,7 +46,7 @@ class DisciplinaController extends APIController
     }
 
     /**
-     * @api {get} disciplinas/:codDepto/:numDisciplina Solicitar dados de uma disciplina
+     * @api {get} disciplinas/:codDepto/:numDisciplina Listar dados de uma disciplina
      * @apiName findById
      * @apiGroup Disciplina
      *

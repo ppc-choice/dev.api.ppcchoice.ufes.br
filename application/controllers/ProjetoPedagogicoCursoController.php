@@ -10,7 +10,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }
 
     /**
-     * @api {GET} projetos-pedagogicos-curso Solicitar todos Projetos Pedagógicos de Curso.
+     * @api {GET} projetos-pedagogicos-curso Listar todos Projetos Pedagógicos de Curso.
      *
      * @apiName findAll
      * @apiGroup Projeto Pedagógico Curso
@@ -44,7 +44,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }
 
     /**
-     * @api {GET} projetos-pedagogicos-curso/:codPpc Solicitar Projeto Pedagógico de Curso.
+     * @api {GET} projetos-pedagogicos-curso/:codPpc Listar Projeto Pedagógico de Curso.
      * @apiParam (URL) {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
      *
      * @apiName findById
@@ -93,7 +93,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }
 
     /**
-     * @api {get} cursos/:codCurso/projetos-pedagogicos-curso Requisitar todos Projetos Pedagógicos de Curso de um Curso.
+     * @api {get} cursos/:codCurso/projetos-pedagogicos-curso Listar todos Projetos Pedagógicos de Curso de um Curso.
      * @apiParam {Number} codCurso Código de identificação de um Curso.
      *
      * @apiName findByCodCurso
@@ -377,7 +377,7 @@ class ProjetoPedagogicoCursoController extends APIController
     }
 
     /**
-     * @api {DELETE} projetos-pedagogicos-curso/:codPpc Deletar Projeto Pedagógico de Curso.
+     * @api {DELETE} projetos-pedagogicos-curso/:codPpc Excluir Projeto Pedagógico de Curso.
      * @apiParam (URL) {Number} codPpc Código de identificação de um Projeto Pedagógico de Curso.
      *
      * @apiName delete

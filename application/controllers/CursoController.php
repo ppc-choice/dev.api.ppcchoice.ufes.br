@@ -10,7 +10,7 @@ class CursoController extends APIController
 	}
 
 	/**
-	 * @api {get} cursos Solicitar todos Cursos registrados.
+	 * @api {get} cursos Listar todos Cursos registrados.
 	 * @apiName findAll
 	 * @apiGroup Curso
 	 * @apiPermission ADMINISTRATOR
@@ -46,7 +46,7 @@ class CursoController extends APIController
 	}
 
 	/**
-	 * @api {get} cursos/:codCurso Solicitar dados de um Curso.
+	 * @api {get} cursos/:codCurso Listar dados de um Curso.
 	 * @apiName findById
 	 * @apiGroup Curso
 	 *
