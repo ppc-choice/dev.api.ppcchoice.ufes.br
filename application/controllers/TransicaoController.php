@@ -265,7 +265,7 @@ class TransicaoController extends APIController
     }
 
     /**
-     * @api {delete} transicoes/:codPpcAtual/:codPpcAlvo Deletar Componente Curricular
+     * @api {delete} transicoes/:codPpcAtual/:codPpcAlvo Excluir Componente Curricular
      * @apiName delete
      * @apiGroup Transição
      * 
